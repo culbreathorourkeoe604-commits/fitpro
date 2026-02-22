@@ -3,44 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>上海露希欧 | 数字化谈单系统</title>
+    <title>SHANGHAI LUXIOU | 智能诊断系统</title>
     <style>
-        body { background-color: #000; color: #fff; font-family: -apple-system, sans-serif; margin: 0; padding: 15px; }
-        .brand-header { text-align: center; padding: 25px 0; background: linear-gradient(180deg, #1a1a1a 0%, #000 100%); border-radius: 12px; margin-bottom: 20px; border: 1px solid #d4af37; }
-        .brand-header h1 { color: #d4af37; font-size: 22px; letter-spacing: 2px; margin: 0; }
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .card { background: #111; border-radius: 10px; overflow: hidden; border: 1px solid #333; }
-        .card img { width: 100%; height: 120px; object-fit: cover; opacity: 0.8; background: #222; }
-        .card .info { padding: 10px; text-align: center; font-size: 14px; color: #d4af37; }
-        .radar-entry { grid-column: span 2; background: linear-gradient(90deg, #d4af37, #b8860b); color: #000; padding: 15px; text-align: center; border-radius: 10px; font-weight: bold; margin-bottom: 15px; text-decoration: none; display: block; font-size: 16px; }
+        :root { --primary: #00f2fe; --secondary: #7000ff; --accent: #d4af37; }
+        body { background: radial-gradient(circle at top right, #1a2a6c, #111 50%), #000; color: #fff; font-family: -apple-system, sans-serif; margin: 0; min-height: 100vh; padding: 20px; box-sizing: border-box; }
+        .brand-card { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; padding: 30px 20px; text-align: center; margin-bottom: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .brand-card h1 { margin: 0; font-size: 24px; letter-spacing: 4px; color: var(--primary); text-shadow: 0 0 10px rgba(0, 242, 254, 0.5); }
+        .brand-card p { margin: 10px 0 0; color: #888; font-size: 14px; letter-spacing: 1px; }
+        .radar-btn { display: block; background: linear-gradient(90deg, var(--primary), var(--secondary)); color: #fff; text-decoration: none; padding: 18px; border-radius: 12px; text-align: center; font-weight: bold; font-size: 16px; margin-bottom: 25px; box-shadow: 0 5px 15px rgba(112, 0, 255, 0.3); transition: 0.3s; }
+        .radar-btn:active { transform: scale(0.98); opacity: 0.9; }
+        .section-label { font-size: 13px; color: var(--primary); margin-bottom: 15px; display: flex; align-items: center; }
+        .section-label::before { content: ""; width: 4px; height: 14px; background: var(--primary); margin-right: 8px; border-radius: 2px; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .card { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; overflow: hidden; position: relative; }
+        .card img { width: 100%; height: 110px; object-fit: cover; filter: brightness(0.8); }
+        .card-info { padding: 10px; font-size: 13px; text-align: center; color: #ccc; background: rgba(0,0,0,0.4); }
+        .footer-tag { text-align: center; font-size: 10px; color: #444; margin-top: 30px; letter-spacing: 2px; }
     </style>
 </head>
 <body>
-    <div class="brand-header">
+    <div class="brand-card">
         <h1>SHANGHAI LUXIOU</h1>
-        <div style="font-size: 12px; color: #888; margin-top: 5px;">数字化私教服务系统</div>
+        <p>智能诊断服务系统</p>
     </div>
 
-    <a href="report.html" class="radar-entry">点击进入：VIP 体测战报系统</a>
+    <a href="report.html" class="radar-btn">A 点击进入：VIP 体测战报系统</a>
 
+    <div class="section-label">素材导航中心</div>
     <div class="grid">
         <div class="card">
             <img src="img1.jpg" alt="门店实景">
-            <div class="info">工作室实景</div>
+            <div class="card-info">门店实景</div>
         </div>
         <div class="card">
             <img src="img2.jpg" alt="专业器械">
-            <div class="info">专业器械库</div>
+            <div class="card-info">专业器械</div>
         </div>
         <div class="card">
-            <img src="img3.jpg" alt="案例展示">
-            <div class="info">减脂案例库</div>
+            <img src="img3.jpg" alt="案例库">
+            <div class="card-info">减脂案例</div>
         </div>
         <div class="card">
-            <img src="img4.jpg" alt="体态纠正">
-            <div class="info">体态纠正库</div>
+            <img src="img4.jpg" alt="体态库">
+            <div class="card-info">体态纠正</div>
         </div>
     </div>
+
+    <div class="footer-tag">DIGITAL FITNESS ARCHITECT</div>
 </body>
 </html>
-
