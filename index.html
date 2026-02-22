@@ -3,56 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SHANGHAI LUXIOU | 智能诊断系统</title>
+    <title>SHANGHAI LUXIOU | 数字化谈单中枢</title>
     <style>
-        :root { --primary: #00f2fe; --secondary: #7000ff; --accent: #d4af37; }
+        :root { --primary: #00f2fe; --secondary: #7000ff; --accent: #22d3ee; }
         body { background: radial-gradient(circle at top right, #1a2a6c, #111 50%), #000; color: #fff; font-family: -apple-system, sans-serif; margin: 0; min-height: 100vh; padding: 20px; box-sizing: border-box; }
         .brand-card { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; padding: 30px 20px; text-align: center; margin-bottom: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
         .brand-card h1 { margin: 0; font-size: 24px; letter-spacing: 4px; color: var(--primary); text-shadow: 0 0 10px rgba(0, 242, 254, 0.5); }
         .brand-card p { margin: 10px 0 0; color: #888; font-size: 14px; letter-spacing: 1px; }
-        .radar-btn { display: block; background: linear-gradient(90deg, var(--primary), var(--secondary)); color: #fff; text-decoration: none; padding: 18px; border-radius: 12px; text-align: center; font-weight: bold; font-size: 16px; margin-bottom: 25px; box-shadow: 0 5px 15px rgba(112, 0, 255, 0.3); transition: 0.3s; }
-        .radar-btn:active { transform: scale(0.98); opacity: 0.9; }
-        .section-label { font-size: 13px; color: var(--primary); margin-bottom: 15px; display: flex; align-items: center; }
+        
+        .radar-btn { display: block; background: linear-gradient(90deg, var(--primary), var(--secondary)); color: #fff; text-decoration: none; padding: 18px; border-radius: 12px; text-align: center; font-weight: bold; font-size: 16px; margin-bottom: 12px; box-shadow: 0 5px 15px rgba(112, 0, 255, 0.3); transition: 0.3s; }
+        .radar-btn.secondary { background: rgba(255,255,255,0.05); border: 1px solid rgba(0,242,254,0.3); box-shadow: none; margin-bottom: 25px; font-size: 14px; }
+        
+        .section-label { font-size: 13px; color: var(--primary); margin-bottom: 15px; display: flex; align-items: center; letter-spacing: 2px; }
         .section-label::before { content: ""; width: 4px; height: 14px; background: var(--primary); margin-right: 8px; border-radius: 2px; }
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-        .card { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; overflow: hidden; position: relative; }
-        .card img { width: 100%; height: 110px; object-fit: cover; filter: brightness(0.8); }
-        .card-info { padding: 10px; font-size: 13px; text-align: center; color: #ccc; background: rgba(0,0,0,0.4); }
-        .footer-tag { text-align: center; font-size: 10px; color: #444; margin-top: 30px; letter-spacing: 2px; }
+        
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .card { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 15px; overflow: hidden; position: relative; transition: 0.3s; text-decoration: none; }
+        .card:active { transform: scale(0.95); border-color: var(--primary); }
+        .card img { width: 100%; height: 120px; object-fit: cover; filter: brightness(0.7); border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .card-info { padding: 12px 5px; font-size: 12px; text-align: center; color: #fff; font-weight: 500; background: rgba(0,0,0,0.4); letter-spacing: 1px; }
+        .footer-tag { text-align: center; font-size: 10px; color: #444; margin-top: 40px; letter-spacing: 3px; }
     </style>
 </head>
 <body>
     <div class="brand-card">
         <h1>SHANGHAI LUXIOU</h1>
-        <p>智能诊断服务系统</p>
+        <p>数字化私教诊断系统</p>
     </div>
 
-    <a href="report.html" class="radar-btn">A 点击进入：VIP 体测战报系统</a>
-<div class="section-label">风险评估中心</div>
-    <a href="parq.html" class="radar-btn" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(0,242,254,0.3); margin-bottom: 25px; box-shadow: none; font-size: 14px;">
-        B 点击进入：PAR-Q 运动前健康评估
-    </a>
-    <div class="section-label">素材导航中心</div>
+    <a href="report.html" class="radar-btn">A 点击进入：VIP 全息体测系统</a>
+    <a href="parq.html" class="radar-btn secondary">B 点击进入：ACE 标准风险评估</a>
+
+    <div class="section-label">LUXIOU 谈单中枢</div>
     <div class="grid">
-        <div class="card">
-            <img src="img1.jpg" alt="门店实景">
-            <div class="card-info">门店实景</div>
-        </div>
-        <div class="card">
-            <img src="img2.jpg" alt="专业器械">
-            <div class="card-info">专业器械</div>
-        </div>
-        <div class="card">
-            <img src="img3.jpg" alt="案例库">
-            <div class="card-info">减脂案例</div>
-        </div>
-        <div class="card">
-            <img src="img4.jpg" alt="体态库">
-            <div class="card-info">体态纠正</div>
-        </div>
+        <a href="#" class="card">
+            <img src="img3.jpg" alt="档案库">
+            <div class="card-info">【档案库】<br>百人真实塑形档案</div>
+        </a>
+        <a href="#" class="card">
+            <img src="img2.jpg" alt="方案库">
+            <div class="card-info">【方案库】<br>定制化周期训练蓝图</div>
+        </a>
+        <a href="#" class="card">
+            <img src="img1.jpg" alt="背书库">
+            <div class="card-info">【背书库】<br>LUXIOU 专业学术认证</div>
+        </a>
+        <a href="#" class="card">
+            <img src="img4.jpg" alt="增值库">
+            <div class="card-info">【增值库】<br>数字化健康资产管理</div>
+        </a>
     </div>
 
-    <div class="footer-tag">DIGITAL FITNESS ARCHITECT</div>
+    <div class="footer-tag">LUXIOU DIGITAL ARCHITECT</div>
 </body>
 </html>
-
