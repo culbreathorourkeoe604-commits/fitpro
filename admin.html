@@ -2,47 +2,74 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LUXIOU | 权限中枢</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>LUXIOU | 老板私密中枢</title>
     <style>
-        body { background: #000; color: #fff; font-family: sans-serif; padding: 15px; }
-        .card { background: #111; border-radius: 12px; padding: 15px; margin-bottom: 15px; border: 1px solid #222; }
-        .lib-title { color: #00f2fe; font-size: 16px; font-weight: bold; margin-bottom: 15px; display: flex; align-items: center; }
-        .row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-top: 1px solid #222; }
-        .label { font-size: 14px; color: #eee; }
-        .file { font-size: 10px; color: #555; }
-        .up-btn { background: #00f2fe; color: #000; padding: 6px 12px; border-radius: 4px; text-decoration: none; font-size: 12px; font-weight: bold; }
+        :root { --primary: #00f2fe; --danger: #ff4444; }
+        body { background: #000; color: #fff; font-family: -apple-system, sans-serif; margin: 0; padding: 20px; }
+        .header { text-align: center; padding: 20px 0; border-bottom: 1px solid #222; margin-bottom: 20px; }
+        .header h2 { color: var(--primary); letter-spacing: 2px; margin: 0; }
+        
+        .lib-card { background: #111; border: 1px solid #222; border-radius: 15px; padding: 15px; margin-bottom: 20px; }
+        .lib-name { font-weight: bold; font-size: 16px; margin-bottom: 15px; display: flex; align-items: center; }
+        .lib-name::before { content: ""; width: 4px; height: 16px; background: var(--primary); margin-right: 10px; border-radius: 2px; }
+        
+        .upload-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-top: 1px solid #222; }
+        .info { flex: 1; }
+        .title-tag { font-size: 14px; color: #eee; }
+        .file-tag { font-family: monospace; font-size: 11px; color: #555; margin-top: 4px; }
+        
+        /* 手机端大按钮，方便操作 */
+        .btn-up { 
+            background: var(--primary); color: #000; 
+            padding: 10px 18px; border-radius: 8px; 
+            text-decoration: none; font-size: 13px; font-weight: bold;
+            box-shadow: 0 4px 10px rgba(0, 242, 254, 0.2);
+        }
+        
+        .notice { background: rgba(255, 68, 68, 0.05); border: 1px dashed var(--danger); border-radius: 10px; padding: 15px; margin-top: 30px; font-size: 12px; color: #aaa; line-height: 1.6; }
     </style>
 </head>
 <body>
-    <h3 style="text-align:center; color:#00f2fe;">老板专供：全息数据更新中枢</h3>
-
-    <div class="card">
-        <div class="lib-title">📁 【档案库】管理</div>
-        <div class="row"><div><div class="label">1挡：减脂案例</div><div class="file">case_1.jpg</div></div><a href="https://github.com/culbreathorourkeoe604-commits/fitpro/upload/main" class="up-btn">上传覆盖</a></div>
-        <div class="row"><div><div class="label">2挡：塑形案例</div><div class="file">case_2.jpg</div></div><a href="https://github.com/culbreathorourkeoe604-commits/fitpro/upload/main" class="up-btn">上传覆盖</a></div>
+    <div class="header">
+        <h2>LUXIOU 管理中枢</h2>
+        <p style="color:#444; font-size:12px;">老板专用 · 员工禁入</p>
     </div>
 
-    <div class="card">
-        <div class="lib-title">📜 【方案库】管理</div>
-        <div class="row"><div><div class="label">1挡：基础方案</div><div class="file">plan_1.jpg</div></div><a href="https://github.com/culbreathorourkeoe604-commits/fitpro/upload/main" class="up-btn">上传覆盖</a></div>
-        <div class="row"><div><div class="label">2挡：强化方案</div><div class="file">plan_2.jpg</div></div><a href="https://github.com/culbreathorourkeoe604-commits/fitpro/upload/main" class="up-btn">上传覆盖</a></div>
+    <div class="lib-card">
+        <div class="lib-name">📁 【档案库】手机直传</div>
+        <div class="upload-row">
+            <div class="info"><div class="title-tag">1挡：减脂案例</div><div class="file-tag">文件名需为: case_1.jpg</div></div>
+            <a href="https://github.com/culbreathorourkeoe604-commits/fitpro/upload/main" class="btn-up">点击上传</a>
+        </div>
+        <div class="upload-row">
+            <div class="info"><div class="title-tag">2挡：塑形案例</div><div class="file-tag">文件名需为: case_2.jpg</div></div>
+            <a href="https://github.com/culbreathorourkeoe604-commits/fitpro/upload/main" class="btn-up">点击上传</a>
+        </div>
     </div>
 
-    <div class="card">
-        <div class="lib-title">🎓 【背书库】管理</div>
-        <div class="row"><div><div class="label">1挡：资质证书</div><div class="file">cert_1.jpg</div></div><a href="https://github.com/culbreathorourkeoe604-commits/fitpro/upload/main" class="up-btn">上传覆盖</a></div>
-        <div class="row"><div><div class="label">2挡：荣誉奖项</div><div class="file">cert_2.jpg</div></div><a href="https://github.com/culbreathorourkeoe604-commits/fitpro/upload/main" class="up-btn">上传覆盖</a></div>
+    <div class="lib-card">
+        <div class="lib-name">📜 【方案库】手机直传</div>
+        <div class="upload-row">
+            <div class="info"><div class="title-tag">1挡：基础方案</div><div class="file-tag">文件名需为: plan_1.jpg</div></div>
+            <a href="https://github.com/culbreathorourkeoe604-commits/fitpro/upload/main" class="btn-up">点击上传</a>
+        </div>
+        <div class="upload-row">
+            <div class="info"><div class="title-tag">2挡：强化方案</div><div class="file-tag">文件名需为: plan_2.jpg</div></div>
+            <a href="https://github.com/culbreathorourkeoe604-commits/fitpro/upload/main" class="btn-up">点击上传</a>
+        </div>
     </div>
 
-    <div class="card">
-        <div class="lib-title">🛒 【产品库】管理</div>
-        <div class="row"><div><div class="label">1挡：私教课程</div><div class="file">prod_1.jpg</div></div><a href="https://github.com/culbreathorourkeoe604-commits/fitpro/upload/main" class="up-btn">上传覆盖</a></div>
-        <div class="row"><div><div class="label">2挡：营养补剂</div><div class="file">prod_2.jpg</div></div><a href="https://github.com/culbreathorourkeoe604-commits/fitpro/upload/main" class="up-btn">上传覆盖</a></div>
+    <div class="notice">
+        <strong>老板，手机上传秘籍：</strong><br>
+        1. 点击上方蓝色的【点击上传】。<br>
+        2. 在 GitHub 页面选好手机相册里的图。<br>
+        3. <strong>关键点：</strong>将上传框下方的图片名称修改为对应的灰色小字（如 <span style="color:#fff">case_1.jpg</span>）。<br>
+        4. 点击绿色的“Commit changes”保存，首页即刻同步。
     </div>
 
-    <div style="color:#333; font-size:10px; text-align:center; padding:20px;">
-        操作提示：点击上传后，上传同名文件即可自动完成前端更新。
+    <div style="text-align:center; padding:30px;">
+        <a href="./index.html" style="color:#333; text-decoration:none; font-size:12px;">← 返回系统首页</a>
     </div>
 </body>
 </html>
