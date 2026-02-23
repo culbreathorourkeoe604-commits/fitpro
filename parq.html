@@ -2,104 +2,95 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>ACE标准 全维度健康筛查 - 上海露希欧</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.staticfile.net/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
-        @import url('https://fonts.loli.net/css2?family=Noto+Sans+SC:wght@300;500;700&display=swap');
-        body { background: #0f172a; font-family: 'Noto Sans SC', sans-serif; color: #fff; padding: 20px; }
-        .glass-card { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 1.5rem; padding: 20px; margin-bottom: 20px; }
-        .q-section-title { font-size: 12px; color: #22d3ee; text-transform: uppercase; letter-spacing: 2px; margin: 20px 0 10px 10px; font-weight: bold; }
-        .q-row { display: flex; justify-content: space-between; align-items: flex-start; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
-        .risk-text { color: #f87171; font-weight: bold; }
-        input[type="checkbox"] { width: 22px; height: 22px; accent-color: #22d3ee; margin-top: 2px; }
-        [contenteditable="true"] { outline: none; border-bottom: 1px dashed rgba(34, 211, 238, 0.3); }
-        .save-btn { background: linear-gradient(90deg, #06b6d4, #3b82f6); position: sticky; bottom: 20px; z-index: 100; }
+        :root { --primary: #00f2fe; --bg-dark: #0f172a; }
+        body { background: var(--bg-dark); color: #fff; font-family: -apple-system, sans-serif; margin: 0; padding: 20px; line-height: 1.6; }
+        .container { max-width: 600px; margin: 0 auto; background: rgba(30, 41, 59, 0.7); border-radius: 20px; padding: 25px; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
+        
+        h2 { color: var(--primary); text-align: center; font-size: 20px; margin-bottom: 25px; letter-spacing: 1px; text-transform: uppercase; }
+        .section-title { color: var(--primary); font-size: 14px; margin: 25px 0 15px; display: flex; align-items: center; opacity: 0.8; }
+        .section-title::after { content: ""; flex: 1; height: 1px; background: rgba(0, 242, 254, 0.2); margin-left: 10px; }
+
+        .question-box { background: rgba(15, 23, 42, 0.5); border-radius: 12px; padding: 18px; margin-bottom: 15px; border-left: 4px solid #7000ff; transition: 0.3s; }
+        .question-box:nth-child(even) { border-left-color: var(--primary); }
+        .question-text { font-size: 15px; margin-bottom: 12px; font-weight: 500; }
+        
+        .options { display: flex; gap: 30px; }
+        label { font-size: 15px; display: flex; align-items: center; gap: 10px; cursor: pointer; }
+        input[type="checkbox"] { width: 20px; height: 20px; accent-color: var(--primary); cursor: pointer; }
+
+        /* 签名与日期区域 - 深度优化 */
+        .sign-section { display: flex; justify-content: space-between; align-items: flex-end; margin-top: 40px; padding: 20px; background: rgba(255,255,255,0.03); border-radius: 15px; border: 1px solid rgba(255,255,255,0.05); }
+        .sign-item { flex: 1; }
+        .sign-label { font-size: 10px; color: #888; margin-bottom: 8px; letter-spacing: 1px; }
+        .sign-input { background: transparent; border: none; border-bottom: 1px dashed #444; color: var(--primary); width: 85%; padding: 8px 0; font-size: 16px; outline: none; }
+        
+        /* 交互式日期选择器 */
+        .date-input { background: #1e293b; border: 1px solid #334155; color: #fff; padding: 10px; border-radius: 8px; font-size: 13px; cursor: pointer; outline: none; font-family: inherit; }
+        .date-input:focus { border-color: var(--primary); }
+
+        .submit-btn { width: 100%; background: linear-gradient(90deg, #00f2fe, #007aff); color: white; border: none; padding: 20px; border-radius: 16px; font-weight: bold; font-size: 17px; margin-top: 35px; box-shadow: 0 10px 25px rgba(0,122,255,0.3); cursor: pointer; transition: 0.3s; }
+        .submit-btn:active { transform: scale(0.98); opacity: 0.9; }
+        
+        .disclaimer { font-size: 11px; color: #64748b; text-align: center; margin-top: 20px; padding: 0 10px; }
     </style>
 </head>
-<body id="capture-area">
-    <div class="max-w-md mx-auto pb-24">
-        <div class="mb-6 px-2">
-            <h1 class="text-2xl font-bold tracking-widest text-white">HEALTH PRE-SCREENING</h1>
-            <p class="text-xs text-cyan-400 mt-1 uppercase">ACE标准体力活动准备问卷 (全维度版)</p>
+<body>
+    <div class="container">
+        <h2>ACE 标准全维度健康筛查</h2>
+        
+        <div class="section-title">IV. 生活习惯与特殊情况</div>
+        
+        <div class="question-box">
+            <div class="question-text">15. 您目前是否有吸烟习惯（或戒烟不足6个月）？</div>
+            <div class="options">
+                <label><input type="checkbox"> 是 / YES</label>
+                <label><input type="checkbox"> 否 / NO</label>
+            </div>
         </div>
-
-        <div class="q-section-title">I. 心血管与呼吸风险症状</div>
-        <div class="glass-card">
-            <div class="q-row"><span class="text-sm pr-4" contenteditable="true">1. 医生是否曾诊断过您患有心脏病或中风？</span><input type="checkbox" onchange="checkRisk(this)"></div>
-            <div class="q-row"><span class="text-sm pr-4" contenteditable="true">2. 您在休息或体力活动时是否感到胸部压迫感或疼痛？</span><input type="checkbox" onchange="checkRisk(this)"></div>
-            <div class="q-row"><span class="text-sm pr-4" contenteditable="true">3. 您是否经常感到头晕、失去平衡或曾有昏厥经历？</span><input type="checkbox" onchange="checkRisk(this)"></div>
-            <div class="q-row"><span class="text-sm pr-4" contenteditable="true">4. 在轻微体力活动或休息时，您是否感到呼吸短促？</span><input type="checkbox" onchange="checkRisk(this)"></div>
-            <div class="q-row"><span class="text-sm pr-4" contenteditable="true">5. 您的下肢（脚踝）是否有不明原因的肿胀？</span><input type="checkbox" onchange="checkRisk(this)"></div>
-            <div class="q-row"><span class="text-sm pr-4" contenteditable="true">6. 您是否有心悸或心跳节律不齐的现象？</span><input type="checkbox" onchange="checkRisk(this)"></div>
-        </div>
-
-        <div class="q-section-title">II. 慢性疾病与药物史</div>
-        <div class="glass-card">
-            <div class="q-row"><span class="text-sm pr-4" contenteditable="true">7. 您是否患有糖尿病（I型或II型）？</span><input type="checkbox" onchange="checkRisk(this)"></div>
-            <div class="q-row"><span class="text-sm pr-4" contenteditable="true">8. 您的静息血压是否超过 140/90 mmHg 或正在服用降压药？</span><input type="checkbox" onchange="checkRisk(this)"></div>
-            <div class="q-row"><span class="text-sm pr-4" contenteditable="true">9. 您目前的总胆固醇水平是否偏高或正在服用降脂药？</span><input type="checkbox" onchange="checkRisk(this)"></div>
-            <div class="q-row"><span class="text-sm pr-4" contenteditable="true">10. 您是否有哮喘或慢性肺部疾病（COPD）？</span><input type="checkbox" onchange="checkRisk(this)"></div>
-            <div class="q-row"><span class="text-sm pr-4" contenteditable="true">11. 您是否患有癫痫、癌症或其他需要长期服药的疾病？</span><input type="checkbox" onchange="checkRisk(this)"></div>
-        </div>
-
-        <div class="q-section-title">III. 肌肉骨骼与近期手术</div>
-        <div class="glass-card">
-            <div class="q-row"><span class="text-sm pr-4" contenteditable="true">12. 您的骨骼、关节或肌肉是否有因运动而加重的疼痛？</span><input type="checkbox" onchange="checkRisk(this)"></div>
-            <div class="q-row"><span class="text-sm pr-4" contenteditable="true">13. 您在过去12个月内是否接受过手术治疗？</span><input type="checkbox" onchange="checkRisk(this)"></div>
-            <div class="q-row"><span class="text-sm pr-4" contenteditable="true">14. 您是否患有严重的骨质疏松或类风湿性关节炎？</span><input type="checkbox" onchange="checkRisk(this)"></div>
-        </div>
-
-        <div class="q-section-title">IV. 生活习惯与特殊情况</div>
-        <div class="glass-card">
-            <div class="q-row"><span class="text-sm pr-4" contenteditable="true">15. 您目前是否有吸烟习惯（或戒烟不足6个月）？</span><input type="checkbox" onchange="checkRisk(this)"></div>
-            <div class="q-row"><span class="text-sm pr-4" contenteditable="true">16. 您在过去3个月内是否每周运动不足3次且每次不足30分钟？</span><input type="checkbox" onchange="checkRisk(this)"></div>
-            <div class="q-row"><span class="text-sm pr-4" contenteditable="true">17.（女性适用）您目前是否怀孕或产后不足12周？</span><input type="checkbox" onchange="checkRisk(this)"></div>
-            <div class="q-row"><span class="text-sm pr-4" contenteditable="true">18. 您是否知道任何其他不应参加运动的原因？</span><input type="checkbox" onchange="checkRisk(this)"></div>
-        </div>
-
-        <div class="glass-card mb-12">
-            <p class="text-[10px] text-gray-400 mb-4 leading-relaxed">本人确认以上内容真实有效。如有异常勾选，已获知需在医生许可下进行体力活动。</p>
-            <div class="grid grid-cols-2 gap-4">
-                <div class="border-b border-white/20 pb-1">
-                    <span class="text-[9px] block opacity-40">会员签名</span>
-                    <div contenteditable="true" class="font-bold text-cyan-400 text-sm">点击输入</div>
-                </div>
-                <div class="border-b border-white/20 pb-1 text-right">
-                    <span class="text-[9px] block opacity-40">签署日期</span>
-                    <div class="text-sm opacity-80">2026-02-22</div>
-                </div>
+        
+        <div class="question-box">
+            <div class="question-text">16. 您在过去3个月内是否每周运动不足3次且每次不足30分钟？</div>
+            <div class="options">
+                <label><input type="checkbox"> 是 / YES</label>
+                <label><input type="checkbox"> 否 / NO</label>
             </div>
         </div>
 
-        <button onclick="saveSurvey()" class="w-full py-5 rounded-2xl font-bold tracking-widest save-btn text-white shadow-2xl active:scale-95">完成评估并生成高清档案图</button>
-    </div>
+        <div class="question-box">
+            <div class="question-text">17.（女性适用）您目前是否怀孕或产后不足12周？</div>
+            <div class="options">
+                <label><input type="checkbox"> 是 / YES</label>
+                <label><input type="checkbox"> 否 / NO</label>
+            </div>
+        </div>
 
-    <script>
-        function checkRisk(el) {
-            const row = el.closest('.q-row');
-            if (el.checked) {
-                row.querySelector('span').classList.add('risk-text');
-            } else {
-                row.querySelector('span').classList.remove('risk-text');
-            }
-        }
-        function saveSurvey() {
-            const btn = document.querySelector('button');
-            btn.style.opacity = '0';
-            html2canvas(document.getElementById('capture-area'), {
-                backgroundColor: '#0f172a',
-                scale: 2,
-                useCORS: true
-            }).then(canvas => {
-                const link = document.createElement('a');
-                link.download = `LUXIOU_ACE_FULL_${new Date().getTime()}.png`;
-                link.href = canvas.toDataURL();
-                link.click();
-                btn.style.opacity = '1';
-            });
-        }
-    </script>
+        <div class="question-box">
+            <div class="question-text">18. 您是否知道任何其他不应参加运动的原因？</div>
+            <div class="options">
+                <label><input type="checkbox"> 是 / YES</label>
+                <label><input type="checkbox"> 否 / NO</label>
+            </div>
+        </div>
+
+        <p class="disclaimer">本人确认以上内容真实有效。如有异常勾选，已获知需在医生许可下进行体力活动。</p>
+
+        <div class="sign-section">
+            <div class="sign-item">
+                <div class="sign-label">会员电子签名 / SIGNATURE</div>
+                <input type="text" class="sign-input" placeholder="点击此处输入姓名">
+            </div>
+            <div style="text-align: right; width: 150px;">
+                <div class="sign-label">签署日期 / DATE</div>
+                <input type="date" class="date-input" value="2026-02-23">
+            </div>
+        </div>
+
+        <button class="submit-btn" onclick="alert('ACE 评估档案已成功生成，请截图保存')">
+            完成评估并生成高清档案图
+        </button>
+    </div>
 </body>
 </html>
