@@ -6,66 +6,29 @@
     <title>SHANGHAI LUXIOU | 数字化谈单中枢</title>
     <style>
         :root { --primary: #00f2fe; --secondary: #7000ff; }
-        * { box-sizing: border-box; }
-        body { 
-            background: #000; 
-            background-image: radial-gradient(circle at top right, #1a2a6c, #000 70%);
-            color: #fff; font-family: -apple-system, sans-serif; 
-            margin: 0; padding: 20px; min-height: 100vh;
-            display: flex; flex-direction: column;
-        }
-
-        .brand-card { 
-            background: rgba(255, 255, 255, 0.03); 
-            backdrop-filter: blur(15px); 
-            border: 1px solid rgba(255, 255, 255, 0.1); 
-            border-radius: 20px; padding: 25px 20px; 
-            text-align: center; margin-bottom: 25px; 
-        }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { background: #000; background-image: radial-gradient(circle at top right, #1a2a6c, #000 70%); color: #fff; font-family: -apple-system, sans-serif; margin: 0; padding: 20px; min-height: 100vh; display: flex; flex-direction: column; }
+        .brand-card { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; padding: 25px 20px; text-align: center; margin-bottom: 25px; }
         .brand-card h1 { margin: 0; font-size: 24px; letter-spacing: 4px; color: var(--primary); text-shadow: 0 0 15px rgba(0, 242, 254, 0.6); }
-        .brand-card p { margin-top: 8px; color: #666; font-size: 13px; letter-spacing: 2px; }
-
-        /* 核心修复：确保两个按钮 100% 宽度完全对齐 */
         .btn-group { width: 100%; display: flex; flex-direction: column; gap: 12px; margin-bottom: 30px; }
-        
-        .radar-btn { 
-            display: block; 
-            width: 100%; /* 强制满宽对齐 */
-            padding: 18px; border-radius: 12px; 
-            text-align: center; font-weight: bold; font-size: 16px; 
-            text-decoration: none; transition: 0.3s;
-        }
-        
+        .radar-btn { display: block; width: 100%; padding: 18px; border-radius: 12px; text-align: center; font-weight: bold; font-size: 16px; text-decoration: none; transition: 0.3s; }
         .btn-a { background: linear-gradient(90deg, #00f2fe, #7000ff); color: #fff; box-shadow: 0 5px 15px rgba(112, 0, 255, 0.3); }
         .btn-b { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.2); color: #eee; }
-        .radar-btn:active { transform: scale(0.98); opacity: 0.9; }
-
         .section-label { font-size: 13px; color: var(--primary); margin-bottom: 15px; display: flex; align-items: center; letter-spacing: 2px; }
-        .section-label::before { content: ""; width: 3px; height: 14px; background: var(--primary); margin-right: 8px; border-radius: 2px; }
-
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; flex: 1; }
-        .card { 
-            background: #111; border: 2px solid transparent; 
-            border-radius: 16px; overflow: hidden; 
-            position: relative; text-decoration: none;
-        }
-        
-        /* 撞色边框 */
+        .card { background: #111; border: 2px solid transparent; border-radius: 16px; overflow: hidden; position: relative; }
         .case-border { border-color: #a855f7; } .plan-border { border-color: #eab308; }
         .cert-border { border-color: #22d3ee; } .prod-border { border-color: #f472b6; }
-
-        .card img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.85); }
-        .card-info { 
-            position: absolute; bottom: 0; width: 100%; 
-            padding: 15px 5px; font-size: 11px; text-align: center; 
-            color: #fff; font-weight: bold; background: linear-gradient(transparent, rgba(0,0,0,0.9));
-        }
+        .card img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.8); }
+        .card-info { position: absolute; bottom: 0; width: 100%; padding: 15px 5px; font-size: 11px; text-align: center; font-weight: bold; background: linear-gradient(transparent, rgba(0,0,0,0.9)); }
+        #modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 1000; flex-direction: column; justify-content: center; align-items: center; backdrop-filter: blur(10px); }
+        #modal img { max-width: 90%; max-height: 70%; border-radius: 15px; box-shadow: 0 0 30px var(--primary); }
     </style>
 </head>
 <body>
     <div class="brand-card">
-        <h1>SHANGHAI LUXIOU</h1>
-        <p>数字化私教诊断系统</p>
+        <h1 id="adminTrigger">SHANGHAI LUXIOU</h1>
+        <p style="color:#666; font-size:12px; margin-top:5px;">数字化私教诊断系统</p>
     </div>
 
     <div class="btn-group">
@@ -75,10 +38,22 @@
 
     <div class="section-label">LUXIOU 谈单中枢</div>
     <div class="grid">
-        <a href="#" class="card case-border"><img src="case.jpg"><div class="card-info">【档案库】</div></a>
-        <a href="#" class="card plan-border"><img src="plan.jpg"><div class="card-info">【方案库】</div></a>
-        <a href="#" class="card cert-border"><img src="cert.jpg"><div class="card-info">【背书库】</div></a>
-        <a href="#" class="card prod-border"><img src="product.jpg"><div class="card-info">【产品库】</div></a>
+        <div class="card case-border" onclick="openModal('case_detail.jpg', '档案库预览')"><img src="case.jpg"><div class="card-info">【档案库】</div></div>
+        <div class="card plan-border" onclick="openModal('plan_detail.jpg', '方案库预览')"><img src="plan.jpg"><div class="card-info">【方案库】</div></div>
+        <div class="card cert-border" onclick="openModal('cert_detail.jpg', '背书库预览')"><img src="cert.jpg"><div class="card-info">【背书库】</div></div>
+        <div class="card prod-border" onclick="openModal('product_detail.jpg', '产品库预览')"><img src="product.jpg"><div class="card-info">【产品库】</div></a>
     </div>
+
+    <div id="modal" onclick="this.style.display='none'"><img id="modalImg" src=""><div id="modalTitle" style="margin-top:20px; color:var(--primary)"></div></div>
+
+    <script>
+        function openModal(s, t) { document.getElementById('modalImg').src = s; document.getElementById('modalTitle').innerText = t; document.getElementById('modal').style.display = 'flex'; }
+        
+        // 老板暗号：长按标题3秒进入管理页
+        let timer;
+        const trigger = document.getElementById('adminTrigger');
+        trigger.addEventListener('touchstart', () => timer = setTimeout(() => window.location.href='./admin.html', 3000));
+        trigger.addEventListener('touchend', () => clearTimeout(timer));
+    </script>
 </body>
 </html>
