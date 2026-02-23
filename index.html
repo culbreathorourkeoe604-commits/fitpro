@@ -6,58 +6,59 @@
     <title>SHANGHAI LUXIOU | 谈单全息中枢</title>
     <style>
         :root { --primary: #00f2fe; --secondary: #7000ff; }
-        body { background: #000; color: #fff; font-family: -apple-system, sans-serif; margin: 0; padding: 20px; box-sizing: border-box; }
+        body { background: radial-gradient(circle at top right, #1a2a6c, #111 50%), #000; color: #fff; font-family: -apple-system, sans-serif; margin: 0; min-height: 100vh; padding: 20px; box-sizing: border-box; }
         
-        .brand-card { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 24px; padding: 30px; text-align: center; margin-bottom: 25px; }
-        .brand-card h1 { margin: 0; font-size: 26px; letter-spacing: 6px; color: #fff; }
+        .brand-card { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; padding: 30px 20px; text-align: center; margin-bottom: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .brand-card h1 { margin: 0; font-size: 24px; letter-spacing: 4px; color: var(--primary); text-shadow: 0 0 10px rgba(0, 242, 254, 0.5); }
+        .brand-card p { margin: 10px 0 0; color: #888; font-size: 14px; letter-spacing: 1px; }
         
-        .radar-btn { display: block; background: linear-gradient(90deg, #00f2fe, #7000ff); color: #fff; text-decoration: none; padding: 18px; border-radius: 16px; text-align: center; font-weight: bold; margin-bottom: 12px; box-shadow: 0 10px 20px rgba(112, 0, 255, 0.2); }
-        .radar-btn.secondary { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.2); box-shadow: none; margin-bottom: 30px; font-size: 14px; opacity: 0.8; }
+        .radar-btn { display: block; background: linear-gradient(90deg, #00f2fe, #7000ff); color: #fff; text-decoration: none; padding: 18px; border-radius: 12px; text-align: center; font-weight: bold; font-size: 16px; margin-bottom: 12px; box-shadow: 0 5px 15px rgba(112, 0, 255, 0.3); transition: 0.3s; }
+        .radar-btn.secondary { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.2); box-shadow: none; margin-bottom: 25px; font-size: 14px; }
         
-        .section-label { font-size: 12px; color: #888; margin-bottom: 15px; letter-spacing: 3px; text-transform: uppercase; text-align: center; }
+        .section-label { font-size: 13px; color: var(--primary); margin-bottom: 15px; display: flex; align-items: center; letter-spacing: 2px; }
+        .section-label::before { content: ""; width: 4px; height: 14px; background: var(--primary); margin-right: 8px; border-radius: 2px; }
         
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
-        .card { position: relative; border-radius: 20px; overflow: hidden; text-decoration: none; height: 160px; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); border: 2px solid transparent; }
-        .card:active { transform: scale(0.92); }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .card { background: rgba(255, 255, 255, 0.03); border: 2px solid transparent; border-radius: 15px; overflow: hidden; position: relative; transition: 0.3s; text-decoration: none; height: 140px; }
+        .card:active { transform: scale(0.95); }
         
-        /* 撞色边框设计 */
-        .card-case { border-color: #a855f7; box-shadow: 0 0 15px rgba(168, 85, 247, 0.3); } /* 紫色 */
-        .card-plan { border-color: #eab308; box-shadow: 0 0 15px rgba(234, 179, 8, 0.3); }  /* 金色 */
-        .card-cert { border-color: #22d3ee; box-shadow: 0 0 15px rgba(34, 211, 238, 0.3); }  /* 青色 */
-        .card-product { border-color: #f472b6; box-shadow: 0 0 15px rgba(244, 114, 182, 0.3); } /* 粉色 */
+        /* 撞色霓虹边框方案 */
+        .case-border { border-color: #a855f7; box-shadow: 0 0 15px rgba(168, 85, 247, 0.2); }
+        .plan-border { border-color: #eab308; box-shadow: 0 0 15px rgba(234, 179, 8, 0.2); }
+        .cert-border { border-color: #22d3ee; box-shadow: 0 0 15px rgba(34, 211, 238, 0.2); }
+        .prod-border { border-color: #f472b6; box-shadow: 0 0 15px rgba(244, 114, 182, 0.2); }
 
         .card img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.8) contrast(1.1); }
-        .card-info { position: absolute; bottom: 0; left: 0; right: 0; padding: 15px 5px; background: linear-gradient(transparent, rgba(0,0,0,0.9)); text-align: center; font-size: 11px; font-weight: bold; letter-spacing: 1px; }
-        
-        .footer-tag { text-align: center; font-size: 9px; color: #333; margin-top: 50px; letter-spacing: 5px; }
+        .card-info { position: absolute; bottom: 0; width: 100%; padding: 12px 0; font-size: 11px; text-align: center; color: #fff; font-weight: bold; background: linear-gradient(transparent, rgba(0,0,0,0.8)); letter-spacing: 1px; }
+        .footer-tag { text-align: center; font-size: 10px; color: #444; margin-top: 40px; letter-spacing: 3px; }
     </style>
 </head>
 <body>
     <div class="brand-card">
-        <h1>LUXIOU</h1>
-        <p style="color:#666; font-size:12px; margin-top:5px; letter-spacing:2px;">DIGITAL DIAGNOSIS SYSTEM</p>
+        <h1>SHANGHAI LUXIOU</h1>
+        <p>数字化私教诊断系统</p>
     </div>
 
-    <a href="report.html" class="radar-btn">A 点击进入：VIP 全息体测系统</a>
+    <a href="报告.html" class="radar-btn">A 点击进入：VIP 全息体测系统</a>
     <a href="parq.html" class="radar-btn secondary">B 点击进入：ACE 风险筛查评估</a>
 
-    <div class="section-label">MANAGEMENT HUB / 谈单中枢</div>
+    <div class="section-label">LUXIOU 谈单中枢</div>
     <div class="grid">
-        <a href="cases.html" class="card card-case">
-            <img src="case.jpg" alt="档案库">
-            <div class="card-info">【档案库】<br>真实塑形全息档案</div>
+        <a href="#" class="card case-border">
+            <img src="案例.jpg" alt="档案库">
+            <div class="card-info">【档案库】<br>真实塑形档案</div>
         </a>
-        <a href="plans.html" class="card card-plan">
-            <img src="plan.jpg" alt="方案库">
-            <div class="card-info">【方案库】<br>透明化定制方案</div>
+        <a href="#" class="card plan-border">
+            <img src="计划.jpg" alt="方案库">
+            <div class="card-info">【方案库】<br>透明定制方案</div>
         </a>
-        <a href="certs.html" class="card card-cert">
-            <img src="cert.jpg" alt="背书库">
-            <div class="card-info">【背书库】<br>LUXIOU 学术认证</div>
+        <a href="#" class="card cert-border">
+            <img src="证书.jpg" alt="背书库">
+            <div class="card-info">【背书库】<br>专业学术认证</div>
         </a>
-        <a href="courses.html" class="card card-product">
-            <img src="product.jpg" alt="课程库">
-            <div class="card-info">【课程库】<br>私教进阶定制中心</div>
+        <a href="#" class="card prod-border">
+            <img src="product.jpg" alt="产品库">
+            <div class="card-info">【产品库】<br>私教定制中心</div>
         </a>
     </div>
 
