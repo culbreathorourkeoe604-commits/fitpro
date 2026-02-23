@@ -4,62 +4,67 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <title>SHANGHAI LUXIOU | 谈单全息中枢</title>
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>SHANGHAI LUXIOU | 数字化谈单中枢</title>
     <style>
         :root { --primary: #00f2fe; --secondary: #7000ff; }
         body { background: radial-gradient(circle at top right, #1a2a6c, #111 50%), #000; color: #fff; font-family: -apple-system, sans-serif; margin: 0; min-height: 100vh; padding: 20px; box-sizing: border-box; }
-        
         .brand-card { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; padding: 30px 20px; text-align: center; margin-bottom: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
         .brand-card h1 { margin: 0; font-size: 24px; letter-spacing: 4px; color: var(--primary); text-shadow: 0 0 10px rgba(0, 242, 254, 0.5); }
         
-        /* 核心入口 A 按钮：修复跳转逻辑 */
-        .radar-btn { display: block; background: linear-gradient(90deg, #00f2fe, #7000ff); color: #fff; text-decoration: none; padding: 18px; border-radius: 12px; text-align: center; font-weight: bold; font-size: 16px; margin-bottom: 12px; box-shadow: 0 5px 15px rgba(112, 0, 255, 0.3); transition: 0.3s; }
-        
-        /* 核心入口 B 按钮：ACE 问卷 */
+        /* A/B 核心控制键 */
+        .radar-btn { display: block; background: linear-gradient(90deg, #00f2fe, #7000ff); color: #fff; text-decoration: none; padding: 18px; border-radius: 12px; text-align: center; font-weight: bold; font-size: 16px; margin-bottom: 12px; box-shadow: 0 5px 15px rgba(112, 0, 255, 0.3); border: none; width: 100%; cursor: pointer; }
         .radar-btn.secondary { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.2); box-shadow: none; margin-bottom: 25px; font-size: 14px; color: #eee; }
         
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
         .card { background: rgba(255, 255, 255, 0.03); border: 2px solid transparent; border-radius: 15px; overflow: hidden; position: relative; height: 160px; text-decoration: none; }
-        
-        /* 霓虹边框方案 */
-        .case-border { border-color: #a855f7; box-shadow: 0 0 15px rgba(168, 85, 247, 0.2); }
-        .plan-border { border-color: #eab308; box-shadow: 0 0 15px rgba(234, 179, 8, 0.2); }
-        .cert-border { border-color: #22d3ee; box-shadow: 0 0 15px rgba(34, 211, 238, 0.2); }
-        .prod-border { border-color: #f472b6; box-shadow: 0 0 15px rgba(244, 114, 182, 0.2); }
-
+        .case-border { border-color: #a855f7; } .plan-border { border-color: #eab308; }
+        .cert-border { border-color: #22d3ee; } .prod-border { border-color: #f472b6; }
         .card img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.9); }
-        .card-info { position: absolute; bottom: 0; width: 100%; padding: 15px 0; font-size: 11px; text-align: center; color: #fff; font-weight: bold; background: linear-gradient(transparent, rgba(0,0,0,0.85)); letter-spacing: 1px; }
+        .card-info { position: absolute; bottom: 0; width: 100%; padding: 15px 0; font-size: 11px; text-align: center; color: #fff; font-weight: bold; background: linear-gradient(transparent, rgba(0,0,0,0.85)); }
     </style>
 </head>
 <body>
     <div class="brand-card">
         <h1>SHANGHAI LUXIOU</h1>
-        <p style="color:#666; font-size:12px; margin-top:5px; letter-spacing:2px;">数字化私教诊断系统</p>
+        <p style="color:#888; font-size:14px; margin-top:5px;">数字化私教诊断系统</p>
     </div>
 
-    <a href="./报告.html?update=2026" class="radar-btn">A 点击进入：VIP 全息体测系统</a>
+    <button onclick="smartRedirect()" class="radar-btn">A 点击进入：VIP 全息体测系统</button>
     <a href="./parq.html" class="radar-btn secondary">B 点击进入：ACE 风险筛查评估</a>
 
-    <div style="font-size: 13px; color: var(--primary); margin-bottom: 15px; padding-left: 5px;">LUXIOU 谈单中枢</div>
+    <div style="font-size: 13px; color: var(--primary); margin-bottom: 15px;">LUXIOU 谈单中枢</div>
     <div class="grid">
-        <a href="#" class="card case-border">
-            <img src="case.jpg" alt="档案库">
-            <div class="card-info">【档案库】<br>真实塑形档案</div>
-        </a>
-        <a href="#" class="card plan-border">
-            <img src="plan.jpg" alt="方案库">
-            <div class="card-info">【方案库】<br>全息透明方案</div>
-        </a>
-        <a href="#" class="card cert-border">
-            <img src="cert.jpg" alt="背书库">
-            <div class="card-info">【背书库】<br>专业学术认证</div>
-        </a>
-        <a href="#" class="card prod-border">
-            <img src="product.jpg" alt="产品库">
-            <div class="card-info">【产品库】<br>私教定制中心</div>
-        </a>
+        <a href="#" class="card case-border"><img src="case.jpg"><div class="card-info">【档案库】</div></a>
+        <a href="#" class="card plan-border"><img src="plan.jpg"><div class="card-info">【方案库】</div></a>
+        <a href="#" class="card cert-border"><img src="cert.jpg"><div class="card-info">【背书库】</div></a>
+        <a href="#" class="card prod-border"><img src="product.jpg"><div class="card-info">【产品库】</div></a>
     </div>
 
-    <p style="text-align: center; font-size: 10px; color: #333; margin-top: 40px; letter-spacing: 3px;">LUXIOU DIGITAL ARCHITECT</p>
+    <script>
+    /**
+     * 老板，这是我为您写的“智能探路者”脚本
+     * 它会自动判断您的文件到底是叫 report 还是 报告，确保 404 永不出现
+     */
+    function smartRedirect() {
+        const paths = ['./report.html', './报告.html'];
+        let found = false;
+        
+        // 尝试探测第一个路径
+        fetch(paths[0], { method: 'HEAD' }).then(res => {
+            if (res.ok) {
+                window.location.href = paths[0] + '?t=' + new Date().getTime();
+                found = true;
+            } else {
+                // 如果第一个失败，强行跳转第二个
+                window.location.href = paths[1] + '?t=' + new Date().getTime();
+            }
+        }).catch(() => {
+            // 网络异常时保底跳转
+            window.location.href = paths[0];
+        });
+    }
+    </script>
 </body>
 </html>
