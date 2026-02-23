@@ -3,57 +3,73 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SHANGHAI LUXIOU | 数字化谈单中枢</title>
+    <title>SHANGHAI LUXIOU | 谈单全息中枢</title>
     <style>
         :root { --primary: #00f2fe; --secondary: #7000ff; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { background: #000; background-image: radial-gradient(circle at top right, #1a2a6c, #000 70%); color: #fff; font-family: -apple-system, sans-serif; margin: 0; padding: 20px; min-height: 100vh; display: flex; flex-direction: column; }
+        body { background: #000; background-image: radial-gradient(circle at top right, #1a2a6c, #000 70%); color: #fff; font-family: -apple-system, sans-serif; margin: 0; padding: 20px; min-height: 100vh; }
         .brand-card { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; padding: 25px 20px; text-align: center; margin-bottom: 25px; }
         .brand-card h1 { margin: 0; font-size: 24px; letter-spacing: 4px; color: var(--primary); text-shadow: 0 0 15px rgba(0, 242, 254, 0.6); }
         .btn-group { width: 100%; display: flex; flex-direction: column; gap: 12px; margin-bottom: 30px; }
-        .radar-btn { display: block; width: 100%; padding: 18px; border-radius: 12px; text-align: center; font-weight: bold; font-size: 16px; text-decoration: none; transition: 0.3s; }
-        .btn-a { background: linear-gradient(90deg, #00f2fe, #7000ff); color: #fff; box-shadow: 0 5px 15px rgba(112, 0, 255, 0.3); }
+        .radar-btn { display: block; width: 100%; padding: 18px; border-radius: 12px; text-align: center; font-weight: bold; font-size: 16px; text-decoration: none; color: #fff; }
+        .btn-a { background: linear-gradient(90deg, #00f2fe, #7000ff); box-shadow: 0 5px 15px rgba(112, 0, 255, 0.3); }
         .btn-b { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.2); color: #eee; }
-        .section-label { font-size: 13px; color: var(--primary); margin-bottom: 15px; display: flex; align-items: center; letter-spacing: 2px; }
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; flex: 1; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
         .card { background: #111; border: 2px solid transparent; border-radius: 16px; overflow: hidden; position: relative; }
-        .case-border { border-color: #a855f7; } .plan-border { border-color: #eab308; }
-        .cert-border { border-color: #22d3ee; } .prod-border { border-color: #f472b6; }
-        .card img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.8); }
+        .card img { width: 100%; height: 160px; object-fit: cover; filter: brightness(0.8); }
         .card-info { position: absolute; bottom: 0; width: 100%; padding: 15px 5px; font-size: 11px; text-align: center; font-weight: bold; background: linear-gradient(transparent, rgba(0,0,0,0.9)); }
-        #modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 1000; flex-direction: column; justify-content: center; align-items: center; backdrop-filter: blur(10px); }
-        #modal img { max-width: 90%; max-height: 70%; border-radius: 15px; box-shadow: 0 0 30px var(--primary); }
+        
+        /* 弹窗及分类样式 */
+        #modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 1000; flex-direction: column; align-items: center; padding-top: 60px; backdrop-filter: blur(10px); }
+        .tab-box { display: flex; gap: 10px; margin-bottom: 20px; width: 90%; }
+        .tab { flex: 1; padding: 12px; background: rgba(255,255,255,0.1); border-radius: 8px; text-align: center; font-size: 13px; color: #888; }
+        .tab.active { background: var(--primary); color: #000; font-weight: bold; }
+        #modalImg { max-width: 90%; max-height: 60%; border-radius: 15px; box-shadow: 0 0 20px var(--primary); }
     </style>
 </head>
 <body>
-    <div class="brand-card">
-        <h1 id="adminTrigger">SHANGHAI LUXIOU</h1>
-        <p style="color:#666; font-size:12px; margin-top:5px;">数字化私教诊断系统</p>
-    </div>
+    <div class="brand-card"><h1 id="adminTrigger">SHANGHAI LUXIOU</h1><p style="color:#666; font-size:12px; margin-top:5px;">数字化私教诊断系统</p></div>
 
     <div class="btn-group">
         <a href="./report.html" class="radar-btn btn-a">A 点击进入：VIP 全息体测系统</a>
         <a href="./parq.html" class="radar-btn btn-b">B 点击进入：ACE 风险筛查评估</a>
     </div>
 
-    <div class="section-label">LUXIOU 谈单中枢</div>
     <div class="grid">
-        <div class="card case-border" onclick="openModal('case_detail.jpg', '档案库预览')"><img src="case.jpg"><div class="card-info">【档案库】</div></div>
-        <div class="card plan-border" onclick="openModal('plan_detail.jpg', '方案库预览')"><img src="plan.jpg"><div class="card-info">【方案库】</div></div>
-        <div class="card cert-border" onclick="openModal('cert_detail.jpg', '背书库预览')"><img src="cert.jpg"><div class="card-info">【背书库】</div></div>
-        <div class="card prod-border" onclick="openModal('product_detail.jpg', '产品库预览')"><img src="product.jpg"><div class="card-info">【产品库】</div></a>
+        <div class="card" style="border-color:#a855f7" onclick="showModule('档案库', '减脂案例', 'case_1.jpg', '塑形案例', 'case_2.jpg')"><img src="case.jpg"><div class="card-info">【档案库】</div></div>
+        <div class="card" style="border-color:#eab308" onclick="showModule('方案库', '基础方案', 'plan_1.jpg', '强化方案', 'plan_2.jpg')"><img src="plan.jpg"><div class="card-info">【方案库】</div></div>
+        <div class="card" style="border-color:#22d3ee" onclick="showModule('背书库', '资质证书', 'cert_1.jpg', '荣誉奖项', 'cert_2.jpg')"><img src="cert.jpg"><div class="card-info">【背书库】</div></div>
+        <div class="card" style="border-color:#f472b6" onclick="showModule('产品库', '私教课程', 'prod_1.jpg', '营养补剂', 'prod_2.jpg')"><img src="product.jpg"><div class="card-info">【产品库】</div></div>
     </div>
 
-    <div id="modal" onclick="this.style.display='none'"><img id="modalImg" src=""><div id="modalTitle" style="margin-top:20px; color:var(--primary)"></div></div>
+    <div id="modal">
+        <div id="modalTitle" style="color:var(--primary); font-size:18px; margin-bottom:20px;"></div>
+        <div class="tab-box" id="tabBox"></div>
+        <img id="modalImg" src="">
+        <div onclick="document.getElementById('modal').style.display='none'" style="margin-top:30px; color:#666; font-size:24px;">× 关闭预览</div>
+    </div>
 
     <script>
-        function openModal(s, t) { document.getElementById('modalImg').src = s; document.getElementById('modalTitle').innerText = t; document.getElementById('modal').style.display = 'flex'; }
-        
-        // 老板暗号：长按标题3秒进入管理页
+        function showModule(mName, t1, i1, t2, i2) {
+            const m = document.getElementById('modal');
+            document.getElementById('modalTitle').innerText = mName;
+            const tb = document.getElementById('tabBox');
+            tb.innerHTML = `
+                <div class="tab active" onclick="switchTab(this, '${i1}')">${t1}</div>
+                <div class="tab" onclick="switchTab(this, '${i2}')">${t2}</div>
+            `;
+            document.getElementById('modalImg').src = i1;
+            m.style.display = 'flex';
+        }
+        function switchTab(el, img) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            el.classList.add('active');
+            document.getElementById('modalImg').src = img;
+        }
+        // 老板长按暗号
         let timer;
-        const trigger = document.getElementById('adminTrigger');
-        trigger.addEventListener('touchstart', () => timer = setTimeout(() => window.location.href='./admin.html', 3000));
-        trigger.addEventListener('touchend', () => clearTimeout(timer));
+        document.getElementById('adminTrigger').addEventListener('touchstart', () => timer = setTimeout(() => window.location.href='./admin.html', 3000));
+        document.getElementById('adminTrigger').addEventListener('touchend', () => clearTimeout(timer));
     </script>
 </body>
 </html>
