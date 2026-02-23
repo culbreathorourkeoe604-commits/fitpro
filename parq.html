@@ -17,41 +17,42 @@
         label { font-size: 14px; display: flex; align-items: center; gap: 8px; cursor: pointer; }
         input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--primary); }
         .sign-section { display: flex; justify-content: space-between; align-items: flex-end; margin-top: 40px; padding: 20px; background: rgba(255,255,255,0.03); border-radius: 15px; }
-        .sign-input { background: transparent; border: none; border-bottom: 1px dashed #444; color: var(--primary); width: 80%; padding: 5px 0; outline: none; }
-        .date-input { background: #1e293b; border: 1px solid #334155; color: #fff; padding: 8px; border-radius: 6px; font-size: 12px; outline: none; }
+        .date-input { background: #1e293b; border: 1px solid #334155; color: #fff; padding: 8px; border-radius: 6px; font-size: 13px; outline: none; }
         .submit-btn { width: 100%; background: linear-gradient(90deg, #00f2fe, #007aff); color: white; border: none; padding: 18px; border-radius: 15px; font-weight: bold; margin-top: 30px; }
     </style>
 </head>
 <body>
     <div class="container">
         <h2>ACE 标准全维度健康筛查</h2>
+        
         <div class="section-title">I. 核心体征评估</div>
         <div class="question-box"><div class="question-text">1. 医生是否曾告诉您患有心脏病？</div><div class="options"><label><input type="checkbox"> 是</label><label><input type="checkbox"> 否</label></div></div>
-        <div class="question-box"><div class="question-text">2. 您在进行体力活动时是否感到胸痛？</div><div class="options"><label><input type="checkbox"> 是</label><label><input type="checkbox"> 否</label></div></div>
+        <div class="question-box"><div class="question-text">2. 您在体力活动时是否感到胸痛？</div><div class="options"><label><input type="checkbox"> 是</label><label><input type="checkbox"> 否</label></div></div>
         <div class="question-box"><div class="question-text">3. 过去一个月内，您在静止时是否胸痛？</div><div class="options"><label><input type="checkbox"> 是</label><label><input type="checkbox"> 否</label></div></div>
+
         <div class="section-title">II. 代谢与平衡评估</div>
         <div class="question-box"><div class="question-text">4. 您是否曾因晕眩失去平衡？</div><div class="options"><label><input type="checkbox"> 是</label><label><input type="checkbox"> 否</label></div></div>
         <div class="question-box"><div class="question-text">5. 您是否有骨骼关节问题？</div><div class="options"><label><input type="checkbox"> 是</label><label><input type="checkbox"> 否</label></div></div>
-        <div class="question-box"><div class="question-text">6. 医生是否为您开具过降压药？</div><div class="options"><label><input type="checkbox"> 是</label><label><input type="checkbox"> 否</label></div></div>
+        <div class="question-box"><div class="question-text">6. 医生是否为您开具过治疗血压的药物？</div><div class="options"><label><input type="checkbox"> 是</label><label><input type="checkbox"> 否</label></div></div>
         <div class="question-box"><div class="question-text">7. 您是否患有糖尿病？</div><div class="options"><label><input type="checkbox"> 是</label><label><input type="checkbox"> 否</label></div></div>
+
         <div class="section-title">III. 身体现状评估</div>
-        <div class="question-box"><div class="question-text">8. 轻微活动后是否呼吸困难？</div><div class="options"><label><input type="checkbox"> 是</label><label><input type="checkbox"> 否</label></div></div>
-        <div class="question-box"><div class="question-text">9. 您是否有哮喘？</div><div class="options"><label><input type="checkbox"> 是</label><label><input type="checkbox"> 否</label></div></div>
-        <div class="question-box"><div class="question-text">10. 腰颈部是否有过严重不适？</div><div class="options"><label><input type="checkbox"> 是</label><label><input type="checkbox"> 否</label></div></div>
-        <div class="question-box"><div class="question-text">11. 是否患有疝气？</div><div class="options"><label><input type="checkbox"> 是</label><label><input type="checkbox"> 否</label></div></div>
-        <div class="question-box"><div class="question-text">12. 是否有神经系统疾病？</div><div class="options"><label><input type="checkbox"> 是</label><label><input type="checkbox"> 否</label></div></div>
-        <div class="question-box"><div class="question-text">13. 过去12个月是否动过手术？</div><div class="options"><label><input type="checkbox"> 是</label><label><input type="checkbox"> 否</label></div></div>
-        <div class="question-box"><div class="question-text">14. 是否有严重骨质疏松？</div><div class="options"><label><input type="checkbox"> 是</label><label><input type="checkbox"> 否</label></div></div>
+        <div class="question-box"><div class="question-text">8-14. 包含手术史、哮喘、骨质疏松等身体状况？</div><div class="options"><label><input type="checkbox"> 是</label><label><input type="checkbox"> 否</label></div></div>
+
         <div class="section-title">IV. 生活习惯</div>
         <div class="question-box"><div class="question-text">15. 目前是否有吸烟习惯？</div><div class="options"><label><input type="checkbox"> 是</label><label><input type="checkbox"> 否</label></div></div>
         <div class="question-box"><div class="question-text">16. 每周运动是否不足3次？</div><div class="options"><label><input type="checkbox"> 是</label><label><input type="checkbox"> 否</label></div></div>
         <div class="question-box"><div class="question-text">17. 是否怀孕或产后不足12周？</div><div class="options"><label><input type="checkbox"> 是</label><label><input type="checkbox"> 否</label></div></div>
         <div class="question-box"><div class="question-text">18. 任何其他不应运动的原因？</div><div class="options"><label><input type="checkbox"> 是</label><label><input type="checkbox"> 否</label></div></div>
+
         <div class="sign-section">
-            <div class="sign-item"><p style="font-size:10px;color:#888;">会员签名</p><input type="text" class="sign-input" placeholder="点击输入"></div>
-            <div style="text-align:right;"><p style="font-size:10px;color:#888;">签署日期</p><input type="date" class="date-input" value="2026-02-23"></div>
+            <div style="flex:1;"><p style="font-size:10px;color:#888;">会员签名</p><input type="text" style="background:transparent;border:none;border-bottom:1px dashed #444;color:#00f2fe;width:80%;outline:none;" placeholder="点击输入"></div>
+            <div style="text-align:right;">
+                <p style="font-size:10px;color:#888;">签署日期</p>
+                <input type="date" class="date-input" value="2026-02-23">
+            </div>
         </div>
-        <button class="submit-btn" onclick="alert('档案已同步')">完成评估并生成档案图</button>
+        <button class="submit-btn" onclick="alert('ACE 评估档案已成功生成')">完成评估并生成高清档案图</button>
     </div>
 </body>
 </html>
