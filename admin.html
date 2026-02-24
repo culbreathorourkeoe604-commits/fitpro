@@ -3,102 +3,84 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LUXIOU | 数字化数据自动化中枢</title>
+    <title>LUXIOU | 课程产品矩阵中枢</title>
     <style>
-        :root { --primary: #00f2fe; --bg: #0a0a0a; }
+        :root { --primary: #00f2fe; --secondary: #7000ff; --bg: #0a0a0a; }
         body { background: var(--bg); color: #fff; font-family: -apple-system, sans-serif; padding: 30px; line-height: 1.6; margin: 0; }
-        .container { max-width: 1000px; margin: 0 auto; }
+        .container { max-width: 1100px; margin: 0 auto; }
         .header { text-align: center; border-bottom: 2px solid #222; padding-bottom: 20px; margin-bottom: 30px; }
-        .header h1 { color: var(--primary); letter-spacing: 3px; font-size: 28px; margin-bottom: 10px; }
+        .header h1 { color: var(--primary); letter-spacing: 3px; font-size: 28px; }
         
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        .card { background: #111; border: 1px solid #222; border-radius: 15px; padding: 25px; transition: 0.3s; }
-        .card:hover { border-color: #333; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        .card h3 { color: var(--primary); margin-top: 0; border-left: 4px solid var(--primary); padding-left: 12px; font-size: 18px; margin-bottom: 20px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+        .card { background: #111; border: 1px solid #222; border-radius: 15px; padding: 25px; }
+        .card h3 { color: var(--primary); margin-top: 0; border-left: 4px solid var(--primary); padding-left: 12px; font-size: 18px; margin-bottom: 10px; }
+        .card .subtitle { color: #555; font-size: 12px; margin-bottom: 20px; letter-spacing: 1px; }
         
         .upload-zone { 
-            border: 2px dashed #333; border-radius: 12px; padding: 25px; text-align: center; 
+            border: 2px dashed #333; border-radius: 12px; padding: 20px; text-align: center; 
             margin-top: 15px; transition: 0.3s; cursor: pointer; background: rgba(255,255,255,0.01);
         }
         .upload-zone:hover { border-color: var(--primary); background: rgba(0,242,254,0.05); }
         .btn-github { 
             display: inline-block; background: linear-gradient(90deg, #00f2fe, #7000ff); color: #fff; 
             padding: 15px 30px; border-radius: 10px; text-decoration: none; font-weight: bold; 
-            margin-top: 30px; width: 100%; text-align: center; box-shadow: 0 5px 15px rgba(112, 0, 255, 0.3);
+            margin-top: 30px; width: 100%; text-align: center;
         }
-        .file-info { font-size: 11px; color: #555; margin-top: 10px; font-family: monospace; letter-spacing: 1px; }
+        .file-info { font-size: 10px; color: #444; margin-top: 10px; font-family: monospace; }
         canvas { display: none; }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>LUXIOU 数据自动化中枢</h1>
-            <p style="color:#666; font-size: 14px;">电脑端专供 · 图片自动加工厂 · 极致同步体验</p>
+            <h1>LUXIOU 课程产品矩阵中枢</h1>
+            <p style="color:#666">自动化图片加工 · 规格：1000x1200高清</p>
         </div>
 
         <div class="grid">
             <div class="card">
-                <h3>📁 【档案库】管理</h3>
-                <div class="upload-zone" onclick="triggerUpload('case_1.jpg')">
-                    点击上传：1挡 (减脂案例)
-                    <div class="file-info">目标文件名：case_1.jpg</div>
+                <h3>常规课程 (60min)</h3>
+                <div class="subtitle">重点：减脂塑形、大肌群训练</div>
+                <div class="upload-zone" onclick="triggerUpload('prod_reg_1.jpg')">
+                    点击上传：常规课详情 A
+                    <div class="file-info">目标：prod_reg_1.jpg</div>
                 </div>
-                <div class="upload-zone" onclick="triggerUpload('case_2.jpg')">
-                    点击上传：2挡 (塑形案例)
-                    <div class="file-info">目标文件名：case_2.jpg</div>
-                </div>
-            </div>
-
-            <div class="card">
-                <h3>📜 【方案库】管理</h3>
-                <div class="upload-zone" onclick="triggerUpload('plan_1.jpg')">
-                    点击上传：1挡 (基础方案)
-                    <div class="file-info">目标文件名：plan_1.jpg</div>
-                </div>
-                <div class="upload-zone" onclick="triggerUpload('plan_2.jpg')">
-                    点击上传：2挡 (强化方案)
-                    <div class="file-info">目标文件名：plan_2.jpg</div>
+                <div class="upload-zone" onclick="triggerUpload('prod_reg_2.jpg')">
+                    点击上传：常规课详情 B
+                    <div class="file-info">目标：prod_reg_2.jpg</div>
                 </div>
             </div>
 
             <div class="card">
-                <h3>🎓 【背书库】管理</h3>
-                <div class="upload-zone" onclick="triggerUpload('cert_1.jpg')">
-                    点击上传：1挡 (资质证书)
-                    <div class="file-info">目标文件名：cert_1.jpg</div>
+                <h3>特色课程 (45min)</h3>
+                <div class="subtitle">拉伸/拳击/普拉提/TRX/HIIT</div>
+                <div class="upload-zone" onclick="triggerUpload('prod_feat_1.jpg')">
+                    点击上传：特色课详情 A
+                    <div class="file-info">目标：prod_feat_1.jpg</div>
                 </div>
-                <div class="upload-zone" onclick="triggerUpload('cert_2.jpg')">
-                    点击上传：2挡 (荣誉奖项)
-                    <div class="file-info">目标文件名：cert_2.jpg</div>
+                <div class="upload-zone" onclick="triggerUpload('prod_feat_2.jpg')">
+                    点击上传：特色课详情 B
+                    <div class="file-info">目标：prod_feat_2.jpg</div>
                 </div>
             </div>
 
             <div class="card">
-                <h3>🛒 【产品库】管理</h3>
-                <div class="upload-zone" onclick="triggerUpload('prod_1.jpg')">
-                    点击上传：1挡 (私教课程)
-                    <div class="file-info">目标文件名：prod_1.jpg</div>
+                <h3>包月系统 (45min)</h3>
+                <div class="subtitle">包月/包季/半年卡 (高频养成)</div>
+                <div class="upload-zone" onclick="triggerUpload('prod_sub_1.jpg')">
+                    点击上传：包月/包季卡种
+                    <div class="file-info">目标：prod_sub_1.jpg</div>
                 </div>
-                <div class="upload-zone" onclick="triggerUpload('prod_2.jpg')">
-                    点击上传：2挡 (营养补剂)
-                    <div class="file-info">目标文件名：prod_2.jpg</div>
+                <div class="upload-zone" onclick="triggerUpload('prod_sub_2.jpg')">
+                    点击上传：半年卡/长期方案
+                    <div class="file-info">目标：prod_sub_2.jpg</div>
                 </div>
             </div>
         </div>
 
-        <div style="margin-top: 40px; background: rgba(255,255,255,0.02); padding: 30px; border-radius: 20px; border: 1px solid #222;">
-            <h4 style="color: var(--primary); margin-top: 0; font-size: 18px;">🚀 操作指引</h4>
-            <ol style="color: #888; font-size: 14px; padding-left: 20px;">
-                <li style="margin-bottom: 10px;">点击上方任意虚线框，选择您电脑里的原始图片（支持任何格式、任何大小）。</li>
-                <li style="margin-bottom: 10px;">系统会自动完成图片优化，并将改好名的 <b>.jpg</b> 文件下载到您的电脑。</li>
-                <li style="margin-bottom: 10px;">点击下方紫色大按钮打开 GitHub。</li>
-                <li>直接将下载好的文件<b>拖入</b> GitHub 页面，点击绿色 <b>Commit changes</b> 即可同步。</li>
-            </ol>
-            <a href="https://github.com/culbreathorourkeoe604-commits/fitpro/upload/main" target="_blank" class="btn-github">
-                点击这里打开 GitHub 后台 ➔ 拖入文件极速同步
-            </a>
-        </div>
+        <a href="https://github.com/culbreathorourkeoe604-commits/fitpro/upload/main" target="_blank" class="btn-github">
+            一键进入 GitHub 后台 ➔ 拖入处理好的文件
+        </a>
     </div>
 
     <input type="file" id="fileInput" accept="image/*" style="display:none">
@@ -110,36 +92,26 @@
         const canvas = document.getElementById('canvas');
         const ctx = canvas.getContext('2d');
 
-        function triggerUpload(name) {
-            targetName = name;
-            fileInput.click();
-        }
+        function triggerUpload(name) { targetName = name; fileInput.click(); }
 
         fileInput.onchange = function(e) {
             const file = e.target.files[0];
             if (!file) return;
-
             const reader = new FileReader();
             reader.onload = function(event) {
                 const img = new Image();
                 img.onload = function() {
-                    // 统一高品质规格：1000x1200
-                    canvas.width = 1000;
-                    canvas.height = 1200;
-                    ctx.fillStyle = "#000";
-                    ctx.fillRect(0, 0, 1000, 1200);
-                    
+                    canvas.width = 1000; canvas.height = 1200;
+                    ctx.fillStyle = "#000"; ctx.fillRect(0, 0, 1000, 1200);
                     const scale = Math.max(1000 / img.width, 1200 / img.height);
                     const x = (1000 - img.width * scale) / 2;
                     const y = (1200 - img.height * scale) / 2;
                     ctx.drawImage(img, x, y, img.width * scale, img.height * scale);
-
                     const link = document.createElement('a');
                     link.download = targetName;
                     link.href = canvas.toDataURL('image/jpeg', 0.9);
                     link.click();
-                    
-                    alert('✅ 处理成功！已为您生成：' + targetName + '\n文件已保存到下载文件夹。现在去 GitHub 拖入上传吧！');
+                    alert('✅ 处理成功！生成的系统文件：' + targetName + '\n请拖入 GitHub 提交。');
                 };
                 img.src = event.target.result;
             };
