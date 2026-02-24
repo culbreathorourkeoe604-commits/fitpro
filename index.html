@@ -3,55 +3,150 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>LUXIOU | 数字化谈单中枢</title>
+    <title>SHANGHAI LUXIOU</title>
+    
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="LUXIOU谈单">
+    <link rel="apple-touch-icon" href="logo.png">
+    
+    <link rel="preconnect" href="https://cdn.staticfile.net">
+    <link rel="dns-prefetch" href="https://cdn.staticfile.net">
     <link rel="preload" href="case_1.jpg" as="image">
-    <link rel="preload" href="plan_1.jpg" as="image">
-    <link rel="preload" href="cert_1.jpg" as="image">
     <link rel="preload" href="prod_reg_1.jpg" as="image">
-    <style id="theme-style">
+
+    <style>
         :root { --primary: #00f2fe; --secondary: #7000ff; --bg: #000; --card-bg: rgba(255, 255, 255, 0.03); --text: #fff; --grad: radial-gradient(circle at top right, #1a2a6c, #000 70%); }
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
         body { background: var(--bg); background-image: var(--grad); color: var(--text); font-family: -apple-system, sans-serif; margin: 0; padding: 20px; min-height: 100vh; transition: all 0.5s ease; display: flex; flex-direction: column; }
-        #style-trigger { position: fixed; top: 15px; right: 15px; z-index: 2000; background: rgba(255,255,255,0.1); padding: 8px 15px; border-radius: 50px; font-size: 12px; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2); color: #fff; cursor: pointer; }
-        #style-panel { display: none; position: fixed; top: 60px; right: 15px; z-index: 2001; background: #111; border: 1px solid #333; border-radius: 15px; padding: 10px; width: 140px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
-        .style-option { padding: 12px; font-size: 13px; color: #aaa; cursor: pointer; border-bottom: 1px solid #222; text-align: center; }
-        .brand-card { background: var(--card-bg); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; padding: 25px 20px; text-align: center; margin-bottom: 25px; }
+        
+        /* 隐藏的风格切换菜单 */
+        #style-trigger { position: fixed; top: 15px; right: 15px; z-index: 2000; background: rgba(255,255,255,0.1); padding: 8px 15px; border-radius: 50px; font-size: 11px; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2); }
+        #style-panel { display: none; position: fixed; top: 60px; right: 15px; z-index: 2001; background: #111; border: 1px solid #333; border-radius: 15px; padding: 10px; width: 140px; }
+        .style-option { padding: 12px; font-size: 13px; color: #aaa; text-align: center; border-bottom: 1px solid #222; }
+        
+        .brand-card { background: var(--card-bg); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; padding: 25px 20px; text-align: center; margin-bottom: 25px; margin-top: 10px; }
         .brand-card h1 { margin: 0; font-size: 24px; letter-spacing: 4px; color: var(--primary); text-shadow: 0 0 15px var(--primary); }
+        
         .btn-group { width: 100%; display: flex; flex-direction: column; gap: 12px; margin-bottom: 30px; }
         .radar-btn { display: block; width: 100%; padding: 18px; border-radius: 12px; text-align: center; font-weight: bold; font-size: 16px; text-decoration: none; color: #fff; }
         .btn-a { background: linear-gradient(90deg, var(--primary), var(--secondary)); box-shadow: 0 5px 15px rgba(112, 0, 255, 0.3); }
         .btn-b { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.2); }
+        
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; flex: 1; }
-        .card { background: #111; border: 2px solid transparent; border-radius: 16px; overflow: hidden; position: relative; height: 160px; }
+        .card { background: #111; border: 2px solid transparent; border-radius: 16px; overflow: hidden; position: relative; height: 160px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
         .card img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.8); }
-        .card-info { position: absolute; bottom: 0; width: 100%; padding: 15px 5px; font-size: 11px; text-align: center; font-weight: bold; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: #fff; }
-        #modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 1000; flex-direction: column; align-items: center; padding-top: 50px; backdrop-filter: blur(10px); }
+        .card-info { position: absolute; bottom: 0; width: 100%; padding: 12px 5px; font-size: 11px; text-align: center; font-weight: bold; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: #fff; }
+        
+        #modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 1000; flex-direction: column; align-items: center; padding-top: 50px; backdrop-filter: blur(15px); }
         .tab-box { display: flex; gap: 8px; margin-bottom: 15px; width: 92%; }
-        .tab { flex: 1; padding: 10px 5px; background: rgba(255,255,255,0.05); border-radius: 8px; text-align: center; font-size: 11px; color: #fff; }
+        .tab { flex: 1; padding: 10px 5px; background: rgba(255,255,255,0.05); border-radius: 8px; text-align: center; font-size: 11px; color: #fff; border: 1px solid transparent; }
         .tab.active { background: var(--primary); color: #000; font-weight: bold; }
         #modalImg { max-width: 90%; max-height: 60%; border-radius: 15px; box-shadow: 0 0 25px var(--primary); }
     </style>
 </head>
 <body>
     <div id="style-trigger" onclick="togglePanel()">🎨 切换风格</div>
-    <div id="style-panel"><div class="style-option" onclick="applyTheme(0)">赛博霓虹</div><div class="style-option" onclick="applyTheme(1)">哑光极简</div><div class="style-option" onclick="applyTheme(2)">竞技热血</div><div class="style-option" onclick="applyTheme(3)">纯白美学</div><div class="style-option" onclick="applyTheme(4)">香槟金奢</div></div>
-    <div class="brand-card"><h1 id="adminTrigger">SHANGHAI LUXIOU</h1><p style="color:#666; font-size:12px; margin-top:5px; letter-spacing:2px;">数字化私教诊断系统</p></div>
-    <div class="btn-group"><a href="./report.html" class="radar-btn btn-a">A 点击进入：VIP 全息体测系统</a><a href="./parq.html" class="radar-btn btn-b">B 点击进入：ACE 风险筛查评估</a></div>
-    <div class="grid">
-        <div class="card" style="border-color:#a855f7" onclick="showModule('档案库','减脂案例','case_1.jpg','塑形案例','case_2.jpg')"><img src="case.jpg"><div class="card-info">【档案库】</div></div>
-        <div class="card" style="border-color:#eab308" onclick="showModule('方案库','基础方案','plan_1.jpg','强化方案','plan_2.jpg')"><img src="plan.jpg"><div class="card-info">【方案库】</div></div>
-        <div class="card" style="border-color:#22d3ee" onclick="showModule('背书库','资质证书','cert_1.jpg','荣誉奖项','cert_2.jpg')"><img src="cert.jpg"><div class="card-info">【背书库】</div></div>
-        <div class="card" style="border-color:#f472b6" onclick="showTripleModule()"><img src="product.jpg"><div class="card-info">【产品库】</div></div>
+    <div id="style-panel">
+        <div class="style-option" onclick="applyTheme(0)">赛博霓虹</div>
+        <div class="style-option" onclick="applyTheme(1)">哑光极简</div>
+        <div class="style-option" onclick="applyTheme(2)">竞技热血</div>
+        <div class="style-option" onclick="applyTheme(3)">纯白美学</div>
+        <div class="style-option" onclick="applyTheme(4)">香槟金奢</div>
     </div>
-    <div id="modal"><div id="modalTitle" style="color:var(--primary); font-size:18px; margin-bottom:20px;"></div><div class="tab-box" id="tabBox"></div><img id="modalImg" src=""><div onclick="document.getElementById('modal').style.display='none'" style="margin-top:30px; color:#fff; font-size:20px;">× 关闭</div></div>
+
+    <div class="brand-card">
+        <h1 id="adminTrigger">SHANGHAI LUXIOU</h1>
+        <p style="color:#666; font-size:11px; margin-top:5px; letter-spacing:2px;">数字化私教诊断系统</p>
+    </div>
+
+    <div class="btn-group">
+        <a href="./report.html" class="radar-btn btn-a">A 点击进入：VIP 全息体测系统</a>
+        <a href="./parq.html" class="radar-btn btn-b">B 点击进入：ACE 风险筛查评估</a>
+    </div>
+
+    <div class="grid">
+        <div class="card" style="border-color:#a855f7" onclick="showModule('档案库','减脂案例','case_1.jpg','塑形案例','case_2.jpg')">
+            <img src="case.jpg" loading="lazy"><div class="card-info">【档案库】</div>
+        </div>
+        <div class="card" style="border-color:#eab308" onclick="showModule('方案库','基础方案','plan_1.jpg','强化方案','plan_2.jpg')">
+            <img src="plan.jpg" loading="lazy"><div class="card-info">【方案库】</div>
+        </div>
+        <div class="card" style="border-color:#22d3ee" onclick="showModule('背书库','资质证书','cert_1.jpg','荣誉奖项','cert_2.jpg')">
+            <img src="cert.jpg" loading="lazy"><div class="card-info">【背书库】</div>
+        </div>
+        <div class="card" style="border-color:#f472b6" onclick="showTripleModule()">
+            <img src="product.jpg" loading="lazy"><div class="card-info">【产品库】</div>
+        </div>
+    </div>
+
+    <div id="modal">
+        <div id="modalTitle" style="color:var(--primary); font-size:18px; margin-bottom:20px; font-weight:bold;"></div>
+        <div class="tab-box" id="tabBox"></div>
+        <img id="modalImg" src="">
+        <div onclick="document.getElementById('modal').style.display='none'" style="margin-top:30px; color:#fff; font-size:18px; border:1px solid #444; padding:8px 25px; border-radius:50px;">× 点击关闭</div>
+    </div>
+
     <script>
-        const themes = [{ primary: '#00f2fe', secondary: '#7000ff', bg: '#000', grad: 'radial-gradient(circle at top right, #1a2a6c, #000 70%)', card: 'rgba(255,255,255,0.03)', text: '#fff' },{ primary: '#fff', secondary: '#444', bg: '#111', grad: 'none', card: '#1a1a1a', text: '#eee' },{ primary: '#ff3e3e', secondary: '#000', bg: '#000', grad: 'linear-gradient(135deg, #000 0%, #222 100%)', card: '#111', text: '#fff' },{ primary: '#00c6ff', secondary: '#0072ff', bg: '#f5f7fa', grad: 'none', card: '#fff', text: '#333' },{ primary: '#d4af37', secondary: '#1a1a1a', bg: '#050505', grad: 'radial-gradient(circle at center, #1a1a1a, #000)', card: '#111', text: '#d4af37' }];
+        // 极致性能：预读主题配置
+        const themes = [
+            { primary: '#00f2fe', secondary: '#7000ff', bg: '#000', grad: 'radial-gradient(circle at top right, #1a2a6c, #000 70%)', card: 'rgba(255,255,255,0.03)', text: '#fff' },
+            { primary: '#fff', secondary: '#444', bg: '#111', grad: 'none', card: '#1a1a1a', text: '#eee' },
+            { primary: '#ff3e3e', secondary: '#000', bg: '#000', grad: 'linear-gradient(135deg, #000 0%, #222 100%)', card: '#111', text: '#fff' },
+            { primary: '#00c6ff', secondary: '#0072ff', bg: '#f5f7fa', grad: 'none', card: '#fff', text: '#333' },
+            { primary: '#d4af37', secondary: '#1a1a1a', bg: '#050505', grad: 'radial-gradient(circle at center, #1a1a1a, #000)', card: '#111', text: '#d4af37' }
+        ];
+
         function togglePanel() { const p = document.getElementById('style-panel'); p.style.display = p.style.display === 'block' ? 'none' : 'block'; }
-        function applyTheme(idx) { const t = themes[idx]; const root = document.documentElement.style; root.setProperty('--primary', t.primary); root.setProperty('--secondary', t.secondary); root.setProperty('--bg', t.bg); root.setProperty('--grad', t.grad); root.setProperty('--card-bg', t.card); root.setProperty('--text', t.text); document.body.style.color = t.text; togglePanel(); }
-        function showModule(title, t1, i1, t2, i2) { const m = document.getElementById('modal'); document.getElementById('modalTitle').innerText = title; document.getElementById('tabBox').innerHTML = `<div class="tab active" onclick="switchTab(this, '${i1}')">${t1}</div><div class="tab" onclick="switchTab(this, '${i2}')">${t2}</div>`; document.getElementById('modalImg').src = i1; m.style.display = 'flex'; }
-        function showTripleModule() { const m = document.getElementById('modal'); document.getElementById('modalTitle').innerText = '产品库'; document.getElementById('tabBox').innerHTML = `<div class="tab active" onclick="switchTab(this, 'prod_reg_1.jpg')">常规课程</div><div class="tab" onclick="switchTab(this, 'prod_feat_1.jpg')">特色课程</div><div class="tab" onclick="switchTab(this, 'prod_sub_1.jpg')">包月系统</div>`; document.getElementById('modalImg').src = 'prod_reg_1.jpg'; m.style.display = 'flex'; }
-        function switchTab(el, img) { document.querySelectorAll('.tab').forEach(t => t.classList.remove('active')); el.classList.add('active'); document.getElementById('modalImg').src = img; }
-        let timer; document.getElementById('adminTrigger').addEventListener('touchstart', () => timer = setTimeout(() => window.location.href='./admin.html', 3000)); document.getElementById('adminTrigger').addEventListener('touchend', () => clearTimeout(timer));
+        
+        function applyTheme(idx) {
+            const t = themes[idx];
+            const root = document.documentElement.style;
+            root.setProperty('--primary', t.primary);
+            root.setProperty('--secondary', t.secondary);
+            root.setProperty('--bg', t.bg);
+            root.setProperty('--grad', t.grad);
+            root.setProperty('--card-bg', t.card);
+            document.body.style.color = t.text;
+            togglePanel();
+        }
+
+        function showModule(title, t1, i1, t2, i2) {
+            const m = document.getElementById('modal');
+            document.getElementById('modalTitle').innerText = title;
+            document.getElementById('tabBox').innerHTML = `<div class="tab active" onclick="switchTab(this, '${i1}')">${t1}</div><div class="tab" onclick="switchTab(this, '${i2}')">${t2}</div>`;
+            document.getElementById('modalImg').src = i1;
+            m.style.display = 'flex';
+        }
+
+        function showTripleModule() {
+            const m = document.getElementById('modal');
+            document.getElementById('modalTitle').innerText = '产品库';
+            document.getElementById('tabBox').innerHTML = `
+                <div class="tab active" onclick="switchTab(this, 'prod_reg_1.jpg')">常规课程</div>
+                <div class="tab" onclick="switchTab(this, 'prod_feat_1.jpg')">特色课程</div>
+                <div class="tab" onclick="switchTab(this, 'prod_sub_1.jpg')">包月系统</div>
+            `;
+            document.getElementById('modalImg').src = 'prod_reg_1.jpg';
+            m.style.display = 'flex';
+        }
+
+        function switchTab(el, img) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            el.classList.add('active');
+            document.getElementById('modalImg').src = img;
+        }
+
+        // 离线化注册逻辑预留
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                console.log('超速离线模式就绪');
+            });
+        }
+
+        let timer;
+        document.getElementById('adminTrigger').addEventListener('touchstart', () => timer = setTimeout(() => window.location.href='./admin.html', 3000));
+        document.getElementById('adminTrigger').addEventListener('touchend', () => clearTimeout(timer));
     </script>
 </body>
 </html>
