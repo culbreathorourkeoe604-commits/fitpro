@@ -2,55 +2,153 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VIP 全息档案 | SHANGHAI LUXIOU</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>VIP 全息体态报告 | SHANGHAI LUXIOU</title>
     <script src="https://cdn.staticfile.net/Chart.js/3.9.1/chart.min.js"></script>
     <script src="https://cdn.staticfile.net/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         :root { --primary: #00f2fe; --bg: #0b0f19; --glass: rgba(30, 41, 59, 0.7); }
-        body { background: var(--bg); color: #e2e8f0; font-family: sans-serif; margin: 0; padding: 15px; padding-top: 75px; }
-        .back-btn { position: fixed; top: 15px; left: 15px; z-index: 9999; background: rgba(0,0,0,0.6); color: #fff; padding: 10px 18px; border-radius: 50px; text-decoration: none; font-size: 14px; border: 1px solid rgba(255,255,255,0.4); backdrop-filter: blur(10px); font-weight: bold; }
-        .report-wrap { max-width: 600px; margin: 0 auto; background: var(--glass); border-radius: 24px; padding: 20px; border: 1px solid rgba(255,255,255,0.1); }
+        body { background: var(--bg); color: #e2e8f0; font-family: -apple-system, sans-serif; margin: 0; padding: 15px; padding-top: 75px; }
+        
+        /* 毛玻璃返回按钮 */
+        .back-btn { position: fixed; top: 15px; left: 15px; z-index: 9999; background: rgba(0,0,0,0.6); color: #fff; padding: 10px 18px; border-radius: 50px; text-decoration: none; font-size: 14px; border: 1px solid rgba(255,255,255,0.4); backdrop-filter: blur(10px); font-weight: bold; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
+
+        .report-wrap { max-width: 600px; margin: 0 auto; background: var(--glass); border-radius: 24px; padding: 25px; border: 1px solid rgba(255,255,255,0.1); }
         .header { text-align: center; margin-bottom: 25px; border-bottom: 1px solid #333; padding-bottom: 15px; }
-        .header h1 { color: var(--primary); letter-spacing: 4px; font-size: 22px; margin: 0; }
-        .data-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
-        .data-card { background: rgba(255,255,255,0.03); padding: 15px; border-radius: 16px; text-align: center; border: 1px solid rgba(255,255,255,0.05); }
-        .label { font-size: 11px; color: #64748b; margin-bottom: 5px; }
-        .value { font-size: 20px; font-weight: bold; color: var(--primary); }
-        .advice-box { background: rgba(0,242,254,0.05); padding: 15px; border-radius: 15px; border-left: 4px solid var(--primary); margin: 20px 0; font-size: 13px; line-height: 1.6; }
-        .btn-export { display: block; width: 100%; background: var(--primary); color: #000; border: none; padding: 15px; border-radius: 12px; font-weight: bold; margin-top: 20px; }
+        .header h1 { color: var(--primary); letter-spacing: 4px; font-size: 24px; margin: 0; }
+        
+        .section-title { font-size: 13px; color: var(--primary); margin: 20px 0 12px; display: flex; align-items: center; letter-spacing: 1px; }
+        .section-title::before { content: ""; width: 3px; height: 14px; background: var(--primary); margin-right: 8px; border-radius: 2px; }
+
+        .data-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .data-card { background: rgba(255,255,255,0.03); padding: 12px; border-radius: 12px; text-align: center; border: 1px solid rgba(255,255,255,0.05); }
+        .label { font-size: 10px; color: #64748b; margin-bottom: 4px; text-transform: uppercase; }
+        .value { font-size: 16px; font-weight: bold; color: var(--primary); }
+
+        /* 签名区 */
+        .sig-container { margin-top: 25px; }
+        .sig-box { border: 1px dashed #444; border-radius: 12px; background: #000; height: 120px; margin-top: 10px; }
+        canvas#signature { width: 100%; height: 100%; touch-action: none; cursor: crosshair; }
+        
+        .footer-info { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; font-size: 12px; color: #444; }
+        input[type="date"] { background: transparent; color: #666; border: none; font-size: 12px; outline: none; }
+
+        .btn-group { display: flex; gap: 10px; max-width: 600px; margin: 20px auto 50px; }
+        .btn { flex: 1; padding: 15px; border-radius: 12px; border: none; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .btn-clear { background: #1e293b; color: #fff; }
+        .btn-export { background: var(--primary); color: #000; }
     </style>
 </head>
 <body>
     <a href="./index.html" class="back-btn">← 返回中枢</a>
+
     <div class="report-wrap" id="reportArea">
-        <div class="header"><h1>VIP 全息体态档案</h1><p style="font-size:10px; color:#555;">SHANGHAI LUXIOU DIGITAL DIAGNOSIS</p></div>
-        <div class="data-grid">
-            <div class="data-card"><div class="label">体重</div><div class="value">85.0 kg</div></div>
-            <div class="data-card"><div class="label">体脂率</div><div class="value">36.0 %</div></div>
-            <div class="data-card"><div class="label">基础代谢</div><div class="value">1850 kcal</div></div>
-            <div class="data-card"><div class="label">肌肉量</div><div class="value">51.2 kg</div></div>
-            <div class="data-card" style="grid-column: span 2;"><div class="label">身体质量指数 BMI</div><div class="value">27.4 <small>(超重)</small></div></div>
+        <div class="header">
+            <h1>VIP 全息体态档案</h1>
+            <p style="font-size:10px; color:#555; margin-top:5px;">LUXIOU DIGITAL DIAGNOSIS SYSTEM</p>
         </div>
-        <div style="height:300px;"><canvas id="radarChart"></canvas></div>
-        <div class="advice-box">
-            <strong style="color:var(--primary);">专家建议：</strong><br>
-            当前体脂处于高位，建议初期以大肌肉群抗阻训练为主，结合中低强度有氧（心率控制在135-150）。严格控制碳水摄入，增加优质蛋白质。
+
+        <div class="section-title">基础信息档案</div>
+        <div class="data-grid">
+            <div class="data-card"><div class="label">会员姓名</div><div class="value">陈先生</div></div>
+            <div class="data-card"><div class="label">当前年龄</div><div class="value">42 岁</div></div>
+            <div class="data-card"><div class="label">身高数据</div><div class="value">176 cm</div></div>
+            <div class="data-card"><div class="label">出生日期</div><div class="value">1984.05</div></div>
+        </div>
+
+        <div class="section-title">专业测评维度</div>
+        <div class="data-grid">
+            <div class="data-card"><div class="label">当前体重</div><div class="value">85.0 kg</div></div>
+            <div class="data-card"><div class="label">体脂率</div><div class="value">36.0 %</div></div>
+            <div class="data-card"><div class="label">肌肉量</div><div class="value">51.2 kg</div></div>
+            <div class="data-card"><div class="label">基础代谢</div><div class="value">1850 kcal</div></div>
+            <div class="data-card"><div class="label">BMI 指数</div><div class="value">27.4</div></div>
+            <div class="data-card"><div class="label">腰臀比 (WHR)</div><div class="value">0.92</div></div>
+            <div class="data-card" style="grid-column: span 2;"><div class="label">内脏脂肪等级</div><div class="value">12 <small>(警戒线)</small></div></div>
+        </div>
+
+        <div style="height:300px; margin: 25px 0;"><canvas id="radarChart"></canvas></div>
+
+        <div class="sig-container">
+            <div style="font-size:13px; color:var(--primary); font-weight: bold;">教练确认及手写签名：</div>
+            <div class="sig-box"><canvas id="signature"></canvas></div>
+        </div>
+
+        <div class="footer-info">
+            <span>LUXIOU 专业版报告</span>
+            <input type="date" id="reportDate">
         </div>
     </div>
-    <button class="btn-export" onclick="exportImg()">导出全息报告图片</button>
+
+    <div class="btn-group">
+        <button class="btn btn-clear" onclick="clearSig()">清除签名</button>
+        <button class="btn btn-export" onclick="exportImg()">生成报告图片</button>
+    </div>
 
     <script>
+        // 设置日期
+        document.getElementById('reportDate').valueAsDate = new Date();
+
+        // 雷达图逻辑
         const ctx = document.getElementById('radarChart').getContext('2d');
         new Chart(ctx, {
             type: 'radar',
             data: {
                 labels: ['耐力', '力量', '灵敏', '柔韧', '核心', '爆发'],
-                datasets: [{ label: '当前数据', data: [60, 70, 65, 80, 55, 50], backgroundColor: 'rgba(0, 242, 254, 0.2)', borderColor: '#00f2fe', borderWidth: 2 }]
+                datasets: [{ 
+                    label: '当前状态', 
+                    data: [65, 75, 70, 80, 60, 55], 
+                    backgroundColor: 'rgba(0, 242, 254, 0.2)', 
+                    borderColor: '#00f2fe', 
+                    borderWidth: 2,
+                    pointBackgroundColor: '#00f2fe'
+                }]
             },
-            options: { scales: { r: { grid: { color: 'rgba(255,255,255,0.1)' }, angleLines: { color: 'rgba(255,255,255,0.1)' }, ticks: { display: false } } } }
+            options: { 
+                scales: { 
+                    r: { 
+                        grid: { color: 'rgba(255,255,255,0.1)' }, 
+                        angleLines: { color: 'rgba(255,255,255,0.1)' }, 
+                        pointLabels: { color: '#64748b', font: { size: 11 } },
+                        ticks: { display: false } 
+                    } 
+                },
+                plugins: { legend: { display: false } }
+            }
         });
-        function exportImg() { html2canvas(document.querySelector("#reportArea")).then(canvas => { const link = document.createElement('a'); link.download = 'LUXIOU_Report.png'; link.href = canvas.toDataURL(); link.click(); }); }
+
+        // 手写签名逻辑
+        const canvas = document.getElementById('signature');
+        const sctx = canvas.getContext('2d');
+        let drawing = false;
+        canvas.width = canvas.offsetWidth; canvas.height = canvas.offsetHeight;
+
+        const getPos = (e) => {
+            const r = canvas.getBoundingClientRect();
+            return {
+                x: (e.touches ? e.touches[0].clientX : e.clientX) - r.left,
+                y: (e.touches ? e.touches[0].clientY : e.clientY) - r.top
+            };
+        };
+
+        const start = (e) => { drawing = true; const p = getPos(e); sctx.beginPath(); sctx.moveTo(p.x, p.y); };
+        const move = (e) => { if(!drawing) return; const p = getPos(e); sctx.lineTo(p.x, p.y); sctx.strokeStyle = '#00f2fe'; sctx.lineWidth = 2; sctx.lineCap = 'round'; sctx.stroke(); e.preventDefault(); };
+        const end = () => { drawing = false; };
+
+        canvas.addEventListener('touchstart', start); canvas.addEventListener('touchmove', move); canvas.addEventListener('touchend', end);
+        canvas.addEventListener('mousedown', start); canvas.addEventListener('mousemove', move); canvas.addEventListener('mouseup', end);
+
+        function clearSig() { sctx.clearRect(0,0,canvas.width,canvas.height); }
+
+        // 导出图片
+        function exportImg() {
+            html2canvas(document.querySelector("#reportArea"), { backgroundColor: '#0b0f19' }).then(c => {
+                const link = document.createElement('a');
+                link.download = 'LUXIOU_VIP_Analysis.png';
+                link.href = c.toDataURL();
+                link.click();
+            });
+        }
     </script>
 </body>
 </html>
