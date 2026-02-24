@@ -2,73 +2,52 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>ACE 风险筛查评估 | SHANGHAI LUXIOU</title>
     <style>
         :root { --primary: #00f2fe; --bg: #0b0f19; }
-        body { background: var(--bg); color: #e2e8f0; font-family: -apple-system, sans-serif; margin: 0; padding: 20px; padding-top: 70px; }
-        
-        /* 核心：毛玻璃返回按钮 */
-        .back-btn { 
-            position: fixed; top: 15px; left: 15px; z-index: 9999; 
-            background: rgba(0,0,0,0.6); color: #fff; padding: 10px 20px; 
-            border-radius: 50px; text-decoration: none; font-size: 14px; 
-            border: 1px solid rgba(255,255,255,0.4); backdrop-filter: blur(10px); 
-            font-weight: bold; box-shadow: 0 4px 15px rgba(0,0,0,0.5); 
-        }
-
+        body { background: var(--bg); color: #e2e8f0; font-family: -apple-system, sans-serif; margin: 0; padding: 20px; padding-top: 75px; }
+        .back-btn { position: fixed; top: 15px; left: 15px; z-index: 9999; background: rgba(0,0,0,0.6); color: #fff; padding: 10px 20px; border-radius: 50px; text-decoration: none; font-size: 14px; border: 1px solid rgba(255,255,255,0.4); backdrop-filter: blur(10px); font-weight: bold; }
         .container { max-width: 600px; margin: 0 auto; background: rgba(30, 41, 59, 0.7); border-radius: 20px; padding: 20px; border: 1px solid rgba(255,255,255,0.1); }
         h2 { color: var(--primary); text-align: center; margin-bottom: 25px; letter-spacing: 2px; }
         .q-item { background: rgba(255,255,255,0.03); padding: 15px; border-radius: 12px; margin-bottom: 15px; border-left: 4px solid #334155; }
-        .q-text { font-size: 15px; margin-bottom: 10px; line-height: 1.5; }
-        .options { display: flex; gap: 15px; }
-        .opt { flex: 1; padding: 10px; text-align: center; background: rgba(255,255,255,0.05); border-radius: 8px; font-size: 14px; border: 1px solid transparent; }
+        .q-text { font-size: 14px; margin-bottom: 10px; line-height: 1.6; }
+        .options { display: flex; gap: 10px; }
+        .opt { flex: 1; padding: 8px; text-align: center; background: rgba(255,255,255,0.05); border-radius: 8px; font-size: 13px; border: 1px solid transparent; }
         .opt.active { background: var(--primary); color: #000; font-weight: bold; }
         .footer-info { margin-top: 30px; border-top: 1px solid #333; padding-top: 20px; display: flex; justify-content: space-between; align-items: center; }
-        input[type="date"] { background: transparent; color: var(--primary); border: 1px solid var(--primary); border-radius: 5px; padding: 5px; outline: none; }
+        input[type="date"] { background: transparent; color: var(--primary); border: 1px solid var(--primary); border-radius: 5px; padding: 5px; font-size: 12px; }
     </style>
 </head>
 <body>
     <a href="./index.html" class="back-btn">← 返回中枢</a>
-
     <div class="container">
-        <h2>ACE 风险筛查评估</h2>
+        <h2>ACE 风险筛查 (PAR-Q)</h2>
         <div id="questions"></div>
-        
         <div class="footer-info">
-            <span style="font-size: 13px; color: #666;">LUXIOU 专业版</span>
+            <span style="font-size: 12px; color: #666;">LUXIOU 专业诊断版</span>
             <input type="date" id="testDate">
         </div>
     </div>
-
     <script>
-        // 设置默认日期为今天
         document.getElementById('testDate').valueAsDate = new Date();
-
         const questions = [
-            "您的医生是否曾说您的心脏有问题，且只能在医生建议下运动？",
-            "当您运动时，您的胸部是否有疼痛感？",
-            "在过去的一个月中，您在不运动时是否有过胸痛？",
-            "您是否曾因晕眩而失去平衡或曾失去知觉？",
-            "您是否有因运动而加重的骨骼或关节问题？",
-            "医生目前是否因血压或心脏问题向您开药？",
-            "您是否知道有任何其他原因不应参加运动？"
-            // 老板：这里已为您预留，您可以根据需要增加至18题
+            "医生是否曾说您的心脏有问题？", "运动时您的胸部是否有疼痛感？", "过去一个月在不运动时是否有过胸痛？",
+            "是否曾因晕眩而失去平衡或失去知觉？", "是否有因运动而加重的骨骼或关节问题？", "医生目前是否因血压/心脏问题向您开药？",
+            "是否知道有任何其他原因不应参加运动？", "您的直系亲属中是否有在55岁前患心脏病史？", "您是否吸烟或在过去6个月内戒烟？",
+            "您的收缩压是否≥140mmHg或舒张压≥90mmHg？", "您的总胆固醇是否>200mg/dL？", "您的空腹血糖是否≥100mg/dL？",
+            "您的身体质量指数(BMI)是否≥30？", "您是否每周运动少于3次，持续少于3个月？", "您的年龄是否超过45岁(男)或55岁(女)？",
+            "您是否有已知的代谢性疾病(如糖尿病)？", "您是否有哮喘或肺部疾病史？", "您在近期是否有过任何不明原因的呼吸困难？"
         ];
-
         const qBox = document.getElementById('questions');
         questions.forEach((q, i) => {
             const div = document.createElement('div');
             div.className = 'q-item';
-            div.innerHTML = `
-                <div class="q-text">${i + 1}. ${q}</div>
-                <div class="options">
-                    <div class="opt" onclick="this.parentNode.querySelectorAll('.opt').forEach(o=>o.classList.remove('active'));this.classList.add('active')">是</div>
-                    <div class="opt active" onclick="this.parentNode.querySelectorAll('.opt').forEach(o=>o.classList.remove('active'));this.classList.add('active')">否</div>
-                </div>
-            `;
+            div.innerHTML = `<div class="q-text">${i + 1}. ${q}</div><div class="options">
+                <div class="opt" onclick="toggle(this)">是</div><div class="opt active" onclick="toggle(this)">否</div></div>`;
             qBox.appendChild(div);
         });
+        function toggle(el) { el.parentNode.querySelectorAll('.opt').forEach(o=>o.classList.remove('active')); el.classList.add('active'); }
     </script>
 </body>
 </html>
