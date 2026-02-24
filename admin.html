@@ -2,74 +2,121 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>LUXIOU | 老板私密中枢</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LUXIOU | 老板全自动管理中心</title>
     <style>
-        :root { --primary: #00f2fe; --danger: #ff4444; }
-        body { background: #000; color: #fff; font-family: -apple-system, sans-serif; margin: 0; padding: 20px; }
-        .header { text-align: center; padding: 20px 0; border-bottom: 1px solid #222; margin-bottom: 20px; }
-        .header h2 { color: var(--primary); letter-spacing: 2px; margin: 0; }
+        :root { --primary: #00f2fe; --bg: #0a0a0a; }
+        body { background: var(--bg); color: #fff; font-family: sans-serif; padding: 30px; line-height: 1.6; }
+        .container { max-width: 900px; margin: 0 auto; }
+        .header { text-align: center; border-bottom: 2px solid #222; padding-bottom: 20px; margin-bottom: 30px; }
+        .header h1 { color: var(--primary); letter-spacing: 3px; }
         
-        .lib-card { background: #111; border: 1px solid #222; border-radius: 15px; padding: 15px; margin-bottom: 20px; }
-        .lib-name { font-weight: bold; font-size: 16px; margin-bottom: 15px; display: flex; align-items: center; }
-        .lib-name::before { content: ""; width: 4px; height: 16px; background: var(--primary); margin-right: 10px; border-radius: 2px; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .card { background: #111; border: 1px solid #333; border-radius: 15px; padding: 20px; }
+        .card h3 { color: var(--primary); margin-top: 0; border-left: 4px solid var(--primary); padding-left: 10px; }
         
-        .upload-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-top: 1px solid #222; }
-        .info { flex: 1; }
-        .title-tag { font-size: 14px; color: #eee; }
-        .file-tag { font-family: monospace; font-size: 11px; color: #555; margin-top: 4px; }
-        
-        /* 手机端大按钮，方便操作 */
-        .btn-up { 
-            background: var(--primary); color: #000; 
-            padding: 10px 18px; border-radius: 8px; 
-            text-decoration: none; font-size: 13px; font-weight: bold;
-            box-shadow: 0 4px 10px rgba(0, 242, 254, 0.2);
+        .upload-zone { 
+            border: 2px dashed #444; border-radius: 10px; padding: 20px; text-align: center; 
+            margin-top: 15px; transition: 0.3s; cursor: pointer;
         }
-        
-        .notice { background: rgba(255, 68, 68, 0.05); border: 1px dashed var(--danger); border-radius: 10px; padding: 15px; margin-top: 30px; font-size: 12px; color: #aaa; line-height: 1.6; }
+        .upload-zone:hover { border-color: var(--primary); background: rgba(0,242,254,0.05); }
+        .btn-github { 
+            display: inline-block; background: #222; color: #fff; padding: 10px 20px; 
+            border-radius: 8px; text-decoration: none; font-weight: bold; margin-top: 15px; width: 100%; text-align: center;
+        }
+        .file-info { font-size: 11px; color: #666; margin-top: 8px; font-family: monospace; }
+        canvas { display: none; } /* 隐藏的处理引擎 */
     </style>
 </head>
 <body>
-    <div class="header">
-        <h2>LUXIOU 管理中枢</h2>
-        <p style="color:#444; font-size:12px;">老板专用 · 员工禁入</p>
+    <div class="container">
+        <div class="header">
+            <h1>LUXIOU 数据自动化中枢</h1>
+            <p style="color:#666">电脑端专供 · 自动处理 · 极速同步</p>
+        </div>
+
+        <div class="grid">
+            <div class="card">
+                <h3>📁 【档案库】管理</h3>
+                <div class="upload-zone" onclick="triggerUpload('case_1.jpg')">
+                    点击上传：1挡 (减脂案例)
+                    <div class="file-info">目标文件名：case_1.jpg</div>
+                </div>
+                <div class="upload-zone" onclick="triggerUpload('case_2.jpg')">
+                    点击上传：2挡 (塑形案例)
+                    <div class="file-info">目标文件名：case_2.jpg</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>📜 【方案库】管理</h3>
+                <div class="upload-zone" onclick="triggerUpload('plan_1.jpg')">
+                    点击上传：1挡 (基础方案)
+                    <div class="file-info">目标文件名：plan_1.jpg</div>
+                </div>
+                <div class="upload-zone" onclick="triggerUpload('plan_2.jpg')">
+                    点击上传：2挡 (强化方案)
+                    <div class="file-info">目标文件名：plan_2.jpg</div>
+                </div>
+            </div>
+        </div>
+
+        <div style="margin-top: 30px; background: #1a1a1a; padding: 20px; border-radius: 15px;">
+            <h4 style="color: var(--primary); margin-top: 0;">第一步：上传处理</h4>
+            <p style="font-size: 13px; color: #888;">点击上方虚线框选择图片，系统会自动将其转换为标准的 .jpg 格式并自动重命名下载到您的电脑。</p>
+            <h4 style="color: var(--primary);">第二步：极速同步</h4>
+            <a href="https://github.com/culbreathorourkeoe604-commits/fitpro/upload/main" target="_blank" class="btn-github">
+                点击这里打开 GitHub 后台 ➔ 将下载好的文件拖进去即可
+            </a>
+        </div>
     </div>
 
-    <div class="lib-card">
-        <div class="lib-name">📁 【档案库】手机直传</div>
-        <div class="upload-row">
-            <div class="info"><div class="title-tag">1挡：减脂案例</div><div class="file-tag">文件名需为: case_1.jpg</div></div>
-            <a href="https://github.com/culbreathorourkeoe604-commits/fitpro/upload/main" class="btn-up">点击上传</a>
-        </div>
-        <div class="upload-row">
-            <div class="info"><div class="title-tag">2挡：塑形案例</div><div class="file-tag">文件名需为: case_2.jpg</div></div>
-            <a href="https://github.com/culbreathorourkeoe604-commits/fitpro/upload/main" class="btn-up">点击上传</a>
-        </div>
-    </div>
+    <input type="file" id="fileInput" accept="image/*" style="display:none">
+    <canvas id="canvas"></canvas>
 
-    <div class="lib-card">
-        <div class="lib-name">📜 【方案库】手机直传</div>
-        <div class="upload-row">
-            <div class="info"><div class="title-tag">1挡：基础方案</div><div class="file-tag">文件名需为: plan_1.jpg</div></div>
-            <a href="https://github.com/culbreathorourkeoe604-commits/fitpro/upload/main" class="btn-up">点击上传</a>
-        </div>
-        <div class="upload-row">
-            <div class="info"><div class="title-tag">2挡：强化方案</div><div class="file-tag">文件名需为: plan_2.jpg</div></div>
-            <a href="https://github.com/culbreathorourkeoe604-commits/fitpro/upload/main" class="btn-up">点击上传</a>
-        </div>
-    </div>
+    <script>
+        let targetName = "";
+        const fileInput = document.getElementById('fileInput');
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
 
-    <div class="notice">
-        <strong>老板，手机上传秘籍：</strong><br>
-        1. 点击上方蓝色的【点击上传】。<br>
-        2. 在 GitHub 页面选好手机相册里的图。<br>
-        3. <strong>关键点：</strong>将上传框下方的图片名称修改为对应的灰色小字（如 <span style="color:#fff">case_1.jpg</span>）。<br>
-        4. 点击绿色的“Commit changes”保存，首页即刻同步。
-    </div>
+        function triggerUpload(name) {
+            targetName = name;
+            fileInput.click();
+        }
 
-    <div style="text-align:center; padding:30px;">
-        <a href="./index.html" style="color:#333; text-decoration:none; font-size:12px;">← 返回系统首页</a>
-    </div>
+        fileInput.onchange = function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const img = new Image();
+                img.onload = function() {
+                    // 自动裁剪并转码为 JPG
+                    canvas.width = 1000; // 统一宽度
+                    canvas.height = 1200; // 统一高度，完美契合弹窗
+                    ctx.fillStyle = "#000";
+                    ctx.fillRect(0, 0, 1000, 1200);
+                    
+                    // 计算缩放并居中覆盖
+                    const scale = Math.max(1000 / img.width, 1200 / img.height);
+                    const x = (1000 - img.width * scale) / 2;
+                    const y = (1200 - img.height * scale) / 2;
+                    ctx.drawImage(img, x, y, img.width * scale, img.height * scale);
+
+                    // 自动下载重命名后的文件
+                    const link = document.createElement('a');
+                    link.download = targetName;
+                    link.href = canvas.toDataURL('image/jpeg', 0.85); // 0.85 质量均衡
+                    link.click();
+                    
+                    alert('✅ 处理成功！文件已改名为 ' + targetName + ' 并保存到您的下载文件夹。\n请点击下方按钮上传到 GitHub。');
+                };
+                img.src = event.target.result;
+            };
+            reader.readAsDataURL(file);
+        };
+    </script>
 </body>
 </html>
