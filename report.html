@@ -3,658 +3,193 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>VIP 金盾体态档案 | SHANGHAI LUXIOU</title>
+    <title>VIP 私教体态档案 | SHANGHAI LUXIOU</title>
     <script src="https://cdn.staticfile.net/Chart.js/3.9.1/chart.min.js"></script>
     <script src="https://cdn.staticfile.net/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
-        :root {
-            --primary: #00f2fe;
-            --secondary-text: #64748b;
-            --bg-dark: #0f172a; /* 更深背景 */
-            --card-bg: #1e293b; /* 卡片背景 */
-            --border-color: #334155;
-            --text-color: #e2e8f0;
-            --input-bg: #0f172a;
-            --input-border: #475569;
-        }
-
-        body {
-            background-color: var(--bg-dark);
-            color: var(--text-color);
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
-            margin: 0;
-            padding: 15px;
-            padding-top: 80px; /* 留出顶部按钮空间 */
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
+        :root { --primary: #00f2fe; --bg: #0b0f19; --glass: rgba(30, 41, 59, 0.7); --card: #161e2e; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { background: var(--bg); color: #e2e8f0; font-family: -apple-system, sans-serif; margin: 0; padding: 15px; padding-top: 75px; }
+        
         /* 返回按钮 */
-        .back-btn {
-            position: fixed;
-            top: 15px;
-            left: 15px;
-            z-index: 1000;
-            background: rgba(45, 55, 72, 0.8); /* 深色玻璃效果 */
-            color: var(--text-color);
-            padding: 10px 20px;
-            border-radius: 30px;
-            text-decoration: none;
-            font-size: 14px;
-            border: 1px solid rgba(71, 85, 105, 0.5);
-            backdrop-filter: blur(10px);
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            transition: all 0.2s ease-in-out;
-        }
-        .back-btn:hover {
-            background: rgba(0, 242, 254, 0.2);
-            border-color: var(--primary);
-            color: var(--primary);
-        }
-        .back-btn::before {
-            content: "←";
-            font-size: 16px;
-        }
+        .back-btn { position: fixed; top: 15px; left: 15px; z-index: 1000; background: rgba(0,0,0,0.6); color: #fff; padding: 10px 18px; border-radius: 50px; text-decoration: none; font-size: 14px; border: 1px solid rgba(255,255,255,0.4); backdrop-filter: blur(10px); font-weight: bold; }
 
-        .report-container {
-            width: 100%;
-            max-width: 650px; /* 调整最大宽度以匹配新设计 */
-            background: var(--card-bg);
-            border-radius: 20px;
-            padding: 25px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-            border: 1px solid var(--border-color);
-        }
+        .report-wrap { max-width: 600px; margin: 0 auto; background: var(--glass); border-radius: 24px; padding: 25px; border: 1px solid rgba(255,255,255,0.1); }
+        .header { text-align: center; margin-bottom: 25px; border-bottom: 1px solid #333; padding-bottom: 15px; }
+        .header h1 { color: var(--primary); letter-spacing: 4px; font-size: 24px; margin: 0; }
 
-        .header {
-            text-align: center;
-            margin-bottom: 25px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid var(--border-color);
-        }
-        .header h1 {
-            color: var(--primary);
-            letter-spacing: 3px;
-            font-size: 26px; /* 更大标题 */
-            margin: 0;
-            text-shadow: 0 0 8px rgba(0, 242, 254, 0.3);
-        }
-        .header p {
-            font-size: 12px;
-            color: var(--secondary-text);
-            margin-top: 5px;
-            letter-spacing: 1px;
-        }
+        .section-label { font-size: 13px; color: var(--primary); margin: 20px 0 12px; display: flex; align-items: center; letter-spacing: 1px; font-weight: bold; }
+        .section-label::before { content: ""; width: 3px; height: 14px; background: var(--primary); margin-right: 8px; border-radius: 2px; }
 
-        .section-title {
-            font-size: 15px;
-            color: var(--primary);
-            margin: 25px 0 15px;
-            display: flex;
-            align-items: center;
-            letter-spacing: 1px;
-            font-weight: bold;
-        }
-        .section-title::before {
-            content: "";
-            width: 4px;
-            height: 16px;
-            background: var(--primary);
-            margin-right: 10px;
-            border-radius: 2px;
-        }
+        .data-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .data-card { background: var(--card); padding: 15px; border-radius: 16px; text-align: center; border: 1px solid rgba(255,255,255,0.05); }
+        .label { font-size: 11px; color: #64748b; margin-bottom: 6px; text-transform: uppercase; }
+        .value { font-size: 18px; font-weight: bold; color: var(--primary); border-bottom: 1px dashed rgba(0,242,254,0.3); padding-bottom: 2px; }
 
-        .info-grid, .data-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); /* 更灵活的列 */
-            gap: 15px;
-        }
-        .card {
-            background: var(--input-bg);
-            padding: 15px;
-            border-radius: 12px;
-            border: 1px solid var(--input-border);
-            text-align: center;
-            position: relative;
-            overflow: hidden; /* 隐藏滚轮溢出 */
-        }
-        .card .label {
-            font-size: 10px;
-            color: var(--secondary-text);
-            margin-bottom: 5px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        .card .value {
-            font-size: 18px;
-            font-weight: bold;
-            color: var(--text-color);
-            line-height: 1.2;
-            min-height: 22px; /* 保持高度一致 */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .card .value input[type="text"] { /* 姓名输入框 */
-            background: transparent;
-            border: none;
-            color: var(--primary);
-            font-size: 18px;
-            font-weight: bold;
-            text-align: center;
-            width: 100%;
-            outline: none;
-        }
-        .card .value .editable-value { /* 滚轮值 */
-            color: var(--primary);
-            cursor: pointer;
-            padding: 0 5px;
-            border-bottom: 1px dashed rgba(0, 242, 254, 0.3);
-            transition: border-color 0.2s;
-        }
-        .card .value .editable-value:hover {
-            border-color: var(--primary);
-        }
-
-        /* 上传图片区域 */
-        .photo-upload-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-top: 15px;
-        }
-        .photo-upload-card {
-            background: var(--input-bg);
-            border: 1px dashed var(--input-border);
-            border-radius: 12px;
-            height: 180px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            overflow: hidden;
-            position: relative;
-        }
-        .photo-upload-card:hover {
-            border-color: var(--primary);
-            box-shadow: 0 0 10px rgba(0, 242, 254, 0.2);
-        }
-        .photo-upload-card img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            position: absolute;
-            top: 0;
-            left: 0;
-        }
-        .photo-upload-card span {
-            color: var(--secondary-text);
-            font-size: 13px;
-            z-index: 1; /* 确保文字在图片之上 */
-        }
-
-        /* 雷达图 */
-        .chart-container {
-            background: var(--input-bg);
-            padding: 20px;
-            border-radius: 15px;
-            border: 1px solid var(--border-color);
-            margin: 25px 0;
-            height: 300px; /* 固定高度 */
-        }
+        /* 对比照区域 */
+        .photo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px; }
+        .photo-box { background: #000; border: 1px dashed #444; border-radius: 12px; height: 180px; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+        .photo-box img { width: 100%; height: 100%; object-fit: cover; position: absolute; }
+        .photo-box span { font-size: 12px; color: #444; z-index: 1; }
 
         /* 签名区 */
-        .sig-container {
-            margin-top: 25px;
-            padding-top: 15px;
-            border-top: 1px solid var(--border-color);
-        }
-        .sig-box {
-            border: 1px dashed var(--primary);
-            border-radius: 12px;
-            background: var(--input-bg);
-            height: 120px;
-            margin-top: 10px;
-            overflow: hidden;
-        }
-        canvas#signature {
-            width: 100%;
-            height: 100%;
-            touch-action: none;
-            cursor: crosshair;
-        }
+        .sig-box { border: 1px dashed #444; border-radius: 12px; background: #000; height: 150px; margin-top: 10px; }
+        canvas#signature { width: 100%; height: 100%; touch-action: none; }
+        
+        /* 滚轮选择器 */
+        .picker-mask { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 2000; display: none; align-items: center; justify-content: center; opacity: 0; transition: 0.3s; }
+        .picker-mask.active { display: flex; opacity: 1; }
+        .picker-content { background: #1a2234; width: 85%; max-width: 320px; border-radius: 20px; padding: 20px; border: 1px solid #334155; }
+        .picker-scroll { height: 200px; overflow-y: auto; scroll-snap-type: y mandatory; padding: 80px 0; }
+        .picker-item { height: 40px; line-height: 40px; text-align: center; font-size: 18px; color: #64748b; scroll-snap-align: center; }
+        .picker-item.selected { color: var(--primary); font-weight: bold; font-size: 22px; }
+        .picker-btns { display: flex; gap: 10px; margin-top: 20px; }
+        .btn-small { flex: 1; padding: 12px; border-radius: 10px; border: none; font-weight: bold; cursor: pointer; }
 
-        .footer-meta {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 20px;
-            font-size: 11px;
-            color: var(--secondary-text);
-            border-top: 1px dashed var(--input-border);
-            padding-top: 15px;
-        }
-        .footer-meta input[type="date"] {
-            background: transparent;
-            color: var(--secondary-text);
-            border: none;
-            font-size: 11px;
-            outline: none;
-        }
-
-        /* 按钮组 */
-        .btn-group {
-            display: flex;
-            gap: 15px;
-            margin-top: 30px;
-            padding-bottom: 50px; /* 底部留白 */
-        }
-        .btn {
-            flex: 1;
-            padding: 16px;
-            border-radius: 12px;
-            border: none;
-            font-weight: bold;
-            font-size: 15px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-        .btn-clear-sig {
-            background: var(--input-border);
-            color: var(--text-color);
-        }
-        .btn-clear-sig:hover {
-            background: #475569;
-        }
-        .btn-export-report {
-            background: linear-gradient(90deg, #00f2fe, #7000ff);
-            color: #000;
-        }
-        .btn-export-report:hover {
-            box-shadow: 0 0 15px rgba(0, 242, 254, 0.5);
-        }
-
-        /* 滚轮模拟样式 */
-        .picker {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            z-index: 2000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease;
-        }
-        .picker.active {
-            opacity: 1;
-            pointer-events: auto;
-        }
-        .picker-content {
-            background: var(--card-bg);
-            border-radius: 15px;
-            padding: 20px;
-            width: 90%;
-            max-width: 300px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
-            border: 1px solid var(--border-color);
-        }
-        .picker-list {
-            max-height: 200px;
-            overflow-y: scroll;
-            -webkit-overflow-scrolling: touch;
-            border: 1px solid var(--input-border);
-            border-radius: 8px;
-            margin-bottom: 15px;
-            position: relative;
-        }
-        .picker-list-item {
-            padding: 10px;
-            text-align: center;
-            color: var(--secondary-text);
-            font-size: 16px;
-            cursor: pointer;
-            transition: all 0.1s ease;
-        }
-        .picker-list-item.selected {
-            background: rgba(0, 242, 254, 0.1);
-            color: var(--primary);
-            font-weight: bold;
-            font-size: 18px;
-        }
-        .picker-controls {
-            display: flex;
-            gap: 10px;
-        }
-        .picker-controls .btn {
-            padding: 12px;
-            font-size: 14px;
-        }
-        /* 滚轮模拟的选中条 */
-        .picker-list::before, .picker-list::after {
-            content: '';
-            position: absolute;
-            left: 0;
-            right: 0;
-            height: 40px; /* Item height */
-            background: linear-gradient(to bottom, rgba(30, 41, 59, 1) 0%, rgba(30, 41, 59, 0) 100%);
-            pointer-events: none;
-            z-index: 10;
-        }
-        .picker-list::after {
-            top: auto;
-            bottom: 0;
-            background: linear-gradient(to top, rgba(30, 41, 59, 1) 0%, rgba(30, 41, 59, 0) 100%);
-        }
+        .btn-main { display: block; width: 100%; padding: 16px; border-radius: 12px; border: none; font-weight: bold; margin-top: 20px; cursor: pointer; }
+        .btn-export { background: var(--primary); color: #000; }
+        .btn-clear { background: #2d3748; color: #fff; margin-top: 10px; }
     </style>
 </head>
 <body>
-    <a href="./index.html" class="back-btn">返回中枢</a>
+    <a href="./index.html" class="back-btn">← 返回中枢</a>
 
-    <div class="report-container" id="reportArea">
+    <div class="report-wrap" id="reportArea">
         <div class="header">
-            <h1>VIP 金盾体态档案</h1>
+            <h1>VIP 私教体态档案</h1>
             <p>LUXIOU DIGITAL DIAGNOSIS SYSTEM</p>
         </div>
 
-        <div class="section-title">基础信息档案</div>
-        <div class="info-grid">
-            <div class="card">
-                <div class="label">会员姓名</div>
-                <div class="value"><input type="text" id="memberName" value="陈先生" onchange="updateRadar()"></div>
-            </div>
-            <div class="card">
-                <div class="label">当前年龄</div>
-                <div class="value"><input type="text" id="memberAge" value="42 岁" onchange="updateRadar()"></div>
-            </div>
-            <div class="card">
-                <div class="label">身高数据</div>
-                <div class="value"><input type="text" id="memberHeight" value="176 cm" onchange="updateRadar()"></div>
-            </div>
-            <div class="card">
-                <div class="label">出生日期</div>
-                <div class="value"><input type="text" id="memberBirthday" value="1984.05" onchange="updateRadar()"></div>
-            </div>
-        </div>
-
-        <div class="section-title">专业测评维度</div>
+        <div class="section-label">基础信息档案</div>
         <div class="data-grid">
-            <div class="card"><div class="label">当前体重 (kg)</div><div class="value"><span class="editable-value" data-unit="kg" data-min="40" data-max="200" data-step="0.1" data-id="weight">85.0</span></div></div>
-            <div class="card"><div class="label">体脂率 (%)</div><div class="value"><span class="editable-value" data-unit="%" data-min="5" data-max="60" data-step="0.1" data-id="bodyFat">36.0</span></div></div>
-            <div class="card"><div class="label">肌肉量 (kg)</div><div class="value"><span class="editable-value" data-unit="kg" data-min="20" data-max="100" data-step="0.1" data-id="muscleMass">51.2</span></div></div>
-            <div class="card"><div class="label">基础代谢 (kcal)</div><div class="value"><span class="editable-value" data-unit="kcal" data-min="1000" data-max="3000" data-step="10" data-id="bmr">1850</span></div></div>
-            <div class="card"><div class="label">BMI 指数</div><div class="value"><span class="editable-value" data-unit="" data-min="15" data-max="40" data-step="0.1" data-id="bmi">27.4</span></div></div>
-            <div class="card"><div class="label">腰臀比 (WHR)</div><div class="value"><span class="editable-value" data-unit="" data-min="0.6" data-max="1.2" data-step="0.01" data-id="whr">0.92</span></div></div>
-            <div class="card" style="grid-column: span 2;"><div class="label">内脏脂肪等级</div><div class="value"><span class="editable-value" data-unit="级" data-min="1" data-max="30" data-step="1" data-id="visceralFat">12 <small>(警戒线)</small></span></div></div>
+            <div class="data-card"><div class="label">会员姓名</div><div class="value" onclick="editName()">陈先生</div></div>
+            <div class="data-card"><div class="label">当前年龄</div><div class="value" id="val_age" onclick="openPicker('age')">42 岁</div></div>
+            <div class="data-card"><div class="label">身高数据</div><div class="value" id="val_height" onclick="openPicker('height')">176 cm</div></div>
+            <div class="data-card"><div class="label">出生日期</div><div class="value" id="val_birth" onclick="openPicker('birth')">1984.05</div></div>
         </div>
 
-        <div class="section-title">体能维度评估</div>
+        <div class="section-label">专业测评维度</div>
         <div class="data-grid">
-            <div class="card"><div class="label">耐力</div><div class="value"><span class="editable-value" data-unit="" data-min="0" data-max="100" data-step="1" data-id="endurance">65</span></div></div>
-            <div class="card"><div class="label">力量</div><div class="value"><span class="editable-value" data-unit="" data-min="0" data-max="100" data-step="1" data-id="strength">75</span></div></div>
-            <div class="card"><div class="label">灵敏</div><div class="value"><span class="editable-value" data-unit="" data-min="0" data-max="100" data-step="1" data-id="agility">70</span></div></div>
-            <div class="card"><div class="label">柔韧</div><div class="value"><span class="editable-value" data-unit="" data-min="0" data-max="100" data-step="1" data-id="flexibility">80</span></div></div>
-            <div class="card"><div class="label">核心</div><div class="value"><span class="editable-value" data-unit="" data-min="0" data-max="100" data-step="1" data-id="core">60</span></div></div>
-            <div class="card"><div class="label">爆发</div><div class="value"><span class="editable-value" data-unit="" data-min="0" data-max="100" data-step="1" data-id="explosive">55</span></div></div>
+            <div class="data-card"><div class="label">当前体重 (KG)</div><div class="value" id="val_weight" onclick="openPicker('weight')">85.0 kg</div></div>
+            <div class="data-card"><div class="label">体脂率 (%)</div><div class="value" id="val_fat" onclick="openPicker('fat')">36.0 %</div></div>
+            <div class="data-card"><div class="label">肌肉量 (KG)</div><div class="value" id="val_muscle" onclick="openPicker('muscle')">51.2 kg</div></div>
+            <div class="data-card"><div class="label">基础代谢 (KCAL)</div><div class="value" id="val_bmr" onclick="openPicker('bmr')">1850</div></div>
+            <div class="data-card"><div class="label">BMI 指数</div><div class="value" id="val_bmi" onclick="openPicker('bmi')">27.4</div></div>
+            <div class="data-card"><div class="label">腰臀比 (WHR)</div><div class="value" id="val_whr" onclick="openPicker('whr')">0.92</div></div>
+            <div class="data-card" style="grid-column: span 2;"><div class="label">内脏脂肪等级</div><div class="value" id="val_vfat" onclick="openPicker('vfat')">12 (警戒线)</div></div>
         </div>
 
-        <div class="chart-container"><canvas id="radarChart"></canvas></div>
+        <div class="section-label">体能指标雷达</div>
+        <div style="height:320px; margin: 20px 0;"><canvas id="radarChart"></canvas></div>
 
-        <div class="section-title">健身前后对比</div>
-        <div class="photo-upload-grid">
-            <label for="beforePhoto" class="photo-upload-card">
-                <img id="beforeImg" src="" alt="上传前照片" style="display: none;">
-                <span id="beforeText">上传前照片</span>
-                <input type="file" id="beforePhoto" accept="image/*" style="display: none;" onchange="uploadPhoto(this, 'beforeImg', 'beforeText')">
-            </label>
-            <label for="afterPhoto" class="photo-upload-card">
-                <img id="afterImg" src="" alt="上传后照片" style="display: none;">
-                <span id="afterText">上传后照片</span>
-                <input type="file" id="afterPhoto" accept="image/*" style="display: none;" onchange="uploadPhoto(this, 'afterImg', 'afterText')">
-            </label>
+        <div class="section-label">前后对比照片</div>
+        <div class="photo-grid">
+            <label class="photo-box"><img id="img_b" style="display:none"><span>点击上传(前)</span><input type="file" hidden onchange="showImg(this,'img_b')"></label>
+            <label class="photo-box"><img id="img_a" style="display:none"><span>点击上传(后)</span><input type="file" hidden onchange="showImg(this,'img_a')"></label>
         </div>
+
+        <div class="section-label">教练确认及手写签名</div>
+        <div class="sig-box"><canvas id="signature"></canvas></div>
         
-        <div class="sig-container">
-            <div style="font-size:13px; color:var(--primary); font-weight: bold; margin-bottom: 10px;">教练确认及手写签名：</div>
-            <div class="sig-box"><canvas id="signature"></canvas></div>
-        </div>
-
-        <div class="footer-meta">
-            <span>LUXIOU 专业版报告</span>
-            <input type="date" id="reportDate">
+        <div style="display:flex; justify-content:space-between; margin-top:20px; font-size:12px; color:#444;">
+            <span>LUXIOU 专业版报告</span><span id="curDate"></span>
         </div>
     </div>
 
-    <div class="btn-group report-container">
-        <button class="btn btn-clear-sig" onclick="clearSig()">清除签名</button>
-        <button class="btn btn-export-report" onclick="exportImg()">生成报告图片</button>
+    <div style="max-width:600px; margin:0 auto;">
+        <button class="btn-main btn-export" onclick="exportImg()">生成并保存报告图片</button>
+        <button class="btn-main btn-clear" onclick="clearSig()">清除签名</button>
     </div>
 
-    <div class="picker" id="valuePicker">
+    <div class="picker-mask" id="pickerMask">
         <div class="picker-content">
-            <div class="picker-list" id="pickerList"></div>
-            <div class="picker-controls">
-                <button class="btn btn-clear-sig" onclick="cancelPicker()">取消</button>
-                <button class="btn btn-export-report" onclick="confirmPicker()">确定</button>
+            <div class="picker-scroll" id="pickerList"></div>
+            <div class="picker-btns">
+                <button class="btn-small btn-clear" onclick="closePicker()">取消</button>
+                <button class="btn-small btn-export" onclick="confirmValue()">确定</button>
             </div>
         </div>
     </div>
 
     <script>
-        // 设置日期
-        document.getElementById('reportDate').valueAsDate = new Date();
+        document.getElementById('curDate').innerText = new Date().toLocaleDateString();
+        let curType = '', curVal = '';
+        const radarData = [65, 75, 70, 80, 60, 55];
 
-        // 雷达图数据与初始化
-        let radarChart;
-        const radarData = {
-            endurance: 65, strength: 75, agility: 70,
-            flexibility: 80, core: 60, explosive: 55
+        // 雷达图初始化
+        const ctx = document.getElementById('radarChart').getContext('2d');
+        const radar = new Chart(ctx, {
+            type: 'radar',
+            data: {
+                labels: ['耐力', '力量', '灵敏', '柔韧', '核心', '爆发'],
+                datasets: [{ data: radarData, backgroundColor: 'rgba(0,242,254,0.2)', borderColor: '#00f2fe', borderWidth: 2, pointBackgroundColor: '#00f2fe' }]
+            },
+            options: { scales: { r: { grid: { color: 'rgba(255,255,255,0.1)' }, angleLines: { color: 'rgba(255,255,255,0.1)' }, ticks: { display: false } } }, plugins: { legend: { display: false } } }
+        });
+
+        // 滚轮配置
+        const config = {
+            age: { min: 18, max: 80, unit: ' 岁' },
+            height: { min: 140, max: 220, unit: ' cm' },
+            weight: { min: 40, max: 150, unit: ' kg', step: 0.1 },
+            fat: { min: 5, max: 50, unit: ' %', step: 0.1 },
+            muscle: { min: 20, max: 80, unit: ' kg', step: 0.1 },
+            bmr: { min: 1000, max: 3000, step: 10 },
+            bmi: { min: 15, max: 40, step: 0.1 },
+            whr: { min: 0.6, max: 1.2, step: 0.01 },
+            vfat: { min: 1, max: 30 },
+            birth: { min: 1960, max: 2010, step: 1, suffix: '.01' }
         };
 
-        function initRadarChart() {
-            const ctx = document.getElementById('radarChart').getContext('2d');
-            radarChart = new Chart(ctx, {
-                type: 'radar',
-                data: {
-                    labels: ['耐力', '力量', '灵敏', '柔韧', '核心', '爆发'],
-                    datasets: [{
-                        label: '当前状态',
-                        data: Object.values(radarData),
-                        backgroundColor: 'rgba(0, 242, 254, 0.2)',
-                        borderColor: '#00f2fe',
-                        borderWidth: 2,
-                        pointBackgroundColor: '#00f2fe'
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        r: {
-                            grid: { color: 'rgba(255,255,255,0.1)' },
-                            angleLines: { color: 'rgba(255,255,255,0.1)' },
-                            pointLabels: { color: '#64748b', font: { size: 11 } },
-                            ticks: { display: false, beginAtZero: true, max: 100 }
-                        }
-                    },
-                    plugins: { legend: { display: false } }
-                }
-            });
+        function openPicker(type) {
+            curType = type;
+            const p = config[type];
+            let html = '';
+            for(let i=p.min; i<=p.max; i=(i+(p.step||1))) {
+                let v = i.toFixed(p.step < 1 ? 1 : 0);
+                if(type==='whr') v = i.toFixed(2);
+                html += `<div class="picker-item" onclick="selectItem(this,'${v}')">${v}${p.unit||''}</div>`;
+            }
+            document.getElementById('pickerList').innerHTML = html;
+            document.getElementById('pickerMask').classList.add('active');
         }
 
-        function updateRadar() {
-            if (radarChart) {
-                radarChart.data.datasets[0].data = Object.values(radarData);
-                radarChart.update();
+        function selectItem(el, val) {
+            document.querySelectorAll('.picker-item').forEach(i=>i.classList.remove('selected'));
+            el.classList.add('selected');
+            curVal = val;
+        }
+
+        function confirmValue() {
+            const p = config[curType];
+            document.getElementById('val_'+curType).innerText = curVal + (p.unit||'') + (p.suffix||'');
+            closePicker();
+            // 联动雷达逻辑：根据体脂和肌肉量自动微调力量和核心
+            if(curType==='fat' || curType==='muscle') {
+                radar.data.datasets[0].data[1] = Math.min(100, 75 + (50 - parseFloat(curVal)));
+                radar.update();
             }
         }
 
-        initRadarChart();
+        function closePicker() { document.getElementById('pickerMask').classList.remove('active'); }
+        function editName() { const n = prompt("输入会员姓名"); if(n) event.target.innerText = n; }
+        function showImg(input, id) { if(input.files[0]) { const r = new FileReader(); r.onload=e=>{ const img=document.getElementById(id); img.src=e.target.result; img.style.display='block'; img.nextElementSibling.style.display='none'; }; r.readAsDataURL(input.files[0]); } }
 
-        // 手写签名逻辑
-        const signatureCanvas = document.getElementById('signature');
-        const sctx = signatureCanvas.getContext('2d');
-        let drawing = false;
-        signatureCanvas.width = signatureCanvas.offsetWidth;
-        signatureCanvas.height = signatureCanvas.offsetHeight;
+        // 签名逻辑
+        const can = document.getElementById('signature');
+        const sctx = can.getContext('2d');
+        let draw = false;
+        can.width = can.offsetWidth; can.height = can.offsetHeight;
+        const getP = e => ({ x: (e.touches?e.touches[0].clientX:e.clientX)-can.getBoundingClientRect().left, y: (e.touches?e.touches[0].clientY:e.clientY)-can.getBoundingClientRect().top });
+        can.addEventListener('touchstart', e => { draw=true; const p=getP(e); sctx.beginPath(); sctx.moveTo(p.x,p.y); e.preventDefault(); });
+        can.addEventListener('touchmove', e => { if(draw) { const p=getP(e); sctx.lineTo(p.x,p.y); sctx.strokeStyle='#00f2fe'; sctx.lineWidth=2; sctx.stroke(); } e.preventDefault(); });
+        can.addEventListener('touchend', () => draw=false);
+        function clearSig() { sctx.clearRect(0,0,can.width,can.height); }
 
-        const getPos = (e) => {
-            const r = signatureCanvas.getBoundingClientRect();
-            return {
-                x: (e.touches ? e.touches[0].clientX : e.clientX) - r.left,
-                y: (e.touches ? e.touches[0].clientY : e.clientY) - r.top
-            };
-        };
-
-        const startDrawing = (e) => { drawing = true; const p = getPos(e); sctx.beginPath(); sctx.moveTo(p.x, p.y); };
-        const draw = (e) => {
-            if(!drawing) return;
-            const p = getPos(e);
-            sctx.lineTo(p.x, p.y);
-            sctx.strokeStyle = '#00f2fe';
-            sctx.lineWidth = 2;
-            sctx.lineCap = 'round';
-            sctx.stroke();
-            e.preventDefault();
-        };
-        const endDrawing = () => { drawing = false; };
-
-        signatureCanvas.addEventListener('touchstart', startDrawing);
-        signatureCanvas.addEventListener('touchmove', draw);
-        signatureCanvas.addEventListener('touchend', endDrawing);
-        signatureCanvas.addEventListener('mousedown', startDrawing);
-        signatureCanvas.addEventListener('mousemove', draw);
-        signatureCanvas.addEventListener('mouseup', endDrawing);
-
-        function clearSig() { sctx.clearRect(0, 0, signatureCanvas.width, signatureCanvas.height); }
-
-        // 图片上传逻辑
-        function uploadPhoto(input, imgId, textId) {
-            if (input.files && input.files[0]) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    document.getElementById(imgId).src = e.target.result;
-                    document.getElementById(imgId).style.display = 'block';
-                    document.getElementById(textId).style.display = 'none';
-                };
-                reader.readAsDataURL(input.files[0]);
-            }
-        }
-
-        // 导出报告图片
         function exportImg() {
-            // 隐藏返回按钮和底部操作按钮，以便截图
-            document.querySelector('.back-btn').style.display = 'none';
-            document.querySelector('.btn-group').style.display = 'none';
-
-            html2canvas(document.querySelector("#reportArea"), {
-                backgroundColor: '#0f172a', // 使用更深的背景色确保截图背景一致
-                useCORS: true, // 允许跨域图片，如果图片来自外部链接需要
-                scale: 2 // 提高截图清晰度
-            }).then(canvas => {
-                const link = document.createElement('a');
-                link.download = `LUXIOU_VIP_Report_${document.getElementById('memberName').value}.png`;
-                link.href = canvas.toDataURL('image/png', 1.0); // 导出PNG格式，最高质量
-                link.click();
-            }).finally(() => {
-                // 恢复隐藏的元素
-                document.querySelector('.back-btn').style.display = 'flex';
-                document.querySelector('.btn-group').style.display = 'flex';
+            html2canvas(document.querySelector("#reportArea"), { backgroundColor: '#0b0f19', scale: 2 }).then(c => {
+                const a = document.createElement('a'); a.download = 'LUXIOU_VIP_REPORT.png'; a.href = c.toDataURL(); a.click();
             });
-        }
-
-
-        // 滚轮选择器逻辑
-        let currentPickerTarget = null;
-        let pickerValues = [];
-        const valuePicker = document.getElementById('valuePicker');
-        const pickerList = document.getElementById('pickerList');
-
-        document.querySelectorAll('.editable-value').forEach(span => {
-            span.addEventListener('click', function() {
-                currentPickerTarget = this;
-                const min = parseFloat(this.dataset.min);
-                const max = parseFloat(this.dataset.max);
-                const step = parseFloat(this.dataset.step);
-                const unit = this.dataset.unit || '';
-                const currentValue = parseFloat(this.innerText);
-                
-                pickerValues = [];
-                for (let i = min; i <= max; i += step) {
-                    pickerValues.push(i.toFixed(step.toString().split('.')[1]?.length || 0));
-                }
-                
-                pickerList.innerHTML = '';
-                pickerValues.forEach(val => {
-                    const item = document.createElement('div');
-                    item.className = 'picker-list-item';
-                    item.textContent = val + unit;
-                    item.dataset.value = val;
-                    if (parseFloat(val) === currentValue) {
-                        item.classList.add('selected');
-                    }
-                    pickerList.appendChild(item);
-                });
-
-                // 滚动到当前选中值
-                const selectedItem = pickerList.querySelector('.selected');
-                if (selectedItem) {
-                    pickerList.scrollTop = selectedItem.offsetTop - pickerList.clientHeight / 2 + selectedItem.clientHeight / 2;
-                }
-                
-                valuePicker.classList.add('active');
-            });
-        });
-
-        pickerList.addEventListener('scroll', () => {
-            const items = pickerList.querySelectorAll('.picker-list-item');
-            let closestItem = null;
-            let minDiff = Infinity;
-
-            items.forEach(item => {
-                const diff = Math.abs((item.offsetTop + item.clientHeight / 2) - (pickerList.scrollTop + pickerList.clientHeight / 2));
-                if (diff < minDiff) {
-                    minDiff = diff;
-                    closestItem = item;
-                }
-            });
-
-            items.forEach(item => item.classList.remove('selected'));
-            if (closestItem) {
-                closestItem.classList.add('selected');
-            }
-        });
-
-        function confirmPicker() {
-            const selectedItem = pickerList.querySelector('.picker-list-item.selected');
-            if (selectedItem && currentPickerTarget) {
-                const newValue = parseFloat(selectedItem.dataset.value);
-                const unit = currentPickerTarget.dataset.unit || '';
-                currentPickerTarget.innerText = newValue + unit;
-                
-                // 更新雷达图数据
-                const dataId = currentPickerTarget.dataset.id;
-                if (radarData.hasOwnProperty(dataId)) {
-                    radarData[dataId] = newValue;
-                    updateRadar();
-                }
-            }
-            valuePicker.classList.remove('active');
-        }
-
-        function cancelPicker() {
-            valuePicker.classList.remove('active');
         }
     </script>
 </body>
