@@ -10,64 +10,47 @@
         :root { --primary: #00f2fe; --bg: #0b0f19; --glass: rgba(30, 41, 59, 0.7); --card: #161e2e; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body { background: var(--bg); color: #e2e8f0; font-family: -apple-system, sans-serif; margin: 0; padding: 15px; padding-top: 75px; }
-        
-        /* 返回按钮 */
         .back-btn { position: fixed; top: 15px; left: 15px; z-index: 1000; background: rgba(0,0,0,0.6); color: #fff; padding: 10px 18px; border-radius: 50px; text-decoration: none; font-size: 14px; border: 1px solid rgba(255,255,255,0.4); backdrop-filter: blur(10px); font-weight: bold; }
-
         .report-wrap { max-width: 600px; margin: 0 auto; background: var(--glass); border-radius: 24px; padding: 25px; border: 1px solid rgba(255,255,255,0.1); }
         .header { text-align: center; margin-bottom: 25px; border-bottom: 1px solid #333; padding-bottom: 15px; }
         .header h1 { color: var(--primary); letter-spacing: 4px; font-size: 24px; margin: 0; }
-
         .section-label { font-size: 13px; color: var(--primary); margin: 20px 0 12px; display: flex; align-items: center; letter-spacing: 1px; font-weight: bold; }
         .section-label::before { content: ""; width: 3px; height: 14px; background: var(--primary); margin-right: 8px; border-radius: 2px; }
-
         .data-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
         .data-card { background: var(--card); padding: 15px; border-radius: 16px; text-align: center; border: 1px solid rgba(255,255,255,0.05); }
         .label { font-size: 11px; color: #64748b; margin-bottom: 6px; text-transform: uppercase; }
-        .value { font-size: 18px; font-weight: bold; color: var(--primary); border-bottom: 1px dashed rgba(0,242,254,0.3); padding-bottom: 2px; cursor: pointer; }
-
-        /* 对比照区域 */
+        .value { font-size: 17px; font-weight: bold; color: var(--primary); border-bottom: 1px dashed rgba(0,242,254,0.3); padding-bottom: 2px; cursor: pointer; }
         .photo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px; }
         .photo-box { background: #000; border: 1px dashed #444; border-radius: 12px; height: 180px; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; cursor: pointer; }
         .photo-box img { width: 100%; height: 100%; object-fit: cover; position: absolute; }
         .photo-box span { font-size: 12px; color: #444; z-index: 1; }
-
-        /* 签名区 */
         .sig-box { border: 1px dashed #444; border-radius: 12px; background: #000; height: 150px; margin-top: 10px; }
         canvas#signature { width: 100%; height: 100%; touch-action: none; }
-        
-        /* 滚轮选择器 */
         .picker-mask { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 2000; display: none; align-items: center; justify-content: center; opacity: 0; transition: 0.3s; }
         .picker-mask.active { display: flex; opacity: 1; }
-        .picker-content { background: #1a2234; width: 85%; max-width: 320px; border-radius: 20px; padding: 20px; border: 1px solid #334155; }
-        .picker-scroll { height: 200px; overflow-y: auto; scroll-snap-type: y mandatory; padding: 80px 0; }
-        .picker-item { height: 40px; line-height: 40px; text-align: center; font-size: 18px; color: #64748b; scroll-snap-align: center; cursor: pointer; }
-        .picker-item.selected { color: var(--primary); font-weight: bold; font-size: 22px; }
+        .picker-content { background: #1a2234; width: 90%; max-width: 350px; border-radius: 20px; padding: 20px; border: 1px solid #334155; }
+        .picker-scroll-wrap { display: flex; justify-content: space-around; height: 200px; overflow: hidden; }
+        .picker-scroll { flex: 1; height: 100%; overflow-y: auto; scroll-snap-type: y mandatory; padding: 80px 0; }
+        .picker-item { height: 40px; line-height: 40px; text-align: center; font-size: 16px; color: #64748b; scroll-snap-align: center; cursor: pointer; }
+        .picker-item.selected { color: var(--primary); font-weight: bold; font-size: 18px; }
         .picker-btns { display: flex; gap: 10px; margin-top: 20px; }
         .btn-small { flex: 1; padding: 12px; border-radius: 10px; border: none; font-weight: bold; cursor: pointer; }
-
-        .btn-main { display: block; width: 100%; padding: 16px; border-radius: 12px; border: none; font-weight: bold; margin-top: 20px; cursor: pointer; transition: 0.3s; }
+        .btn-main { display: block; width: 100%; padding: 16px; border-radius: 12px; border: none; font-weight: bold; margin-top: 20px; cursor: pointer; }
         .btn-export { background: var(--primary); color: #000; }
         .btn-clear { background: #2d3748; color: #fff; }
     </style>
 </head>
 <body>
     <a href="./index.html" class="back-btn">返回中枢</a>
-
     <div class="report-wrap" id="reportArea">
-        <div class="header">
-            <h1>VIP 私教体态档案</h1>
-            <p>LUXIOU DIGITAL DIAGNOSIS SYSTEM</p>
-        </div>
-
+        <div class="header"><h1>VIP 私教体态档案</h1><p>LUXIOU DIGITAL DIAGNOSIS SYSTEM</p></div>
         <div class="section-label">基础信息档案</div>
         <div class="data-grid">
             <div class="data-card"><div class="label">会员姓名</div><div class="value" onclick="editName(this)">陈先生</div></div>
             <div class="data-card"><div class="label">当前年龄</div><div class="value" id="val_age" onclick="openPicker('age')">42 岁</div></div>
             <div class="data-card"><div class="label">身高数据</div><div class="value" id="val_height" onclick="openPicker('height')">176 cm</div></div>
-            <div class="data-card"><div class="label">出生日期</div><div class="value" id="val_birth" onclick="openPicker('birth')">1984.05</div></div>
+            <div class="data-card"><div class="label">出生日期</div><div class="value" id="val_birth" onclick="openPicker('birth')">1984-05-20</div></div>
         </div>
-
         <div class="section-label">专业测评维度</div>
         <div class="data-grid">
             <div class="data-card"><div class="label">当前体重 (KG)</div><div class="value" id="val_weight" onclick="openPicker('weight')">85.0 kg</div></div>
@@ -78,118 +61,77 @@
             <div class="data-card"><div class="label">腰臀比 (WHR)</div><div class="value" id="val_whr" onclick="openPicker('whr')">0.92</div></div>
             <div class="data-card" style="grid-column: span 2;"><div class="label">内脏脂肪等级</div><div class="value" id="val_vfat" onclick="openPicker('vfat')">12 (警戒线)</div></div>
         </div>
-
         <div class="section-label">体能指标雷达</div>
-        <div style="height:320px; margin: 20px 0;"><canvas id="radarChart"></canvas></div>
-
+        <div style="height:320px; margin: 10px 0;"><canvas id="radarChart"></canvas></div>
         <div class="section-label">前后对比照片</div>
         <div class="photo-grid">
             <label class="photo-box"><img id="img_b" style="display:none"><span>点击上传(前)</span><input type="file" hidden onchange="showImg(this,'img_b')"></label>
             <label class="photo-box"><img id="img_a" style="display:none"><span>点击上传(后)</span><input type="file" hidden onchange="showImg(this,'img_a')"></label>
         </div>
-
         <div class="section-label">教练确认及手写签名</div>
         <div class="sig-box"><canvas id="signature"></canvas></div>
-        
         <div style="display:flex; justify-content:space-between; margin-top:20px; font-size:12px; color:#444;">
             <span>LUXIOU 专业版报告</span><span id="curDate"></span>
         </div>
     </div>
-
-    <div style="max-width:600px; margin:0 auto;">
-        <button class="btn-main btn-export" onclick="exportImg()">生成并保存报告图片</button>
-        <button class="btn-main btn-clear" onclick="clearSig()">清除签名</button>
-    </div>
-
-    <div class="picker-mask" id="pickerMask">
-        <div class="picker-content">
-            <div class="picker-scroll" id="pickerList"></div>
-            <div class="picker-btns">
-                <button class="btn-small btn-clear" onclick="closePicker()">取消</button>
-                <button class="btn-small btn-export" onclick="confirmValue()">确定</button>
-            </div>
-        </div>
-    </div>
-
+    <div style="max-width:600px; margin:0 auto;"><button class="btn-main btn-export" onclick="exportImg()">生成并保存报告图片</button><button class="btn-main btn-clear" onclick="clearSig()">清除签名</button></div>
+    <div class="picker-mask" id="pickerMask"><div class="picker-content">
+        <div class="picker-scroll-wrap" id="pickerList"></div>
+        <div class="picker-btns"><button class="btn-small btn-clear" onclick="closePicker()">取消</button><button class="btn-small btn-export" onclick="confirmValue()">确定</button></div>
+    </div></div>
     <script>
         document.getElementById('curDate').innerText = new Date().toLocaleDateString();
-        let curType = '', tempVal = '';
-        const radarDataValues = { endurance: 65, strength: 75, agility: 70, flexibility: 80, core: 60, explosive: 55 };
-
+        let curType = '', finalVal = '';
+        const radarData = [65, 75, 70, 80, 60, 55];
         const ctx = document.getElementById('radarChart').getContext('2d');
         const radar = new Chart(ctx, {
             type: 'radar',
-            data: {
-                labels: ['耐力', '力量', '灵敏', '柔韧', '核心', '爆发'],
-                datasets: [{ data: Object.values(radarDataValues), backgroundColor: 'rgba(0,242,254,0.2)', borderColor: '#00f2fe', borderWidth: 2, pointBackgroundColor: '#00f2fe' }]
-            },
+            data: { labels: ['耐力', '力量', '灵敏', '柔韧', '核心', '爆发'], datasets: [{ data: radarData, backgroundColor: 'rgba(0,242,254,0.2)', borderColor: '#00f2fe', borderWidth: 2, pointBackgroundColor: '#00f2fe' }] },
             options: { scales: { r: { grid: { color: 'rgba(255,255,255,0.1)' }, angleLines: { color: 'rgba(255,255,255,0.1)' }, ticks: { display: false } } }, plugins: { legend: { display: false } } }
         });
-
-        const config = {
-            age: { min: 18, max: 80, unit: ' 岁' },
-            height: { min: 140, max: 220, unit: ' cm' },
-            weight: { min: 40, max: 150, unit: ' kg', step: 0.1 },
-            fat: { min: 5, max: 50, unit: ' %', step: 0.1 },
-            muscle: { min: 20, max: 80, unit: ' kg', step: 0.1 },
-            bmr: { min: 1000, max: 3000, step: 10 },
-            bmi: { min: 15, max: 40, step: 0.1 },
-            whr: { min: 0.6, max: 1.2, step: 0.01 },
-            vfat: { min: 1, max: 30 },
-            birth: { min: 1960, max: 2010, step: 1, suffix: '.01' }
-        };
-
+        const config = { age:{min:18,max:80,unit:' 岁'}, height:{min:140,max:220,unit:' cm'}, weight:{min:40,max:150,unit:' kg',step:0.1}, fat:{min:5,max:50,unit:' %',step:0.1}, muscle:{min:20,max:80,unit:' kg',step:0.1}, bmr:{min:1000,max:3000,step:10}, bmi:{min:15,max:40,step:0.1}, whr:{min:0.6,max:1.2,step:0.01}, vfat:{min:1,max:30} };
         function openPicker(type) {
-            curType = type;
-            const p = config[type];
-            let html = '';
-            for(let i=p.min; i<=p.max; i=parseFloat((i+(p.step||1)).toFixed(2))) {
-                let v = i.toFixed(p.step < 1 ? (p.step === 0.01 ? 2 : 1) : 0);
-                html += `<div class="picker-item" onclick="selectItem(this,'${v}')">${v}${p.unit||''}</div>`;
+            curType = type; const list = document.getElementById('pickerList'); list.innerHTML = '';
+            if(type === 'birth') {
+                list.innerHTML = `<div class="picker-scroll" id="p_y"></div><div class="picker-scroll" id="p_m"></div><div class="picker-scroll" id="p_d"></div>`;
+                fillScroll('p_y', 1960, 2015, ''); fillScroll('p_m', 1, 12, ''); fillScroll('p_d', 1, 31, '');
+            } else {
+                list.innerHTML = `<div class="picker-scroll" id="p_single"></div>`;
+                const p = config[type];
+                for(let i=p.min; i<=p.max; i=parseFloat((i+(p.step||1)).toFixed(2))) {
+                    const v = i.toFixed(p.step < 1 ? (p.step === 0.01 ? 2 : 1) : 0);
+                    document.getElementById('p_single').innerHTML += `<div class="picker-item" onclick="selectItem(this,'${v}')">${v}${p.unit||''}</div>`;
+                }
             }
-            document.getElementById('pickerList').innerHTML = html;
             document.getElementById('pickerMask').classList.add('active');
         }
-
-        function selectItem(el, val) {
-            document.querySelectorAll('.picker-item').forEach(i=>i.classList.remove('selected'));
-            el.classList.add('selected');
-            tempVal = val;
+        function fillScroll(id, min, max, unit) {
+            for(let i=min; i<=max; i++) document.getElementById(id).innerHTML += `<div class="picker-item" onclick="selectPart(this,'${i}')">${i<10?'0'+i:i}${unit}</div>`;
         }
-
+        function selectItem(el, val) { document.querySelectorAll('.picker-item').forEach(i=>i.classList.remove('selected')); el.classList.add('selected'); finalVal = val; }
+        function selectPart(el, val) { el.parentNode.querySelectorAll('.picker-item').forEach(i=>i.classList.remove('selected')); el.classList.add('selected'); }
         function confirmValue() {
-            if(!tempVal) return;
-            const p = config[curType];
-            document.getElementById('val_'+curType).innerText = tempVal + (p.unit||'') + (p.suffix||'');
-            
-            // 自动更新雷达图逻辑：肌肉量增加提升力量，体脂降低提升灵敏
-            if(curType==='muscle') radarDataValues.strength = Math.min(100, 75 + (parseFloat(tempVal)-50)*2);
-            if(curType==='fat') radarDataValues.agility = Math.min(100, 70 + (30-parseFloat(tempVal))*2);
-            
-            radar.data.datasets[0].data = Object.values(radarDataValues);
-            radar.update();
+            if(curType === 'birth') {
+                const y = document.querySelector('#p_y .selected')?.innerText || '1984';
+                const m = document.querySelector('#p_m .selected')?.innerText || '05';
+                const d = document.querySelector('#p_d .selected')?.innerText || '20';
+                document.getElementById('val_birth').innerText = `${y}-${m}-${d}`;
+            } else {
+                const p = config[curType]; document.getElementById('val_'+curType).innerText = finalVal + (p.unit||'');
+            }
             closePicker();
         }
-
-        function closePicker() { document.getElementById('pickerMask').classList.remove('active'); tempVal = ''; }
+        function closePicker() { document.getElementById('pickerMask').classList.remove('active'); finalVal = ''; }
         function editName(el) { const n = prompt("输入会员姓名", el.innerText); if(n) el.innerText = n; }
         function showImg(input, id) { if(input.files[0]) { const r = new FileReader(); r.onload=e=>{ const img=document.getElementById(id); img.src=e.target.result; img.style.display='block'; img.nextElementSibling.style.display='none'; }; r.readAsDataURL(input.files[0]); } }
-
-        const can = document.getElementById('signature');
-        const sctx = can.getContext('2d');
-        let draw = false;
+        const can = document.getElementById('signature'); const sctx = can.getContext('2d'); let draw = false;
         can.width = can.offsetWidth; can.height = can.offsetHeight;
         const getP = e => ({ x: (e.touches?e.touches[0].clientX:e.clientX)-can.getBoundingClientRect().left, y: (e.touches?e.touches[0].clientY:e.clientY)-can.getBoundingClientRect().top });
         can.addEventListener('touchstart', e => { draw=true; const p=getP(e); sctx.beginPath(); sctx.moveTo(p.x,p.y); e.preventDefault(); });
         can.addEventListener('touchmove', e => { if(draw) { const p=getP(e); sctx.lineTo(p.x,p.y); sctx.strokeStyle='#00f2fe'; sctx.lineWidth=2; sctx.stroke(); } e.preventDefault(); });
         can.addEventListener('touchend', () => draw=false);
         function clearSig() { sctx.clearRect(0,0,can.width,can.height); }
-
-        function exportImg() {
-            html2canvas(document.querySelector("#reportArea"), { backgroundColor: '#0b0f19', scale: 2 }).then(c => {
-                const a = document.createElement('a'); a.download = 'LUXIOU_VIP_REPORT.png'; a.href = c.toDataURL(); a.click();
-            });
-        }
+        function exportImg() { html2canvas(document.querySelector("#reportArea"), { backgroundColor: '#0b0f19', scale: 2 }).then(c => { const a = document.createElement('a'); a.download = 'LUXIOU_VIP_REPORT.png'; a.href = c.toDataURL(); a.click(); }); }
     </script>
 </body>
 </html>
