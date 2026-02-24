@@ -9,18 +9,17 @@
         :root { --primary: #00f2fe; --bg: #0b0f19; }
         body { background: var(--bg); color: #e2e8f0; font-family: -apple-system, sans-serif; margin: 0; padding: 20px; padding-top: 75px; }
         .back-btn { position: fixed; top: 15px; left: 15px; z-index: 9999; background: rgba(0,0,0,0.6); color: #fff; padding: 10px 18px; border-radius: 50px; text-decoration: none; font-size: 14px; border: 1px solid rgba(255,255,255,0.4); backdrop-filter: blur(10px); font-weight: bold; }
-        .container { max-width: 600px; margin: 0 auto; background: rgba(30, 41, 59, 0.7); border-radius: 20px; padding: 20px; border: 1px solid rgba(255,255,255,0.1); }
-        h2 { color: var(--primary); text-align: center; margin-bottom: 20px; letter-spacing: 2px; }
-        .q-item { background: rgba(255,255,255,0.03); padding: 12px; border-radius: 12px; margin-bottom: 12px; border-left: 4px solid #334155; }
-        .q-text { font-size: 14px; margin-bottom: 8px; line-height: 1.5; }
+        .container { max-width: 600px; margin: 0 auto; background: rgba(30, 41, 59, 0.7); border-radius: 20px; padding: 25px; border: 1px solid rgba(255,255,255,0.1); }
+        h2 { color: var(--primary); text-align: center; margin-bottom: 25px; letter-spacing: 2px; }
+        .q-item { background: rgba(255,255,255,0.03); padding: 15px; border-radius: 12px; margin-bottom: 12px; border-left: 4px solid #334155; }
+        .q-text { font-size: 14px; margin-bottom: 10px; line-height: 1.6; }
         .options { display: flex; gap: 10px; }
-        .opt { flex: 1; padding: 8px; text-align: center; background: rgba(255,255,255,0.05); border-radius: 8px; font-size: 13px; border: 1px solid transparent; }
+        .opt { flex: 1; padding: 10px; text-align: center; background: rgba(255,255,255,0.05); border-radius: 8px; font-size: 13px; border: 1px solid transparent; }
         .opt.active { background: var(--primary); color: #000; font-weight: bold; }
-        /* 签名区 */
-        .sig-box { margin-top: 20px; border: 1px dashed #444; border-radius: 10px; background: #000; height: 150px; position: relative; }
-        canvas#signature { width: 100%; height: 100%; touch-action: none; }
-        .btn-group { display: flex; gap: 10px; margin-top: 20px; }
-        .btn { flex: 1; padding: 15px; border-radius: 10px; border: none; font-weight: bold; cursor: pointer; }
+        .sig-box { margin-top: 25px; border: 1px dashed #444; border-radius: 12px; background: #000; height: 180px; position: relative; }
+        canvas#signature { width: 100%; height: 100%; touch-action: none; cursor: crosshair; }
+        .btn-group { display: flex; gap: 10px; margin-top: 25px; max-width: 600px; margin-left: auto; margin-right: auto; padding-bottom: 50px; }
+        .btn { flex: 1; padding: 16px; border-radius: 12px; border: none; font-weight: bold; font-size: 15px; }
         .btn-clear { background: #334155; color: #fff; }
         .btn-save { background: linear-gradient(90deg, #00f2fe, #7000ff); color: #fff; }
     </style>
@@ -28,22 +27,23 @@
 <body>
     <a href="./index.html" class="back-btn">← 返回中枢</a>
     <div class="container" id="captureArea">
-        <h2>ACE 风险筛查评估</h2>
+        <h2>ACE 风险筛查 (PAR-Q)</h2>
         <div id="questions"></div>
-        <div style="font-size:12px; color:var(--primary); margin: 20px 0 5px;">会员知情签名确认：</div>
+        <div style="font-size:13px; color:var(--primary); margin: 25px 0 10px; font-weight: bold;">会员本人签字确认：</div>
         <div class="sig-box"><canvas id="signature"></canvas></div>
     </div>
-    <div class="btn-group" style="max-width:600px; margin: 0 auto 50px;">
-        <button class="btn btn-clear" onclick="clearSig()">清除签名</button>
-        <button class="btn btn-save" onclick="saveReport()">生成评估长图</button>
+    <div class="btn-group">
+        <button class="btn btn-clear" onclick="clearSig()">清除重签</button>
+        <button class="btn btn-save" onclick="saveReport()">生成评估报告</button>
     </div>
-
     <script>
         const questions = [
             "医生是否曾说您的心脏有问题？", "运动时您的胸部是否有疼痛感？", "过去月内不运动时是否有过胸痛？",
             "是否曾因晕眩失去平衡？", "是否有因运动加重的骨关节问题？", "是否正在服用心脏/血压类药物？",
-            "吸烟或过去6个月内戒烟？", "直系亲属55岁前有心脏病史？", "BMI指数是否大于30？",
-            "每周运动是否少于3次且持续不足3月？"
+            "是否知道其他不应参加运动的原因？", "直系亲属55岁前有心脏病史？", "您目前是否吸烟？",
+            "收缩压≥140或舒张压≥90？", "总胆固醇是否>200mg/dL？", "空腹血糖是否≥100mg/dL？",
+            "BMI指数是否大于30？", "每周运动是否少于3次？", "男>45岁或女>55岁？",
+            "是否有已知代谢性疾病？", "是否有肺部疾病史？", "近期是否有不明原因呼吸困难？"
         ];
         const qBox = document.getElementById('questions');
         questions.forEach((q, i) => {
@@ -54,16 +54,17 @@
             qBox.appendChild(div);
         });
         function toggle(el) { el.parentNode.querySelectorAll('.opt').forEach(o=>o.classList.remove('active')); el.classList.add('active'); }
-
         const canvas = document.getElementById('signature');
         const ctx = canvas.getContext('2d');
         let drawing = false;
         canvas.width = canvas.offsetWidth; canvas.height = canvas.offsetHeight;
-        canvas.addEventListener('touchstart', (e) => { drawing = true; ctx.beginPath(); ctx.moveTo(e.touches[0].clientX - canvas.getBoundingClientRect().left, e.touches[0].clientY - canvas.getBoundingClientRect().top); });
-        canvas.addEventListener('touchmove', (e) => { if(drawing) { ctx.lineTo(e.touches[0].clientX - canvas.getBoundingClientRect().left, e.touches[0].clientY - canvas.getBoundingClientRect().top); ctx.strokeStyle = '#00f2fe'; ctx.lineWidth = 2; ctx.stroke(); } e.preventDefault(); });
-        canvas.addEventListener('touchend', () => drawing = false);
+        const getPos = (e) => { const r = canvas.getBoundingClientRect(); return { x: (e.touches ? e.touches[0].clientX : e.clientX) - r.left, y: (e.touches ? e.touches[0].clientY : e.clientY) - r.top }; };
+        const start = (e) => { drawing = true; const p = getPos(e); ctx.beginPath(); ctx.moveTo(p.x, p.y); };
+        const move = (e) => { if(!drawing) return; const p = getPos(e); ctx.lineTo(p.x, p.y); ctx.strokeStyle = '#00f2fe'; ctx.lineWidth = 3; ctx.lineCap = 'round'; ctx.stroke(); e.preventDefault(); };
+        canvas.addEventListener('touchstart', start); canvas.addEventListener('touchmove', move); canvas.addEventListener('touchend', () => drawing = false);
+        canvas.addEventListener('mousedown', start); canvas.addEventListener('mousemove', move); canvas.addEventListener('mouseup', () => drawing = false);
         function clearSig() { ctx.clearRect(0,0,canvas.width,canvas.height); }
-        function saveReport() { html2canvas(document.querySelector("#captureArea")).then(canvas => { const link = document.createElement('a'); link.download = 'LUXIOU_ACE_Report.png'; link.href = canvas.toDataURL(); link.click(); }); }
+        function saveReport() { html2canvas(document.querySelector("#captureArea")).then(c => { const a = document.createElement('a'); a.download = 'LUXIOU_PARQ.png'; a.href = c.toDataURL(); a.click(); }); }
     </script>
 </body>
 </html>
