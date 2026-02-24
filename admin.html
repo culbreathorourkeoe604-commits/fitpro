@@ -3,36 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LUXIOU | 老板全自动管理中心</title>
+    <title>LUXIOU | 数字化数据自动化中枢</title>
     <style>
         :root { --primary: #00f2fe; --bg: #0a0a0a; }
-        body { background: var(--bg); color: #fff; font-family: sans-serif; padding: 30px; line-height: 1.6; }
-        .container { max-width: 900px; margin: 0 auto; }
+        body { background: var(--bg); color: #fff; font-family: -apple-system, sans-serif; padding: 30px; line-height: 1.6; margin: 0; }
+        .container { max-width: 1000px; margin: 0 auto; }
         .header { text-align: center; border-bottom: 2px solid #222; padding-bottom: 20px; margin-bottom: 30px; }
-        .header h1 { color: var(--primary); letter-spacing: 3px; }
+        .header h1 { color: var(--primary); letter-spacing: 3px; font-size: 28px; margin-bottom: 10px; }
         
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        .card { background: #111; border: 1px solid #333; border-radius: 15px; padding: 20px; }
-        .card h3 { color: var(--primary); margin-top: 0; border-left: 4px solid var(--primary); padding-left: 10px; }
+        .card { background: #111; border: 1px solid #222; border-radius: 15px; padding: 25px; transition: 0.3s; }
+        .card:hover { border-color: #333; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .card h3 { color: var(--primary); margin-top: 0; border-left: 4px solid var(--primary); padding-left: 12px; font-size: 18px; margin-bottom: 20px; }
         
         .upload-zone { 
-            border: 2px dashed #444; border-radius: 10px; padding: 20px; text-align: center; 
-            margin-top: 15px; transition: 0.3s; cursor: pointer;
+            border: 2px dashed #333; border-radius: 12px; padding: 25px; text-align: center; 
+            margin-top: 15px; transition: 0.3s; cursor: pointer; background: rgba(255,255,255,0.01);
         }
         .upload-zone:hover { border-color: var(--primary); background: rgba(0,242,254,0.05); }
         .btn-github { 
-            display: inline-block; background: #222; color: #fff; padding: 10px 20px; 
-            border-radius: 8px; text-decoration: none; font-weight: bold; margin-top: 15px; width: 100%; text-align: center;
+            display: inline-block; background: linear-gradient(90deg, #00f2fe, #7000ff); color: #fff; 
+            padding: 15px 30px; border-radius: 10px; text-decoration: none; font-weight: bold; 
+            margin-top: 30px; width: 100%; text-align: center; box-shadow: 0 5px 15px rgba(112, 0, 255, 0.3);
         }
-        .file-info { font-size: 11px; color: #666; margin-top: 8px; font-family: monospace; }
-        canvas { display: none; } /* 隐藏的处理引擎 */
+        .file-info { font-size: 11px; color: #555; margin-top: 10px; font-family: monospace; letter-spacing: 1px; }
+        canvas { display: none; }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
             <h1>LUXIOU 数据自动化中枢</h1>
-            <p style="color:#666">电脑端专供 · 自动处理 · 极速同步</p>
+            <p style="color:#666; font-size: 14px;">电脑端专供 · 图片自动加工厂 · 极致同步体验</p>
         </div>
 
         <div class="grid">
@@ -59,14 +61,42 @@
                     <div class="file-info">目标文件名：plan_2.jpg</div>
                 </div>
             </div>
+
+            <div class="card">
+                <h3>🎓 【背书库】管理</h3>
+                <div class="upload-zone" onclick="triggerUpload('cert_1.jpg')">
+                    点击上传：1挡 (资质证书)
+                    <div class="file-info">目标文件名：cert_1.jpg</div>
+                </div>
+                <div class="upload-zone" onclick="triggerUpload('cert_2.jpg')">
+                    点击上传：2挡 (荣誉奖项)
+                    <div class="file-info">目标文件名：cert_2.jpg</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>🛒 【产品库】管理</h3>
+                <div class="upload-zone" onclick="triggerUpload('prod_1.jpg')">
+                    点击上传：1挡 (私教课程)
+                    <div class="file-info">目标文件名：prod_1.jpg</div>
+                </div>
+                <div class="upload-zone" onclick="triggerUpload('prod_2.jpg')">
+                    点击上传：2挡 (营养补剂)
+                    <div class="file-info">目标文件名：prod_2.jpg</div>
+                </div>
+            </div>
         </div>
 
-        <div style="margin-top: 30px; background: #1a1a1a; padding: 20px; border-radius: 15px;">
-            <h4 style="color: var(--primary); margin-top: 0;">第一步：上传处理</h4>
-            <p style="font-size: 13px; color: #888;">点击上方虚线框选择图片，系统会自动将其转换为标准的 .jpg 格式并自动重命名下载到您的电脑。</p>
-            <h4 style="color: var(--primary);">第二步：极速同步</h4>
+        <div style="margin-top: 40px; background: rgba(255,255,255,0.02); padding: 30px; border-radius: 20px; border: 1px solid #222;">
+            <h4 style="color: var(--primary); margin-top: 0; font-size: 18px;">🚀 操作指引</h4>
+            <ol style="color: #888; font-size: 14px; padding-left: 20px;">
+                <li style="margin-bottom: 10px;">点击上方任意虚线框，选择您电脑里的原始图片（支持任何格式、任何大小）。</li>
+                <li style="margin-bottom: 10px;">系统会自动完成图片优化，并将改好名的 <b>.jpg</b> 文件下载到您的电脑。</li>
+                <li style="margin-bottom: 10px;">点击下方紫色大按钮打开 GitHub。</li>
+                <li>直接将下载好的文件<b>拖入</b> GitHub 页面，点击绿色 <b>Commit changes</b> 即可同步。</li>
+            </ol>
             <a href="https://github.com/culbreathorourkeoe604-commits/fitpro/upload/main" target="_blank" class="btn-github">
-                点击这里打开 GitHub 后台 ➔ 将下载好的文件拖进去即可
+                点击这里打开 GitHub 后台 ➔ 拖入文件极速同步
             </a>
         </div>
     </div>
@@ -93,25 +123,23 @@
             reader.onload = function(event) {
                 const img = new Image();
                 img.onload = function() {
-                    // 自动裁剪并转码为 JPG
-                    canvas.width = 1000; // 统一宽度
-                    canvas.height = 1200; // 统一高度，完美契合弹窗
+                    // 统一高品质规格：1000x1200
+                    canvas.width = 1000;
+                    canvas.height = 1200;
                     ctx.fillStyle = "#000";
                     ctx.fillRect(0, 0, 1000, 1200);
                     
-                    // 计算缩放并居中覆盖
                     const scale = Math.max(1000 / img.width, 1200 / img.height);
                     const x = (1000 - img.width * scale) / 2;
                     const y = (1200 - img.height * scale) / 2;
                     ctx.drawImage(img, x, y, img.width * scale, img.height * scale);
 
-                    // 自动下载重命名后的文件
                     const link = document.createElement('a');
                     link.download = targetName;
-                    link.href = canvas.toDataURL('image/jpeg', 0.85); // 0.85 质量均衡
+                    link.href = canvas.toDataURL('image/jpeg', 0.9);
                     link.click();
                     
-                    alert('✅ 处理成功！文件已改名为 ' + targetName + ' 并保存到您的下载文件夹。\n请点击下方按钮上传到 GitHub。');
+                    alert('✅ 处理成功！已为您生成：' + targetName + '\n文件已保存到下载文件夹。现在去 GitHub 拖入上传吧！');
                 };
                 img.src = event.target.result;
             };
