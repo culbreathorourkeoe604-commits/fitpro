@@ -3,51 +3,67 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>ACE 风险筛查评估 | SHANGHAI LUXIOU</title>
+    <title>ACE 风险筛查 | SHANGHAI LUXIOU</title>
+    <script src="https://cdn.staticfile.net/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         :root { --primary: #00f2fe; --bg: #0b0f19; }
         body { background: var(--bg); color: #e2e8f0; font-family: -apple-system, sans-serif; margin: 0; padding: 20px; padding-top: 75px; }
-        .back-btn { position: fixed; top: 15px; left: 15px; z-index: 9999; background: rgba(0,0,0,0.6); color: #fff; padding: 10px 20px; border-radius: 50px; text-decoration: none; font-size: 14px; border: 1px solid rgba(255,255,255,0.4); backdrop-filter: blur(10px); font-weight: bold; }
+        .back-btn { position: fixed; top: 15px; left: 15px; z-index: 9999; background: rgba(0,0,0,0.6); color: #fff; padding: 10px 18px; border-radius: 50px; text-decoration: none; font-size: 14px; border: 1px solid rgba(255,255,255,0.4); backdrop-filter: blur(10px); font-weight: bold; }
         .container { max-width: 600px; margin: 0 auto; background: rgba(30, 41, 59, 0.7); border-radius: 20px; padding: 20px; border: 1px solid rgba(255,255,255,0.1); }
-        h2 { color: var(--primary); text-align: center; margin-bottom: 25px; letter-spacing: 2px; }
-        .q-item { background: rgba(255,255,255,0.03); padding: 15px; border-radius: 12px; margin-bottom: 15px; border-left: 4px solid #334155; }
-        .q-text { font-size: 14px; margin-bottom: 10px; line-height: 1.6; }
+        h2 { color: var(--primary); text-align: center; margin-bottom: 20px; letter-spacing: 2px; }
+        .q-item { background: rgba(255,255,255,0.03); padding: 12px; border-radius: 12px; margin-bottom: 12px; border-left: 4px solid #334155; }
+        .q-text { font-size: 14px; margin-bottom: 8px; line-height: 1.5; }
         .options { display: flex; gap: 10px; }
         .opt { flex: 1; padding: 8px; text-align: center; background: rgba(255,255,255,0.05); border-radius: 8px; font-size: 13px; border: 1px solid transparent; }
         .opt.active { background: var(--primary); color: #000; font-weight: bold; }
-        .footer-info { margin-top: 30px; border-top: 1px solid #333; padding-top: 20px; display: flex; justify-content: space-between; align-items: center; }
-        input[type="date"] { background: transparent; color: var(--primary); border: 1px solid var(--primary); border-radius: 5px; padding: 5px; font-size: 12px; }
+        /* 签名区 */
+        .sig-box { margin-top: 20px; border: 1px dashed #444; border-radius: 10px; background: #000; height: 150px; position: relative; }
+        canvas#signature { width: 100%; height: 100%; touch-action: none; }
+        .btn-group { display: flex; gap: 10px; margin-top: 20px; }
+        .btn { flex: 1; padding: 15px; border-radius: 10px; border: none; font-weight: bold; cursor: pointer; }
+        .btn-clear { background: #334155; color: #fff; }
+        .btn-save { background: linear-gradient(90deg, #00f2fe, #7000ff); color: #fff; }
     </style>
 </head>
 <body>
     <a href="./index.html" class="back-btn">← 返回中枢</a>
-    <div class="container">
-        <h2>ACE 风险筛查 (PAR-Q)</h2>
+    <div class="container" id="captureArea">
+        <h2>ACE 风险筛查评估</h2>
         <div id="questions"></div>
-        <div class="footer-info">
-            <span style="font-size: 12px; color: #666;">LUXIOU 专业诊断版</span>
-            <input type="date" id="testDate">
-        </div>
+        <div style="font-size:12px; color:var(--primary); margin: 20px 0 5px;">会员知情签名确认：</div>
+        <div class="sig-box"><canvas id="signature"></canvas></div>
     </div>
+    <div class="btn-group" style="max-width:600px; margin: 0 auto 50px;">
+        <button class="btn btn-clear" onclick="clearSig()">清除签名</button>
+        <button class="btn btn-save" onclick="saveReport()">生成评估长图</button>
+    </div>
+
     <script>
-        document.getElementById('testDate').valueAsDate = new Date();
         const questions = [
-            "医生是否曾说您的心脏有问题？", "运动时您的胸部是否有疼痛感？", "过去一个月在不运动时是否有过胸痛？",
-            "是否曾因晕眩而失去平衡或失去知觉？", "是否有因运动而加重的骨骼或关节问题？", "医生目前是否因血压/心脏问题向您开药？",
-            "是否知道有任何其他原因不应参加运动？", "您的直系亲属中是否有在55岁前患心脏病史？", "您是否吸烟或在过去6个月内戒烟？",
-            "您的收缩压是否≥140mmHg或舒张压≥90mmHg？", "您的总胆固醇是否>200mg/dL？", "您的空腹血糖是否≥100mg/dL？",
-            "您的身体质量指数(BMI)是否≥30？", "您是否每周运动少于3次，持续少于3个月？", "您的年龄是否超过45岁(男)或55岁(女)？",
-            "您是否有已知的代谢性疾病(如糖尿病)？", "您是否有哮喘或肺部疾病史？", "您在近期是否有过任何不明原因的呼吸困难？"
+            "医生是否曾说您的心脏有问题？", "运动时您的胸部是否有疼痛感？", "过去月内不运动时是否有过胸痛？",
+            "是否曾因晕眩失去平衡？", "是否有因运动加重的骨关节问题？", "是否正在服用心脏/血压类药物？",
+            "吸烟或过去6个月内戒烟？", "直系亲属55岁前有心脏病史？", "BMI指数是否大于30？",
+            "每周运动是否少于3次且持续不足3月？"
         ];
         const qBox = document.getElementById('questions');
         questions.forEach((q, i) => {
             const div = document.createElement('div');
             div.className = 'q-item';
-            div.innerHTML = `<div class="q-text">${i + 1}. ${q}</div><div class="options">
+            div.innerHTML = `<div class="q-text">${i+1}. ${q}</div><div class="options">
                 <div class="opt" onclick="toggle(this)">是</div><div class="opt active" onclick="toggle(this)">否</div></div>`;
             qBox.appendChild(div);
         });
         function toggle(el) { el.parentNode.querySelectorAll('.opt').forEach(o=>o.classList.remove('active')); el.classList.add('active'); }
+
+        const canvas = document.getElementById('signature');
+        const ctx = canvas.getContext('2d');
+        let drawing = false;
+        canvas.width = canvas.offsetWidth; canvas.height = canvas.offsetHeight;
+        canvas.addEventListener('touchstart', (e) => { drawing = true; ctx.beginPath(); ctx.moveTo(e.touches[0].clientX - canvas.getBoundingClientRect().left, e.touches[0].clientY - canvas.getBoundingClientRect().top); });
+        canvas.addEventListener('touchmove', (e) => { if(drawing) { ctx.lineTo(e.touches[0].clientX - canvas.getBoundingClientRect().left, e.touches[0].clientY - canvas.getBoundingClientRect().top); ctx.strokeStyle = '#00f2fe'; ctx.lineWidth = 2; ctx.stroke(); } e.preventDefault(); });
+        canvas.addEventListener('touchend', () => drawing = false);
+        function clearSig() { ctx.clearRect(0,0,canvas.width,canvas.height); }
+        function saveReport() { html2canvas(document.querySelector("#captureArea")).then(canvas => { const link = document.createElement('a'); link.download = 'LUXIOU_ACE_Report.png'; link.href = canvas.toDataURL(); link.click(); }); }
     </script>
 </body>
 </html>
