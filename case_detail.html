@@ -3,45 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>LUXIOU | 医学级全息案例</title>
+    <title>LUXIOU | 医学级全息诊断档案</title>
     <style>
         :root { --primary: #00f2fe; --bg: #0b0f19; --glass: rgba(30, 41, 59, 0.7); --card: #161e2e; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body { background: var(--bg); color: #e2e8f0; font-family: -apple-system, sans-serif; margin: 0; padding: 15px; padding-top: 75px; overflow-x: hidden; }
         
+        /* 返回中枢按钮 */
         .back-btn { position: fixed; top: 15px; left: 15px; z-index: 1000; background: rgba(0,0,0,0.6); color: #fff; padding: 10px 18px; border-radius: 50px; text-decoration: none; font-size: 14px; border: 1px solid rgba(255,255,255,0.4); backdrop-filter: blur(10px); font-weight: bold; }
 
         .case-wrap { max-width: 600px; margin: 0 auto; background: var(--glass); border-radius: 24px; padding: 15px; border: 1px solid rgba(255,255,255,0.1); }
         
+        /* 标题分类栏：支持横向滚动 */
         .category-box { display: flex; gap: 8px; overflow-x: auto; margin-bottom: 15px; padding-bottom: 8px; scrollbar-width: none; }
-        .cat-item { flex: 0 0 auto; padding: 8px 16px; background: var(--card); border-radius: 50px; font-size: 11px; border: 1px solid #333; color: #64748b; }
+        .cat-item { flex: 0 0 auto; padding: 8px 16px; background: var(--card); border-radius: 50px; font-size: 12px; border: 1px solid #333; color: #64748b; }
         .cat-item.active { background: var(--primary); color: #000; font-weight: bold; border-color: #fff; }
 
+        /* 顶部核心数据：随案例类型变化 */
         .metrics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 15px; }
         .metric-item { background: var(--card); padding: 12px 5px; border-radius: 12px; text-align: center; border: 1px solid rgba(255,255,255,0.05); }
         .metric-item span { display: block; font-size: 10px; color: #64748b; margin-bottom: 4px; }
         .metric-item strong { display: block; font-size: 15px; color: var(--primary); border-bottom: 1px dashed rgba(0,242,254,0.3); cursor: pointer; }
 
+        /* 全息对比区 */
         .comparison-stage { position: relative; width: 100%; height: 480px; background: #000; border-radius: 20px; overflow: hidden; display: flex; align-items: center; justify-content: center; }
         .img-layer { position: absolute; width: 100%; height: 100%; background-size: contain; background-repeat: no-repeat; background-position: center; transition: opacity 0.1s linear; }
         
-        /* 侧边精控参数标签 */
+        /* 侧边医学锚点：随数据自动演算 */
         .side-params { position: absolute; z-index: 10; display: flex; flex-direction: column; gap: 25px; pointer-events: none; width: 100%; height: 90%; padding: 0 10px; justify-content: center; }
-        .param-tag { font-size: 10px; padding: 6px 10px; border-radius: 8px; backdrop-filter: blur(5px); display: flex; flex-direction: column; pointer-events: auto; min-width: 85px; }
+        .param-tag { font-size: 10px; padding: 6px 10px; border-radius: 8px; backdrop-filter: blur(5px); display: flex; flex-direction: column; pointer-events: auto; min-width: 90px; }
         .tag-left { align-self: flex-start; background: rgba(255,255,255,0.08); border-left: 3px solid #666; }
         .tag-right { align-self: flex-end; background: rgba(0,242,254,0.08); border-right: 3px solid var(--primary); text-align: right; }
         .param-tag label { color: #888; margin-bottom: 2px; }
         .param-tag b { font-size: 14px; color: var(--primary); cursor: pointer; }
-        .diff-val { font-size: 9px; color: #00ff88; margin-top: 2px; font-weight: bold; }
+        .diff-val { font-size: 10px; color: #00ff88; margin-top: 2px; font-weight: bold; }
 
+        /* 透明度滑块 */
         .fade-slider-wrap { margin-top: 20px; padding: 15px; background: var(--card); border-radius: 15px; border: 1px solid #333; }
         input[type=range] { width: 100%; -webkit-appearance: none; background: #222; height: 6px; border-radius: 5px; outline: none; }
-        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 28px; height: 28px; background: var(--primary); border-radius: 50%; box-shadow: 0 0 15px var(--primary); }
+        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 28px; height: 28px; background: var(--primary); border-radius: 50%; box-shadow: 0 0 15px var(--primary); cursor: pointer; }
 
         .upload-group { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
-        .upload-btn { background: rgba(255,255,255,0.05); border: 1px dashed #444; border-radius: 10px; padding: 10px; text-align: center; font-size: 11px; color: #888; }
+        .upload-btn { background: rgba(255,255,255,0.05); border: 1px dashed #444; border-radius: 10px; padding: 10px; text-align: center; font-size: 11px; color: #888; cursor: pointer; }
         
-        /* 滚轮选择器适配 */
+        /* 滚轮选择器 */
         .picker-mask { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 2000; display: none; align-items: center; justify-content: center; }
         .picker-mask.active { display: flex; }
         .picker-content { background: #1a2234; width: 85%; max-width: 320px; border-radius: 24px; padding: 25px; border: 1px solid #334155; }
@@ -54,20 +59,20 @@
     <a href="./index.html" class="back-btn">返回中枢</a>
 
     <div class="case-wrap">
-        <div class="category-box">
-            <div class="cat-item active" onclick="switchCase(this, '产后康复')">产后康复</div>
-            <div class="cat-item" onclick="switchCase(this, '增肌专场')">增肌专场</div>
-            <div class="cat-item" onclick="switchCase(this, '减脂塑形')">减脂塑形</div>
-            <div class="cat-item" onclick="switchCase(this, '体态矫正')">体态矫正</div>
-            <div class="cat-item" onclick="switchCase(this, '直角肩')">直角肩</div>
-            <div class="cat-item" onclick="switchCase(this, '蜜桃臀')">蜜桃臀</div>
-            <div class="cat-item" onclick="switchCase(this, '马甲线')">马甲线</div>
+        <div class="category-box" id="catBox">
+            <div class="cat-item active" onclick="loadCaseData('postpartum', this)">产后康复</div>
+            <div class="cat-item" onclick="loadCaseData('posture', this)">体态矫正</div>
+            <div class="cat-item" onclick="loadCaseData('shoulder', this)">直角肩</div>
+            <div class="cat-item" onclick="loadCaseData('muscle', this)">增肌专场</div>
+            <div class="cat-item" onclick="loadCaseData('fatloss', this)">减脂塑形</div>
+            <div class="cat-item" onclick="loadCaseData('hip', this)">蜜桃臀</div>
+            <div class="cat-item" onclick="loadCaseData('abs', this)">马甲线</div>
         </div>
 
         <div class="metrics-grid">
-            <div class="metric-item"><span>体重变化</span><strong id="val_weight" onclick="openPicker('weight')">-12.5kg</strong></div>
-            <div class="metric-item"><span>体脂下降</span><strong id="val_fat" onclick="openPicker('fat')">-9.2%</strong></div>
-            <div class="metric-item"><span>达成周期</span><strong id="val_week" onclick="openPicker('week')">12周</strong></div>
+            <div class="metric-item"><span>体重变化</span><strong id="val_weight" onclick="manualEdit(this, 'kg')">-12.5kg</strong></div>
+            <div class="metric-item"><span>体脂下降</span><strong id="val_fat" onclick="manualEdit(this, '%')">-9.2%</strong></div>
+            <div class="metric-item"><span>达成周期</span><strong id="val_week" onclick="manualEdit(this, '周')">12周</strong></div>
         </div>
 
         <div class="comparison-stage">
@@ -75,21 +80,21 @@
             <div class="img-layer" id="layerAfter" style="background-image:url('case_after.jpg'); opacity:0;"></div>
             
             <div class="side-params">
-                <div class="param-tag tag-left"><label>腰围(前)</label><b id="w_pre" onclick="manualEdit(this)">85cm</b></div>
-                <div class="param-tag tag-left"><label>骨盆角度(前)</label><b id="p_pre" onclick="manualEdit(this)">18°</b></div>
-                <div class="param-tag tag-left"><label>假胯宽(前)</label><b id="h_pre" onclick="manualEdit(this)">98cm</b></div>
+                <div class="param-tag tag-left"><label id="L1">腰围(前)</label><b id="p1_pre" onclick="manualEdit(this, 'cm')">85cm</b></div>
+                <div class="param-tag tag-left"><label id="L2">骨盆角度(前)</label><b id="p2_pre" onclick="manualEdit(this, '°')">18°</b></div>
+                <div class="param-tag tag-left"><label id="L3">臀围(前)</label><b id="p3_pre" onclick="manualEdit(this, 'cm')">98cm</b></div>
                 
                 <div class="param-tag tag-right">
-                    <label>腰围(后)</label><b id="w_post" onclick="manualEdit(this, 'w_pre', 'cm')">68cm</b>
-                    <div class="diff-val" id="w_diff">-17cm</div>
+                    <label id="R1">腰围(后)</label><b id="p1_post" onclick="manualEdit(this, 'cm', 'p1_pre')">68cm</b>
+                    <div class="diff-val" id="d1">-17.0cm</div>
                 </div>
                 <div class="param-tag tag-right">
-                    <label>骨盆角度(后)</label><b id="p_post" onclick="manualEdit(this, 'p_pre', '°')">8°</b>
-                    <div class="diff-val" id="p_diff">-10°</div>
+                    <label id="R2">骨盆角度(后)</label><b id="p2_post" onclick="manualEdit(this, '°', 'p2_pre')">8°</b>
+                    <div class="diff-val" id="d2">-10.0°</div>
                 </div>
                 <div class="param-tag tag-right">
-                    <label>假胯宽(后)</label><b id="h_post" onclick="manualEdit(this, 'h_pre', 'cm') hide">92cm</b>
-                    <div class="diff-val" id="h_diff">-6cm</div>
+                    <label id="R3">臀围(后)</label><b id="p3_post" onclick="manualEdit(this, 'cm', 'p3_pre')">92cm</b>
+                    <div class="diff-val" id="d3">-6.0cm</div>
                 </div>
             </div>
         </div>
@@ -107,44 +112,75 @@
         </div>
     </div>
 
-    <div class="picker-mask" id="pickerMask">
-        <div class="picker-content">
-            <div class="picker-scroll" id="pickerList"></div>
-            <div style="display:flex; gap:10px; margin-top:20px;">
-                <button style="flex:1; padding:12px; border-radius:10px; border:none; background:#2d3748; color:#fff;" onclick="closePicker()">取消</button>
-                <button style="flex:1; padding:12px; border-radius:10px; border:none; background:var(--primary); color:#000; font-weight:bold;" onclick="confirmValue()">确定</button>
-            </div>
-        </div>
-    </div>
-
     <script>
-        let curType = '', tempVal = '';
-        const configs = {
-            weight: { min: -40, max: 0, step: 0.1, unit: 'kg' },
-            fat: { min: -20, max: 0, step: 0.1, unit: '%' },
-            week: { min: 1, max: 100, step: 1, unit: '周' }
+        // 核心数据库：不同案例的独立预设值
+        const caseDatabase = {
+            postpartum: { title: "产后康复", weight: "-12.5kg", fat: "-9.2%", week: "12周", L1: "腰围(前)", V1_pre: "85cm", V1_post: "68cm", L2: "骨盆前倾", V2_pre: "18°", V2_post: "8°", L3: "臀围(前)", V3_pre: "98cm", V3_post: "92cm" },
+            posture: { title: "体态矫正", weight: "-2.1kg", fat: "-3.5%", week: "8周", L1: "颈角偏离", V1_pre: "15°", V1_post: "5°", L2: "圆肩角度", V2_pre: "22°", V2_post: "10°", L3: "身高伸展", V3_pre: "175cm", V3_post: "176.5cm" },
+            shoulder: { title: "直角肩", weight: "-1.5kg", fat: "-2.0%", week: "4周", L1: "肩峰高度", V1_pre: "12cm", V1_post: "15cm", L2: "斜方肌厚", V2_pre: "5.5cm", V2_post: "3.2cm", L3: "锁骨开度", V3_pre: "145°", V3_post: "175°" },
+            muscle: { title: "增肌专场", weight: "+4.5kg", fat: "-2.1%", week: "16周", L1: "胸围", V1_pre: "95cm", V1_post: "108cm", L2: "上臂围", V2_pre: "32cm", V2_post: "38.5cm", L3: "大腿围", V3_pre: "52cm", V3_post: "58cm" },
+            fatloss: { title: "减脂塑形", weight: "-18.2kg", fat: "-15.5%", week: "24周", L1: "腰围", V1_pre: "98cm", V1_post: "72cm", L2: "腹部脂肪", V2_pre: "35mm", V2_post: "12mm", L3: "臀围", V3_pre: "105cm", V3_post: "95cm" },
+            hip: { title: "蜜桃臀", weight: "+1.2kg", fat: "-4.2%", week: "12周", L1: "臀围", V1_pre: "88cm", V1_post: "96cm", L2: "臀线下移", V2_pre: "5.2cm", V2_post: "2.1cm", L3: "大腿根围", V3_pre: "54cm", V3_post: "51cm" },
+            abs: { title: "马甲线", weight: "-3.8kg", fat: "-8.5%", week: "10周", L1: "腰围", V1_pre: "78cm", V1_post: "64cm", L2: "腹直肌隙", V2_pre: "2.5cm", V2_post: "0.5cm", L3: "侧腰围", V3_pre: "82cm", V3_post: "68cm" }
         };
 
-        const slider = document.getElementById('fadeSlider');
-        slider.addEventListener('input', (e) => {
+        // 数据加载与联动引擎
+        function loadCaseData(key, el) {
+            const d = caseDatabase[key];
+            if(el) {
+                document.querySelectorAll('.cat-item').forEach(i => i.classList.remove('active'));
+                el.classList.add('active');
+            }
+            // 更新顶部数据
+            document.getElementById('val_weight').innerText = d.weight;
+            document.getElementById('val_fat').innerText = d.fat;
+            document.getElementById('val_week').innerText = d.week;
+            // 更新侧边标签及预设值
+            const updateLabel = (id, text) => { document.getElementById('L'+id).innerText = text+'(前)'; document.getElementById('R'+id).innerText = text+'(后)'; };
+            updateLabel(1, d.L1.replace('(前)','')); updateLabel(2, d.L2.replace('(前)','')); updateLabel(3, d.L3.replace('(前)',''));
+            
+            document.getElementById('p1_pre').innerText = d.V1_pre; document.getElementById('p1_post').innerText = d.V1_post;
+            document.getElementById('p2_pre').innerText = d.V2_pre; document.getElementById('p2_post').innerText = d.V2_post;
+            document.getElementById('p3_pre').innerText = d.V3_pre; document.getElementById('p3_post').innerText = d.V3_post;
+            
+            // 触发自动计算
+            ['p1_post','p2_post','p3_post'].forEach(id => {
+                const preId = id.replace('post','pre');
+                const diffId = 'd' + id.match(/\d/)[0];
+                calcDiff(document.getElementById(id), preId, diffId);
+            });
+        }
+
+        // 精准计算差值逻辑
+        function calcDiff(el, preId, diffId) {
+            const preVal = parseFloat(document.getElementById(preId).innerText);
+            const postVal = parseFloat(el.innerText);
+            const unit = el.innerText.replace(/[0-9.-]/g, '');
+            const diff = (postVal - preVal).toFixed(1);
+            document.getElementById(diffId).innerText = (diff > 0 ? '+' : '') + diff + unit;
+        }
+
+        // 手动修改与计算联动
+        function manualEdit(el, unit, preId) {
+            const currentVal = el.innerText.replace(unit, '');
+            const newVal = prompt("请输入新数值 (" + unit + ")", currentVal);
+            if(newVal !== null && newVal !== "") {
+                el.innerText = newVal + unit;
+                if(preId) {
+                    const diffId = 'd' + el.id.match(/\d/)[0];
+                    calcDiff(el, preId, diffId);
+                }
+            }
+        }
+
+        // 透明度滑动控制
+        document.getElementById('fadeSlider').addEventListener('input', (e) => {
             const val = e.target.value / 100;
             document.getElementById('layerAfter').style.opacity = val;
             document.getElementById('layerBefore').style.opacity = 1 - val;
         });
 
-        function manualEdit(el, compareId, unit) {
-            const val = prompt("输入数值", el.innerText.replace(/[^0-9.]/g, ''));
-            if(val) {
-                el.innerText = val + unit;
-                if(compareId) {
-                    const preVal = parseFloat(document.getElementById(compareId).innerText);
-                    const diff = parseFloat(val) - preVal;
-                    const diffEl = document.getElementById(el.id.replace('post', 'diff'));
-                    diffEl.innerText = (diff > 0 ? '+' : '') + diff.toFixed(1) + unit;
-                }
-            }
-        }
-
+        // 图片加载
         function loadImg(input, targetId) {
             if (input.files && input.files[0]) {
                 const reader = new FileReader();
@@ -153,24 +189,8 @@
             }
         }
 
-        function openPicker(type) {
-            curType = type; const p = configs[type]; let html = '';
-            for(let i=p.min; i<=p.max; i=parseFloat((i+p.step).toFixed(1))) {
-                html += `<div class="picker-item" onclick="selectItem(this,'${i}')">${i}${p.unit}</div>`;
-            }
-            document.getElementById('pickerList').innerHTML = html;
-            document.getElementById('pickerMask').classList.add('active');
-        }
-        function selectItem(el, val) {
-            document.querySelectorAll('.picker-item').forEach(i=>i.classList.remove('selected'));
-            el.classList.add('selected'); tempVal = val;
-        }
-        function confirmValue() { document.getElementById('val_'+curType).innerText = tempVal + configs[curType].unit; closePicker(); }
-        function closePicker() { document.getElementById('pickerMask').classList.remove('active'); }
-        function switchCase(el, title) {
-            document.querySelectorAll('.cat-item').forEach(i=>i.classList.remove('active'));
-            el.classList.add('active');
-        }
+        // 初始化加载产后康复数据
+        window.onload = () => loadCaseData('postpartum');
     </script>
 </body>
 </html>
