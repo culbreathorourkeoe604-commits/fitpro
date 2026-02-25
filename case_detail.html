@@ -1,13 +1,77 @@
-<div class="case-detail-box">
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>LUXIOU | 数字化全息档案</title>
+    <style>
+        :root { --primary: #00f2fe; --bg: #0b0f19; --glass: rgba(30, 41, 59, 0.7); }
+        body { background: var(--bg); color: #e2e8f0; font-family: -apple-system, sans-serif; margin: 0; padding: 20px; padding-top: 75px; }
+        
+        .back-btn { position: fixed; top: 15px; left: 15px; z-index: 9999; background: rgba(0,0,0,0.6); color: #fff; padding: 10px 20px; border-radius: 50px; text-decoration: none; font-size: 14px; border: 1px solid rgba(255,255,255,0.4); backdrop-filter: blur(10px); font-weight: bold; }
+
+        .case-header { text-align: center; color: var(--primary); font-size: 22px; letter-spacing: 2px; margin-bottom: 20px; font-weight: bold; }
+        
+        /* 数据对比矩阵 */
+        .metrics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 25px; }
+        .metric-item { background: var(--glass); padding: 15px 5px; border-radius: 12px; text-align: center; border: 1px solid rgba(255,255,255,0.05); }
+        .metric-item span { display: block; font-size: 11px; color: #64748b; margin-bottom: 5px; }
+        .metric-item strong { display: block; font-size: 16px; color: var(--primary); }
+
+        /* 滑动对比引擎 */
+        .comparison-slider { position: relative; width: 100%; height: 450px; border-radius: 20px; overflow: hidden; border: 1px solid #333; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .comparison-slider .img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-size: cover; background-position: center; }
+        .comparison-slider .before { background-image: url('case_1_before.jpg'); z-index: 1; }
+        .comparison-slider .after { background-image: url('case_1_after.jpg'); width: 50%; border-right: 3px solid var(--primary); z-index: 2; }
+        
+        /* 滑动条控制 */
+        .slider-handle { position: absolute; top: 0; left: 50%; width: 40px; height: 100%; margin-left: -20px; z-index: 3; display: flex; align-items: center; justify-content: center; cursor: ew-resize; }
+        .handle-circle { width: 40px; height: 40px; background: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #000; font-weight: bold; box-shadow: 0 0 15px var(--primary); }
+
+        .coach-comment { margin-top: 25px; background: rgba(255,255,255,0.03); padding: 20px; border-radius: 15px; border-left: 4px solid var(--primary); font-size: 14px; line-height: 1.7; color: #ccc; }
+    </style>
+</head>
+<body>
+    <a href="./index.html" class="back-btn">← 返回中枢</a>
+
     <div class="case-header">案例 001：产后极速塑形</div>
+
     <div class="metrics-grid">
-        <div class="metric-item"><span>体重</span><strong>-12.5kg</strong></div>
-        <div class="metric-item"><span>体脂</span><strong>-9.2%</strong></div>
-        <div class="metric-item"><span>周期</span><strong>12周</strong></div>
+        <div class="metric-item"><span>体重变化</span><strong>-12.5kg</strong></div>
+        <div class="metric-item"><span>体脂下降</span><strong>-9.2%</strong></div>
+        <div class="metric-item"><span>达成周期</span><strong>12周</strong></div>
     </div>
-    <div class="photo-compare-slider">
+
+    <div class="comparison-slider" id="slider">
+        <div class="img before"></div>
+        <div class="img after" id="afterImg"></div>
+        <div class="slider-handle" id="handle">
+            <div class="handle-circle">↔</div>
         </div>
-    <div class="coach-comment">
-        “该学员初期核心极度虚弱，通过第一阶段的呼吸模式重塑...”
     </div>
-</div>
+
+    <div class="coach-comment">
+        <strong style="color:var(--primary);">专家点评：</strong><br>
+        该会员初期核心极其虚弱，伴随轻度盆底肌松弛。通过第一阶段呼吸模式重塑与深层核心激活，配合第二阶段大肌群抗阻训练，成功在3个月内实现体态蜕变。
+    </div>
+
+    <script>
+        const slider = document.getElementById('slider');
+        const afterImg = document.getElementById('afterImg');
+        const handle = document.getElementById('handle');
+
+        const move = (e) => {
+            let x = e.type === 'touchmove' ? e.touches[0].pageX : e.pageX;
+            let rect = slider.getBoundingClientRect();
+            let pos = ((x - rect.left) / rect.width) * 100;
+            if (pos < 0) pos = 0;
+            if (pos > 100) pos = 100;
+            afterImg.style.width = pos + '%';
+            handle.style.left = pos + '%';
+        };
+
+        slider.addEventListener('mousemove', move);
+        slider.addEventListener('touchmove', move);
+    </script>
+</body>
+</html>
