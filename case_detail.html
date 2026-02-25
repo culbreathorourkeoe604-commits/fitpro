@@ -4,64 +4,60 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>LUXIOU | 数字化全息案例</title>
-    <script src="https://cdn.staticfile.net/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         :root { --primary: #00f2fe; --bg: #0b0f19; --glass: rgba(30, 41, 59, 0.7); --card: #161e2e; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body { background: var(--bg); color: #e2e8f0; font-family: -apple-system, sans-serif; margin: 0; padding: 15px; padding-top: 75px; }
         
-        /* 返回按钮 */
+        /* 返回中枢按钮 */
         .back-btn { position: fixed; top: 15px; left: 15px; z-index: 1000; background: rgba(0,0,0,0.6); color: #fff; padding: 10px 18px; border-radius: 50px; text-decoration: none; font-size: 14px; border: 1px solid rgba(255,255,255,0.4); backdrop-filter: blur(10px); font-weight: bold; }
 
-        .case-wrap { max-width: 600px; margin: 0 auto; background: var(--glass); border-radius: 24px; padding: 25px; border: 1px solid rgba(255,255,255,0.1); }
+        .case-wrap { max-width: 600px; margin: 0 auto; background: var(--glass); border-radius: 24px; padding: 20px; border: 1px solid rgba(255,255,255,0.1); }
         
-        /* 案例类型选择 */
-        .category-box { display: flex; gap: 8px; overflow-x: auto; margin-bottom: 20px; padding-bottom: 5px; }
-        .cat-item { flex: 0 0 auto; padding: 8px 15px; background: var(--card); border-radius: 50px; font-size: 12px; border: 1px solid #333; color: #64748b; }
+        /* 扩充标题栏分类 */
+        .category-box { display: flex; gap: 8px; overflow-x: auto; margin-bottom: 20px; padding-bottom: 8px; scrollbar-width: none; }
+        .cat-item { flex: 0 0 auto; padding: 8px 16px; background: var(--card); border-radius: 50px; font-size: 12px; border: 1px solid #333; color: #64748b; }
         .cat-item.active { background: var(--primary); color: #000; font-weight: bold; border-color: #fff; }
 
-        .case-title { text-align: center; color: var(--primary); font-size: 20px; letter-spacing: 2px; margin-bottom: 20px; font-weight: bold; }
+        .case-title { text-align: center; color: var(--primary); font-size: 19px; letter-spacing: 2px; margin-bottom: 20px; font-weight: bold; }
 
-        /* 数据对比矩阵 */
-        .metrics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 25px; }
+        /* 数据对比 */
+        .metrics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
         .metric-item { background: var(--card); padding: 15px 5px; border-radius: 12px; text-align: center; border: 1px solid rgba(255,255,255,0.05); }
         .metric-item span { display: block; font-size: 11px; color: #64748b; margin-bottom: 5px; }
         .metric-item strong { display: block; font-size: 16px; color: var(--primary); border-bottom: 1px dashed rgba(0,242,254,0.3); cursor: pointer; }
 
-        /* 滑动对比引擎 */
-        .comparison-slider { position: relative; width: 100%; height: 450px; border-radius: 20px; overflow: hidden; border: 1px solid #333; }
+        /* 滑块对比 */
+        .comparison-slider { position: relative; width: 100%; height: 400px; border-radius: 20px; overflow: hidden; border: 1px solid #333; background: #000; }
         .comparison-slider .img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-size: cover; background-position: center; }
-        .comparison-slider .before { background-image: url('case_before.jpg'); z-index: 1; }
-        .comparison-slider .after { background-image: url('case_after.jpg'); width: 50%; border-right: 2px solid var(--primary); z-index: 2; }
+        .comparison-slider .after { width: 50%; border-right: 2px solid var(--primary); z-index: 2; }
         .slider-handle { position: absolute; top: 0; left: 50%; width: 40px; height: 100%; margin-left: -20px; z-index: 3; display: flex; align-items: center; justify-content: center; }
-        .handle-circle { width: 40px; height: 40px; background: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #000; font-size: 20px; box-shadow: 0 0 15px var(--primary); }
+        .handle-circle { width: 36px; height: 36px; background: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #000; font-size: 18px; box-shadow: 0 0 15px var(--primary); }
 
-        /* 教练点评区 */
-        .coach-comment { margin-top: 25px; background: rgba(255,255,255,0.03); padding: 20px; border-radius: 15px; border-left: 4px solid var(--primary); font-size: 14px; line-height: 1.7; color: #ccc; }
-        .comment-text { cursor: pointer; }
+        /* 手机直传按钮 */
+        .upload-group { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
+        .upload-btn { background: rgba(255,255,255,0.05); border: 1px dashed #444; border-radius: 10px; padding: 12px; text-align: center; font-size: 12px; color: #888; cursor: pointer; }
 
-        /* 滚轮选择器样式 */
-        .picker-mask { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 2000; display: none; align-items: center; justify-content: center; opacity: 0; transition: 0.3s; }
-        .picker-mask.active { display: flex; opacity: 1; }
+        /* 滚轮选择器 */
+        .picker-mask { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 2000; display: none; align-items: center; justify-content: center; }
+        .picker-mask.active { display: flex; }
         .picker-content { background: #1a2234; width: 85%; max-width: 320px; border-radius: 20px; padding: 20px; border: 1px solid #334155; }
         .picker-scroll { height: 200px; overflow-y: auto; scroll-snap-type: y mandatory; padding: 80px 0; }
         .picker-item { height: 40px; line-height: 40px; text-align: center; font-size: 18px; color: #64748b; scroll-snap-align: center; }
         .picker-item.selected { color: var(--primary); font-weight: bold; font-size: 22px; }
-        .picker-btns { display: flex; gap: 10px; margin-top: 20px; }
-        .btn-small { flex: 1; padding: 12px; border-radius: 10px; border: none; font-weight: bold; cursor: pointer; }
-        .btn-ok { background: var(--primary); color: #000; }
     </style>
 </head>
 <body>
     <a href="./index.html" class="back-btn">返回中枢</a>
 
-    <div class="case-wrap" id="captureArea">
+    <div class="case-wrap">
         <div class="category-box">
             <div class="cat-item active" onclick="switchCase(this, '产后康复')">产后康复</div>
             <div class="cat-item" onclick="switchCase(this, '增肌专场')">增肌专场</div>
             <div class="cat-item" onclick="switchCase(this, '减脂塑形')">减脂塑形</div>
+            <div class="cat-item" onclick="switchCase(this, '体态矫正')">体态矫正</div>
+            <div class="cat-item" onclick="switchCase(this, '直角肩')">直角肩</div>
             <div class="cat-item" onclick="switchCase(this, '蜜桃臀')">蜜桃臀</div>
-            <div class="cat-item" onclick="switchCase(this, '马甲线')">马甲线</div>
         </div>
 
         <div class="case-title" id="displayTitle">案例报告：产后康复</div>
@@ -73,25 +69,28 @@
         </div>
 
         <div class="comparison-slider" id="slider">
-            <div class="img before"></div>
-            <div class="img after" id="afterImg"></div>
-            <div class="slider-handle" id="handle">
-                <div class="handle-circle">↔</div>
-            </div>
+            <div class="img before" id="bgBefore" style="background-image:url('case_before.jpg')"></div>
+            <div class="img after" id="bgAfter" style="background-image:url('case_after.jpg')"></div>
+            <div class="slider-handle" id="handle"><div class="handle-circle">↔</div></div>
         </div>
 
-        <div class="coach-comment">
+        <div class="upload-group">
+            <label class="upload-btn">📷 上传对比前<input type="file" hidden accept="image/*" onchange="uploadImg(this, 'bgBefore')"></label>
+            <label class="upload-btn">📷 上传对比后<input type="file" hidden accept="image/*" onchange="uploadImg(this, 'bgAfter')"></label>
+        </div>
+
+        <div style="margin-top:20px; background:rgba(255,255,255,0.03); padding:15px; border-radius:12px; border-left:4px solid var(--primary); font-size:13px; line-height:1.6; color:#ccc;">
             <strong style="color:var(--primary);">教练点评：</strong><br>
-            <span class="comment-text" id="commentText" onclick="editComment()">点击此处可修改教练点评内容...</span>
+            <span onclick="this.innerText=prompt('修改点评内容',this.innerText)">该案例针对核心及体态缺陷进行针对性强化，成果显著...</span>
         </div>
     </div>
 
     <div class="picker-mask" id="pickerMask">
         <div class="picker-content">
             <div class="picker-scroll" id="pickerList"></div>
-            <div class="picker-btns">
-                <button class="btn-small" style="background:#2d3748;color:#fff" onclick="closePicker()">取消</button>
-                <button class="btn-small btn-ok" onclick="confirmValue()">确定</button>
+            <div style="display:flex; gap:10px; margin-top:20px;">
+                <button style="flex:1; padding:12px; border-radius:10px; border:none; background:#2d3748; color:#fff;" onclick="closePicker()">取消</button>
+                <button style="flex:1; padding:12px; border-radius:10px; border:none; background:var(--primary); color:#000; font-weight:bold;" onclick="confirmValue()">确定</button>
             </div>
         </div>
     </div>
@@ -99,27 +98,32 @@
     <script>
         let curType = '', tempVal = '';
         const configs = {
-            weight: { min: -20, max: 0, step: 0.1, unit: 'kg' },
-            fat: { min: -15, max: 0, step: 0.1, unit: '%' },
-            week: { min: 4, max: 24, step: 1, unit: '周' }
+            weight: { min: -30, max: 0, step: 0.1, unit: 'kg' },
+            fat: { min: -20, max: 0, step: 0.1, unit: '%' },
+            week: { min: 1, max: 100, step: 1, unit: '周' } // 增加更长周期
         };
 
-        // 左右滑动逻辑
         const slider = document.getElementById('slider');
-        const afterImg = document.getElementById('afterImg');
+        const bgAfter = document.getElementById('bgAfter');
         const handle = document.getElementById('handle');
         const move = (e) => {
             let x = e.type === 'touchmove' ? e.touches[0].pageX : e.pageX;
             let rect = slider.getBoundingClientRect();
             let pos = ((x - rect.left) / rect.width) * 100;
             if (pos < 0) pos = 0; if (pos > 100) pos = 100;
-            afterImg.style.width = pos + '%';
+            bgAfter.style.width = pos + '%';
             handle.style.left = pos + '%';
         };
-        slider.addEventListener('mousemove', move);
-        slider.addEventListener('touchmove', move);
+        slider.addEventListener('mousemove', move); slider.addEventListener('touchmove', move);
 
-        // 滚轮修改逻辑
+        function uploadImg(input, targetId) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = (e) => { document.getElementById(targetId).style.backgroundImage = `url(${e.target.result})`; };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
         function openPicker(type) {
             curType = type; const p = configs[type]; let html = '';
             for(let i=p.min; i<=p.max; i=parseFloat((i+p.step).toFixed(1))) {
@@ -132,21 +136,11 @@
             document.querySelectorAll('.picker-item').forEach(i=>i.classList.remove('selected'));
             el.classList.add('selected'); tempVal = val;
         }
-        function confirmValue() {
-            document.getElementById('val_'+curType).innerText = tempVal + configs[curType].unit;
-            closePicker();
-        }
+        function confirmValue() { document.getElementById('val_'+curType).innerText = tempVal + configs[curType].unit; closePicker(); }
         function closePicker() { document.getElementById('pickerMask').classList.remove('active'); }
-
-        // 其他编辑功能
         function switchCase(el, title) {
             document.querySelectorAll('.cat-item').forEach(i=>i.classList.remove('active'));
-            el.classList.add('active');
-            document.getElementById('displayTitle').innerText = '案例报告：' + title;
-        }
-        function editComment() {
-            const n = prompt("输入教练点评内容");
-            if(n) document.getElementById('commentText').innerText = n;
+            el.classList.add('active'); document.getElementById('displayTitle').innerText = '案例报告：' + title;
         }
     </script>
 </body>
