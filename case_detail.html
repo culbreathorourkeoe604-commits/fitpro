@@ -7,56 +7,61 @@
     <style>
         :root { --primary: #00f2fe; --bg: #0b0f19; --glass: rgba(30, 41, 59, 0.7); --card: #161e2e; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { background: var(--bg); color: #e2e8f0; font-family: -apple-system, sans-serif; margin: 0; padding: 15px; padding-top: 75px; padding-bottom: 100px; overflow-x: hidden; }
+        body { background: var(--bg); color: #e2e8f0; font-family: -apple-system, sans-serif; margin: 0; padding: 10px; padding-top: 70px; overflow-x: hidden; }
         
-        .back-btn { position: fixed; top: 15px; left: 15px; z-index: 1000; background: rgba(0,0,0,0.6); color: #fff; padding: 10px 18px; border-radius: 50px; text-decoration: none; font-size: 14px; border: 1px solid rgba(255,255,255,0.4); backdrop-filter: blur(10px); }
+        .back-btn { position: fixed; top: 15px; left: 15px; z-index: 1000; background: rgba(0,0,0,0.6); color: #fff; padding: 8px 15px; border-radius: 50px; text-decoration: none; font-size: 13px; border: 1px solid rgba(255,255,255,0.4); backdrop-filter: blur(10px); }
 
-        .case-wrap { max-width: 600px; margin: 0 auto; background: var(--glass); border-radius: 24px; padding: 15px; border: 1px solid rgba(255,255,255,0.1); position: relative; }
+        .case-wrap { max-width: 600px; margin: 0 auto; background: var(--glass); border-radius: 20px; padding: 12px; border: 1px solid rgba(255,255,255,0.1); }
         
-        .category-box { display: flex; gap: 8px; overflow-x: auto; margin-bottom: 15px; padding-bottom: 8px; scrollbar-width: none; }
-        .cat-item { flex: 0 0 auto; padding: 8px 16px; background: var(--card); border-radius: 50px; font-size: 11px; border: 1px solid #333; color: #64748b; }
+        .category-box { display: flex; gap: 8px; overflow-x: auto; margin-bottom: 12px; padding-bottom: 5px; scrollbar-width: none; }
+        .cat-item { flex: 0 0 auto; padding: 6px 12px; background: var(--card); border-radius: 50px; font-size: 11px; border: 1px solid #333; color: #64748b; }
         .cat-item.active { background: var(--primary); color: #000; font-weight: bold; }
 
-        .metrics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 15px; }
-        .metric-item { background: var(--card); padding: 10px 5px; border-radius: 12px; text-align: center; border: 1px solid rgba(255,255,255,0.05); }
-        .metric-item span { display: block; font-size: 10px; color: #64748b; }
-        .metric-item strong { display: block; font-size: 14px; color: var(--primary); cursor: pointer; }
+        .metrics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 12px; }
+        .metric-item { background: var(--card); padding: 8px 5px; border-radius: 10px; text-align: center; border: 1px solid rgba(255,255,255,0.05); }
+        .metric-item span { display: block; font-size: 9px; color: #64748b; }
+        .metric-item strong { display: block; font-size: 13px; color: var(--primary); }
 
-        .comparison-stage { position: relative; width: 100%; height: 500px; background: #000; border-radius: 20px; overflow: hidden; }
+        /* 对比区：优化高度适配 */
+        .comparison-stage { position: relative; width: 100%; height: 440px; background: #000; border-radius: 15px; overflow: hidden; }
         .img-layer { position: absolute; width: 100%; height: 100%; background-size: contain; background-repeat: no-repeat; background-position: center; transition: opacity 0.1s linear; }
         
-        /* 侧边6维度标签 */
-        .side-params { position: absolute; z-index: 10; display: flex; flex-direction: column; gap: 12px; pointer-events: none; width: 100%; height: 95%; padding: 0 8px; justify-content: center; }
-        .param-tag { font-size: 9px; padding: 5px 8px; border-radius: 6px; backdrop-filter: blur(8px); display: flex; flex-direction: column; pointer-events: auto; min-width: 85px; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); }
+        /* 侧边标签：紧凑排列防止溢出 */
+        .side-params { position: absolute; z-index: 10; display: flex; flex-direction: column; gap: 10px; pointer-events: none; width: 100%; height: 95%; padding: 5px 8px; justify-content: space-around; }
+        .param-tag { font-size: 9px; padding: 4px 6px; border-radius: 6px; backdrop-filter: blur(8px); display: flex; flex-direction: column; pointer-events: auto; min-width: 80px; background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); }
         .tag-left { align-self: flex-start; border-left: 2px solid #fff; }
         .tag-right { align-self: flex-end; border-right: 2px solid var(--primary); text-align: right; }
-        .param-tag b { font-size: 13px; color: var(--primary); cursor: pointer; }
+        .param-tag b { font-size: 11px; color: var(--primary); }
         .diff-val { font-size: 9px; color: #00ff88; font-weight: bold; }
 
-        .fade-slider-wrap { margin-top: 15px; padding: 12px; background: var(--card); border-radius: 15px; }
-        input[type=range] { width: 100%; -webkit-appearance: none; background: #222; height: 6px; border-radius: 5px; outline: none; }
-        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 24px; height: 24px; background: var(--primary); border-radius: 50%; box-shadow: 0 0 10px var(--primary); }
+        /* 滑块 */
+        .fade-slider-wrap { margin-top: 10px; padding: 10px; background: var(--card); border-radius: 12px; }
+        input[type=range] { width: 100%; -webkit-appearance: none; background: #222; height: 4px; border-radius: 5px; outline: none; }
+        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 20px; height: 20px; background: var(--primary); border-radius: 50%; box-shadow: 0 0 10px var(--primary); }
 
-        .action-group { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 15px; }
-        .btn-act { background: var(--card); border: 1px solid #333; border-radius: 10px; padding: 10px; text-align: center; font-size: 11px; color: #e2e8f0; cursor: pointer; }
+        .action-group { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-top: 12px; }
+        .btn-act { background: var(--card); border: 1px solid #333; border-radius: 10px; padding: 8px; text-align: center; font-size: 11px; color: #e2e8f0; cursor: pointer; }
         .btn-save { background: var(--primary); color: #000; font-weight: bold; border: none; }
 
-        /* 案例库抽屉 */
-        .vault-drawer { position: fixed; bottom: -80%; left: 0; width: 100%; height: 75%; background: #0f172a; z-index: 2000; border-top: 2px solid var(--primary); border-radius: 30px 30px 0 0; padding: 20px; transition: 0.4s ease; overflow-y: auto; }
+        /* 案例库：支持左滑删除 */
+        .vault-drawer { position: fixed; bottom: -85%; left: 0; width: 100%; height: 80%; background: #0f172a; z-index: 2000; border-top: 2px solid var(--primary); border-radius: 25px 25px 0 0; padding: 15px; transition: 0.4s ease; }
         .vault-drawer.open { bottom: 0; }
-        .vault-item { background: var(--card); border-radius: 15px; padding: 12px; margin-bottom: 15px; border: 1px solid #333; display: flex; justify-content: space-between; align-items: center; }
+        #vaultList { height: 75%; overflow-y: auto; margin-top: 15px; }
+        
+        .vault-item-wrap { position: relative; overflow: hidden; margin-bottom: 10px; border-radius: 12px; background: #1e293b; }
+        .vault-content { position: relative; z-index: 2; background: #1e293b; padding: 12px; transition: transform 0.3s ease; display: flex; justify-content: space-between; align-items: center; }
+        .delete-btn { position: absolute; right: 0; top: 0; height: 100%; width: 70px; background: #ff4757; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: bold; z-index: 1; }
     </style>
 </head>
 <body>
     <a href="./index.html" class="back-btn">返回中枢</a>
 
     <div class="case-wrap">
-        <div class="category-box" id="catBox">
+        <div class="category-box">
             <div class="cat-item active" onclick="loadCaseData('posture', this)">体态矫正</div>
             <div class="cat-item" onclick="loadCaseData('shoulder', this)">直角肩</div>
             <div class="cat-item" onclick="loadCaseData('muscle', this)">增肌专场</div>
             <div class="cat-item" onclick="loadCaseData('abs', this)">马甲线</div>
-            <div class="cat-item" onclick="loadCaseData('fatloss', this)">减脂塑形</div>
         </div>
 
         <div class="metrics-grid">
@@ -68,110 +73,83 @@
         <div class="comparison-stage">
             <div class="img-layer" id="layerBefore" style="background-image:url('case_before.jpg'); opacity:1;"></div>
             <div class="img-layer" id="layerAfter" style="background-image:url('case_after.jpg'); opacity:0;"></div>
-            
-            <div class="side-params" id="paramsContainer">
-                </div>
+            <div class="side-params" id="paramsContainer"></div>
         </div>
 
-        <div class="fade-slider-wrap">
-            <input type="range" min="0" max="100" value="0" id="fadeSlider">
-        </div>
+        <div class="fade-slider-wrap"><input type="range" min="0" max="100" value="0" id="fadeSlider"></div>
 
         <div class="action-group">
-            <div class="btn-act" onclick="document.getElementById('fileBefore').click()">📷 传对比前<input type="file" id="fileBefore" hidden onchange="loadImg(this, 'layerBefore')"></div>
-            <div class="btn-act" onclick="document.getElementById('fileAfter').click()">📷 传对比后<input type="file" id="fileAfter" hidden onchange="loadImg(this, 'layerAfter')"></div>
-            <div class="btn-act btn-save" onclick="saveToVault()">💾 保存入库</div>
+            <div class="btn-act" onclick="document.getElementById('fileBefore').click()">📷 传前<input type="file" id="fileBefore" hidden onchange="loadImg(this, 'layerBefore')"></div>
+            <div class="btn-act" onclick="document.getElementById('fileAfter').click()">📷 传后<input type="file" id="fileAfter" hidden onchange="loadImg(this, 'layerAfter')"></div>
+            <div class="btn-act btn-save" onclick="saveToVault()">💾 保存</div>
         </div>
-        
-        <div class="btn-act" style="margin-top:10px; width:100%;" onclick="toggleVault()">📂 打开案例库 (查看已存案例)</div>
+        <div class="btn-act" style="margin-top:8px; width:100%;" onclick="toggleVault()">📂 成功案例库</div>
     </div>
 
     <div class="vault-drawer" id="vaultDrawer">
-        <h3 style="color:var(--primary); text-align:center; margin-bottom:20px;">LUXIOU 成功案例仓库</h3>
+        <h3 style="color:var(--primary); text-align:center; margin:0;">案例仓库</h3>
+        <p style="text-align:center; font-size:10px; color:#555;">(向左滑动案例可删除)</p>
         <div id="vaultList"></div>
-        <div class="btn-act" onclick="toggleVault()" style="background:#222; margin-top:20px;">关闭仓库</div>
+        <div class="btn-act" onclick="toggleVault()" style="background:#222; margin-top:10px;">关闭</div>
     </div>
 
     <script>
         const caseDatabase = {
-            posture: { 
-                name: "体态矫正",
-                labels: ["头前引距离", "圆肩偏离度", "高低肩差值", "骨盆前倾角", "假胯宽维度", "脊柱侧倾度"],
-                pre: ["8.5cm", "25°", "2.5cm", "18°", "98cm", "12°"],
-                post: ["2.1cm", "8°", "0.2cm", "7°", "91cm", "2°"],
-                units: ["cm", "°", "cm", "°", "cm", "°"]
-            },
-            shoulder: {
-                name: "直角肩",
-                labels: ["一字肩夹角", "斜方肌厚度", "锁骨外展度", "肩峰差", "颈根宽度", "背部平整度"],
-                pre: ["145°", "5.8cm", "150°", "1.5cm", "14cm", "12mm"],
-                post: ["178°", "3.1cm", "175°", "0.2cm", "11.5cm", "4mm"],
-                units: ["°", "cm", "°", "cm", "cm", "mm"]
-            },
-            muscle: {
-                name: "增肌专场",
-                labels: ["腰围", "臀围", "小腿围", "上臂围", "胸围", "大腿围"],
-                pre: ["88cm", "92cm", "34cm", "31cm", "95cm", "52cm"],
-                post: ["78cm", "98cm", "36.5cm", "38cm", "112cm", "59cm"],
-                units: ["cm", "cm", "cm", "cm", "cm", "cm"]
-            },
-            abs: {
-                name: "马甲线",
-                labels: ["侧腰人鱼线宽度", "腹直肌间隙", "皮下脂肪厚度", "下腹维度", "腰围", "腰臀比"],
-                pre: ["12cm", "2.5cm", "28mm", "85cm", "82cm", "0.88"],
-                post: ["4cm", "0.2cm", "10mm", "72cm", "65cm", "0.71"],
-                units: ["cm", "cm", "mm", "cm", "cm", ""]
-            }
+            posture: { labels: ["头前引", "圆肩角", "高低肩", "骨盆前", "假胯宽", "脊柱侧"], pre: ["8.5cm","25°","2.5cm","18°","98cm","12°"], post: ["2.1cm","8°","0.2cm","7°","91cm","2°"], units: ["cm","°","cm","°","cm","°"] },
+            shoulder: { labels: ["一字肩角", "斜方肌", "锁骨展", "肩峰差", "颈根宽", "平整度"], pre: ["145°","5.8cm","150°","1.5cm","14cm","12mm"], post: ["178°","3.1cm","175°","0.2cm","11.5cm","4mm"], units: ["°","cm","°","cm","cm","mm"] }
         };
 
         function loadCaseData(key, el) {
-            const d = caseDatabase[key];
-            if(el) {
-                document.querySelectorAll('.cat-item').forEach(i => i.classList.remove('active'));
-                el.classList.add('active');
-            }
+            const d = caseDatabase[key] || caseDatabase.posture;
+            if(el) { document.querySelectorAll('.cat-item').forEach(i => i.classList.remove('active')); el.classList.add('active'); }
             let html = '';
             for(let i=0; i<6; i++) {
                 const diff = (parseFloat(d.post[i]) - parseFloat(d.pre[i])).toFixed(1);
-                const diffStr = (diff > 0 ? '+' : '') + diff + d.units[i];
-                html += `
-                <div class="param-tag tag-left"><label>${d.labels[i]}(前)</label><b onclick="manualEdit(this)">${d.pre[i]}</b></div>
-                <div class="param-tag tag-right">
-                    <label>${d.labels[i]}(后)</label><b onclick="manualEdit(this, true)">${d.post[i]}</b>
-                    <div class="diff-val">${diffStr}</div>
-                </div>`;
+                html += `<div class="param-tag tag-left"><label>${d.labels[i]}(前)</label><b>${d.pre[i]}</b></div>
+                         <div class="param-tag tag-right"><label>${d.labels[i]}(后)</label><b>${d.post[i]}</b><div class="diff-val">${diff}${d.units[i]}</div></div>`;
             }
             document.getElementById('paramsContainer').innerHTML = html;
         }
 
-        function manualEdit(el, isPost) {
-            const val = prompt("修改数据", el.innerText);
-            if(val) el.innerText = val;
-            // 如果是修改“后”数据，简单触发重算逻辑（此处为演示，正式版可加精准正则）
+        function saveToVault() {
+            const name = prompt("备注姓名", "王小姐");
+            if(!name) return;
+            const vault = JSON.parse(localStorage.getItem('luxiou_vault') || '[]');
+            vault.push({ id: Date.now(), name, type: document.querySelector('.cat-item.active').innerText, date: new Date().toLocaleDateString() });
+            localStorage.setItem('luxiou_vault', JSON.stringify(vault));
+            renderVault(); alert("已存入库");
         }
 
-        function editVal(el) { const v = prompt("修改数据", el.innerText); if(v) el.innerText = v; }
-
-        function saveToVault() {
-            const name = prompt("请输入此案例备注（如：会员王小姐）", "新案例");
-            const vault = JSON.parse(localStorage.getItem('luxiou_vault') || '[]');
-            vault.push({ name, date: new Date().toLocaleDateString(), type: document.querySelector('.cat-item.active').innerText });
+        function deleteItem(id) {
+            let vault = JSON.parse(localStorage.getItem('luxiou_vault') || '[]');
+            vault = vault.filter(i => i.id !== id);
             localStorage.setItem('luxiou_vault', JSON.stringify(vault));
-            alert("案例已成功存入私有仓库！");
             renderVault();
         }
 
         function renderVault() {
             const vault = JSON.parse(localStorage.getItem('luxiou_vault') || '[]');
-            document.getElementById('vaultList').innerHTML = vault.map((item, index) => `
-                <div class="vault-item">
-                    <div>
-                        <b style="color:var(--primary)">${item.name}</b><br>
-                        <small style="color:#666">${item.date} | ${item.type}</small>
+            document.getElementById('vaultList').innerHTML = vault.map(i => `
+                <div class="vault-item-wrap" ontouchstart="touchStart(event)" ontouchmove="touchMove(event)" ontouchend="touchEnd(event, ${i.id})">
+                    <div class="delete-btn" onclick="deleteItem(${i.id})">删除</div>
+                    <div class="vault-content">
+                        <div><b>${i.name}</b><br><small>${i.type} | ${i.date}</small></div>
+                        <button style="background:var(--primary); border:none; padding:4px 10px; border-radius:4px; font-size:10px;">调取</button>
                     </div>
-                    <button onclick="alert('正在调取存档数据...')" style="background:#00f2fe; border:none; padding:5px 10px; border-radius:5px;">调取</button>
-                </div>
-            `).join('');
+                </div>`).join('');
+        }
+
+        let startX = 0, currentX = 0;
+        function touchStart(e) { startX = e.touches[0].clientX; }
+        function touchMove(e) {
+            let moveX = e.touches[0].clientX - startX;
+            if (moveX < 0 && moveX > -70) e.currentTarget.querySelector('.vault-content').style.transform = `translateX(${moveX}px)`;
+        }
+        function touchEnd(e, id) {
+            let endX = e.changedTouches[0].clientX;
+            const content = e.currentTarget.querySelector('.vault-content');
+            if (startX - endX > 40) content.style.transform = `translateX(-70px)`;
+            else content.style.transform = `translateX(0)`;
         }
 
         function toggleVault() { document.getElementById('vaultDrawer').classList.toggle('open'); }
@@ -180,7 +158,6 @@
             document.getElementById('layerAfter').style.opacity = e.target.value/100;
             document.getElementById('layerBefore').style.opacity = 1-(e.target.value/100);
         };
-
         window.onload = () => { loadCaseData('posture'); renderVault(); };
     </script>
 </body>
