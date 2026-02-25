@@ -3,75 +3,97 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>LUXIOU | 数字化全息档案 V5.0</title>
+    <title>LUXIOU | 数字化全息档案 V6.0</title>
     <style>
         :root { --primary: #00f2fe; --accent: #00ff88; --bg: #0b0f19; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body { background: var(--bg); color: #e2e8f0; font-family: -apple-system, sans-serif; margin: 0; padding: 0; overflow: hidden; touch-action: none; }
         
-        .app-wrap { width: 100vw; height: 100vh; display: flex; flex-direction: column; padding: 10px; padding-top: 60px; background: radial-gradient(circle at 50% 50%, #1a2234 0%, #0b0f19 100%); }
-        .back-btn { position: fixed; top: 15px; left: 15px; z-index: 5000; background: rgba(0,0,0,0.6); color: #fff; padding: 10px 18px; border-radius: 50px; text-decoration: none; font-size: 13px; border: 1px solid rgba(255,255,255,0.3); backdrop-filter: blur(10px); font-weight: bold; }
+        .app-wrap { width: 100vw; height: 100vh; display: flex; flex-direction: column; padding: 10px; padding-top: 65px; background: radial-gradient(circle at 50% 50%, #1a2234 0%, #0b0f19 100%); }
+        
+        /* 顶部标题强化 */
+        .header-brand { position: fixed; top: 0; left: 0; width: 100%; height: 55px; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.5); backdrop-filter: blur(10px); z-index: 5000; border-bottom: 1px solid rgba(0,242,254,0.3); }
+        .brand-text { font-size: 20px; font-weight: 900; color: #fff; letter-spacing: 2px; text-shadow: 0 0 15px var(--primary); }
+        .back-btn { position: absolute; left: 15px; color: #fff; text-decoration: none; font-size: 13px; border: 1px solid #444; padding: 5px 12px; border-radius: 20px; }
 
         /* 标题栏高亮 */
         .category-box { display: flex; gap: 8px; overflow-x: auto; margin-bottom: 10px; padding-bottom: 5px; scrollbar-width: none; }
-        .cat-item { flex: 0 0 auto; padding: 7px 15px; background: #161e2e; border-radius: 10px; font-size: 11px; color: #fff; border: 1px solid #444; text-shadow: 0 0 5px rgba(255,255,255,0.3); }
-        .cat-item.active { background: var(--primary); color: #000; font-weight: bold; border-color: #fff; box-shadow: 0 0 15px var(--primary); text-shadow: none; }
+        .cat-item { flex: 0 0 auto; padding: 8px 16px; background: #161e2e; border-radius: 10px; font-size: 13px; color: #fff; border: 1px solid #444; font-weight: bold; }
+        .cat-item.active { background: var(--primary); color: #000; border-color: #fff; box-shadow: 0 0 15px var(--primary); }
 
-        /* 极致大屏布局 */
+        /* 大屏布局 */
         .stage-area { position: relative; flex: 1; width: 100%; display: flex; justify-content: space-between; gap: 2px; margin-bottom: 10px; }
-        .params-side { flex: 0 0 80px; display: flex; flex-direction: column; z-index: 100; }
-        .param-card { flex: 1; background: rgba(11, 15, 25, 0.88); border-bottom: 0.5px solid rgba(255,255,255,0.1); padding: 4px; display: flex; flex-direction: column; justify-content: center; }
+        .params-side { flex: 0 0 85px; display: flex; flex-direction: column; z-index: 100; }
+        .param-card { flex: 1; background: rgba(11, 15, 25, 0.85); border-bottom: 0.5px solid rgba(255,255,255,0.1); padding: 4px; display: flex; flex-direction: column; justify-content: center; }
         .card-l { border-left: 4px solid #fff; }
         .card-r { border-right: 4px solid var(--primary); text-align: right; }
-        .param-card label { font-size: 8px; color: #aaa; margin-bottom: 2px; transform: scale(0.95); }
-        .param-card b { font-size: 18px; color: var(--primary); font-weight: 900; letter-spacing: 0.5px; }
+        .param-card label { font-size: 8px; color: #aaa; margin-bottom: 2px; }
+        .param-card b { font-size: 16px; color: var(--primary); font-weight: 900; background: transparent; border: none; width: 100%; outline: none; }
 
-        /* 图片显示区最大化 */
+        /* 独立缩放视窗 */
         .main-viewer { flex: 1; background: #000; border-radius: 15px; position: relative; overflow: hidden; border: 1px solid #333; }
-        .img-layer { position: absolute; width: 100%; height: 100%; background-size: contain; background-repeat: no-repeat; background-position: center; transition: opacity 0.3s; transform: scale(1); }
+        .img-layer { position: absolute; width: 100%; height: 100%; background-size: contain; background-repeat: no-repeat; background-position: center; transition: opacity 0.3s; transform-origin: center; }
         #laserCanvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 150; touch-action: none; }
 
-        .control-panel { background: rgba(16, 24, 39, 0.85); border-radius: 20px; padding: 12px; border: 1px solid rgba(255,255,255,0.1); }
-        .slider-row { display: flex; flex-direction: column; gap: 8px; margin-bottom: 10px; }
-        .slider-label { display: flex; justify-content: space-between; font-size: 10px; color: var(--primary); font-weight: bold; }
+        /* 独立缩放控制面板 */
+        .zoom-controls { position: absolute; bottom: 80px; width: 100%; display: flex; justify-content: space-between; padding: 0 15px; z-index: 200; pointer-events: none; }
+        .zoom-group { pointer-events: auto; background: rgba(0,0,0,0.6); padding: 5px; border-radius: 10px; display: flex; flex-direction: column; align-items: center; border: 1px solid #444; }
+        .zoom-group label { font-size: 9px; color: #00f2fe; margin-bottom: 4px; }
+        .zoom-group input { width: 80px; height: 4px; }
+
+        .control-panel { background: rgba(16, 24, 39, 0.9); border-radius: 20px; padding: 12px; border: 1px solid rgba(255,255,255,0.1); }
+        .slider-row { margin-bottom: 10px; }
+        .slider-label { display: flex; justify-content: space-between; font-size: 10px; color: var(--primary); font-weight: bold; margin-bottom: 5px; }
         input[type=range] { width: 100%; -webkit-appearance: none; background: #1a2234; height: 4px; border-radius: 2px; }
-        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 22px; background: #fff; border: 3px solid var(--primary); border-radius: 50%; box-shadow: 0 0 10px var(--primary); }
+        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 22px; background: #fff; border: 3px solid var(--primary); border-radius: 50%; }
 
         .btn-grid { display: grid; grid-template-columns: 1fr 1fr 1.2fr; gap: 8px; }
         .lux-btn { background: #1a2234; border: 1px solid #333; padding: 10px; border-radius: 10px; color: #fff; font-size: 11px; font-weight: bold; text-align: center; }
         .btn-save { background: var(--primary); color: #000; border: none; box-shadow: 0 0 15px var(--primary); }
 
-        /* 历史库显示 */
-        #vaultList { height: 100px; overflow-y: auto; margin-top: 10px; border-top: 1px solid #222; }
-        .vault-item { background: #161e2e; padding: 10px; border-radius: 8px; margin-top: 5px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #333; }
+        #vaultList { height: 90px; overflow-y: auto; margin-top: 10px; }
+        .vault-item { background: #161e2e; padding: 8px; border-radius: 8px; margin-top: 5px; display: flex; justify-content: space-between; border: 1px solid #333; font-size: 12px; }
     </style>
 </head>
 <body>
-    <a href="./index.html" class="back-btn">返回</a>
+    <div class="header-brand">
+        <a href="./index.html" class="back-btn">返回</a>
+        <div class="brand-text">LUXIOU 全息数字化诊断</div>
+    </div>
+
     <div class="app-wrap">
         <div class="category-box" id="catBox"></div>
 
         <div class="stage-area">
             <div class="params-side" id="colL"></div>
-            <div class="main-viewer" id="viewBox">
+            <div class="main-viewer">
                 <div class="img-layer" id="layB" style="background-image:url('case_before.jpg'); opacity:1;"></div>
                 <div class="img-layer" id="layA" style="background-image:url('case_after.jpg'); opacity:0;"></div>
                 <canvas id="laserCanvas"></canvas>
+                
+                <div class="zoom-controls">
+                    <div class="zoom-group">
+                        <label>前图缩放</label>
+                        <input type="range" min="50" max="300" value="100" oninput="zoomIndiv('layB', this.value)">
+                    </div>
+                    <div class="zoom-group">
+                        <label>后图缩放</label>
+                        <input type="range" min="50" max="300" value="100" oninput="zoomIndiv('layA', this.value)">
+                    </div>
+                </div>
             </div>
             <div class="params-side" id="colR"></div>
         </div>
 
         <div class="control-panel">
             <div class="slider-row">
-                <div class="slider-label"><span>图片缩放</span><span id="zoomVal">100%</span></div>
-                <input type="range" min="50" max="250" value="100" oninput="zoomImg(this.value)">
-                <div class="slider-label"><span>前后对比 (Before-After)</span></div>
+                <div class="slider-label"><span>BEFORE</span><span>滑动对比前后差异</span><span>AFTER</span></div>
                 <input type="range" min="0" max="100" value="0" id="fadeSlider">
             </div>
             <div class="btn-grid">
                 <div class="lux-btn" onclick="document.getElementById('fB').click()">📷 前照<input type="file" id="fB" hidden accept="image/*" onchange="processImg(this,'layB')"></div>
                 <div class="lux-btn" onclick="document.getElementById('fA').click()">📷 后照<input type="file" id="fA" hidden accept="image/*" onchange="processImg(this,'layA')"></div>
-                <div class="lux-btn btn-save" onclick="saveArchive()">💾 保存/调取</div>
+                <div class="lux-btn btn-save" onclick="saveArchive()">💾 保存/查看存档</div>
             </div>
             <div id="vaultList"></div>
         </div>
@@ -86,9 +108,7 @@
         const db = {
             posture: { name: "体态矫正", labels: ["颈椎前引", "圆肩偏离", "高低肩差", "骨盆前倾", "脊柱侧倾", "假胯宽度"], pre: ["8.5cm","25°","2.5cm","18°","12°","98cm"], post: ["2.1cm","8°","0.2cm","7°","2°","91cm"] },
             shoulder: { name: "直角肩", labels: ["一字肩角", "斜方肌厚", "锁骨展度", "肩峰差值", "颈根宽度", "背平整度"], pre: ["145°","5.8cm","150°","1.5cm","14cm","12mm"], post: ["178°","3.1cm","175°","0.2cm","11.5cm","4mm"] },
-            postpartum: { name: "产后康复", labels: ["腹直肌隙", "耻骨宽度", "内脏脂肪", "盆底肌力", "腹围减寸", "腰椎压力"], pre: ["3.5cm","12cm","15","L2","95cm","H9"], post: ["0.2cm","9cm","5","L5","78cm","H2"] },
-            muscle: { name: "增肌专场", labels: ["上臂维度", "胸围增长", "大腿围度", "背阔肌展", "力量评级", "肌肉质量"], pre: ["31cm","95cm","52cm","88cm","B","35"], post: ["38cm","115cm","61cm","112cm","S","72"] },
-            fatloss: { name: "减脂塑形", labels: ["基础代谢", "内脏脂肪", "全身脂率", "BMI指数", "腰臀比例", "水分含量"], pre: ["1250","14","35%","28.5","0.92","48%"], post: ["1550","4","18%","22.1","0.72","62%"] }
+            muscle: { name: "增肌专场", labels: ["上臂维度", "胸围增长", "大腿围度", "背阔肌展", "力量评级", "肌肉质量"], pre: ["31cm","95cm","52cm","88cm","B","35"], post: ["38cm","115cm","61cm","112cm","S","72"] }
         };
 
         function draw() {
@@ -96,12 +116,67 @@
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             anchors.forEach((pt, i) => {
                 const boxY = (i * (canvas.height / 6)) + (canvas.height / 12);
-                ctx.strokeStyle = "rgba(0, 242, 254, 0.5)"; ctx.setLineDash([5, 5]);
+                ctx.strokeStyle = "rgba(0, 242, 254, 0.4)"; ctx.setLineDash([5, 5]);
                 ctx.beginPath(); ctx.moveTo(0, boxY); ctx.lineTo(pt.x*canvas.width, pt.y*canvas.height); ctx.stroke();
                 ctx.beginPath(); ctx.moveTo(canvas.width, boxY); ctx.lineTo(pt.x*canvas.width, pt.y*canvas.height); ctx.stroke();
-                ctx.setLineDash([]); ctx.fillStyle = draggingIdx === i ? "#fff" : "#00ff88";
-                ctx.beginPath(); ctx.arc(pt.x*canvas.width, pt.y*canvas.height, 7, 0, Math.PI*2); ctx.fill();
+                ctx.setLineDash([]); ctx.fillStyle = "#00ff88";
+                ctx.beginPath(); ctx.arc(pt.x*canvas.width, pt.y*canvas.height, 6, 0, Math.PI*2); ctx.fill();
             });
+        }
+
+        function zoomIndiv(target, val) {
+            document.getElementById(target).style.transform = `scale(${val/100})`;
+        }
+
+        function loadSetup(key, el) {
+            const d = db[key];
+            if(el) { document.querySelectorAll('.cat-item').forEach(i => i.classList.remove('active')); el.classList.add('active'); }
+            let hL = '', hR = '';
+            for(let i=0; i<6; i++) {
+                hL += `<div class="param-card card-l"><label>${d.labels[i]}</label><b contenteditable="true">${d.pre[i]}</b></div>`;
+                hR += `<div class="param-card card-r"><label>${d.labels[i]}</label><b contenteditable="true">${d.post[i]}</b></div>`;
+            }
+            document.getElementById('colL').innerHTML = hL; document.getElementById('colR').innerHTML = hR;
+            draw();
+        }
+
+        function processImg(i, t) { if(i.files[0]){ const r=new FileReader(); r.onload=e=>{document.getElementById(t).style.backgroundImage=`url('${e.target.result}')`; draw();}; r.readAsDataURL(i.files[0]); } }
+        
+        function saveArchive() {
+            const name = prompt("输入客户姓名保存"); if(!name) return;
+            const vault = JSON.parse(localStorage.getItem('LUX_V6_DB') || '[]');
+            // 获取当前输入的实时数值
+            const preVals = Array.from(document.querySelectorAll('.card-l b')).map(b => b.innerText);
+            const postVals = Array.from(document.querySelectorAll('.card-r b')).map(b => b.innerText);
+
+            vault.unshift({ 
+                id: Date.now(), name, type: document.querySelector('.cat-item.active').innerText, 
+                imgB: document.getElementById('layB').style.backgroundImage, 
+                imgA: document.getElementById('layA').style.backgroundImage,
+                anchors: anchors, preVals, postVals
+            });
+            localStorage.setItem('LUX_V6_DB', JSON.stringify(vault)); renderVault();
+        }
+
+        function loadArchive(id) {
+            const vault = JSON.parse(localStorage.getItem('LUX_V6_DB') || '[]');
+            const i = vault.find(x => x.id === id);
+            if(i) {
+                document.getElementById('layB').style.backgroundImage = i.imgB; 
+                document.getElementById('layA').style.backgroundImage = i.imgA;
+                anchors = i.anchors;
+                // 还原数值
+                const lCards = document.querySelectorAll('.card-l b');
+                const rCards = document.querySelectorAll('.card-r b');
+                i.preVals.forEach((v, idx) => lCards[idx].innerText = v);
+                i.postVals.forEach((v, idx) => rCards[idx].innerText = v);
+                draw();
+            }
+        }
+
+        function renderVault() {
+            const v = JSON.parse(localStorage.getItem('LUX_V6_DB') || '[]');
+            document.getElementById('vaultList').innerHTML = v.map(i => `<div class="vault-item"><span>${i.name} - ${i.type}</span><button onclick="loadArchive(${i.id})">调取</button></div>`).join('');
         }
 
         const getCoord = (e, axis) => {
@@ -109,76 +184,22 @@
             const val = e.touches ? (axis === 'x' ? e.touches[0].clientX : e.touches[0].clientY) : (axis === 'x' ? e.clientX : e.clientY);
             return (val - (axis === 'x' ? rect.left : rect.top)) / (axis === 'x' ? canvas.width : canvas.height);
         };
-        const handleStart = e => {
+        canvas.addEventListener('touchstart', e => {
             const x = getCoord(e, 'x'); const y = getCoord(e, 'y');
             draggingIdx = anchors.findIndex(a => Math.sqrt((a.x-x)**2 + (a.y-y)**2) < 0.08);
             if(draggingIdx !== -1) e.preventDefault(); 
-        };
-        const handleMove = e => {
+        }, {passive: false});
+        canvas.addEventListener('touchmove', e => {
             if(draggingIdx !== -1) {
                 anchors[draggingIdx] = { x: Math.max(0, Math.min(1, getCoord(e, 'x'))), y: Math.max(0, Math.min(1, getCoord(e, 'y'))) };
                 draw(); e.preventDefault();
             }
-        };
-        canvas.addEventListener('touchstart', handleStart, {passive: false}); canvas.addEventListener('touchmove', handleMove, {passive: false});
+        }, {passive: false});
         window.addEventListener('touchend', () => draggingIdx = -1);
 
-        function loadSetup(key, el) {
-            const d = db[key];
-            if(el) { document.querySelectorAll('.cat-item').forEach(i => i.classList.remove('active')); el.classList.add('active'); }
-            let hL = '', hR = '';
-            for(let i=0; i<6; i++) {
-                hL += `<div class="param-card card-l"><label>${d.labels[i]}</label><b>${d.pre[i]}</b></div>`;
-                hR += `<div class="param-card card-r"><label>${d.labels[i]}</label><b>${d.post[i]}</b></div>`;
-            }
-            document.getElementById('colL').innerHTML = hL; document.getElementById('colR').innerHTML = hR;
-            draw();
-        }
-
-        function zoomImg(val) {
-            const scale = val / 100;
-            document.getElementById('layA').style.transform = `scale(${scale})`;
-            document.getElementById('layB').style.transform = `scale(${scale})`;
-            document.getElementById('zoomVal').innerText = val + '%';
-        }
-
-        function processImg(i, t) { if(i.files[0]){ const r=new FileReader(); r.onload=e=>{document.getElementById(t).style.backgroundImage=`url('${e.target.result}')`; draw();}; r.readAsDataURL(i.files[0]); } }
-        
-        // 核心存档修复：V5.0 稳定版
-        function saveArchive() {
-            const name = prompt("备注存档姓名"); if(!name) return;
-            const vault = JSON.parse(localStorage.getItem('LUX_V5_MASTER') || '[]');
-            vault.unshift({ 
-                id: Date.now(), name, type: document.querySelector('.cat-item.active').innerText, 
-                imgB: document.getElementById('layB').style.backgroundImage, 
-                imgA: document.getElementById('layA').style.backgroundImage,
-                anchors: JSON.parse(JSON.stringify(anchors)),
-                pL: document.getElementById('colL').innerHTML, pR: document.getElementById('colR').innerHTML
-            });
-            localStorage.setItem('LUX_V5_MASTER', JSON.stringify(vault)); renderVault(); alert("成功存档至库！");
-        }
-
-        function loadArchive(id) {
-            const vault = JSON.parse(localStorage.getItem('LUX_V5_MASTER') || '[]');
-            const i = vault.find(x => x.id === id);
-            if(i) {
-                document.getElementById('layB').style.backgroundImage = i.imgB; 
-                document.getElementById('layA').style.backgroundImage = i.imgA;
-                anchors = i.anchors; 
-                document.getElementById('colL').innerHTML = i.pL; 
-                document.getElementById('colR').innerHTML = i.pR;
-                draw(); alert("全息照片与数据已瞬间还原！");
-            }
-        }
-
-        function renderVault() {
-            const v = JSON.parse(localStorage.getItem('LUX_V5_MASTER') || '[]');
-            document.getElementById('vaultList').innerHTML = v.map(i => `<div class="vault-item"><span><b>${i.name}</b> (${i.type})</span><button onclick="loadArchive(${i.id})" style="background:var(--primary); border:none; padding:5px 12px; border-radius:6px; font-weight:bold;">调取</button></div>`).join('');
-        }
-
         document.getElementById('fadeSlider').oninput = e => {
-            const v = e.target.value / 100;
-            document.getElementById('layA').style.opacity = v; document.getElementById('layB').style.opacity = 1 - v;
+            document.getElementById('layA').style.opacity = e.target.value / 100;
+            document.getElementById('layB').style.opacity = 1 - (e.target.value / 100);
         };
 
         window.onload = () => {
