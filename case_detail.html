@@ -3,59 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>LUXIOU | 医学级全息诊断档案</title>
+    <title>LUXIOU | 数字化全息诊断档案</title>
     <style>
         :root { --primary: #00f2fe; --bg: #0b0f19; --glass: rgba(30, 41, 59, 0.7); --card: rgba(22, 30, 46, 0.95); }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { background: var(--bg); color: #e2e8f0; font-family: -apple-system, sans-serif; margin: 0; padding: 12px; padding-top: 75px; overflow-x: hidden; }
+        body { background: var(--bg); color: #e2e8f0; font-family: -apple-system, sans-serif; margin: 0; padding: 10px; padding-top: 70px; overflow-x: hidden; }
         
         .back-btn { position: fixed; top: 15px; left: 15px; z-index: 1000; background: rgba(0,0,0,0.6); color: #fff; padding: 10px 18px; border-radius: 50px; text-decoration: none; font-size: 13px; border: 1px solid rgba(255,255,255,0.4); backdrop-filter: blur(10px); font-weight: bold; }
 
-        .case-wrap { max-width: 600px; margin: 0 auto; background: var(--glass); border-radius: 24px; padding: 15px; border: 1px solid rgba(255,255,255,0.1); }
+        .case-wrap { max-width: 600px; margin: 0 auto; background: var(--glass); border-radius: 24px; padding: 12px; border: 1px solid rgba(255,255,255,0.1); }
         
-        .category-box { display: flex; gap: 8px; overflow-x: auto; margin-bottom: 15px; padding-bottom: 8px; scrollbar-width: none; }
-        .cat-item { flex: 0 0 auto; padding: 7px 15px; background: var(--card); border-radius: 50px; font-size: 11px; border: 1px solid #333; color: #64748b; }
+        .category-box { display: flex; gap: 8px; overflow-x: auto; margin-bottom: 12px; padding-bottom: 8px; scrollbar-width: none; }
+        .cat-item { flex: 0 0 auto; padding: 6px 14px; background: var(--card); border-radius: 50px; font-size: 11px; border: 1px solid #333; color: #64748b; }
         .cat-item.active { background: var(--primary); color: #000; font-weight: bold; }
 
-        .metrics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 15px; }
-        .metric-item { background: var(--card); padding: 12px 5px; border-radius: 12px; text-align: center; border: 1px solid rgba(255,255,255,0.05); }
+        .metrics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 12px; }
+        .metric-item { background: var(--card); padding: 10px 5px; border-radius: 12px; text-align: center; border: 1px solid rgba(255,255,255,0.05); }
         .metric-item span { display: block; font-size: 10px; color: #64748b; margin-bottom: 4px; }
-        .metric-item strong { display: block; font-size: 15px; color: var(--primary); border-bottom: 1px dashed rgba(0,242,254,0.3); cursor: pointer; }
+        .metric-item strong { display: block; font-size: 14px; color: var(--primary); border-bottom: 1px dashed rgba(0,242,254,0.3); cursor: pointer; }
 
-        /* 对比区：高度锁定与标签向内聚拢 */
-        .comparison-stage { position: relative; width: 100%; height: 480px; background: #000; border-radius: 20px; overflow: hidden; display: flex; align-items: center; justify-content: center; }
-        .img-layer { position: absolute; width: 100%; height: 100%; background-size: contain; background-repeat: no-repeat; background-position: center; transition: opacity 0.3s; }
+        /* 对比区：极致紧凑排版 */
+        .comparison-stage { position: relative; width: 100%; height: 460px; background: #000; border-radius: 20px; overflow: hidden; display: flex; align-items: center; justify-content: center; border: 1px solid #222; }
+        .img-layer { position: absolute; width: 100%; height: 100%; background-size: contain; background-repeat: no-repeat; background-position: center; transition: opacity 0.2s; }
         
-        /* 侧边标签精调：缩小分距，紧贴核心区域 */
-        .side-params { position: absolute; z-index: 10; display: flex; flex-direction: column; gap: 12px; pointer-events: none; width: 100%; height: auto; padding: 5px 6px; }
-        .param-tag { font-size: 9px; padding: 5px 8px; border-radius: 8px; backdrop-filter: blur(8px); display: flex; flex-direction: column; pointer-events: auto; min-width: 90px; background: rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.15); }
-        .tag-left { align-self: flex-start; border-left: 3px solid #fff; }
-        .tag-right { align-self: flex-end; border-right: 3px solid var(--primary); text-align: right; }
-        .param-tag label { color: #888; font-size: 9px; margin-bottom: 2px; }
-        .param-tag b { font-size: 13px; color: var(--primary); cursor: pointer; }
-        .diff-val { font-size: 10px; color: #00ff88; font-weight: bold; margin-top: 2px; }
+        /* 侧边标签：使用 Flex 聚拢，缩小上下分距 */
+        .side-params { position: absolute; z-index: 10; display: flex; flex-direction: column; gap: 10px; pointer-events: none; width: 100%; height: 98%; padding: 5px 6px; justify-content: center; }
+        .param-tag { font-size: 9px; padding: 4px 8px; border-radius: 8px; backdrop-filter: blur(8px); display: flex; flex-direction: column; pointer-events: auto; min-width: 90px; background: rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.15); }
+        .tag-left { align-self: flex-start; border-left: 3px solid #fff; margin-bottom: 2px; }
+        .tag-right { align-self: flex-end; border-right: 3px solid var(--primary); text-align: right; margin-top: -15px; } /* 负间距聚拢 */
+        .param-tag b { font-size: 12px; color: var(--primary); cursor: pointer; }
+        .diff-val { font-size: 9px; color: #00ff88; font-weight: bold; margin-top: 1px; }
 
-        .fade-slider-wrap { margin-top: 15px; padding: 15px; background: var(--card); border-radius: 15px; border: 1px solid #333; }
-        input[type=range] { width: 100%; -webkit-appearance: none; background: #222; height: 6px; border-radius: 5px; outline: none; }
-        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 28px; height: 28px; background: var(--primary); border-radius: 50%; box-shadow: 0 0 15px var(--primary); cursor: pointer; }
+        .fade-slider-wrap { margin-top: 10px; padding: 12px; background: var(--card); border-radius: 15px; border: 1px solid #333; }
+        input[type=range] { width: 100%; -webkit-appearance: none; background: #222; height: 5px; border-radius: 5px; outline: none; }
+        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 24px; height: 24px; background: var(--primary); border-radius: 50%; box-shadow: 0 0 10px var(--primary); }
 
-        .action-group { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 15px; }
+        .action-group { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-top: 12px; }
         .btn-act { background: var(--card); border: 1px solid #333; border-radius: 12px; padding: 12px; text-align: center; font-size: 11px; color: #e2e8f0; cursor: pointer; }
         .btn-save { background: var(--primary); color: #000; font-weight: bold; border: none; }
 
-        /* 案例库及左滑删除 */
+        /* 案例库对齐 */
         .vault-container { margin-top: 15px; padding: 15px; background: rgba(255,255,255,0.03); border-radius: 15px; border: 1px dashed #444; }
-        #vaultList { height: 200px; overflow-y: auto; margin-top: 10px; }
-        .vault-item-wrap { position: relative; overflow: hidden; margin-bottom: 12px; border-radius: 12px; background: #1e293b; }
-        .vault-content { position: relative; z-index: 2; background: #1e293b; padding: 15px; transition: 0.3s; display: flex; justify-content: space-between; align-items: center; }
-        .delete-btn { position: absolute; right: 0; top: 0; height: 100%; width: 75px; background: #ff4757; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: bold; z-index: 1; }
+        #vaultList { height: 180px; overflow-y: auto; margin-top: 10px; }
+        .vault-item-wrap { position: relative; overflow: hidden; margin-bottom: 10px; border-radius: 12px; background: #1e293b; }
+        .vault-content { position: relative; z-index: 2; background: #1e293b; padding: 12px; transition: 0.3s; display: flex; justify-content: space-between; align-items: center; }
+        .delete-btn { position: absolute; right: 0; top: 0; height: 100%; width: 70px; background: #ff4757; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: bold; z-index: 1; }
 
-        /* 滚动选择器样式优化：确定按钮靠右 */
+        /* 滚轮选择器对齐：确定在右 */
         .picker-mask { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 2000; display: none; align-items: center; justify-content: center; }
         .picker-mask.active { display: flex; }
         .picker-content { background: #1a2234; width: 85%; max-width: 320px; border-radius: 24px; padding: 25px; border: 1px solid #334155; }
-        .picker-scroll { height: 200px; overflow-y: auto; scroll-snap-type: y mandatory; padding: 80px 0; }
-        .picker-item { height: 45px; line-height: 45px; text-align: center; font-size: 18px; color: #64748b; scroll-snap-align: center; }
+        .picker-scroll { height: 180px; overflow-y: auto; scroll-snap-type: y mandatory; padding: 70px 0; }
+        .picker-item { height: 40px; line-height: 40px; text-align: center; font-size: 18px; color: #64748b; scroll-snap-align: center; }
         .picker-item.selected { color: var(--primary); font-weight: bold; font-size: 22px; }
         .picker-footer { display: flex; gap: 15px; margin-top: 25px; }
         .picker-btn { flex: 1; padding: 12px; border-radius: 12px; border: none; font-weight: bold; cursor: pointer; }
@@ -99,7 +98,7 @@
 
         <div class="vault-container">
             <div style="font-size:11px; color:var(--primary); font-weight:bold;">📂 调取历史成功案例：(左滑删除)</div>
-            <div id="vaultList"><p style="font-size:10px; color:#555; text-align:center;">暂无调取记录</p></div>
+            <div id="vaultList"></div>
         </div>
     </div>
 
@@ -145,9 +144,24 @@
             document.getElementById('paramsContainer').innerHTML = html;
         }
 
-        // 核心修复：载入案例即刻还原图片
+        // 核心修复：保存逻辑增强
+        function saveToVault() {
+            const name = prompt("备注案例姓名", "新成功案例"); if(!name) return;
+            const vault = JSON.parse(localStorage.getItem('luxiou_case_v5') || '[]');
+            const data = { 
+                id: Date.now(), name, type: document.querySelector('.cat-item.active').innerText, 
+                imgB: document.getElementById('layerBefore').style.backgroundImage, 
+                imgA: document.getElementById('layerAfter').style.backgroundImage,
+                metrics: { w: document.getElementById('val_weight').innerText, f: document.getElementById('val_fat').innerText, wk: document.getElementById('val_week').innerText },
+                params: document.getElementById('paramsContainer').innerHTML
+            };
+            vault.unshift(data); localStorage.setItem('luxiou_case_v5', JSON.stringify(vault));
+            renderVault(); alert("案例已成功存入本地库！");
+        }
+
+        // 核心修复：调取逻辑同步刷新
         function loadItem(id) {
-            const vault = JSON.parse(localStorage.getItem('luxiou_final_vault') || '[]');
+            const vault = JSON.parse(localStorage.getItem('luxiou_case_v5') || '[]');
             const item = vault.find(i => i.id === id);
             if(item) {
                 document.getElementById('layerBefore').style.backgroundImage = item.imgB;
@@ -156,22 +170,8 @@
                 document.getElementById('val_fat').innerText = item.metrics.f;
                 document.getElementById('val_week').innerText = item.metrics.wk;
                 document.getElementById('paramsContainer').innerHTML = item.params;
-                alert("案例及对比图载入成功！");
+                alert("对比案例已载入，图片与数据同步更新！");
             }
-        }
-
-        function saveToVault() {
-            const name = prompt("备注会员姓名", "新案例"); if(!name) return;
-            const vault = JSON.parse(localStorage.getItem('luxiou_final_vault') || '[]');
-            const data = { 
-                id: Date.now(), name, type: document.querySelector('.cat-item.active').innerText, 
-                imgB: document.getElementById('layerBefore').style.backgroundImage, 
-                imgA: document.getElementById('layerAfter').style.backgroundImage,
-                metrics: { w: document.getElementById('val_weight').innerText, f: document.getElementById('val_fat').innerText, wk: document.getElementById('val_week').innerText },
-                params: document.getElementById('paramsContainer').innerHTML
-            };
-            vault.unshift(data); localStorage.setItem('luxiou_final_vault', JSON.stringify(vault));
-            renderVault(); alert("存档成功！");
         }
 
         function openPicker(type) {
@@ -186,29 +186,30 @@
         function confirmValue() { document.getElementById('val_'+curType).innerText = tempVal + configs[curType].unit; closePicker(); }
         function closePicker() { document.getElementById('pickerMask').classList.remove('active'); }
 
-        function deleteItem(id) {
-            let vault = JSON.parse(localStorage.getItem('luxiou_final_vault') || '[]');
-            vault = vault.filter(i => i.id !== id);
-            localStorage.setItem('luxiou_final_vault', JSON.stringify(vault));
-            renderVault();
-        }
-
         function renderVault() {
-            const vault = JSON.parse(localStorage.getItem('luxiou_final_vault') || '[]');
-            if(vault.length === 0) { document.getElementById('vaultList').innerHTML = '<p style="font-size:10px; color:#555; text-align:center;">暂无调取记录</p>'; return; }
-            document.getElementById('vaultList').innerHTML = vault.map(i => `
+            const vault = JSON.parse(localStorage.getItem('luxiou_case_v5') || '[]');
+            const list = document.getElementById('vaultList');
+            if(vault.length === 0) { list.innerHTML = '<p style="font-size:10px; color:#555; text-align:center;">暂无记录</p>'; return; }
+            list.innerHTML = vault.map(i => `
                 <div class="vault-item-wrap" ontouchstart="tS(event)" ontouchmove="tM(event)" ontouchend="tE(event, ${i.id})">
                     <div class="delete-btn" onclick="deleteItem(${i.id})">删除</div>
                     <div class="vault-content">
                         <div style="font-size:11px;"><b>${i.name}</b> <small style="color:#666">${i.type}</small></div>
-                        <button onclick="loadItem(${i.id})" style="background:var(--primary); border:none; padding:5px 12px; border-radius:6px; font-size:11px; font-weight:bold;">载入</button>
+                        <button onclick="loadItem(${i.id})" style="background:var(--primary); border:none; padding:4px 10px; border-radius:4px; font-size:11px; font-weight:bold;">载入</button>
                     </div>
                 </div>`).join('');
         }
 
+        function deleteItem(id) {
+            let vault = JSON.parse(localStorage.getItem('luxiou_case_v5') || '[]');
+            vault = vault.filter(i => i.id !== id);
+            localStorage.setItem('luxiou_case_v5', JSON.stringify(vault));
+            renderVault();
+        }
+
         let sX = 0; function tS(e) { sX = e.touches[0].clientX; }
-        function tM(e) { let mX = e.touches[0].clientX - sX; if (mX < 0 && mX > -75) e.currentTarget.querySelector('.vault-content').style.transform = `translateX(${mX}px)`; }
-        function tE(e, id) { let eX = e.changedTouches[0].clientX; const c = e.currentTarget.querySelector('.vault-content'); if (sX - eX > 35) c.style.transform = `translateX(-75px)`; else c.style.transform = `translateX(0)`; }
+        function tM(e) { let mX = e.touches[0].clientX - sX; if (mX < 0 && mX > -65) e.currentTarget.querySelector('.vault-content').style.transform = `translateX(${mX}px)`; }
+        function tE(e, id) { let eX = e.changedTouches[0].clientX; const c = e.currentTarget.querySelector('.vault-content'); if (sX - eX > 30) c.style.transform = `translateX(-65px)`; else c.style.transform = `translateX(0)`; }
 
         function manualEdit(el) { const v = prompt("修改数据", el.innerText); if(v) el.innerText = v; }
         function loadImg(input, targetId) {
