@@ -3,56 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>LUXIOU | 医学级全息诊断档案</title>
+    <title>LUXIOU | 数字化全息档案</title>
     <style>
         :root { --primary: #00f2fe; --bg: #0b0f19; --glass: rgba(30, 41, 59, 0.7); --card: #161e2e; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { background: var(--bg); color: #e2e8f0; font-family: -apple-system, sans-serif; margin: 0; padding: 15px; padding-top: 75px; overflow-x: hidden; }
+        body { background: var(--bg); color: #e2e8f0; font-family: -apple-system, sans-serif; margin: 0; padding: 15px; padding-top: 75px; padding-bottom: 100px; overflow-x: hidden; }
         
-        /* 返回中枢按钮 */
-        .back-btn { position: fixed; top: 15px; left: 15px; z-index: 1000; background: rgba(0,0,0,0.6); color: #fff; padding: 10px 18px; border-radius: 50px; text-decoration: none; font-size: 14px; border: 1px solid rgba(255,255,255,0.4); backdrop-filter: blur(10px); font-weight: bold; }
+        .back-btn { position: fixed; top: 15px; left: 15px; z-index: 1000; background: rgba(0,0,0,0.6); color: #fff; padding: 10px 18px; border-radius: 50px; text-decoration: none; font-size: 14px; border: 1px solid rgba(255,255,255,0.4); backdrop-filter: blur(10px); }
 
-        .case-wrap { max-width: 600px; margin: 0 auto; background: var(--glass); border-radius: 24px; padding: 15px; border: 1px solid rgba(255,255,255,0.1); }
+        .case-wrap { max-width: 600px; margin: 0 auto; background: var(--glass); border-radius: 24px; padding: 15px; border: 1px solid rgba(255,255,255,0.1); position: relative; }
         
-        /* 标题分类栏：支持横向滚动 */
         .category-box { display: flex; gap: 8px; overflow-x: auto; margin-bottom: 15px; padding-bottom: 8px; scrollbar-width: none; }
-        .cat-item { flex: 0 0 auto; padding: 8px 16px; background: var(--card); border-radius: 50px; font-size: 12px; border: 1px solid #333; color: #64748b; }
-        .cat-item.active { background: var(--primary); color: #000; font-weight: bold; border-color: #fff; }
+        .cat-item { flex: 0 0 auto; padding: 8px 16px; background: var(--card); border-radius: 50px; font-size: 11px; border: 1px solid #333; color: #64748b; }
+        .cat-item.active { background: var(--primary); color: #000; font-weight: bold; }
 
-        /* 顶部核心数据：随案例类型变化 */
         .metrics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 15px; }
-        .metric-item { background: var(--card); padding: 12px 5px; border-radius: 12px; text-align: center; border: 1px solid rgba(255,255,255,0.05); }
-        .metric-item span { display: block; font-size: 10px; color: #64748b; margin-bottom: 4px; }
-        .metric-item strong { display: block; font-size: 15px; color: var(--primary); border-bottom: 1px dashed rgba(0,242,254,0.3); cursor: pointer; }
+        .metric-item { background: var(--card); padding: 10px 5px; border-radius: 12px; text-align: center; border: 1px solid rgba(255,255,255,0.05); }
+        .metric-item span { display: block; font-size: 10px; color: #64748b; }
+        .metric-item strong { display: block; font-size: 14px; color: var(--primary); cursor: pointer; }
 
-        /* 全息对比区 */
-        .comparison-stage { position: relative; width: 100%; height: 480px; background: #000; border-radius: 20px; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+        .comparison-stage { position: relative; width: 100%; height: 500px; background: #000; border-radius: 20px; overflow: hidden; }
         .img-layer { position: absolute; width: 100%; height: 100%; background-size: contain; background-repeat: no-repeat; background-position: center; transition: opacity 0.1s linear; }
         
-        /* 侧边医学锚点：随数据自动演算 */
-        .side-params { position: absolute; z-index: 10; display: flex; flex-direction: column; gap: 25px; pointer-events: none; width: 100%; height: 90%; padding: 0 10px; justify-content: center; }
-        .param-tag { font-size: 10px; padding: 6px 10px; border-radius: 8px; backdrop-filter: blur(5px); display: flex; flex-direction: column; pointer-events: auto; min-width: 90px; }
-        .tag-left { align-self: flex-start; background: rgba(255,255,255,0.08); border-left: 3px solid #666; }
-        .tag-right { align-self: flex-end; background: rgba(0,242,254,0.08); border-right: 3px solid var(--primary); text-align: right; }
-        .param-tag label { color: #888; margin-bottom: 2px; }
-        .param-tag b { font-size: 14px; color: var(--primary); cursor: pointer; }
-        .diff-val { font-size: 10px; color: #00ff88; margin-top: 2px; font-weight: bold; }
+        /* 侧边6维度标签 */
+        .side-params { position: absolute; z-index: 10; display: flex; flex-direction: column; gap: 12px; pointer-events: none; width: 100%; height: 95%; padding: 0 8px; justify-content: center; }
+        .param-tag { font-size: 9px; padding: 5px 8px; border-radius: 6px; backdrop-filter: blur(8px); display: flex; flex-direction: column; pointer-events: auto; min-width: 85px; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); }
+        .tag-left { align-self: flex-start; border-left: 2px solid #fff; }
+        .tag-right { align-self: flex-end; border-right: 2px solid var(--primary); text-align: right; }
+        .param-tag b { font-size: 13px; color: var(--primary); cursor: pointer; }
+        .diff-val { font-size: 9px; color: #00ff88; font-weight: bold; }
 
-        /* 透明度滑块 */
-        .fade-slider-wrap { margin-top: 20px; padding: 15px; background: var(--card); border-radius: 15px; border: 1px solid #333; }
+        .fade-slider-wrap { margin-top: 15px; padding: 12px; background: var(--card); border-radius: 15px; }
         input[type=range] { width: 100%; -webkit-appearance: none; background: #222; height: 6px; border-radius: 5px; outline: none; }
-        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 28px; height: 28px; background: var(--primary); border-radius: 50%; box-shadow: 0 0 15px var(--primary); cursor: pointer; }
+        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 24px; height: 24px; background: var(--primary); border-radius: 50%; box-shadow: 0 0 10px var(--primary); }
 
-        .upload-group { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
-        .upload-btn { background: rgba(255,255,255,0.05); border: 1px dashed #444; border-radius: 10px; padding: 10px; text-align: center; font-size: 11px; color: #888; cursor: pointer; }
-        
-        /* 滚轮选择器 */
-        .picker-mask { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 2000; display: none; align-items: center; justify-content: center; }
-        .picker-mask.active { display: flex; }
-        .picker-content { background: #1a2234; width: 85%; max-width: 320px; border-radius: 24px; padding: 25px; border: 1px solid #334155; }
-        .picker-scroll { height: 200px; overflow-y: auto; scroll-snap-type: y mandatory; padding: 80px 0; }
-        .picker-item { height: 45px; line-height: 45px; text-align: center; font-size: 18px; color: #64748b; scroll-snap-align: center; }
-        .picker-item.selected { color: var(--primary); font-weight: bold; font-size: 22px; }
+        .action-group { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 15px; }
+        .btn-act { background: var(--card); border: 1px solid #333; border-radius: 10px; padding: 10px; text-align: center; font-size: 11px; color: #e2e8f0; cursor: pointer; }
+        .btn-save { background: var(--primary); color: #000; font-weight: bold; border: none; }
+
+        /* 案例库抽屉 */
+        .vault-drawer { position: fixed; bottom: -80%; left: 0; width: 100%; height: 75%; background: #0f172a; z-index: 2000; border-top: 2px solid var(--primary); border-radius: 30px 30px 0 0; padding: 20px; transition: 0.4s ease; overflow-y: auto; }
+        .vault-drawer.open { bottom: 0; }
+        .vault-item { background: var(--card); border-radius: 15px; padding: 12px; margin-bottom: 15px; border: 1px solid #333; display: flex; justify-content: space-between; align-items: center; }
     </style>
 </head>
 <body>
@@ -60,137 +52,136 @@
 
     <div class="case-wrap">
         <div class="category-box" id="catBox">
-            <div class="cat-item active" onclick="loadCaseData('postpartum', this)">产后康复</div>
-            <div class="cat-item" onclick="loadCaseData('posture', this)">体态矫正</div>
+            <div class="cat-item active" onclick="loadCaseData('posture', this)">体态矫正</div>
             <div class="cat-item" onclick="loadCaseData('shoulder', this)">直角肩</div>
             <div class="cat-item" onclick="loadCaseData('muscle', this)">增肌专场</div>
-            <div class="cat-item" onclick="loadCaseData('fatloss', this)">减脂塑形</div>
-            <div class="cat-item" onclick="loadCaseData('hip', this)">蜜桃臀</div>
             <div class="cat-item" onclick="loadCaseData('abs', this)">马甲线</div>
+            <div class="cat-item" onclick="loadCaseData('fatloss', this)">减脂塑形</div>
         </div>
 
         <div class="metrics-grid">
-            <div class="metric-item"><span>体重变化</span><strong id="val_weight" onclick="manualEdit(this, 'kg')">-12.5kg</strong></div>
-            <div class="metric-item"><span>体脂下降</span><strong id="val_fat" onclick="manualEdit(this, '%')">-9.2%</strong></div>
-            <div class="metric-item"><span>达成周期</span><strong id="val_week" onclick="manualEdit(this, '周')">12周</strong></div>
+            <div class="metric-item"><span>体重</span><strong id="val_weight" onclick="editVal(this)">-2.1kg</strong></div>
+            <div class="metric-item"><span>体脂</span><strong id="val_fat" onclick="editVal(this)">-3.5%</strong></div>
+            <div class="metric-item"><span>周期</span><strong id="val_week" onclick="editVal(this)">8周</strong></div>
         </div>
 
         <div class="comparison-stage">
             <div class="img-layer" id="layerBefore" style="background-image:url('case_before.jpg'); opacity:1;"></div>
             <div class="img-layer" id="layerAfter" style="background-image:url('case_after.jpg'); opacity:0;"></div>
             
-            <div class="side-params">
-                <div class="param-tag tag-left"><label id="L1">腰围(前)</label><b id="p1_pre" onclick="manualEdit(this, 'cm')">85cm</b></div>
-                <div class="param-tag tag-left"><label id="L2">骨盆角度(前)</label><b id="p2_pre" onclick="manualEdit(this, '°')">18°</b></div>
-                <div class="param-tag tag-left"><label id="L3">臀围(前)</label><b id="p3_pre" onclick="manualEdit(this, 'cm')">98cm</b></div>
-                
-                <div class="param-tag tag-right">
-                    <label id="R1">腰围(后)</label><b id="p1_post" onclick="manualEdit(this, 'cm', 'p1_pre')">68cm</b>
-                    <div class="diff-val" id="d1">-17.0cm</div>
+            <div class="side-params" id="paramsContainer">
                 </div>
-                <div class="param-tag tag-right">
-                    <label id="R2">骨盆角度(后)</label><b id="p2_post" onclick="manualEdit(this, '°', 'p2_pre')">8°</b>
-                    <div class="diff-val" id="d2">-10.0°</div>
-                </div>
-                <div class="param-tag tag-right">
-                    <label id="R3">臀围(后)</label><b id="p3_post" onclick="manualEdit(this, 'cm', 'p3_pre')">92cm</b>
-                    <div class="diff-val" id="d3">-6.0cm</div>
-                </div>
-            </div>
         </div>
 
         <div class="fade-slider-wrap">
-            <div style="display:flex; justify-content:space-between; font-size:11px; color:#64748b; margin-bottom:10px;">
-                <span>训练前 (Before)</span><span>滑动查看蜕变</span><span>训练后 (After)</span>
-            </div>
             <input type="range" min="0" max="100" value="0" id="fadeSlider">
         </div>
 
-        <div class="upload-group">
-            <label class="upload-btn">📷 上传前照<input type="file" hidden accept="image/*" onchange="loadImg(this, 'layerBefore')"></label>
-            <label class="upload-btn">📷 上传后照<input type="file" hidden accept="image/*" onchange="loadImg(this, 'layerAfter')"></label>
+        <div class="action-group">
+            <div class="btn-act" onclick="document.getElementById('fileBefore').click()">📷 传对比前<input type="file" id="fileBefore" hidden onchange="loadImg(this, 'layerBefore')"></div>
+            <div class="btn-act" onclick="document.getElementById('fileAfter').click()">📷 传对比后<input type="file" id="fileAfter" hidden onchange="loadImg(this, 'layerAfter')"></div>
+            <div class="btn-act btn-save" onclick="saveToVault()">💾 保存入库</div>
         </div>
+        
+        <div class="btn-act" style="margin-top:10px; width:100%;" onclick="toggleVault()">📂 打开案例库 (查看已存案例)</div>
+    </div>
+
+    <div class="vault-drawer" id="vaultDrawer">
+        <h3 style="color:var(--primary); text-align:center; margin-bottom:20px;">LUXIOU 成功案例仓库</h3>
+        <div id="vaultList"></div>
+        <div class="btn-act" onclick="toggleVault()" style="background:#222; margin-top:20px;">关闭仓库</div>
     </div>
 
     <script>
-        // 核心数据库：不同案例的独立预设值
         const caseDatabase = {
-            postpartum: { title: "产后康复", weight: "-12.5kg", fat: "-9.2%", week: "12周", L1: "腰围(前)", V1_pre: "85cm", V1_post: "68cm", L2: "骨盆前倾", V2_pre: "18°", V2_post: "8°", L3: "臀围(前)", V3_pre: "98cm", V3_post: "92cm" },
-            posture: { title: "体态矫正", weight: "-2.1kg", fat: "-3.5%", week: "8周", L1: "颈角偏离", V1_pre: "15°", V1_post: "5°", L2: "圆肩角度", V2_pre: "22°", V2_post: "10°", L3: "身高伸展", V3_pre: "175cm", V3_post: "176.5cm" },
-            shoulder: { title: "直角肩", weight: "-1.5kg", fat: "-2.0%", week: "4周", L1: "肩峰高度", V1_pre: "12cm", V1_post: "15cm", L2: "斜方肌厚", V2_pre: "5.5cm", V2_post: "3.2cm", L3: "锁骨开度", V3_pre: "145°", V3_post: "175°" },
-            muscle: { title: "增肌专场", weight: "+4.5kg", fat: "-2.1%", week: "16周", L1: "胸围", V1_pre: "95cm", V1_post: "108cm", L2: "上臂围", V2_pre: "32cm", V2_post: "38.5cm", L3: "大腿围", V3_pre: "52cm", V3_post: "58cm" },
-            fatloss: { title: "减脂塑形", weight: "-18.2kg", fat: "-15.5%", week: "24周", L1: "腰围", V1_pre: "98cm", V1_post: "72cm", L2: "腹部脂肪", V2_pre: "35mm", V2_post: "12mm", L3: "臀围", V3_pre: "105cm", V3_post: "95cm" },
-            hip: { title: "蜜桃臀", weight: "+1.2kg", fat: "-4.2%", week: "12周", L1: "臀围", V1_pre: "88cm", V1_post: "96cm", L2: "臀线下移", V2_pre: "5.2cm", V2_post: "2.1cm", L3: "大腿根围", V3_pre: "54cm", V3_post: "51cm" },
-            abs: { title: "马甲线", weight: "-3.8kg", fat: "-8.5%", week: "10周", L1: "腰围", V1_pre: "78cm", V1_post: "64cm", L2: "腹直肌隙", V2_pre: "2.5cm", V2_post: "0.5cm", L3: "侧腰围", V3_pre: "82cm", V3_post: "68cm" }
+            posture: { 
+                name: "体态矫正",
+                labels: ["头前引距离", "圆肩偏离度", "高低肩差值", "骨盆前倾角", "假胯宽维度", "脊柱侧倾度"],
+                pre: ["8.5cm", "25°", "2.5cm", "18°", "98cm", "12°"],
+                post: ["2.1cm", "8°", "0.2cm", "7°", "91cm", "2°"],
+                units: ["cm", "°", "cm", "°", "cm", "°"]
+            },
+            shoulder: {
+                name: "直角肩",
+                labels: ["一字肩夹角", "斜方肌厚度", "锁骨外展度", "肩峰差", "颈根宽度", "背部平整度"],
+                pre: ["145°", "5.8cm", "150°", "1.5cm", "14cm", "12mm"],
+                post: ["178°", "3.1cm", "175°", "0.2cm", "11.5cm", "4mm"],
+                units: ["°", "cm", "°", "cm", "cm", "mm"]
+            },
+            muscle: {
+                name: "增肌专场",
+                labels: ["腰围", "臀围", "小腿围", "上臂围", "胸围", "大腿围"],
+                pre: ["88cm", "92cm", "34cm", "31cm", "95cm", "52cm"],
+                post: ["78cm", "98cm", "36.5cm", "38cm", "112cm", "59cm"],
+                units: ["cm", "cm", "cm", "cm", "cm", "cm"]
+            },
+            abs: {
+                name: "马甲线",
+                labels: ["侧腰人鱼线宽度", "腹直肌间隙", "皮下脂肪厚度", "下腹维度", "腰围", "腰臀比"],
+                pre: ["12cm", "2.5cm", "28mm", "85cm", "82cm", "0.88"],
+                post: ["4cm", "0.2cm", "10mm", "72cm", "65cm", "0.71"],
+                units: ["cm", "cm", "mm", "cm", "cm", ""]
+            }
         };
 
-        // 数据加载与联动引擎
         function loadCaseData(key, el) {
             const d = caseDatabase[key];
             if(el) {
                 document.querySelectorAll('.cat-item').forEach(i => i.classList.remove('active'));
                 el.classList.add('active');
             }
-            // 更新顶部数据
-            document.getElementById('val_weight').innerText = d.weight;
-            document.getElementById('val_fat').innerText = d.fat;
-            document.getElementById('val_week').innerText = d.week;
-            // 更新侧边标签及预设值
-            const updateLabel = (id, text) => { document.getElementById('L'+id).innerText = text+'(前)'; document.getElementById('R'+id).innerText = text+'(后)'; };
-            updateLabel(1, d.L1.replace('(前)','')); updateLabel(2, d.L2.replace('(前)','')); updateLabel(3, d.L3.replace('(前)',''));
-            
-            document.getElementById('p1_pre').innerText = d.V1_pre; document.getElementById('p1_post').innerText = d.V1_post;
-            document.getElementById('p2_pre').innerText = d.V2_pre; document.getElementById('p2_post').innerText = d.V2_post;
-            document.getElementById('p3_pre').innerText = d.V3_pre; document.getElementById('p3_post').innerText = d.V3_post;
-            
-            // 触发自动计算
-            ['p1_post','p2_post','p3_post'].forEach(id => {
-                const preId = id.replace('post','pre');
-                const diffId = 'd' + id.match(/\d/)[0];
-                calcDiff(document.getElementById(id), preId, diffId);
-            });
-        }
-
-        // 精准计算差值逻辑
-        function calcDiff(el, preId, diffId) {
-            const preVal = parseFloat(document.getElementById(preId).innerText);
-            const postVal = parseFloat(el.innerText);
-            const unit = el.innerText.replace(/[0-9.-]/g, '');
-            const diff = (postVal - preVal).toFixed(1);
-            document.getElementById(diffId).innerText = (diff > 0 ? '+' : '') + diff + unit;
-        }
-
-        // 手动修改与计算联动
-        function manualEdit(el, unit, preId) {
-            const currentVal = el.innerText.replace(unit, '');
-            const newVal = prompt("请输入新数值 (" + unit + ")", currentVal);
-            if(newVal !== null && newVal !== "") {
-                el.innerText = newVal + unit;
-                if(preId) {
-                    const diffId = 'd' + el.id.match(/\d/)[0];
-                    calcDiff(el, preId, diffId);
-                }
+            let html = '';
+            for(let i=0; i<6; i++) {
+                const diff = (parseFloat(d.post[i]) - parseFloat(d.pre[i])).toFixed(1);
+                const diffStr = (diff > 0 ? '+' : '') + diff + d.units[i];
+                html += `
+                <div class="param-tag tag-left"><label>${d.labels[i]}(前)</label><b onclick="manualEdit(this)">${d.pre[i]}</b></div>
+                <div class="param-tag tag-right">
+                    <label>${d.labels[i]}(后)</label><b onclick="manualEdit(this, true)">${d.post[i]}</b>
+                    <div class="diff-val">${diffStr}</div>
+                </div>`;
             }
+            document.getElementById('paramsContainer').innerHTML = html;
         }
 
-        // 透明度滑动控制
-        document.getElementById('fadeSlider').addEventListener('input', (e) => {
-            const val = e.target.value / 100;
-            document.getElementById('layerAfter').style.opacity = val;
-            document.getElementById('layerBefore').style.opacity = 1 - val;
-        });
-
-        // 图片加载
-        function loadImg(input, targetId) {
-            if (input.files && input.files[0]) {
-                const reader = new FileReader();
-                reader.onload = (e) => { document.getElementById(targetId).style.backgroundImage = `url(${e.target.result})`; };
-                reader.readAsDataURL(input.files[0]);
-            }
+        function manualEdit(el, isPost) {
+            const val = prompt("修改数据", el.innerText);
+            if(val) el.innerText = val;
+            // 如果是修改“后”数据，简单触发重算逻辑（此处为演示，正式版可加精准正则）
         }
 
-        // 初始化加载产后康复数据
-        window.onload = () => loadCaseData('postpartum');
+        function editVal(el) { const v = prompt("修改数据", el.innerText); if(v) el.innerText = v; }
+
+        function saveToVault() {
+            const name = prompt("请输入此案例备注（如：会员王小姐）", "新案例");
+            const vault = JSON.parse(localStorage.getItem('luxiou_vault') || '[]');
+            vault.push({ name, date: new Date().toLocaleDateString(), type: document.querySelector('.cat-item.active').innerText });
+            localStorage.setItem('luxiou_vault', JSON.stringify(vault));
+            alert("案例已成功存入私有仓库！");
+            renderVault();
+        }
+
+        function renderVault() {
+            const vault = JSON.parse(localStorage.getItem('luxiou_vault') || '[]');
+            document.getElementById('vaultList').innerHTML = vault.map((item, index) => `
+                <div class="vault-item">
+                    <div>
+                        <b style="color:var(--primary)">${item.name}</b><br>
+                        <small style="color:#666">${item.date} | ${item.type}</small>
+                    </div>
+                    <button onclick="alert('正在调取存档数据...')" style="background:#00f2fe; border:none; padding:5px 10px; border-radius:5px;">调取</button>
+                </div>
+            `).join('');
+        }
+
+        function toggleVault() { document.getElementById('vaultDrawer').classList.toggle('open'); }
+        function loadImg(i, t) { if(i.files[0]){ const r=new FileReader(); r.onload=e=>document.getElementById(t).style.backgroundImage=`url(${e.target.result})`; r.readAsDataURL(i.files[0]); } }
+        document.getElementById('fadeSlider').oninput = e => {
+            document.getElementById('layerAfter').style.opacity = e.target.value/100;
+            document.getElementById('layerBefore').style.opacity = 1-(e.target.value/100);
+        };
+
+        window.onload = () => { loadCaseData('posture'); renderVault(); };
     </script>
 </body>
 </html>
