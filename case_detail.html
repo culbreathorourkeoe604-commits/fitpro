@@ -3,58 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>LUXIOU | 高级全息诊断舱</title>
+    <title>LUXIOU | 数字化全息诊断舱</title>
     <style>
-        :root { --primary: #00f2fe; --accent: #00ff88; --bg: #0b0f19; --card-border: rgba(255,255,255,0.1); }
+        :root { --primary: #00f2fe; --accent: #00ff88; --bg: #0b0f19; --panel: rgba(20, 30, 48, 0.9); --glow: rgba(0, 242, 254, 0.3); }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { background: var(--bg); color: #e2e8f0; font-family: 'PingFang SC', sans-serif; margin: 0; padding: 10px; padding-top: 65px; overflow-x: hidden; }
+        body { background: var(--bg); color: #e2e8f0; font-family: 'Inter', system-ui; margin: 0; padding: 10px; padding-top: 65px; overflow-x: hidden; }
         
-        .back-btn { position: fixed; top: 15px; left: 15px; z-index: 9999; background: rgba(0,0,0,0.6); color: #fff; padding: 10px 18px; border-radius: 50px; text-decoration: none; font-size: 13px; border: 1px solid var(--card-border); backdrop-filter: blur(15px); }
+        .back-btn { position: fixed; top: 15px; left: 15px; z-index: 9999; background: rgba(0,0,0,0.6); color: #fff; padding: 10px 18px; border-radius: 50px; text-decoration: none; font-size: 13px; border: 1px solid rgba(255,255,255,0.2); backdrop-filter: blur(15px); font-weight: bold; }
 
-        .case-wrap { max-width: 800px; margin: 0 auto; background: radial-gradient(circle at center, #1a2234 0%, #0b0f19 100%); border-radius: 30px; padding: 20px; border: 1px solid var(--card-border); }
+        /* 全息背景格栅纹理 */
+        .case-wrap { max-width: 900px; margin: 0 auto; background: radial-gradient(circle at 50% 50%, #1a2234 0%, #0b0f19 100%); background-size: 20px 20px; border-radius: 30px; padding: 20px; border: 1px solid rgba(255,255,255,0.05); box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
 
-        /* 顶部导航：小而美 */
-        .category-box { display: flex; gap: 8px; overflow-x: auto; margin-bottom: 20px; scrollbar-width: none; }
-        .cat-item { flex: 0 0 auto; padding: 6px 14px; background: #161e2e; border-radius: 12px; font-size: 11px; color: #64748b; border: 1px solid #333; }
-        .cat-item.active { background: var(--primary); color: #000; font-weight: bold; box-shadow: 0 0 15px var(--primary); }
+        /* 顶部紧凑导航 */
+        .category-box { display: flex; gap: 6px; overflow-x: auto; margin-bottom: 15px; scrollbar-width: none; }
+        .cat-item { flex: 0 0 auto; padding: 6px 15px; background: #161e2e; border-radius: 10px; font-size: 11px; color: #556075; border: 1px solid #222; transition: 0.3s; }
+        .cat-item.active { background: var(--primary); color: #000; font-weight: bold; border-color: #fff; box-shadow: 0 0 15px var(--glow); }
 
-        /* 顶部核心数据：诊断感 */
-        .metrics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 25px; }
-        .metric-item { background: rgba(22, 30, 46, 0.6); padding: 12px; border-radius: 15px; text-align: center; border: 1px solid var(--card-border); }
-        .metric-item span { font-size: 10px; color: #64748b; text-transform: uppercase; }
+        /* 指标区域：增强科技感 */
+        .metrics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
+        .metric-item { background: var(--panel); padding: 12px; border-radius: 15px; text-align: center; border: 1px solid rgba(255,255,255,0.1); box-shadow: inset 0 0 10px rgba(0,0,0,0.5); }
+        .metric-item span { font-size: 10px; color: #64748b; font-weight: bold; letter-spacing: 1px; }
         .metric-item strong { display: block; font-size: 16px; color: var(--primary); font-weight: 900; margin-top: 4px; }
 
-        /* 全息诊断中心区域：三栏布局 */
-        .holo-stage { display: flex; gap: 10px; position: relative; height: 500px; justify-content: space-between; align-items: center; }
+        /* 【核心布局】左右分离三栏式（图二风格） */
+        .holo-stage { display: flex; gap: 10px; position: relative; height: 520px; align-items: stretch; }
         
-        /* 左右参数列：卡片式 */
-        .params-column { display: flex; flex-direction: column; gap: 10px; z-index: 20; }
-        .param-card { width: 105px; padding: 8px 10px; background: #161e2e; border: 1px solid var(--card-border); border-radius: 8px; position: relative; }
+        .params-column { flex: 0 0 110px; display: flex; flex-direction: column; gap: 0; }
+        .param-card { flex: 1; padding: 6px 10px; background: rgba(22, 30, 46, 0.8); border: 0.5px solid rgba(255,255,255,0.05); position: relative; display: flex; flex-direction: column; justify-content: center; }
         .card-l { border-left: 4px solid #fff; }
         .card-r { border-right: 4px solid var(--primary); text-align: right; }
-        .param-card label { display: block; font-size: 9px; color: #888; margin-bottom: 3px; }
-        .param-card b { display: block; font-size: 16px; color: var(--primary); font-weight: 900; }
-        .diff-tag { font-size: 11px; color: var(--accent); font-weight: bold; margin-top: 2px; }
+        .param-card label { display: block; font-size: 9px; color: #888; margin-bottom: 2px; }
+        .param-card b { display: block; font-size: 18px; color: var(--primary); font-weight: 900; letter-spacing: 0.5px; }
+        .diff-tag { font-size: 11px; color: var(--accent); font-weight: 900; }
 
-        /* 中间扫描区：圆角深色 */
-        .img-container { flex: 1; height: 100%; background: #000; border-radius: 24px; position: relative; overflow: hidden; border: 2px solid #222; }
-        .img-layer { position: absolute; width: 100%; height: 100%; background-size: cover; background-position: center; transition: 0.3s; }
+        /* 中间扫描区：带内阴影 */
+        .img-container { flex: 1; background: #000; border-radius: 20px; position: relative; overflow: hidden; border: 1px solid #333; box-shadow: inset 0 0 30px rgba(0,0,0,1); }
+        .img-layer { position: absolute; width: 100%; height: 100%; background-size: contain; background-repeat: no-repeat; background-position: center; transition: opacity 0.4s ease; }
         #holoCanvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 15; pointer-events: none; }
 
-        /* 滑块：UI 发光处理 */
-        .slider-control { margin-top: 25px; padding: 20px; background: rgba(22,30,46,0.5); border-radius: 20px; border: 1px solid var(--card-border); }
-        .slider-label { display: flex; justify-content: space-between; font-size: 11px; color: var(--primary); font-weight: 900; margin-bottom: 12px; }
-        input[type=range] { width: 100%; -webkit-appearance: none; background: #222; height: 4px; border-radius: 2px; outline: none; }
-        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 30px; height: 30px; background: #fff; border: 4px solid var(--primary); border-radius: 50%; box-shadow: 0 0 15px var(--primary); }
+        /* 告示文字与滑块 */
+        .slider-control { margin-top: 20px; padding: 15px; background: rgba(22,30,46,0.6); border-radius: 20px; border: 1px solid rgba(255,255,255,0.05); }
+        .slider-label { display: flex; justify-content: space-between; font-size: 11px; color: var(--primary); font-weight: 900; margin-bottom: 12px; letter-spacing: 1px; }
+        input[type=range] { width: 100%; -webkit-appearance: none; background: #1a2234; height: 6px; border-radius: 3px; outline: none; border: 1px solid #333; }
+        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 28px; height: 28px; background: #fff; border: 4px solid var(--primary); border-radius: 50%; box-shadow: 0 0 15px var(--glow); cursor: pointer; }
 
-        /* 动作按钮：科技感 */
-        .btn-group { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-top: 20px; }
-        .lux-btn { background: #161e2e; border: 1px solid #333; padding: 14px; border-radius: 12px; color: #fff; font-size: 12px; font-weight: bold; text-align: center; cursor: pointer; }
-        .btn-main { background: var(--primary); color: #000; border: none; box-shadow: 0 0 15px rgba(0,242,254,0.3); }
+        /* 操作按钮组 */
+        .btn-group { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 20px; }
+        .lux-btn { background: #1a2234; border: 1px solid #334155; padding: 12px; border-radius: 12px; color: #fff; font-size: 12px; font-weight: bold; text-align: center; }
+        .btn-main { background: var(--primary); color: #000; border: none; box-shadow: 0 5px 15px rgba(0,242,254,0.4); }
 
-        /* 历史库展示 */
-        #vaultList { margin-top: 20px; height: 180px; overflow-y: auto; }
-        .vault-item { background: #1a2234; padding: 15px; border-radius: 12px; margin-bottom: 10px; display: flex; justify-content: space-between; border: 1px solid var(--card-border); }
+        /* 仓库列表 */
+        #vaultList { margin-top: 20px; height: 160px; overflow-y: auto; }
+        .vault-item { background: #161e2e; padding: 12px; border-radius: 12px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; border: 1px solid rgba(255,255,255,0.05); }
     </style>
 </head>
 <body>
@@ -64,14 +64,14 @@
             <div class="cat-item active" onclick="loadCaseData('posture', this)">体态矫正</div>
             <div class="cat-item" onclick="loadCaseData('shoulder', this)">直角肩</div>
             <div class="cat-item" onclick="loadCaseData('postpartum', this)">产后康复</div>
-            <div class="cat-item" onclick="loadCaseData('muscle', this)">增肌专场</div>
             <div class="cat-item" onclick="loadCaseData('abs', this)">马甲线</div>
+            <div class="cat-item" onclick="loadCaseData('muscle', this)">增肌专场</div>
         </div>
 
         <div class="metrics-grid">
-            <div class="metric-item"><span>Weight Change</span><strong id="v_w">-2.1kg</strong></div>
-            <div class="metric-item"><span>Fat Drop</span><strong id="v_f">-3.5%</strong></div>
-            <div class="metric-item"><span>Duration</span><strong id="v_k">8周</strong></div>
+            <div class="metric-item"><span>W. CHANGE</span><strong id="v_w">-2.1kg</strong></div>
+            <div class="metric-item"><span>F. DROP</span><strong id="v_f">-3.5%</strong></div>
+            <div class="metric-item"><span>PERIOD</span><strong id="v_k">8周</strong></div>
         </div>
 
         <div class="holo-stage">
@@ -85,7 +85,7 @@
         </div>
 
         <div class="slider-control">
-            <div class="slider-label"><span>BEFORE</span><span>HOLOGRAPHIC SCANNER</span><span>AFTER</span></div>
+            <div class="slider-label"><span>BEFORE (训练前)</span><span>SCANNING SYSTEM</span><span>AFTER (训练后)</span></div>
             <input type="range" min="0" max="100" value="0" id="fadeSlider">
         </div>
 
@@ -99,46 +99,47 @@
     </div>
 
     <script>
-        // 绝对精准：锁定点映射
+        // 绝对精准解剖映射
         const map = {
-            posture: [0.15, 0.28, 0.40, 0.55, 0.68, 0.82],
-            shoulder: [0.22, 0.25, 0.28, 0.32, 0.18, 0.40]
+            posture: [0.12, 0.25, 0.38, 0.52, 0.68, 0.85],
+            shoulder: [0.22, 0.20, 0.28, 0.35, 0.18, 0.40],
+            postpartum: [0.55, 0.62, 0.48, 0.70, 0.42, 0.78]
         };
 
         const canvas = document.getElementById('holoCanvas');
         const ctx = canvas.getContext('2d');
 
-        function drawHolo(points) {
+        // 绘制工业级折线导引
+        function drawHoloLines(points) {
             canvas.width = canvas.offsetWidth; canvas.height = canvas.offsetHeight;
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             
             points.forEach((yPct, i) => {
-                const startY = (i * 72) + 38; // 参数卡片垂直间距对齐
-                const endY = canvas.height * yPct;
+                const startY = (i * 86) + 43; // 根据卡片高度精确计算
+                const targetY = canvas.height * yPct;
                 
-                // 线条梯度发光效果
-                const grad = ctx.createLinearGradient(0, startY, canvas.width, endY);
-                grad.addColorStop(0, "rgba(255,255,255,0.4)");
-                grad.addColorStop(1, "rgba(0, 242, 254, 0.6)");
-                ctx.strokeStyle = grad;
-                ctx.lineWidth = 1.5; ctx.setLineDash([5, 5]);
+                // 线条样式：极光蓝
+                ctx.strokeStyle = "rgba(0, 242, 254, 0.6)"; ctx.lineWidth = 1.5; ctx.setLineDash([6, 4]);
 
-                // 绘制三段式视觉
-                ctx.beginPath(); ctx.moveTo(0, startY); ctx.lineTo(canvas.width*0.5, endY); ctx.stroke();
-                ctx.beginPath(); ctx.moveTo(canvas.width, startY); ctx.lineTo(canvas.width*0.5, endY); ctx.stroke();
+                // 绘制左侧导引线
+                ctx.beginPath(); ctx.moveTo(0, startY); ctx.lineTo(canvas.width * 0.4, targetY); ctx.stroke();
+                // 绘制右侧导引线
+                ctx.beginPath(); ctx.moveTo(canvas.width, startY); ctx.lineTo(canvas.width * 0.6, targetY); ctx.stroke();
                 
-                // 核心解剖点
+                // 绘制中间扫描锚点
                 ctx.setLineDash([]); ctx.fillStyle = "#00ff88"; ctx.beginPath();
-                ctx.arc(canvas.width*0.5, endY, 4, 0, Math.PI*2); ctx.fill();
+                ctx.arc(canvas.width * 0.5, targetY, 4, 0, Math.PI*2); ctx.fill();
+                ctx.strokeStyle = "#fff"; ctx.lineWidth = 1; ctx.stroke();
             });
         }
 
-        function loadCaseData(key, el) {
-            const d = {
-                posture: { labels: ["颈椎引", "圆肩角", "高低肩", "盆倾角", "脊柱侧", "假胯宽"], pre: ["8.5cm","25°","2.5cm","18°","12°","98cm"], post: ["2.1cm","8°","0.2cm","7°","2°","91cm"], units: ["cm","°","cm","°","°","cm"] },
-                shoulder: { labels: ["一字肩", "斜方肌", "锁骨展", "肩峰差", "颈根宽", "平整度"], pre: ["145°","5.8cm","150°","1.5cm","14cm","12mm"], post: ["178°","3.1cm","175°","0.2cm","11.5cm","4mm"], units: ["°","cm","°","cm","cm","mm"] }
-            }[key] || { labels: Array(6).fill("N/A"), pre: Array(6).fill("-"), post: Array(6).fill("-"), units: Array(6).fill("") };
+        const caseData = {
+            posture: { labels: ["颈椎前引", "圆肩偏离", "高低肩差", "骨盆前倾", "脊柱侧倾", "假胯宽维"], pre: ["8.5cm","25°","2.5cm","18°","12°","98cm"], post: ["2.1cm","8°","0.2cm","7°","2°","91cm"], units: ["cm","°","cm","°","°","cm"] },
+            shoulder: { labels: ["一字肩角", "斜方肌厚", "锁骨外展", "肩峰差值", "颈根宽度", "背部平整"], pre: ["145°","5.8cm","150°","1.5cm","14cm","12mm"], post: ["178°","3.1cm","175°","0.2cm","11.5cm","4mm"], units: ["°","cm","°","cm","cm","mm"] }
+        };
 
+        function loadCaseData(key, el) {
+            const d = caseData[key] || caseData.posture;
             if(el) { document.querySelectorAll('.cat-item').forEach(i => i.classList.remove('active')); el.classList.add('active'); }
             let hL = '', hR = '';
             for(let i=0; i<6; i++) {
@@ -147,39 +148,39 @@
                 hR += `<div class="param-card card-r"><label>${d.labels[i]}(后)</label><b>${d.post[i]}</b><div class="diff-tag">${diff > 0 ? '+' : ''}${diff}${d.units[i]}</div></div>`;
             }
             document.getElementById('colL').innerHTML = hL; document.getElementById('colR').innerHTML = hR;
-            setTimeout(() => drawHolo(map[key] || [0.5,0.5,0.5,0.5,0.5,0.5]), 150);
+            setTimeout(() => drawHoloLines(map[key] || [0.5,0.5,0.5,0.5,0.5,0.5]), 150);
         }
 
-        // 保存/调取 逻辑（图片镜像捕获）
+        // 保存/载入 彻底修复逻辑
         function saveToVault() {
-            const name = prompt("存档命名"); if(!name) return;
-            const vault = JSON.parse(localStorage.getItem('LUXIOU_PRO_V1') || '[]');
+            const name = prompt("请输入存档名"); if(!name) return;
+            const vault = JSON.parse(localStorage.getItem('LUXIOU_PRO_VAULT') || '[]');
             vault.unshift({ 
                 id: Date.now(), name, type: document.querySelector('.cat-item.active').innerText, 
                 imgB: document.getElementById('layB').style.backgroundImage, imgA: document.getElementById('layA').style.backgroundImage,
                 w: document.getElementById('v_w').innerText, f: document.getElementById('v_f').innerText, k: document.getElementById('v_k').innerText,
                 pL: document.getElementById('colL').innerHTML, pR: document.getElementById('colR').innerHTML,
-                focus: map[Object.keys(map).find(k => d[k]?.labels[0] === document.querySelector('.param-card label').innerText.replace('(前)',''))] || [0.5,0.5,0.5,0.5,0.5,0.5]
+                pts: map[Object.keys(map).find(k => caseData[k]?.labels[0] === document.querySelector('.param-card label').innerText.replace('(前)',''))] || [0.5,0.5,0.5,0.5,0.5,0.5]
             });
-            localStorage.setItem('LUXIOU_PRO_V1', JSON.stringify(vault)); renderVault(); alert("诊断存档已就绪");
+            localStorage.setItem('LUXIOU_PRO_VAULT', JSON.stringify(vault)); renderVault(); alert("存档成功！");
         }
 
         function loadItem(id) {
-            const v = JSON.parse(localStorage.getItem('LUXIOU_PRO_V1') || '[]');
+            const v = JSON.parse(localStorage.getItem('LUXIOU_PRO_VAULT') || '[]');
             const i = v.find(x => x.id === id);
             if(i) {
                 document.getElementById('layB').style.backgroundImage = i.imgB; document.getElementById('layA').style.backgroundImage = i.imgA;
                 document.getElementById('v_w').innerText = i.w; document.getElementById('v_f').innerText = i.f; document.getElementById('v_k').innerText = i.k;
                 document.getElementById('colL').innerHTML = i.pL; document.getElementById('colR').innerHTML = i.pR;
-                drawHolo(i.focus || [0.5,0.5,0.5,0.5,0.5,0.5]); alert("历史案例完美还原");
+                drawHoloLines(i.pts); alert("全息案例已完美还原！");
             }
         }
 
         function renderVault() {
-            const v = JSON.parse(localStorage.getItem('LUXIOU_PRO_V1') || '[]');
+            const v = JSON.parse(localStorage.getItem('LUXIOU_PRO_VAULT') || '[]');
             const list = document.getElementById('vaultList');
-            if(v.length === 0) { list.innerHTML = '<p style="text-align:center; color:#555;">暂无历史案例</p>'; return; }
-            list.innerHTML = v.map(i => `<div class="vault-item"><div><b>${i.name}</b> <small>${i.type}</small></div><button onclick="loadItem(${i.id})" style="background:var(--primary); border:none; padding:6px 12px; border-radius:6px; font-weight:bold;">载入诊断</button></div>`).join('');
+            if(v.length === 0) { list.innerHTML = '<p style="text-align:center; color:#555;">暂无历史存档</p>'; return; }
+            list.innerHTML = v.map(i => `<div class="vault-item"><div><b>${i.name}</b> <small>${i.type}</small></div><button onclick="loadItem(${i.id})" style="background:var(--primary); border:none; padding:8px 15px; border-radius:8px; font-weight:bold; color:#000;">载入全息</button></div>`).join('');
         }
 
         function loadImg(i, t) { if(i.files[0]){ const r=new FileReader(); r.onload=e=>document.getElementById(t).style.backgroundImage=`url('${e.target.result}')`; r.readAsDataURL(i.files[0]); } }
