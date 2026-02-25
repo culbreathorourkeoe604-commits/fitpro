@@ -5,45 +5,47 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>LUXIOU | 全息雷达诊断系统</title>
     <style>
-        :root { --primary: #00f2fe; --highlight: #00ff88; --bg: #0b0f19; --card: rgba(22, 30, 46, 0.98); }
+        :root { --primary: #00f2fe; --accent: #00ff88; --bg: #0b0f19; --card: rgba(22, 30, 46, 0.95); }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { background: var(--bg); color: #e2e8f0; font-family: -apple-system, sans-serif; margin: 0; padding: 10px; padding-top: 75px; overflow-x: hidden; }
+        body { background: var(--bg); color: #e2e8f0; font-family: -apple-system, sans-serif; margin: 0; padding: 12px; padding-top: 70px; overflow-x: hidden; }
         
+        /* 导航及基础 UI */
         .back-btn { position: fixed; top: 15px; left: 15px; z-index: 5000; background: rgba(0,0,0,0.6); color: #fff; padding: 10px 18px; border-radius: 50px; text-decoration: none; font-size: 13px; border: 1px solid rgba(255,255,255,0.4); backdrop-filter: blur(10px); font-weight: bold; }
-
-        .case-wrap { max-width: 600px; margin: 0 auto; background: rgba(30, 41, 59, 0.5); border-radius: 24px; padding: 12px; border: 1px solid rgba(255,255,255,0.05); }
+        .case-wrap { max-width: 600px; margin: 0 auto; background: rgba(30, 41, 59, 0.3); border-radius: 24px; padding: 15px; border: 1px solid rgba(255,255,255,0.05); }
         
-        /* 顶部导航 */
-        .category-box { display: flex; gap: 8px; overflow-x: auto; margin-bottom: 15px; scrollbar-width: none; }
-        .cat-item { flex: 0 0 auto; padding: 8px 16px; background: var(--card); border-radius: 50px; font-size: 11px; color: #64748b; border: 1px solid #333; }
+        .category-box { display: flex; gap: 8px; overflow-x: auto; margin-bottom: 15px; padding-bottom: 8px; scrollbar-width: none; }
+        .category-box::-webkit-scrollbar { display: none; }
+        .cat-item { flex: 0 0 auto; padding: 7px 15px; background: var(--card); border-radius: 50px; font-size: 11px; border: 1px solid #333; color: #64748b; }
         .cat-item.active { background: var(--primary); color: #000; font-weight: bold; }
 
-        /* 核心指标 */
         .metrics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 15px; }
         .metric-item { background: var(--card); padding: 12px 5px; border-radius: 12px; text-align: center; border: 1px solid rgba(255,255,255,0.05); }
-        .metric-item span { display: block; font-size: 10px; color: #64748b; }
-        .metric-item strong { display: block; font-size: 16px; color: var(--primary); font-weight: 800; }
+        .metric-item span { display: block; font-size: 9px; color: #64748b; }
+        .metric-item strong { display: block; font-size: 15px; color: var(--primary); font-weight: 800; cursor: pointer; }
 
-        /* 全息对比区 */
-        .comparison-stage { position: relative; width: 100%; height: 520px; background: #000; border-radius: 20px; overflow: hidden; display: flex; align-items: center; justify-content: center; }
-        .img-layer { position: absolute; width: 100%; height: 100%; background-size: contain; background-repeat: no-repeat; background-position: center; transition: 0.3s ease; }
+        /* 全息对比核心区 */
+        .comparison-stage { position: relative; width: 100%; height: 520px; background: #000; border-radius: 20px; overflow: hidden; display: flex; align-items: center; justify-content: center; border: 1px solid #222; }
+        .img-layer { position: absolute; width: 100%; height: 100%; background-size: contain; background-repeat: no-repeat; background-position: center; transition: opacity 0.3s; }
+        
+        /* 激光连线层 */
         #radarCanvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 15; pointer-events: none; }
 
+        /* 参数卡片：极致垂直无缝 */
         .side-params { position: absolute; z-index: 20; display: flex; width: 100%; height: 100%; pointer-events: none; }
         .params-column { position: absolute; top: 0; display: flex; flex-direction: column; gap: 0; pointer-events: auto; }
         .col-left { left: 0px; }
         .col-right { right: 0px; text-align: right; }
 
-        /* 大字号标签 */
-        .param-tag { font-size: 11px; padding: 8px 12px; min-width: 115px; background: rgba(0,0,0,0.85); border-bottom: 0.25px solid rgba(255,255,255,0.05); display: flex; flex-direction: column; }
+        .param-tag { font-size: 10px; padding: 6px 10px; min-width: 105px; background: rgba(0,0,0,0.8); border: 0.25px solid rgba(255,255,255,0.1); display: flex; flex-direction: column; margin: 0; }
         .tag-l { border-left: 5px solid #fff; }
         .tag-r { border-right: 5px solid var(--primary); align-items: flex-end; }
-        .param-tag label { color: #888; font-size: 10px; margin-bottom: 2px; }
-        .param-tag b { font-size: 18px; color: var(--primary); font-weight: 900; letter-spacing: 0.5px; }
-        .diff-val { font-size: 12px; color: var(--highlight); font-weight: 900; margin-top: 1px; }
+        .param-tag label { color: #888; font-size: 9px; margin-bottom: 2px; }
+        .param-tag b { font-size: 18px; color: var(--primary); font-weight: 900; cursor: pointer; letter-spacing: 0.5px; }
+        .diff-val { font-size: 12px; color: var(--accent); font-weight: 900; margin-top: 1px; }
 
-        .slider-wrap { margin-top: 15px; padding: 15px; background: var(--card); border-radius: 15px; border: 1px solid #333; }
-        .slider-label { display: flex; justify-content: space-between; font-size: 11px; color: var(--primary); font-weight: bold; margin-bottom: 10px; }
+        /* 交互滑块 */
+        .fade-slider-wrap { margin-top: 15px; padding: 15px; background: var(--card); border-radius: 15px; border: 1px solid #333; }
+        .slider-info { display: flex; justify-content: space-between; font-size: 11px; color: var(--primary); font-weight: bold; margin-bottom: 10px; }
         input[type=range] { width: 100%; -webkit-appearance: none; background: #222; height: 6px; border-radius: 5px; outline: none; }
         input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 28px; height: 28px; background: var(--primary); border-radius: 50%; box-shadow: 0 0 15px var(--primary); cursor: pointer; }
 
@@ -51,8 +53,11 @@
         .btn-act { background: var(--card); border: 1px solid #333; border-radius: 12px; padding: 12px; text-align: center; font-size: 11px; color: #e2e8f0; cursor: pointer; }
         .btn-save { background: var(--primary); color: #000; font-weight: bold; border: none; }
 
-        #vaultList { height: 200px; overflow-y: auto; margin-top: 15px; }
-        .vault-item { background: #1e293b; padding: 15px; border-radius: 12px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #333; }
+        .vault-container { margin-top: 15px; padding: 15px; background: rgba(255,255,255,0.03); border-radius: 15px; border: 1px dashed #444; }
+        #vaultList { height: 180px; overflow-y: auto; margin-top: 10px; }
+        .vault-item-wrap { position: relative; overflow: hidden; margin-bottom: 10px; border-radius: 12px; background: #1e293b; }
+        .vault-content { position: relative; z-index: 2; background: #1e293b; padding: 15px; transition: 0.3s; display: flex; justify-content: space-between; align-items: center; }
+        .delete-btn { position: absolute; right: 0; top: 0; height: 100%; width: 70px; background: #ff4757; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: bold; z-index: 1; }
     </style>
 </head>
 <body>
@@ -63,13 +68,13 @@
             <div class="cat-item" onclick="loadCaseData('shoulder', this)">直角肩</div>
             <div class="cat-item" onclick="loadCaseData('postpartum', this)">产后康复</div>
             <div class="cat-item" onclick="loadCaseData('muscle', this)">增肌专场</div>
-            <div class="cat-item" onclick="loadCaseData('abs', this)">马甲线</div>
+            <div class="cat-item" onclick="loadCaseData('fatloss', this)">减脂塑形</div>
         </div>
 
         <div class="metrics-grid">
-            <div class="metric-item"><span>体重</span><strong id="val_weight">-2.1kg</strong></div>
-            <div class="metric-item"><span>体脂</span><strong id="val_fat">-3.5%</strong></div>
-            <div class="metric-item"><span>周期</span><strong id="val_week">8周</strong></div>
+            <div class="metric-item"><span>体重</span><strong id="val_weight" onclick="editBase(this)">-2.1kg</strong></div>
+            <div class="metric-item"><span>体脂</span><strong id="val_fat" onclick="editBase(this)">-3.5%</strong></div>
+            <div class="metric-item"><span>周期</span><strong id="val_week" onclick="editBase(this)">8周</strong></div>
         </div>
 
         <div class="comparison-stage">
@@ -82,78 +87,115 @@
             </div>
         </div>
 
-        <div class="slider-wrap">
-            <div class="slider-label"><span>BEFORE</span><span>滑动查看雷达蜕变引导</span><span>AFTER</span></div>
+        <div class="fade-slider-wrap">
+            <div class="slider-info"><span>BEFORE</span><span>滑动开启全息对比导引</span><span>AFTER</span></div>
             <input type="range" min="0" max="100" value="0" id="fadeSlider">
         </div>
 
         <div class="action-group">
-            <div class="btn-act" onclick="document.getElementById('fileB').click()">📷 传前照<input type="file" id="fileB" hidden onchange="loadImg(this,'layerB')"></div>
-            <div class="btn-act" onclick="document.getElementById('fileA').click()">📷 传后照<input type="file" id="fileA" hidden onchange="loadImg(this,'layerA')"></div>
+            <div class="btn-act" onclick="document.getElementById('fileB').click()">📷 传前照<input type="file" id="fileB" hidden accept="image/*" onchange="loadImg(this,'layerB')"></div>
+            <div class="btn-act" onclick="document.getElementById('fileA').click()">📷 传后照<input type="file" id="fileA" hidden accept="image/*" onchange="loadImg(this,'layerA')"></div>
             <div class="btn-act btn-save" onclick="saveToVault()">💾 保存入库</div>
         </div>
 
-        <div id="vaultList"></div>
+        <div class="vault-container">
+            <div style="font-size:11px; color:var(--primary); font-weight:bold;">📂 历史调取案例 (左滑删除)</div>
+            <div id="vaultList"></div>
+        </div>
     </div>
 
     <script>
-        // 解剖学坐标映射表：根据人体中心点定位 (x, y 百分比)
-        const coordinateMap = {
-            posture: [0.15, 0.25, 0.35, 0.55, 0.65, 0.78], // 对应 6 个维度指向的解剖点
+        // 解剖学坐标映射：[y轴百分比]
+        const coordMap = {
+            posture: [0.15, 0.25, 0.35, 0.55, 0.65, 0.78], 
             shoulder: [0.22, 0.2, 0.28, 0.35, 0.18, 0.4],
-            postpartum: [0.55, 0.6, 0.5, 0.65, 0.45, 0.7]
+            postpartum: [0.55, 0.6, 0.5, 0.65, 0.45, 0.75]
         };
 
         const canvas = document.getElementById('radarCanvas');
         const ctx = canvas.getContext('2d');
 
-        function drawRadar(targets) {
+        function drawLaser(targets) {
             canvas.width = canvas.offsetWidth; canvas.height = canvas.offsetHeight;
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            // 线条样式：高能荧光色
-            ctx.strokeStyle = "rgba(0, 255, 136, 0.6)"; 
-            ctx.lineWidth = 1.5; ctx.setLineDash([6, 4]);
+            ctx.lineWidth = 1.2; ctx.setLineDash([8, 5]);
 
             targets.forEach((yPct, i) => {
-                const startY = (i * 55) + 35; // 对应列表项垂直中心
-                // 左侧连线
-                ctx.beginPath(); ctx.moveTo(115, startY);
-                ctx.lineTo(canvas.width * 0.5, canvas.height * yPct); ctx.stroke();
-                // 右侧连线
-                ctx.beginPath(); ctx.moveTo(canvas.width - 115, startY);
-                ctx.lineTo(canvas.width * 0.5, canvas.height * yPct); ctx.stroke();
+                const startY = (i * 55) + 38; // 对应参数框垂直中点
+                // 绘制激光连线
+                const grad = ctx.createLinearGradient(0, startY, canvas.width, startY);
+                grad.addColorStop(0, "rgba(255,255,255,0.2)");
+                grad.addColorStop(0.5, "rgba(0, 242, 254, 0.6)");
+                grad.addColorStop(1, "rgba(0, 255, 136, 0.2)");
+                ctx.strokeStyle = grad;
+
+                ctx.beginPath(); ctx.moveTo(110, startY); ctx.lineTo(canvas.width*0.5, canvas.height*yPct); ctx.stroke();
+                ctx.beginPath(); ctx.moveTo(canvas.width-110, startY); ctx.lineTo(canvas.width*0.5, canvas.height*yPct); ctx.stroke();
+                
                 // 绘制解剖锚点
-                ctx.fillStyle = "#00ff88"; ctx.setLineDash([]);
-                ctx.beginPath(); ctx.arc(canvas.width * 0.5, canvas.height * yPct, 4, 0, Math.PI*2); ctx.fill();
-                ctx.strokeStyle = "#fff"; ctx.stroke();
+                ctx.setLineDash([]); ctx.fillStyle = "#00ff88"; ctx.beginPath();
+                ctx.arc(canvas.width*0.5, canvas.height*yPct, 3, 0, Math.PI*2); ctx.fill();
             });
         }
 
-        function loadCaseData(key, el) {
-            const d = {
-                posture: { labels: ["头前引", "圆肩角", "高低肩", "骨盆前", "脊柱侧", "假胯宽"], pre: ["8.5cm","25°","2.5cm","18°","12°","98cm"], post: ["2.1cm","8°","0.2cm","7°","2°","91cm"], units: ["cm","°","cm","°","°","cm"] },
-                shoulder: { labels: ["一字肩", "斜方肌", "锁骨展", "肩峰差", "颈根宽", "平整度"], pre: ["145°","5.8cm","150°","1.5cm","14cm","12mm"], post: ["178°","3.1cm","175°","0.2cm","11.5cm","4mm"], units: ["°","cm","°","cm","cm","mm"] }
-            }[key] || { labels: ["维度1", "维度2", "维度3", "维度4", "维度5", "维度6"], pre: Array(6).fill("-"), post: Array(6).fill("-"), units: Array(6).fill("") };
+        const caseDatabase = {
+            posture: { labels: ["头前引", "圆肩角", "高低肩", "骨盆前", "脊柱侧", "假胯宽"], pre: ["8.5cm","25°","2.5cm","18°","12°","98cm"], post: ["2.1cm","8°","0.2cm","7°","2°","91cm"], units: ["cm","°","cm","°","°","cm"] },
+            shoulder: { labels: ["一字肩", "斜方肌", "锁骨展", "肩峰差", "颈根宽", "平整度"], pre: ["145°","5.8cm","150°","1.5cm","14cm","12mm"], post: ["178°","3.1cm","175°","0.2cm","11.5cm","4mm"], units: ["°","cm","°","cm","cm","mm"] }
+        };
 
+        function loadCaseData(key, el) {
+            const d = caseDatabase[key] || caseDatabase.posture;
             if(el) { document.querySelectorAll('.cat-item').forEach(i => i.classList.remove('active')); el.classList.add('active'); }
             let hL = '', hR = '';
             for(let i=0; i<6; i++) {
-                hL += `<div class="param-tag tag-l"><label>${d.labels[i]}(前)</label><b>${d.pre[i]}</b></div>`;
-                hR += `<div class="param-tag tag-r"><label>${d.labels[i]}(后)</label><b>${d.post[i]}</b><div class="diff-val">改善中</div></div>`;
+                const diff = (parseFloat(d.post[i]) - parseFloat(d.pre[i])).toFixed(1);
+                hL += `<div class="param-tag tag-l"><label>${d.labels[i]}(前)</label><b onclick="editVal(this)">${d.pre[i]}</b></div>`;
+                hR += `<div class="param-tag tag-r"><label>${d.labels[i]}(后)</label><b onclick="editVal(this)">${d.post[i]}</b><div class="diff-val">${diff > 0 ? '+' : ''}${diff}${d.units[i]}</div></div>`;
             }
-            document.getElementById('colL').innerHTML = hL;
-            document.getElementById('colR').innerHTML = hR;
-            // 延迟重绘确保 DOM 加载
-            setTimeout(() => drawRadar(coordinateMap[key] || [0.5,0.5,0.5,0.5,0.5,0.5]), 100);
+            document.getElementById('colL').innerHTML = hL; document.getElementById('colR').innerHTML = hR;
+            setTimeout(() => drawLaser(coordMap[key] || [0.5,0.5,0.5,0.5,0.5,0.5]), 100);
         }
 
+        // 保存与调取核心修复
+        function saveToVault() {
+            const name = prompt("备注姓名", "成功案例"); if(!name) return;
+            const vault = JSON.parse(localStorage.getItem('luxiou_final_v10') || '[]');
+            vault.unshift({ 
+                id: Date.now(), name, type: document.querySelector('.cat-item.active').innerText, 
+                imgB: document.getElementById('layerB').style.backgroundImage, 
+                imgA: document.getElementById('layerA').style.backgroundImage,
+                metrics: { w: document.getElementById('val_weight').innerText, f: document.getElementById('val_fat').innerText, wk: document.getElementById('val_week').innerText },
+                paramsL: document.getElementById('colL').innerHTML, paramsR: document.getElementById('colR').innerHTML
+            });
+            localStorage.setItem('luxiou_final_v10', JSON.stringify(vault)); renderVault(); alert("存档成功！");
+        }
+
+        function loadItem(id) {
+            const vault = JSON.parse(localStorage.getItem('luxiou_final_v10') || '[]');
+            const i = vault.find(x => x.id === id);
+            if(i) {
+                document.getElementById('layerB').style.backgroundImage = i.imgB; document.getElementById('layerA').style.backgroundImage = i.imgA;
+                document.getElementById('val_weight').innerText = i.metrics.w; document.getElementById('val_fat').innerText = i.metrics.f; document.getElementById('val_week').innerText = i.metrics.wk;
+                document.getElementById('colL').innerHTML = i.paramsL; document.getElementById('colR').innerHTML = i.paramsR;
+                alert("对比数据已瞬间还原！");
+            }
+        }
+
+        function renderVault() {
+            const v = JSON.parse(localStorage.getItem('luxiou_final_v10') || '[]');
+            const list = document.getElementById('vaultList');
+            if(v.length === 0) { list.innerHTML = '<p style="font-size:10px; color:#555; text-align:center;">暂无记录</p>'; return; }
+            list.innerHTML = v.map(i => `<div class="vault-item-wrap" ontouchstart="tS(event)" ontouchmove="tM(event)" ontouchend="tE(event, ${i.id})"><div class="delete-btn" onclick="deleteItem(${i.id})">删除</div><div class="vault-content"><div><b>${i.name}</b> <small>${i.type}</small></div><button onclick="loadItem(${i.id})" style="background:var(--primary); border:none; padding:5px 12px; border-radius:6px; font-size:10px; font-weight:bold;">调取案例</button></div></div>`).join('');
+        }
+
+        let sX = 0; function tS(e) { sX = e.touches[0].clientX; }
+        function tM(e) { let mX = e.touches[0].clientX - sX; if (mX < 0 && mX > -65) e.currentTarget.querySelector('.vault-content').style.transform = `translateX(${mX}px)`; }
+        function tE(e, id) { let eX = e.changedTouches[0].clientX; const c = e.currentTarget.querySelector('.vault-content'); if (sX - eX > 30) c.style.transform = `translateX(-65px)`; else c.style.transform = `translateX(0)`; }
+        function editVal(el) { const v = prompt("修改数据", el.innerText); if(v) el.innerText = v; }
+        function editBase(el) { const v = prompt("修改数据", el.innerText); if(v) el.innerText = v; }
         function loadImg(i, t) { if(i.files[0]){ const r=new FileReader(); r.onload=e=>document.getElementById(t).style.backgroundImage=`url('${e.target.result}')`; r.readAsDataURL(i.files[0]); } }
-        document.getElementById('fadeSlider').oninput = e => {
-            const v = e.target.value / 100;
-            document.getElementById('layerA').style.opacity = v;
-            document.getElementById('layerB').style.opacity = 1 - v;
-        };
-        window.onload = () => loadCaseData('posture');
+        document.getElementById('fadeSlider').oninput = e => { document.getElementById('layerA').style.opacity = e.target.value/100; document.getElementById('layerB').style.opacity = 1-(e.target.value/100); };
+        window.onload = () => { loadCaseData('posture'); renderVault(); };
     </script>
 </body>
 </html>
