@@ -3,51 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>LUXIOU | 数字化全息档案</title>
+    <title>LUXIOU | 专业全息档案</title>
     <style>
         :root { --primary: #00f2fe; --bg: #0b0f19; --glass: rgba(30, 41, 59, 0.7); --card: rgba(22, 30, 46, 0.95); }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { background: var(--bg); color: #e2e8f0; font-family: -apple-system, sans-serif; margin: 0; padding: 12px; padding-top: 75px; overflow-x: hidden; }
+        body { background: var(--bg); color: #e2e8f0; font-family: -apple-system, sans-serif; margin: 0; padding: 10px; padding-top: 75px; overflow-x: hidden; }
         
-        .back-btn { position: fixed; top: 15px; left: 15px; z-index: 1000; background: rgba(0,0,0,0.6); color: #fff; padding: 10px 18px; border-radius: 50px; text-decoration: none; font-size: 13px; border: 1px solid rgba(255,255,255,0.4); backdrop-filter: blur(10px); font-weight: bold; }
+        .back-btn { position: fixed; top: 15px; left: 15px; z-index: 2000; background: rgba(0,0,0,0.6); color: #fff; padding: 10px 18px; border-radius: 50px; text-decoration: none; font-size: 13px; border: 1px solid rgba(255,255,255,0.4); backdrop-filter: blur(10px); font-weight: bold; }
 
         .case-wrap { max-width: 600px; margin: 0 auto; background: var(--glass); border-radius: 24px; padding: 15px; border: 1px solid rgba(255,255,255,0.1); }
         
-        .category-box { display: flex; gap: 8px; overflow-x: auto; margin-bottom: 12px; padding-bottom: 8px; scrollbar-width: none; }
+        /* 标题栏横向滚动 */
+        .category-box { display: flex; gap: 8px; overflow-x: auto; margin-bottom: 15px; padding-bottom: 8px; scrollbar-width: none; }
         .category-box::-webkit-scrollbar { display: none; }
         .cat-item { flex: 0 0 auto; padding: 6px 14px; background: var(--card); border-radius: 50px; font-size: 11px; border: 1px solid #333; color: #64748b; }
         .cat-item.active { background: var(--primary); color: #000; font-weight: bold; }
 
-        .metrics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 12px; }
-        .metric-item { background: var(--card); padding: 10px 5px; border-radius: 12px; text-align: center; border: 1px solid rgba(255,255,255,0.05); }
-        .metric-item span { display: block; font-size: 10px; color: #64748b; }
-        .metric-item strong { display: block; font-size: 14px; color: var(--primary); border-bottom: 1px dashed rgba(0,242,254,0.3); cursor: pointer; }
+        /* 顶部数据网格 */
+        .metrics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 15px; }
+        .metric-item { background: var(--card); padding: 12px 5px; border-radius: 12px; text-align: center; border: 1px solid rgba(255,255,255,0.05); }
+        .metric-item span { display: block; font-size: 10px; color: #64748b; margin-bottom: 4px; }
+        .metric-item strong { display: block; font-size: 14px; color: var(--primary); border-bottom: 1px dashed rgba(0,242,254,0.3); }
 
-        /* 对比区高度适配与标签聚拢 */
-        .comparison-stage { position: relative; width: 100%; height: 480px; background: #000; border-radius: 20px; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+        /* 核心对比区：锁定高度防止溢出 */
+        .comparison-stage { position: relative; width: 100%; height: 460px; background: #000; border-radius: 20px; overflow: hidden; display: flex; align-items: center; justify-content: center; border: 1px solid #222; }
         .img-layer { position: absolute; width: 100%; height: 100%; background-size: contain; background-repeat: no-repeat; background-position: center; transition: opacity 0.3s; }
         
-        /* 侧边精控：解决上下间距分得太开的问题 */
-        .side-params { position: absolute; z-index: 10; display: flex; flex-direction: column; gap: 15px; pointer-events: none; width: 100%; height: auto; padding: 10px 5px; }
-        .param-tag { font-size: 9px; padding: 5px 8px; border-radius: 8px; backdrop-filter: blur(8px); display: flex; flex-direction: column; pointer-events: auto; min-width: 85px; background: rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.15); }
-        .tag-left { align-self: flex-start; border-left: 3px solid #fff; }
-        .tag-right { align-self: flex-end; border-right: 3px solid var(--primary); text-align: right; }
-        .param-tag b { font-size: 13px; color: var(--primary); }
+        /* 侧边标签聚拢设计 */
+        .side-params { position: absolute; z-index: 10; display: flex; flex-direction: column; gap: 15px; pointer-events: none; width: 100%; height: auto; padding: 10px 6px; }
+        .param-tag { font-size: 9px; padding: 5px 8px; border-radius: 8px; backdrop-filter: blur(8px); display: flex; flex-direction: column; pointer-events: auto; min-width: 88px; background: rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.15); }
+        .tag-left { align-self: flex-start; border-left: 2px solid #fff; }
+        .tag-right { align-self: flex-end; border-right: 2px solid var(--primary); text-align: right; }
+        .param-tag b { font-size: 12px; color: var(--primary); }
         .diff-val { font-size: 10px; color: #00ff88; margin-top: 2px; font-weight: bold; }
 
         .fade-slider-wrap { margin-top: 15px; padding: 12px; background: var(--card); border-radius: 15px; border: 1px solid #333; }
-        input[type=range] { width: 100%; -webkit-appearance: none; background: #222; height: 6px; border-radius: 5px; outline: none; }
-        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 26px; height: 26px; background: var(--primary); border-radius: 50%; box-shadow: 0 0 15px var(--primary); cursor: pointer; }
+        input[type=range] { width: 100%; -webkit-appearance: none; background: #222; height: 5px; border-radius: 5px; outline: none; }
+        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 24px; height: 24px; background: var(--primary); border-radius: 50%; box-shadow: 0 0 10px var(--primary); }
 
         .action-group { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 15px; }
-        .btn-act { background: var(--card); border: 1px solid #333; border-radius: 10px; padding: 12px; text-align: center; font-size: 11px; color: #e2e8f0; cursor: pointer; }
+        .btn-act { background: var(--card); border: 1px solid #333; border-radius: 12px; padding: 12px; text-align: center; font-size: 11px; color: #e2e8f0; cursor: pointer; }
         .btn-save { background: var(--primary); color: #000; font-weight: bold; border: none; }
 
-        /* 案例库对齐 */
+        /* 案例库列表 */
         .vault-container { margin-top: 15px; padding: 15px; background: rgba(255,255,255,0.03); border-radius: 15px; border: 1px dashed #444; }
-        #vaultList { height: 200px; overflow-y: auto; margin-top: 10px; }
+        #vaultList { height: 220px; overflow-y: auto; margin-top: 10px; }
         .vault-item-wrap { position: relative; overflow: hidden; margin-bottom: 10px; border-radius: 12px; background: #1e293b; }
-        .vault-content { position: relative; z-index: 2; background: #1e293b; padding: 12px; transition: 0.3s; display: flex; justify-content: space-between; align-items: center; }
+        .vault-content { position: relative; z-index: 2; background: #1e293b; padding: 15px; transition: 0.3s; display: flex; justify-content: space-between; align-items: center; }
         .delete-btn { position: absolute; right: 0; top: 0; height: 100%; width: 70px; background: #ff4757; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: bold; z-index: 1; }
     </style>
 </head>
@@ -66,30 +68,28 @@
         </div>
 
         <div class="metrics-grid">
-            <div class="metric-item"><span>体重</span><strong id="val_weight" onclick="editVal(this)">-2.1kg</strong></div>
-            <div class="metric-item"><span>体脂</span><strong id="val_fat" onclick="editVal(this)">-3.5%</strong></div>
-            <div class="metric-item"><span>周期</span><strong id="val_week" onclick="editVal(this)">8周</strong></div>
+            <div class="metric-item"><span>体重变化</span><strong id="val_weight" onclick="editVal(this)">-2.1kg</strong></div>
+            <div class="metric-item"><span>体脂下降</span><strong id="val_fat" onclick="editVal(this)">-3.5%</strong></div>
+            <div class="metric-item"><span>达成周期</span><strong id="val_week" onclick="editVal(this)">8周</strong></div>
         </div>
 
         <div class="comparison-stage">
             <div class="img-layer" id="layerBefore" style="background-image:url('case_before.jpg'); opacity:1;"></div>
             <div class="img-layer" id="layerAfter" style="background-image:url('case_after.jpg'); opacity:0;"></div>
-            
-            <div class="side-params" id="paramsContainer">
-                </div>
+            <div class="side-params" id="paramsContainer"></div>
         </div>
 
         <div class="fade-slider-wrap"><input type="range" min="0" max="100" value="0" id="fadeSlider"></div>
 
         <div class="action-group">
-            <div class="btn-act" onclick="document.getElementById('fileB').click()">📷 传前照<input type="file" id="fileB" hidden accept="image/*" onchange="loadImg(this, 'layerBefore')"></div>
-            <div class="btn-act" onclick="document.getElementById('fileA').click()">📷 传后照<input type="file" id="fileA" hidden accept="image/*" onchange="loadImg(this, 'layerAfter')"></div>
+            <div class="btn-act" onclick="document.getElementById('fileB').click()">📷 传前照<input type="file" id="fileB" hidden accept="image/*" onchange="loadImg(this,'layerBefore')"></div>
+            <div class="btn-act" onclick="document.getElementById('fileA').click()">📷 传后照<input type="file" id="fileA" hidden accept="image/*" onchange="loadImg(this,'layerAfter')"></div>
             <div class="btn-act btn-save" onclick="saveToVault()">💾 保存入库</div>
         </div>
 
         <div class="vault-container">
             <div style="font-size:11px; color:var(--primary); font-weight:bold;">📂 调取历史成功案例：(左滑删除)</div>
-            <div id="vaultList"><p style="font-size:10px; color:#555; text-align:center;">暂无调取记录</p></div>
+            <div id="vaultList"></div>
         </div>
     </div>
 
@@ -117,10 +117,9 @@
             document.getElementById('paramsContainer').innerHTML = html;
         }
 
-        // 保存逻辑：强制捕获图片 Base64
         function saveToVault() {
             const name = prompt("备注案例姓名", "新案例"); if(!name) return;
-            const vault = JSON.parse(localStorage.getItem('luxiou_vault') || '[]');
+            const vault = JSON.parse(localStorage.getItem('luxiou_v2') || '[]');
             const data = { 
                 id: Date.now(), name, type: document.querySelector('.cat-item.active').innerText, 
                 imgB: document.getElementById('layerBefore').style.backgroundImage, 
@@ -128,13 +127,12 @@
                 metrics: { w: document.getElementById('val_weight').innerText, f: document.getElementById('val_fat').innerText, wk: document.getElementById('val_week').innerText },
                 params: document.getElementById('paramsContainer').innerHTML
             };
-            vault.unshift(data); localStorage.setItem('luxiou_vault', JSON.stringify(vault));
+            vault.unshift(data); localStorage.setItem('luxiou_v2', JSON.stringify(vault));
             renderVault(); alert("存档成功！");
         }
 
-        // 调取逻辑：核心修复，确保图片重现
         function loadItem(id) {
-            const vault = JSON.parse(localStorage.getItem('luxiou_vault') || '[]');
+            const vault = JSON.parse(localStorage.getItem('luxiou_v2') || '[]');
             const item = vault.find(i => i.id === id);
             if(item) {
                 document.getElementById('layerBefore').style.backgroundImage = item.imgB;
@@ -143,41 +141,40 @@
                 document.getElementById('val_fat').innerText = item.metrics.f;
                 document.getElementById('val_week').innerText = item.metrics.wk;
                 document.getElementById('paramsContainer').innerHTML = item.params;
-                alert("案例载入成功，图片已还原！");
+                alert("对比图及数据已载入完毕！");
             }
         }
 
-        function deleteItem(id) {
-            let vault = JSON.parse(localStorage.getItem('luxiou_vault') || '[]');
-            vault = vault.filter(i => i.id !== id);
-            localStorage.setItem('luxiou_vault', JSON.stringify(vault));
-            renderVault();
-        }
-
         function renderVault() {
-            const vault = JSON.parse(localStorage.getItem('luxiou_vault') || '[]');
-            if(vault.length === 0) { document.getElementById('vaultList').innerHTML = '<p style="font-size:10px; color:#555; text-align:center;">暂无调取记录</p>'; return; }
-            document.getElementById('vaultList').innerHTML = vault.map(i => `
+            const vault = JSON.parse(localStorage.getItem('luxiou_v2') || '[]');
+            const list = document.getElementById('vaultList');
+            if(vault.length === 0) { list.innerHTML = '<p style="font-size:10px; color:#555; text-align:center;">暂无存档案例</p>'; return; }
+            list.innerHTML = vault.map(i => `
                 <div class="vault-item-wrap" ontouchstart="tS(event)" ontouchmove="tM(event)" ontouchend="tE(event, ${i.id})">
                     <div class="delete-btn" onclick="deleteItem(${i.id})">删除</div>
                     <div class="vault-content">
                         <div style="font-size:11px;"><b>${i.name}</b> <small style="color:#666">${i.type}</small></div>
-                        <button onclick="loadItem(${i.id})" style="background:var(--primary); border:none; padding:4px 10px; border-radius:4px; font-size:10px; font-weight:bold;">载入案例</button>
+                        <button onclick="loadItem(${i.id})" style="background:var(--primary); border:none; padding:4px 10px; border-radius:4px; font-size:10px; font-weight:bold;">载入效果</button>
                     </div>
                 </div>`).join('');
         }
 
+        function deleteItem(id) {
+            let vault = JSON.parse(localStorage.getItem('luxiou_v2') || '[]');
+            vault = vault.filter(i => i.id !== id);
+            localStorage.setItem('luxiou_v2', JSON.stringify(vault));
+            renderVault();
+        }
+
         let sX = 0; function tS(e) { sX = e.touches[0].clientX; }
-        function tM(e) { let mX = e.touches[0].clientX - sX; if (mX < 0 && mX > -65) e.currentTarget.querySelector('.vault-content').style.transform = `translateX(${mX}px)`; }
-        function tE(e, id) { let eX = e.changedTouches[0].clientX; const c = e.currentTarget.querySelector('.vault-content'); if (sX - eX > 35) c.style.transform = `translateX(-65px)`; else c.style.transform = `translateX(0)`; }
+        function tM(e) { let mX = e.touches[0].clientX - sX; if (mX < 0 && mX > -70) e.currentTarget.querySelector('.vault-content').style.transform = `translateX(${mX}px)`; }
+        function tE(e, id) { let eX = e.changedTouches[0].clientX; const c = e.currentTarget.querySelector('.vault-content'); if (sX - eX > 35) c.style.transform = `translateX(-70px)`; else c.style.transform = `translateX(0)`; }
 
         function editVal(el) { const v = prompt("修改数据", el.innerText); if(v) el.innerText = v; }
         function loadImg(input, targetId) {
             if (input.files && input.files[0]) {
                 const reader = new FileReader();
-                reader.onload = (e) => { 
-                    document.getElementById(targetId).style.backgroundImage = `url('${e.target.result}')`; 
-                };
+                reader.onload = (e) => { document.getElementById(targetId).style.backgroundImage = `url('${e.target.result}')`; };
                 reader.readAsDataURL(input.files[0]);
             }
         }
