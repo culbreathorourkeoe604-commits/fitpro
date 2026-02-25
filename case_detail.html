@@ -3,58 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>LUXIOU | 数字化全息诊断 V7.0</title>
+    <title>LUXIOU | 数字化全息诊断 V8.0</title>
     <style>
         :root { --primary: #00f2fe; --accent: #00ff88; --bg: #0b0f19; }
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
         body { background: var(--bg); color: #e2e8f0; font-family: -apple-system, sans-serif; margin: 0; padding: 0; overflow: hidden; touch-action: none; }
         
-        /* 顶部品牌区 */
-        .header-brand { position: fixed; top: 0; left: 0; width: 100%; height: 55px; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.7); backdrop-filter: blur(15px); z-index: 5000; border-bottom: 2px solid var(--primary); }
-        .brand-text { font-size: 22px; font-weight: 900; color: #fff; letter-spacing: 3px; text-shadow: 0 0 20px var(--primary); }
-        .back-btn { position: absolute; left: 15px; color: #fff; text-decoration: none; font-size: 13px; border: 1px solid #444; padding: 6px 14px; border-radius: 20px; }
+        /* 顶部品牌 */
+        .header-brand { position: fixed; top: 0; left: 0; width: 100%; height: 50px; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); z-index: 5000; border-bottom: 1px solid var(--primary); }
+        .brand-text { font-size: 18px; font-weight: 900; color: #fff; letter-spacing: 2px; text-shadow: 0 0 10px var(--primary); }
+        .back-btn { position: absolute; left: 15px; color: #fff; text-decoration: none; font-size: 12px; border: 1px solid #444; padding: 4px 10px; border-radius: 20px; }
 
-        .app-wrap { width: 100vw; height: 100vh; display: flex; flex-direction: column; padding: 10px; padding-top: 65px; }
+        .app-wrap { width: 100vw; height: 100vh; display: flex; flex-direction: column; padding: 10px; padding-top: 55px; }
 
-        /* 标题栏补全 */
-        .category-box { display: flex; gap: 8px; overflow-x: auto; margin-bottom: 12px; padding-bottom: 5px; scrollbar-width: none; }
-        .category-box::-webkit-scrollbar { display: none; }
-        .cat-item { flex: 0 0 auto; padding: 8px 18px; background: #161e2e; border-radius: 12px; font-size: 13px; color: #fff; border: 1px solid #444; font-weight: bold; text-shadow: 0 0 5px rgba(255,255,255,0.3); }
-        .cat-item.active { background: var(--primary); color: #000; border-color: #fff; box-shadow: 0 0 15px var(--primary); text-shadow: none; }
+        /* 标题栏 */
+        .category-box { display: flex; gap: 6px; overflow-x: auto; margin-bottom: 8px; padding-bottom: 4px; scrollbar-width: none; }
+        .cat-item { flex: 0 0 auto; padding: 6px 12px; background: #161e2e; border-radius: 8px; font-size: 11px; color: #fff; border: 1px solid #333; }
+        .cat-item.active { background: var(--primary); color: #000; font-weight: bold; border-color: #fff; box-shadow: 0 0 10px var(--primary); }
 
-        /* 核心诊断视窗 */
-        .stage-area { position: relative; flex: 1; width: 100%; display: flex; justify-content: space-between; gap: 5px; margin-bottom: 10px; }
-        .params-side { flex: 0 0 90px; display: flex; flex-direction: column; z-index: 100; }
-        .param-card { flex: 1; background: rgba(11, 15, 25, 0.85); border-bottom: 1px solid rgba(255,255,255,0.1); padding: 5px; display: flex; flex-direction: column; justify-content: center; }
-        .card-l { border-left: 4px solid #fff; }
-        .card-r { border-right: 4px solid var(--primary); text-align: right; }
-        .param-card label { font-size: 9px; color: #aaa; margin-bottom: 2px; }
+        /* 布局重构 */
+        .stage-area { position: relative; flex: 1; width: 100%; display: flex; gap: 4px; margin-bottom: 8px; overflow: hidden; }
+        .params-side { flex: 0 0 85px; display: flex; flex-direction: column; }
+        .param-card { flex: 1; background: rgba(11, 15, 25, 0.9); border-bottom: 0.5px solid rgba(255,255,255,0.05); padding: 4px; display: flex; flex-direction: column; justify-content: center; }
+        .card-l { border-left: 3px solid #fff; }
+        .card-r { border-right: 3px solid var(--primary); text-align: right; }
+        .param-card label { font-size: 8px; color: #888; margin-bottom: 1px; }
         
-        /* 滚轮式数值选择器样式 */
-        .param-card select { background: transparent; color: var(--primary); border: none; font-size: 18px; font-weight: 900; appearance: none; outline: none; width: 100%; cursor: pointer; }
+        /* 交互式水平滚轮 */
+        .wheel-val { font-size: 17px; color: var(--primary); font-weight: 900; cursor: ew-resize; display: inline-block; width: 100%; }
 
-        .main-viewer { flex: 1; background: #000; border-radius: 20px; position: relative; overflow: hidden; border: 1.5px solid #333; }
+        .main-viewer { flex: 1; background: #000; border-radius: 12px; position: relative; overflow: hidden; border: 1px solid #222; }
         .img-layer { position: absolute; width: 100%; height: 100%; background-size: contain; background-repeat: no-repeat; background-position: center; transition: opacity 0.3s; }
-        #laserCanvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 150; touch-action: none; }
+        #laserCanvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 100; touch-action: none; }
 
-        /* 底部控制面板（集成缩放） */
-        .control-panel { background: rgba(16, 24, 39, 0.95); border-radius: 25px; padding: 15px; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 -10px 30px rgba(0,0,0,0.5); }
-        .control-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px; }
-        .zoom-item { display: flex; flex-direction: column; gap: 5px; }
-        .zoom-item label { font-size: 10px; color: var(--primary); font-weight: bold; }
-        
-        .slider-row { margin-bottom: 15px; }
-        .slider-label { display: flex; justify-content: space-between; font-size: 11px; color: #fff; font-weight: bold; margin-bottom: 8px; }
-        
-        input[type=range] { width: 100%; -webkit-appearance: none; background: #1a2234; height: 5px; border-radius: 3px; }
-        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 24px; height: 24px; background: #fff; border: 3px solid var(--primary); border-radius: 50%; box-shadow: 0 0 10px var(--primary); }
+        /* 底部极简面板 */
+        .control-panel { background: rgba(16, 24, 39, 0.95); border-radius: 18px; padding: 12px; border: 1px solid rgba(255,255,255,0.1); }
+        .zoom-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+        .zoom-box { font-size: 9px; color: var(--primary); }
+        input[type=range] { width: 100%; -webkit-appearance: none; background: #1a2234; height: 3px; border-radius: 2px; }
+        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 20px; height: 20px; background: #fff; border: 2px solid var(--primary); border-radius: 50%; }
 
-        .btn-group { display: grid; grid-template-columns: 1fr 1fr 1.2fr; gap: 10px; }
-        .lux-btn { background: #1a2234; border: 1px solid #333; padding: 12px; border-radius: 12px; color: #fff; font-size: 12px; font-weight: bold; text-align: center; }
-        .btn-save { background: var(--primary); color: #000; border: none; box-shadow: 0 5px 15px rgba(0,242,254,0.4); }
+        .btn-group { display: grid; grid-template-columns: 1fr 1fr 1.2fr; gap: 8px; }
+        .lux-btn { background: #1a2234; border: 1px solid #333; padding: 10px; border-radius: 10px; color: #fff; font-size: 11px; font-weight: bold; text-align: center; }
+        .btn-save { background: var(--primary); color: #000; border: none; box-shadow: 0 0 10px var(--primary); }
 
-        #vaultDisplay { height: 100px; overflow-y: auto; margin-top: 15px; border-top: 1px solid #222; }
-        .vault-card { background: #161e2e; padding: 10px; border-radius: 10px; margin-top: 8px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #333; }
+        #vault { height: 75px; overflow-y: auto; margin-top: 8px; font-size: 11px; border-top: 1px solid #222; }
+        .v-item { background: #161e2e; padding: 8px; border-radius: 6px; margin-top: 4px; display: flex; justify-content: space-between; align-items: center; }
     </style>
 </head>
 <body>
@@ -65,7 +59,6 @@
 
     <div class="app-wrap">
         <div class="category-box" id="catBox"></div>
-
         <div class="stage-area">
             <div class="params-side" id="colL"></div>
             <div class="main-viewer">
@@ -77,28 +70,18 @@
         </div>
 
         <div class="control-panel">
-            <div class="control-grid">
-                <div class="zoom-item">
-                    <label>前图缩放</label>
-                    <input type="range" min="50" max="300" value="100" oninput="zoomIndiv('layB', this.value)">
-                </div>
-                <div class="zoom-item">
-                    <label>后图缩放</label>
-                    <input type="range" min="50" max="300" value="100" oninput="zoomIndiv('layA', this.value)">
-                </div>
+            <div class="zoom-row">
+                <div class="zoom-box">前图缩放 <input type="range" min="50" max="300" value="100" oninput="zoom('layB', this.value)"></div>
+                <div class="zoom-box">后图缩放 <input type="range" min="50" max="300" value="100" oninput="zoom('layA', this.value)"></div>
             </div>
-
-            <div class="slider-row">
-                <div class="slider-label"><span>BEFORE (前照)</span><span>对比对比滑块</span><span>AFTER (后照)</span></div>
-                <input type="range" min="0" max="100" value="0" id="fadeSlider">
-            </div>
-
+            <div style="display:flex; justify-content:space-between; font-size:9px; color:#fff; margin-bottom:5px;"><span>BEFORE</span><span>对比滑块</span><span>AFTER</span></div>
+            <input type="range" min="0" max="100" value="0" id="fadeSlider" style="margin-bottom:10px;">
             <div class="btn-group">
-                <div class="lux-btn" onclick="document.getElementById('fB').click()">📷 导入前照<input type="file" id="fB" hidden accept="image/*" onchange="processImg(this,'layB')"></div>
-                <div class="lux-btn" onclick="document.getElementById('fA').click()">📷 导入后照<input type="file" id="fA" hidden accept="image/*" onchange="processImg(this,'layA')"></div>
-                <div class="lux-btn btn-save" onclick="saveCase()">💾 永久存为案例</div>
+                <div class="lux-btn" onclick="document.getElementById('fB').click()">📷 前照<input type="file" id="fB" hidden onchange="processImg(this,'layB')"></div>
+                <div class="lux-btn" onclick="document.getElementById('fA').click()">📷 后照<input type="file" id="fA" hidden onchange="processImg(this,'layA')"></div>
+                <div class="lux-btn btn-save" onclick="saveCase()">💾 保存存档</div>
             </div>
-            <div id="vaultDisplay"></div>
+            <div id="vault"></div>
         </div>
     </div>
 
@@ -108,7 +91,6 @@
         let anchors = Array(6).fill(0).map((_, i) => ({ x: 0.5, y: 0.15 + i * 0.14 }));
         let draggingIdx = -1;
 
-        // 全量标题栏数据库补完
         const db = {
             posture: { name: "体态矫正", labels: ["颈椎前引", "圆肩偏离", "高低肩差", "骨盆前倾", "脊柱侧倾", "假胯宽度"], unit: "cm" },
             shoulder: { name: "直角肩", labels: ["一字肩角", "斜方肌厚", "锁骨展度", "肩峰差值", "颈根宽度", "背平整度"], unit: "°" },
@@ -127,84 +109,81 @@
                 ctx.strokeStyle = "rgba(0, 242, 254, 0.4)"; ctx.setLineDash([5, 5]);
                 ctx.beginPath(); ctx.moveTo(0, boxY); ctx.lineTo(pt.x*canvas.width, pt.y*canvas.height); ctx.stroke();
                 ctx.beginPath(); ctx.moveTo(canvas.width, boxY); ctx.lineTo(pt.x*canvas.width, pt.y*canvas.height); ctx.stroke();
-                ctx.setLineDash([]); ctx.fillStyle = "#00ff88"; ctx.shadowBlur=10; ctx.shadowColor="#00f2fe";
-                ctx.beginPath(); ctx.arc(pt.x*canvas.width, pt.y*canvas.height, 6, 0, Math.PI*2); ctx.fill();
-                ctx.shadowBlur=0;
+                ctx.setLineDash([]); ctx.fillStyle = "#00ff88"; ctx.beginPath();
+                ctx.arc(pt.x*canvas.width, pt.y*canvas.height, 6, 0, Math.PI*2); ctx.fill();
             });
         }
 
-        function zoomIndiv(target, val) { document.getElementById(target).style.transform = `scale(${val/100})`; }
-
-        // 生成滚轮选择器
-        function createWheel(unit) {
-            let options = '';
-            for(let i=0; i<=200; i+=0.1) {
-                let v = i.toFixed(1);
-                options += `<option value="${v}${unit}">${v}${unit}</option>`;
-            }
-            return `<select>${options}</select>`;
+        // 水平滑动调值逻辑
+        let startX = 0, startVal = 0;
+        function initWheel(el) {
+            el.addEventListener('touchstart', e => { startX = e.touches[0].clientX; startVal = parseFloat(el.innerText); });
+            el.addEventListener('touchmove', e => {
+                const delta = (e.touches[0].clientX - startX) * 0.1;
+                el.innerText = (startVal + delta).toFixed(1);
+            });
         }
+
+        function zoom(target, val) { document.getElementById(target).style.transform = `scale(${val/100})`; }
 
         function loadSetup(key, el) {
             const d = db[key];
             if(el) { document.querySelectorAll('.cat-item').forEach(i => i.classList.remove('active')); el.classList.add('active'); }
             let hL = '', hR = '';
             d.labels.forEach(l => {
-                hL += `<div class="param-card card-l"><label>${l}(前)</label>${createWheel(d.unit)}</div>`;
-                hR += `<div class="param-card card-r"><label>${l}(后)</label>${createWheel(d.unit)}</div>`;
+                hL += `<div class="param-card card-l"><label>${l}</label><span class="wheel-val">0.0</span></div>`;
+                hR += `<div class="param-card card-r"><label>${l}</label><span class="wheel-val">0.0</span></div>`;
             });
             document.getElementById('colL').innerHTML = hL; document.getElementById('colR').innerHTML = hR;
+            document.querySelectorAll('.wheel-val').forEach(initWheel);
             draw();
         }
 
-        function processImg(i, t) { if(i.files[0]){ const r=new FileReader(); r.onload=e=>{document.getElementById(t).style.backgroundImage=`url('${e.target.result}')`; draw();}; r.readAsDataURL(i.files[0]); } }
+        // 图片自动压缩逻辑
+        function processImg(i, t) {
+            if(i.files[0]){
+                const r = new FileReader();
+                r.onload = e => {
+                    const img = new Image();
+                    img.onload = () => {
+                        const canvasTmp = document.createElement('canvas');
+                        const maxW = 800; const scale = maxW / img.width;
+                        canvasTmp.width = maxW; canvasTmp.height = img.height * scale;
+                        canvasTmp.getContext('2d').drawImage(img, 0, 0, canvasTmp.width, canvasTmp.height);
+                        document.getElementById(t).style.backgroundImage = `url('${canvasTmp.toDataURL('image/jpeg', 0.7)}')`;
+                        draw();
+                    };
+                    img.src = e.target.result;
+                };
+                r.readAsDataURL(i.files[0]);
+            }
+        }
         
-        // 增强型案例保存
         function saveCase() {
-            const name = prompt("存档名称 (建议：客户姓名+日期)"); if(!name) return;
-            const vault = JSON.parse(localStorage.getItem('LUX_MASTER_DB_V7') || '[]');
-            
-            const preData = Array.from(document.querySelectorAll('.card-l select')).map(s => s.value);
-            const postData = Array.from(document.querySelectorAll('.card-r select')).map(s => s.value);
-
-            vault.unshift({
-                id: Date.now(), name, type: document.querySelector('.cat-item.active').innerText,
-                imgB: document.getElementById('layB').style.backgroundImage,
-                imgA: document.getElementById('layA').style.backgroundImage,
-                anchors: anchors, preData, postData
-            });
-            
-            try {
-                localStorage.setItem('LUX_MASTER_DB_V7', JSON.stringify(vault));
-                renderVault(); alert("存档已在本地全息库同步！");
-            } catch(e) { alert("存档失败：照片体积过大，请尝试截屏后重新上传。"); }
+            const name = prompt("存档名"); if(!name) return;
+            const vault = JSON.parse(localStorage.getItem('LUX_V8_DB') || '[]');
+            const preVals = Array.from(document.querySelectorAll('.card-l .wheel-val')).map(s => s.innerText);
+            const postVals = Array.from(document.querySelectorAll('.card-r .wheel-val')).map(s => s.innerText);
+            vault.unshift({ id: Date.now(), name, type: document.querySelector('.cat-item.active').innerText, imgB: document.getElementById('layB').style.backgroundImage, imgA: document.getElementById('layA').style.backgroundImage, anchors, preVals, postVals });
+            localStorage.setItem('LUX_V8_DB', JSON.stringify(vault)); renderVault();
         }
 
         function loadCase(id) {
-            const v = JSON.parse(localStorage.getItem('LUX_MASTER_DB_V7') || '[]').find(x => x.id === id);
+            const v = JSON.parse(localStorage.getItem('LUX_V8_DB') || '[]').find(x => x.id === id);
             if(v) {
-                document.getElementById('layB').style.backgroundImage = v.imgB;
-                document.getElementById('layA').style.backgroundImage = v.imgA;
-                anchors = v.anchors;
-                const lSel = document.querySelectorAll('.card-l select');
-                const rSel = document.querySelectorAll('.card-r select');
-                v.preData.forEach((val, idx) => lSel[idx].value = val);
-                v.postData.forEach((val, idx) => rSel[idx].value = val);
+                document.getElementById('layB').style.backgroundImage = v.imgB; document.getElementById('layA').style.backgroundImage = v.imgA;
+                anchors = v.anchors; 
+                document.querySelectorAll('.card-l .wheel-val').forEach((s, i) => s.innerText = v.preVals[i]);
+                document.querySelectorAll('.card-r .wheel-val').forEach((s, i) => s.innerText = v.postVals[i]);
                 draw();
             }
         }
 
         function renderVault() {
-            const v = JSON.parse(localStorage.getItem('LUX_MASTER_DB_V7') || '[]');
-            document.getElementById('vaultDisplay').innerHTML = v.map(i => `
-                <div class="vault-card">
-                    <span><b>${i.name}</b><br><small style="color:#888">${i.type}</small></span>
-                    <button onclick="loadCase(${i.id})" style="background:var(--primary); border:none; padding:8px 15px; border-radius:8px; font-weight:bold;">调取全息案例</button>
-                </div>
-            `).join('');
+            const v = JSON.parse(localStorage.getItem('LUX_V8_DB') || '[]');
+            document.getElementById('vault').innerHTML = v.map(i => `<div class="v-item"><span>${i.name}</span><button onclick="loadCase(${i.id})">调取</button></div>`).join('');
         }
 
-        // 交互：全向拖拽
         const getCoord = (e, axis) => {
             const rect = canvas.getBoundingClientRect();
             const val = e.touches ? (axis === 'x' ? e.touches[0].clientX : e.touches[0].clientY) : (axis === 'x' ? e.clientX : e.clientY);
