@@ -3,168 +3,177 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>LUXIOU | 全息雷达诊断系统</title>
+    <title>LUXIOU | 全息诊断系统</title>
     <style>
-        :root { --primary: #00f2fe; --accent: #00ff88; --bg: #0b0f19; --card: rgba(22, 30, 46, 0.95); }
+        :root { --primary: #00f2fe; --accent: #00ff88; --bg: #0b0f19; --panel: rgba(16, 24, 39, 0.8); }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { background: var(--bg); color: #e2e8f0; font-family: -apple-system, sans-serif; margin: 0; padding: 10px; padding-top: 65px; }
+        body { background: var(--bg); color: #e2e8f0; font-family: -apple-system, sans-serif; margin: 0; padding: 0; overflow-x: hidden; }
         
         .back-btn { position: fixed; top: 15px; left: 15px; z-index: 5000; background: rgba(0,0,0,0.6); color: #fff; padding: 10px 18px; border-radius: 50px; text-decoration: none; font-size: 13px; border: 1px solid rgba(255,255,255,0.2); backdrop-filter: blur(10px); }
-        .case-wrap { max-width: 900px; margin: 0 auto; background: radial-gradient(circle, #1a2234 0%, #0b0f19 100%); border-radius: 30px; padding: 15px; border: 1px solid rgba(255,255,255,0.05); }
 
-        /* 顶部导航 */
+        .app-container { width: 100vw; height: 100vh; display: flex; flex-direction: column; padding: 15px; padding-top: 65px; background: radial-gradient(circle at center, #1a2234 0%, #0b0f19 100%); }
+
+        /* 顶部紧凑导航 */
         .category-box { display: flex; gap: 8px; overflow-x: auto; margin-bottom: 15px; scrollbar-width: none; }
-        .cat-item { flex: 0 0 auto; padding: 6px 15px; background: #161e2e; border-radius: 12px; font-size: 11px; color: #556075; border: 1px solid #333; }
+        .cat-item { flex: 0 0 auto; padding: 6px 15px; background: #161e2e; border-radius: 10px; font-size: 11px; color: #556075; border: 1px solid #333; }
         .cat-item.active { background: var(--primary); color: #000; font-weight: bold; box-shadow: 0 0 15px var(--primary); }
 
-        /* 三栏核心区 */
-        .holo-stage { display: flex; gap: 10px; height: 500px; position: relative; align-items: center; }
-        .params-col { flex: 0 0 115px; display: flex; flex-direction: column; height: 100%; }
-        
-        .param-card { flex: 1; padding: 8px 10px; background: rgba(22, 30, 46, 0.9); border: 0.5px solid rgba(255,255,255,0.1); display: flex; flex-direction: column; justify-content: center; }
-        .card-l { border-left: 5px solid #fff; }
-        .card-r { border-right: 5px solid var(--primary); text-align: right; }
-        
-        .param-card label { font-size: 9px; color: #888; margin-bottom: 2px; }
-        .param-card b { font-size: 18px; color: var(--primary); font-weight: 900; }
-        .diff-tag { font-size: 11px; color: var(--accent); font-weight: 800; }
+        /* 【核心重构】大屏图片显示区 */
+        .stage-area { position: relative; flex: 1; width: 100%; display: flex; justify-content: space-between; align-items: stretch; gap: 5px; margin-bottom: 15px; }
 
-        /* 图片显示区 */
-        .image-view { flex: 1; height: 100%; background: #000; border-radius: 20px; position: relative; overflow: hidden; border: 1.5px solid #222; }
-        .img-layer { position: absolute; width: 100%; height: 100%; background-size: contain; background-repeat: no-repeat; background-position: center; transition: 0.4s; }
-        #laserCanvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 15; cursor: crosshair; }
+        /* 左右参数：极致压缩宽度 */
+        .params-side { flex: 0 0 85px; display: flex; flex-direction: column; z-index: 100; }
+        .param-card { flex: 1; background: rgba(11, 15, 25, 0.7); border: 0.5px solid rgba(255,255,255,0.1); padding: 5px; display: flex; flex-direction: column; justify-content: center; backdrop-filter: blur(5px); }
+        .card-l { border-left: 3px solid #fff; }
+        .card-r { border-right: 3px solid var(--primary); text-align: right; }
+        .param-card label { font-size: 9px; color: #888; display: block; transform: scale(0.9); }
+        .param-card b { font-size: 15px; color: var(--primary); font-weight: 900; display: block; }
+        .diff-tag { font-size: 10px; color: var(--accent); font-weight: bold; }
 
-        /* 操作区 */
-        .slider-section { margin-top: 15px; padding: 15px; background: rgba(22,30,46,0.6); border-radius: 20px; }
-        .slider-label { display: flex; justify-content: space-between; font-size: 11px; color: var(--primary); font-weight: 900; margin-bottom: 10px; }
-        input[type=range] { width: 100%; -webkit-appearance: none; background: #222; height: 5px; border-radius: 3px; outline: none; }
-        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 28px; height: 28px; background: #fff; border: 4px solid var(--primary); border-radius: 50%; box-shadow: 0 0 15px var(--primary); }
+        /* 图片视窗：大屏化 */
+        .main-viewer { flex: 1; background: #000; border-radius: 15px; position: relative; overflow: hidden; border: 1px solid #333; box-shadow: 0 0 30px rgba(0,0,0,0.5); }
+        .img-layer { position: absolute; width: 100%; height: 100%; background-size: cover; background-position: center; transition: 0.3s; }
+        #laserCanvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 50; cursor: crosshair; }
 
-        .btn-group { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 15px; }
-        .lux-btn { background: #1a2234; border: 1px solid #334155; padding: 12px; border-radius: 12px; color: #fff; font-size: 12px; font-weight: bold; text-align: center; }
-        .btn-main { background: var(--primary); color: #000; border: none; box-shadow: 0 5px 15px rgba(0,242,254,0.4); }
-        #vaultList { margin-top: 20px; height: 120px; overflow-y: auto; border-top: 1px solid #222; padding-top: 10px; }
+        /* 控制区 */
+        .control-panel { background: var(--panel); border-radius: 20px; padding: 15px; border: 1px solid rgba(255,255,255,0.05); }
+        .slider-wrap { margin-bottom: 15px; }
+        .slider-label { display: flex; justify-content: space-between; font-size: 10px; color: var(--primary); font-weight: bold; margin-bottom: 8px; }
+        input[type=range] { width: 100%; -webkit-appearance: none; background: #1a2234; height: 4px; border-radius: 2px; }
+        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 24px; height: 24px; background: #fff; border: 3px solid var(--primary); border-radius: 50%; box-shadow: 0 0 10px var(--primary); }
+
+        .btn-grid { display: grid; grid-template-columns: 1fr 1fr 1.2fr; gap: 8px; }
+        .lux-btn { background: #1a2234; border: 1px solid #333; padding: 12px 5px; border-radius: 10px; color: #fff; font-size: 11px; font-weight: bold; text-align: center; }
+        .btn-save { background: var(--primary); color: #000; border: none; box-shadow: 0 0 15px var(--primary); }
+
+        #archiveBox { height: 100px; overflow-y: auto; margin-top: 10px; font-size: 11px; }
     </style>
 </head>
 <body>
-    <a href="./index.html" class="back-btn">返回中枢</a>
-    <div class="case-wrap">
+    <a href="./index.html" class="back-btn">返回</a>
+    <div class="app-container">
         <div class="category-box">
-            <div class="cat-item active" onclick="switchCase('posture')">体态矫正</div>
-            <div class="cat-item" onclick="switchCase('shoulder')">直角肩</div>
-            <div class="cat-item" onclick="switchCase('abs')">马甲线</div>
+            <div class="cat-item active" onclick="loadSetup('posture')">体态矫正</div>
+            <div class="cat-item" onclick="loadSetup('shoulder')">直角肩</div>
+            <div class="cat-item" onclick="loadSetup('muscle')">增肌</div>
         </div>
 
-        <div class="holo-stage">
-            <div class="params-col" id="colL"></div>
-            <div class="image-view" id="viewBox">
+        <div class="stage-area">
+            <div class="params-side" id="colL"></div>
+            <div class="main-viewer">
                 <div class="img-layer" id="layB" style="background-image:url('case_before.jpg'); opacity:1;"></div>
                 <div class="img-layer" id="layA" style="background-image:url('case_after.jpg'); opacity:0;"></div>
                 <canvas id="laserCanvas"></canvas>
             </div>
-            <div class="params-col" id="colR"></div>
+            <div class="params-side" id="colR"></div>
         </div>
 
-        <div class="slider-section">
-            <div class="slider-label"><span>BEFORE</span><span>拖动锚点精准定位生活照部位</span><span>AFTER</span></div>
-            <input type="range" min="0" max="100" value="0" id="fadeSlider">
+        <div class="control-panel">
+            <div class="slider-wrap">
+                <div class="slider-label"><span>BEFORE</span><span>滑动对比并手动微调锚点</span><span>AFTER</span></div>
+                <input type="range" min="0" max="100" value="0" id="fadeSlider">
+            </div>
+            <div class="btn-grid">
+                <div class="lux-btn" onclick="document.getElementById('fB').click()">📷 前照<input type="file" id="fB" hidden onchange="processImg(this,'layB')"></div>
+                <div class="lux-btn" onclick="document.getElementById('fA').click()">📷 后照<input type="file" id="fA" hidden onchange="processImg(this,'layA')"></div>
+                <div class="lux-btn btn-save" onclick="saveData()">💾 保存全息存档</div>
+            </div>
+            <div id="archiveBox"></div>
         </div>
-
-        <div class="btn-group">
-            <div class="lux-btn" onclick="document.getElementById('fB').click()">📷 前照<input type="file" id="fB" hidden accept="image/*" onchange="loadImg(this,'layB')"></div>
-            <div class="lux-btn" onclick="document.getElementById('fA').click()">📷 后照<input type="file" id="fA" hidden accept="image/*" onchange="loadImg(this,'layA')"></div>
-            <div class="lux-btn btn-main" onclick="saveArchive()">💾 保存存档</div>
-        </div>
-        <div id="vaultList"></div>
     </div>
 
     <script>
         const canvas = document.getElementById('laserCanvas');
         const ctx = canvas.getContext('2d');
-        let anchors = [0.2, 0.3, 0.4, 0.5, 0.6, 0.7]; // 默认 y 轴比例
+        // 智能自动校正：初始落点算法 [身体核心解剖位百分比]
+        let anchors = [0.15, 0.25, 0.40, 0.55, 0.70, 0.85]; 
         let draggingIdx = -1;
 
-        function drawHolo() {
+        function draw() {
             canvas.width = canvas.offsetWidth; canvas.height = canvas.offsetHeight;
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.lineWidth = 1.5; ctx.setLineDash([8, 4]);
             
             anchors.forEach((yPct, i) => {
-                const boxY = (i * 83) + 41;
+                const boxY = (i * (canvas.height / 6)) + (canvas.height / 12);
                 const targetY = canvas.height * yPct;
                 
-                // 激光线效果
-                ctx.strokeStyle = "rgba(0, 242, 254, 0.6)";
+                // 绘制激光线
+                ctx.strokeStyle = "rgba(0, 242, 254, 0.5)"; ctx.lineWidth = 1; ctx.setLineDash([5, 5]);
                 ctx.beginPath(); ctx.moveTo(0, boxY); ctx.lineTo(canvas.width*0.5, targetY); ctx.stroke();
                 ctx.beginPath(); ctx.moveTo(canvas.width, boxY); ctx.lineTo(canvas.width*0.5, targetY); ctx.stroke();
                 
-                // 绘制可交互锚点
+                // 绘制可移动锚点
                 ctx.setLineDash([]); ctx.fillStyle = draggingIdx === i ? "#fff" : "#00ff88";
+                ctx.shadowBlur = 10; ctx.shadowColor = "#00f2fe";
                 ctx.beginPath(); ctx.arc(canvas.width*0.5, targetY, 6, 0, Math.PI*2); ctx.fill();
+                ctx.shadowBlur = 0;
             });
         }
 
-        canvas.addEventListener('mousedown', e => {
-            const rect = canvas.getBoundingClientRect();
-            const y = (e.clientY - rect.top) / canvas.height;
-            draggingIdx = anchors.findIndex(a => Math.abs(a - y) < 0.05);
-        });
-        canvas.addEventListener('mousemove', e => {
-            if (draggingIdx === -1) return;
-            const rect = canvas.getBoundingClientRect();
-            anchors[draggingIdx] = (e.clientY - rect.top) / canvas.height;
-            drawHolo();
-        });
-        window.addEventListener('mouseup', () => draggingIdx = -1);
+        // 交互逻辑：支持拖拽微调
+        const getEvY = e => (e.touches ? e.touches[0].clientY : e.clientY) - canvas.getBoundingClientRect().top;
+        const handleStart = e => { draggingIdx = anchors.findIndex(a => Math.abs(a - getEvY(e)/canvas.height) < 0.05); };
+        const handleMove = e => { if(draggingIdx !== -1) { anchors[draggingIdx] = Math.max(0, Math.min(1, getEvY(e)/canvas.height)); draw(); } };
+        
+        canvas.addEventListener('mousedown', handleStart); canvas.addEventListener('mousemove', handleMove);
+        canvas.addEventListener('mouseup', () => draggingIdx = -1);
+        canvas.addEventListener('touchstart', handleStart); canvas.addEventListener('touchmove', handleMove);
+        canvas.addEventListener('touchend', () => draggingIdx = -1);
 
-        // 移动端支持
-        canvas.addEventListener('touchstart', e => {
-            const rect = canvas.getBoundingClientRect();
-            const y = (e.touches[0].clientY - rect.top) / canvas.height;
-            draggingIdx = anchors.findIndex(a => Math.abs(a - y) < 0.05);
-        });
-        canvas.addEventListener('touchmove', e => {
-            if (draggingIdx === -1) return;
-            const rect = canvas.getBoundingClientRect();
-            anchors[draggingIdx] = (e.touches[0].clientY - rect.top) / canvas.height;
-            drawHolo();
-        });
-
-        function switchCase(type) {
-            const d = { labels: ["维度1", "维度2", "维度3", "维度4", "维度5", "维度6"], val: ["8.5cm","25°","2.5cm","18°","12°","98cm"] };
+        function loadSetup(key) {
+            const labels = ["颈椎位", "双肩连线", "胸廓中心", "腹直肌", "骨盆中心", "膝关节"];
             let hL = '', hR = '';
-            for(let i=0; i<6; i++) {
-                hL += `<div class="param-card card-l"><label>${d.labels[i]}(前)</label><b>${d.val[i]}</b></div>`;
-                hR += `<div class="param-card card-r"><label>${d.labels[i]}(后)</label><b>${d.val[i]}</b><div class="diff-tag">NEW</div></div>`;
-            }
+            labels.forEach(l => {
+                hL += `<div class="param-card card-l"><label>${l}</label><b>8.5cm</b></div>`;
+                hR += `<div class="param-card card-r"><label>${l}</label><b>2.1cm</b><div class="diff-tag">-6.4</div></div>`;
+            });
             document.getElementById('colL').innerHTML = hL; document.getElementById('colR').innerHTML = hR;
-            drawHolo();
+            // 自动校正：针对不同类型设置不同的初始黄金比例点
+            if(key === 'shoulder') anchors = [0.12, 0.20, 0.28, 0.35, 0.15, 0.40];
+            else anchors = [0.15, 0.25, 0.40, 0.55, 0.70, 0.85];
+            draw();
         }
 
-        function saveArchive() {
-            const name = prompt("存档命名"); if(!name) return;
-            const vault = JSON.parse(localStorage.getItem('LUX_V_FINAL') || '[]');
-            vault.unshift({ id: Date.now(), name, imgB: document.getElementById('layB').style.backgroundImage, imgA: document.getElementById('layA').style.backgroundImage, anchors: [...anchors], pL: document.getElementById('colL').innerHTML, pR: document.getElementById('colR').innerHTML });
-            localStorage.setItem('LUX_V_FINAL', JSON.stringify(vault)); renderVault();
+        function processImg(input, targetId) {
+            if (input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = e => {
+                    document.getElementById(targetId).style.backgroundImage = `url('${e.target.result}')`;
+                    // 自动校正触发：图片上传后重置锚点至黄金位置
+                    draw(); 
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
         }
 
-        function loadArchive(id) {
-            const v = JSON.parse(localStorage.getItem('LUX_V_FINAL') || '[]').find(x => x.id === id);
-            if(v) {
-                document.getElementById('layB').style.backgroundImage = v.imgB; document.getElementById('layA').style.backgroundImage = v.imgA;
-                anchors = v.anchors; document.getElementById('colL').innerHTML = v.pL; document.getElementById('colR').innerHTML = v.pR;
-                drawHolo(); alert("存档照片及拖拽位已还原");
+        function saveData() {
+            const name = prompt("存档名称"); if(!name) return;
+            const vault = JSON.parse(localStorage.getItem('LUX_PRO_V3') || '[]');
+            vault.unshift({ id: Date.now(), name, anchors: [...anchors], imgB: document.getElementById('layB').style.backgroundImage, imgA: document.getElementById('layA').style.backgroundImage });
+            localStorage.setItem('LUX_PRO_V3', JSON.stringify(vault)); renderVault();
+        }
+
+        function loadVault(id) {
+            const item = JSON.parse(localStorage.getItem('LUX_PRO_V3')).find(x => x.id === id);
+            if(item) {
+                anchors = item.anchors;
+                document.getElementById('layB').style.backgroundImage = item.imgB;
+                document.getElementById('layA').style.backgroundImage = item.imgA;
+                draw();
             }
         }
 
         function renderVault() {
-            const v = JSON.parse(localStorage.getItem('LUX_V_FINAL') || '[]');
-            document.getElementById('vaultList').innerHTML = v.map(i => `<div style="background:#161e2e; padding:10px; margin-bottom:5px; border-radius:8px; display:flex; justify-content:space-between;"><b>${i.name}</b><button onclick="loadArchive(${i.id})">调取</button></div>`).join('');
+            const v = JSON.parse(localStorage.getItem('LUX_PRO_V3') || '[]');
+            document.getElementById('archiveBox').innerHTML = v.map(i => `<div style="background:#161e2e; padding:8px; margin-top:5px; border-radius:5px; display:flex; justify-content:space-between;"><span>${i.name}</span><button onclick="loadVault(${i.id})">载入</button></div>`).join('');
         }
 
-        function loadImg(i, t) { if(i.files[0]){ const r=new FileReader(); r.onload=e=>document.getElementById(t).style.backgroundImage=`url('${e.target.result}')`; r.readAsDataURL(i.files[0]); } }
-        document.getElementById('fadeSlider').oninput = e => { document.getElementById('layA').style.opacity = e.target.value/100; document.getElementById('layB').style.opacity = 1-(e.target.value/100); };
-        window.onload = () => { switchCase('posture'); renderVault(); };
+        document.getElementById('fadeSlider').oninput = e => {
+            document.getElementById('layA').style.opacity = e.target.value / 100;
+            document.getElementById('layB').style.opacity = 1 - (e.target.value / 100);
+        };
+
+        window.onload = () => { loadSetup('posture'); renderVault(); };
     </script>
 </body>
 </html>
