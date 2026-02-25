@@ -3,65 +3,68 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>LUXIOU | 数字化全息档案</title>
+    <title>LUXIOU | 数字化全息诊疗档案</title>
     <style>
         :root { --primary: #00f2fe; --bg: #0b0f19; --glass: rgba(30, 41, 59, 0.7); --card: rgba(22, 30, 46, 0.95); }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body { background: var(--bg); color: #e2e8f0; font-family: -apple-system, sans-serif; margin: 0; padding: 10px; padding-top: 70px; overflow-x: hidden; }
         
-        .back-btn { position: fixed; top: 15px; left: 15px; z-index: 2000; background: rgba(0,0,0,0.6); color: #fff; padding: 8px 15px; border-radius: 50px; text-decoration: none; font-size: 13px; border: 1px solid rgba(255,255,255,0.4); backdrop-filter: blur(10px); font-weight: bold; }
+        .back-btn { position: fixed; top: 15px; left: 15px; z-index: 3000; background: rgba(0,0,0,0.6); color: #fff; padding: 10px 18px; border-radius: 50px; text-decoration: none; font-size: 13px; border: 1px solid rgba(255,255,255,0.4); backdrop-filter: blur(10px); font-weight: bold; }
 
-        .case-wrap { max-width: 600px; margin: 0 auto; background: var(--glass); border-radius: 20px; padding: 12px; border: 1px solid rgba(255,255,255,0.1); }
+        .case-wrap { max-width: 600px; margin: 0 auto; background: var(--glass); border-radius: 24px; padding: 12px; border: 1px solid rgba(255,255,255,0.1); }
         
-        .category-box { display: flex; gap: 8px; overflow-x: auto; margin-bottom: 12px; padding-bottom: 5px; scrollbar-width: none; }
-        .cat-item { flex: 0 0 auto; padding: 6px 12px; background: var(--card); border-radius: 50px; font-size: 11px; border: 1px solid #333; color: #64748b; }
+        /* 标题导航全量补齐 */
+        .category-box { display: flex; gap: 8px; overflow-x: auto; margin-bottom: 12px; padding-bottom: 8px; scrollbar-width: none; }
+        .category-box::-webkit-scrollbar { display: none; }
+        .cat-item { flex: 0 0 auto; padding: 6px 14px; background: var(--card); border-radius: 50px; font-size: 11px; border: 1px solid #333; color: #64748b; }
         .cat-item.active { background: var(--primary); color: #000; font-weight: bold; }
 
-        .metrics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 12px; }
-        .metric-item { background: var(--card); padding: 8px 5px; border-radius: 10px; text-align: center; border: 1px solid rgba(255,255,255,0.05); }
-        .metric-item span { font-size: 9px; color: #64748b; display: block; }
-        .metric-item strong { font-size: 13px; color: var(--primary); border-bottom: 1px dashed rgba(0,242,254,0.3); cursor: pointer; display: block; }
+        .metrics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 12px; }
+        .metric-item { background: var(--card); padding: 10px 5px; border-radius: 12px; text-align: center; border: 1px solid rgba(255,255,255,0.05); }
+        .metric-item span { display: block; font-size: 9px; color: #64748b; }
+        .metric-item strong { display: block; font-size: 14px; color: var(--primary); border-bottom: 1px dashed rgba(0,242,254,0.3); cursor: pointer; }
 
-        /* 对比区核心 */
-        .comparison-stage { position: relative; width: 100%; height: 480px; background: #000; border-radius: 15px; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+        /* 对比区：极致垂直紧贴 */
+        .comparison-stage { position: relative; width: 100%; height: 500px; background: #000; border-radius: 20px; overflow: hidden; display: flex; align-items: center; justify-content: center; }
         .img-layer { position: absolute; width: 100%; height: 100%; background-size: contain; background-repeat: no-repeat; background-position: center; transition: opacity 0.2s; }
         
-        /* 纵向无缝排列：取消 gap，实现紧贴 */
-        .side-params { position: absolute; z-index: 10; display: flex; flex-direction: column; width: 100%; height: 100%; pointer-events: none; }
-        .params-column { position: absolute; top: 0; display: flex; flex-direction: column; gap: 0; width: auto; pointer-events: auto; }
-        .col-left { left: 5px; }
-        .col-right { right: 5px; text-align: right; }
+        /* 垂直列表排版：gap 设为 0，完全无缝 */
+        .side-params { position: absolute; z-index: 10; display: flex; width: 100%; height: 100%; pointer-events: none; }
+        .params-column { position: absolute; top: 0; display: flex; flex-direction: column; gap: 0; pointer-events: auto; }
+        .col-left { left: 0px; }
+        .col-right { right: 0px; text-align: right; }
 
-        .param-tag { font-size: 9px; padding: 4px 8px; min-width: 85px; background: rgba(0,0,0,0.7); border: 0.5px solid rgba(255,255,255,0.1); display: flex; flex-direction: column; margin-bottom: 0; }
+        .param-tag { font-size: 9px; padding: 5px 10px; min-width: 95px; background: rgba(0,0,0,0.75); border: 0.25px solid rgba(255,255,255,0.05); display: flex; flex-direction: column; margin: 0; }
         .tag-l { border-left: 3px solid #fff; }
         .tag-r { border-right: 3px solid var(--primary); align-items: flex-end; }
-        .param-tag label { color: #888; font-size: 8px; margin-bottom: 1px; }
-        .param-tag b { font-size: 11px; color: var(--primary); cursor: pointer; }
+        .param-tag label { color: #777; font-size: 8px; margin-bottom: 1px; }
+        .param-tag b { font-size: 12px; color: var(--primary); cursor: pointer; }
         .diff-val { font-size: 9px; color: #00ff88; font-weight: bold; }
 
-        .fade-slider-wrap { margin-top: 10px; padding: 10px; background: var(--card); border-radius: 12px; }
-        input[type=range] { width: 100%; -webkit-appearance: none; background: #222; height: 4px; outline: none; }
-        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 22px; background: var(--primary); border-radius: 50%; box-shadow: 0 0 8px var(--primary); }
+        .fade-slider-wrap { margin-top: 10px; padding: 15px; background: var(--card); border-radius: 15px; border: 1px solid #333; }
+        input[type=range] { width: 100%; -webkit-appearance: none; background: #222; height: 5px; border-radius: 5px; outline: none; }
+        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 26px; height: 26px; background: var(--primary); border-radius: 50%; box-shadow: 0 0 10px var(--primary); cursor: pointer; }
 
-        .action-group { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-top: 12px; }
-        .btn-act { background: var(--card); border: 1px solid #333; border-radius: 10px; padding: 10px; text-align: center; font-size: 11px; color: #e2e8f0; cursor: pointer; }
+        .action-group { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 15px; }
+        .btn-act { background: var(--card); border: 1px solid #333; border-radius: 12px; padding: 12px; text-align: center; font-size: 11px; color: #e2e8f0; cursor: pointer; }
         .btn-save { background: var(--primary); color: #000; font-weight: bold; border: none; }
 
-        #vaultList { height: 180px; overflow-y: auto; margin-top: 10px; border: 1px dashed #333; border-radius: 10px; padding: 10px; }
-        .vault-item-wrap { position: relative; overflow: hidden; margin-bottom: 8px; border-radius: 8px; background: #1e293b; }
-        .vault-content { position: relative; z-index: 2; background: #1e293b; padding: 10px; transition: 0.3s; display: flex; justify-content: space-between; align-items: center; }
-        .delete-btn { position: absolute; right: 0; top: 0; height: 100%; width: 60px; background: #ff4757; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 12px; z-index: 1; }
+        .vault-container { margin-top: 15px; padding: 15px; background: rgba(255,255,255,0.03); border-radius: 15px; border: 1px dashed #444; }
+        #vaultList { height: 180px; overflow-y: auto; margin-top: 10px; }
+        .vault-item-wrap { position: relative; overflow: hidden; margin-bottom: 10px; border-radius: 12px; background: #1e293b; }
+        .vault-content { position: relative; z-index: 2; background: #1e293b; padding: 12px; transition: 0.3s; display: flex; justify-content: space-between; align-items: center; }
+        .delete-btn { position: absolute; right: 0; top: 0; height: 100%; width: 70px; background: #ff4757; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: bold; z-index: 1; }
 
-        /* 确定靠右 */
-        .picker-mask { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 3000; display: none; align-items: center; justify-content: center; }
+        /* 选择器对齐 */
+        .picker-mask { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 4000; display: none; align-items: center; justify-content: center; }
         .picker-mask.active { display: flex; }
-        .picker-content { background: #1a2234; width: 85%; max-width: 320px; border-radius: 20px; padding: 20px; border: 1px solid #334155; }
-        .picker-scroll { height: 160px; overflow-y: auto; scroll-snap-type: y mandatory; padding: 60px 0; }
-        .picker-item { height: 40px; line-height: 40px; text-align: center; font-size: 17px; color: #64748b; scroll-snap-align: center; }
-        .picker-item.selected { color: var(--primary); font-weight: bold; font-size: 20px; }
-        .picker-footer { display: flex; gap: 10px; margin-top: 20px; }
-        .btn-l { flex: 1; padding: 10px; border-radius: 10px; background: #2d3748; color: #fff; border: none; }
-        .btn-r { flex: 1; padding: 10px; border-radius: 10px; background: var(--primary); color: #000; font-weight: bold; border: none; }
+        .picker-content { background: #1a2234; width: 85%; max-width: 320px; border-radius: 24px; padding: 25px; border: 1px solid #334155; }
+        .picker-scroll { height: 180px; overflow-y: auto; scroll-snap-type: y mandatory; padding: 70px 0; }
+        .picker-item { height: 40px; line-height: 40px; text-align: center; font-size: 18px; color: #64748b; scroll-snap-align: center; }
+        .picker-item.selected { color: var(--primary); font-weight: bold; font-size: 22px; }
+        .picker-footer { display: flex; gap: 15px; margin-top: 25px; }
+        .btn-cancel { flex: 1; padding: 12px; border-radius: 12px; background: #2d3748; color: #fff; border: none; }
+        .btn-confirm { flex: 1; padding: 12px; border-radius: 12px; background: var(--primary); color: #000; font-weight: bold; border: none; }
     </style>
 </head>
 <body>
@@ -71,9 +74,9 @@
         <div class="category-box">
             <div class="cat-item active" onclick="loadCaseData('posture', this)">体态矫正</div>
             <div class="cat-item" onclick="loadCaseData('shoulder', this)">直角肩</div>
+            <div class="cat-item" onclick="loadCaseData('postpartum', this)">产后康复</div>
             <div class="cat-item" onclick="loadCaseData('muscle', this)">增肌专场</div>
             <div class="cat-item" onclick="loadCaseData('abs', this)">马甲线</div>
-            <div class="cat-item" onclick="loadCaseData('postpartum', this)">产后康复</div>
             <div class="cat-item" onclick="loadCaseData('fatloss', this)">减脂塑形</div>
             <div class="cat-item" onclick="loadCaseData('hip', this)">蜜桃臀</div>
         </div>
@@ -102,29 +105,67 @@
             <div class="btn-act btn-save" onclick="saveToVault()">💾 保存入库</div>
         </div>
 
-        <div style="font-size:11px; color:var(--primary); margin-top:15px; font-weight:bold;">📂 调取历史案例库</div>
-        <div id="vaultList"></div>
+        <div class="vault-container">
+            <div style="font-size:11px; color:var(--primary); font-weight:bold;">📂 调取历史案例 (左滑删除)</div>
+            <div id="vaultList"></div>
+        </div>
     </div>
 
     <div class="picker-mask" id="pickerMask">
         <div class="picker-content">
             <div class="picker-scroll" id="pickerList"></div>
             <div class="picker-footer">
-                <button class="btn-l" onclick="closePicker()">取消</button>
-                <button class="btn-r" onclick="confirmValue()">确定</button>
+                <button class="btn-cancel" onclick="closePicker()">取消</button>
+                <button class="btn-confirm" onclick="confirmValue()">确定</button>
             </div>
         </div>
     </div>
 
     <script>
+        // 极致详细的参数数据库：补齐 7 大分类
         const caseDatabase = {
-            posture: { labels: ["头前引", "圆肩角", "高低肩", "骨盆前", "假胯宽", "脊柱侧"], pre: ["8.5cm","25°","2.5cm","18°","98cm","12°"], post: ["2.1cm","8°","0.2cm","7°","91cm","2°"], units: ["cm","°","cm","°","cm","°"] },
-            shoulder: { labels: ["一字肩角", "斜方肌", "锁骨展", "肩峰差", "颈根宽", "平整度"], pre: ["145°","5.8cm","150°","1.5cm","14cm","12mm"], post: ["178°","3.1cm","175°","0.2cm","11.5cm","4mm"], units: ["°","cm","°","cm","cm","mm"] },
-            muscle: { labels: ["腰围", "臀围", "小腿围", "上臂围", "胸围", "大腿围"], pre: ["88cm","92cm","34cm","31cm","95cm","52cm"], post: ["78cm","98cm","36.5cm","38cm","112cm","59cm"], units: ["cm","cm","cm","cm","cm","cm"] },
-            abs: { labels: ["人鱼线宽", "腹直肌隙", "脂肪厚度", "下腹维度", "腰围", "腰臀比"], pre: ["12cm","2.5cm","28mm","85cm","82cm","0.88"], post: ["4cm","0.2cm","10mm","72cm","65cm","0.71"], units: ["cm","cm","mm","cm","cm",""] },
-            postpartum: { labels: ["腹直肌隙", "骨盆前倾", "腰围", "假胯宽", "耻骨痛点", "核心力"], pre: ["3.5cm","18°","85cm","98cm","L7","25s"], post: ["0.2cm","7°","68cm","91cm","L0","85s"], units: ["cm","°","cm","cm","","s"] },
-            fatloss: { labels: ["腰围", "皮下脂", "臀围", "BMI", "内脏脂", "侧腰"], pre: ["98cm","35mm","105cm","28.5","12","15cm"], post: ["72cm","12mm","95cm","22.1","3","5cm"], units: ["cm","mm","cm","","","cm"] },
-            hip: { labels: ["臀围", "臀线位", "假胯宽", "大腿根", "核心稳", "臀中肌"], pre: ["88cm","5.2cm","98cm","54cm","L3","L2"], post: ["96cm","2.1cm","91cm","51cm","L9","L8"], units: ["cm","cm","cm","cm","",""] }
+            posture: { 
+                labels: ["头前引距离", "圆肩偏离度", "高低肩差值", "骨盆前倾角", "脊柱侧倾度", "假胯宽维度"], 
+                pre: ["8.5cm","25°","2.5cm","18°","12°","98cm"], 
+                post: ["2.1cm","8°","0.2cm","7°","2°","91cm"], 
+                units: ["cm","°","cm","°","°","cm"] 
+            },
+            shoulder: { 
+                labels: ["一字肩夹角", "斜方肌厚度", "锁骨外展度", "肩峰差", "颈根宽度", "背部平整度"], 
+                pre: ["145°","5.8cm","150°","1.5cm","14cm","12mm"], 
+                post: ["178°","3.1cm","175°","0.2cm","11.5cm","4mm"], 
+                units: ["°","cm","°","cm","cm","mm"] 
+            },
+            postpartum: { 
+                labels: ["腹直肌间隙", "骨盆前倾角", "腰围", "耻骨痛感", "内脏脂肪", "核心力时长"], 
+                pre: ["3.5cm","18°","85cm","L7","12","25s"], 
+                post: ["0.2cm","7°","68cm","L0","4","85s"], 
+                units: ["cm","°","cm","","","s"] 
+            },
+            muscle: { 
+                labels: ["上臂围", "胸围", "大腿围", "腰围", "臀围", "小腿围"], 
+                pre: ["31cm","95cm","52cm","88cm","92cm","34cm"], 
+                post: ["38cm","112cm","59cm","78cm","98cm","36.5cm"], 
+                units: ["cm","cm","cm","cm","cm","cm"] 
+            },
+            abs: { 
+                labels: ["侧腰线宽度", "腹直肌间隙", "皮下脂肪", "下腹维度", "腰围", "腰臀比"], 
+                pre: ["12cm","2.5cm","28mm","85cm","82cm","0.88"], 
+                post: ["4cm","0.2cm","10mm","72cm","65cm","0.71"], 
+                units: ["cm","cm","mm","cm","cm",""] 
+            },
+            fatloss: { 
+                labels: ["腰围", "皮下脂厚", "臀围", "BMI", "内脏脂肪", "侧腰脂肪"], 
+                pre: ["98cm","35mm","105cm","28.5","12","15cm"], 
+                post: ["72cm","12mm","95cm","22.1","3","5cm"], 
+                units: ["cm","mm","cm","","","cm"] 
+            },
+            hip: { 
+                labels: ["臀围", "臀线高度", "假胯宽", "大腿根围", "核心稳定性", "臀中肌厚度"], 
+                pre: ["88cm","5.2cm","98cm","54cm","L3","L2"], 
+                post: ["96cm","2.1cm","91cm","51cm","L9","L8"], 
+                units: ["cm","cm","cm","cm","",""] 
+            }
         };
 
         const configs = { weight:{min:-50,max:0,step:0.1,unit:'kg'}, fat:{min:-30,max:0,step:0.1,unit:'%'}, week:{min:1,max:100,step:1,unit:'周'} };
@@ -146,7 +187,7 @@
 
         function saveToVault() {
             const name = prompt("备注案例姓名", "成功案例"); if(!name) return;
-            const vault = JSON.parse(localStorage.getItem('luxiou_v7') || '[]');
+            const vault = JSON.parse(localStorage.getItem('luxiou_final_v8') || '[]');
             const data = { 
                 id: Date.now(), name, type: document.querySelector('.cat-item.active').innerText, 
                 imgB: document.getElementById('layerBefore').style.backgroundImage, 
@@ -155,12 +196,12 @@
                 paramsL: document.getElementById('colLeft').innerHTML,
                 paramsR: document.getElementById('colRight').innerHTML
             };
-            vault.unshift(data); localStorage.setItem('luxiou_v7', JSON.stringify(vault));
-            renderVault(); alert("保存成功！");
+            vault.unshift(data); localStorage.setItem('luxiou_final_v8', JSON.stringify(vault));
+            renderVault(); alert("存档成功！");
         }
 
         function loadItem(id) {
-            const vault = JSON.parse(localStorage.getItem('luxiou_v7') || '[]');
+            const vault = JSON.parse(localStorage.getItem('luxiou_final_v8') || '[]');
             const item = vault.find(i => i.id === id);
             if(item) {
                 document.getElementById('layerBefore').style.backgroundImage = item.imgB;
@@ -170,7 +211,7 @@
                 document.getElementById('val_week').innerText = item.metrics.wk;
                 document.getElementById('colLeft').innerHTML = item.paramsL;
                 document.getElementById('colRight').innerHTML = item.paramsR;
-                alert("已完整载入对比图及数据！");
+                alert("已成功调取该案例照片及数据！");
             }
         }
 
@@ -187,23 +228,23 @@
         function closePicker() { document.getElementById('pickerMask').classList.remove('active'); }
 
         function renderVault() {
-            const vault = JSON.parse(localStorage.getItem('luxiou_v7') || '[]');
+            const vault = JSON.parse(localStorage.getItem('luxiou_final_v8') || '[]');
             const list = document.getElementById('vaultList');
-            if(vault.length === 0) { list.innerHTML = '<p style="font-size:10px; color:#555; text-align:center;">暂无存档记录</p>'; return; }
+            if(vault.length === 0) { list.innerHTML = '<p style="font-size:10px; color:#555; text-align:center;">暂无记录</p>'; return; }
             list.innerHTML = vault.map(i => `
                 <div class="vault-item-wrap" ontouchstart="tS(event)" ontouchmove="tM(event)" ontouchend="tE(event, ${i.id})">
                     <div class="delete-btn" onclick="deleteItem(${i.id})">删除</div>
                     <div class="vault-content">
                         <div style="font-size:11px;"><b>${i.name}</b> <small style="color:#666">${i.type}</small></div>
-                        <button onclick="loadItem(${i.id})" style="background:var(--primary); border:none; padding:4px 10px; border-radius:4px; font-size:10px; font-weight:bold;">调取案例</button>
+                        <button onclick="loadItem(${i.id})" style="background:var(--primary); border:none; padding:5px 12px; border-radius:6px; font-size:11px; font-weight:bold;">调取案例</button>
                     </div>
                 </div>`).join('');
         }
 
         function deleteItem(id) {
-            let vault = JSON.parse(localStorage.getItem('luxiou_v7') || '[]');
+            let vault = JSON.parse(localStorage.getItem('luxiou_final_v8') || '[]');
             vault = vault.filter(i => i.id !== id);
-            localStorage.setItem('luxiou_v7', JSON.stringify(vault));
+            localStorage.setItem('luxiou_final_v8', JSON.stringify(vault));
             renderVault();
         }
 
