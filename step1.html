@@ -205,7 +205,7 @@
             ctx.shadowBlur = 15;
             ctx.lineWidth = 2;
             ctx.fill(); ctx.stroke();
-            ctx.shadowBlur = 0; // 重置阴影
+            ctx.shadowBlur = 0; 
         }
 
         // 动画循环：让分数和图形平滑过渡
@@ -261,7 +261,6 @@
                         newScores[key] += impact[key]; // 扣分
                     }
                 }
-                // 如果没有明确写明扣分的，随机扣除一点肌肉均衡，制造轻微变化
                 if(!impactStr && !tag.getAttribute('data-goal')) {
                     newScores.muscle -= 5;
                 }
@@ -280,7 +279,6 @@
 
             let finalScore = document.getElementById('scoreDisplay').innerText;
             
-            // 震动反馈 (部分手机支持)
             if (navigator.vibrate) navigator.vibrate(50);
             
             let btn = document.querySelector('.btn-generate');
@@ -288,19 +286,17 @@
             btn.style.background = "#fff";
             
             setTimeout(() => {
-                // 这里可以写跳转逻辑：比如 window.location.href = 'v16_index.html'
                 alert(`筛查完毕！机能健康度：${finalScore}分。\n接下来将带您进入 LUXIOU 舱进行实体全息扫描。`);
-                btn.innerHTML = "<span style='font-size: 20px;'>⚡</span> 生成全息诊断档案";
-                btn.style.background = "var(--primary)";
+                
+                // 🚀 核心修改：自动跳转到全息诊断页面！
+                window.location.href = 'case_detail.html'; 
+                
             }, 1000);
         }
 
-        // 初始化
         window.onload = () => {
             drawRadar();
             animate();
-            
-            // 监听窗口大小变化，重绘雷达图防拉伸
             window.addEventListener('resize', drawRadar);
         };
     </script>
