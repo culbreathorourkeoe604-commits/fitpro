@@ -6,33 +6,34 @@
     <title>LUXIOU | 智能痛点筛查矩阵</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
-        /* 铂金高定配色：香槟金、黛红、黑曜石 */
-        :root { --primary: #E2C07C; --accent: #D4AF37; --danger: #D9534F; --bg: #0A0A0C; --surface: #141418; }
+        /* 顶级哑光奢华配色：拉丝金、勃艮第红、曜石黑 */
+        :root { --primary: #D4AF37; --accent: #C5A059; --danger: #8B0000; --danger-light: #B22222; --bg: #050505; --surface: #121212; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; margin: 0; padding: 0; }
         
-        body { background: var(--bg); color: #e2e8f0; font-family: "DIN Alternate", -apple-system, sans-serif; display: flex; flex-direction: column; height: 100svh; overflow: hidden; -webkit-font-smoothing: antialiased; }
-        #capture-area { background: var(--bg); display: flex; flex-direction: column; height: 100%; width: 100%; }
+        /* 🚀 核心修复：取消高度锁定，让页面自然滑动，杜绝任何遮挡！ */
+        body { background: var(--bg); color: #e2e8f0; font-family: "DIN Alternate", "Helvetica Neue", sans-serif; overflow-y: auto; -webkit-font-smoothing: antialiased; }
+        #capture-area { background: var(--bg); width: 100%; min-height: 100vh; padding-bottom: 120px; display: block; }
 
-        .header-brand { flex: 0 0 60px; width: 100%; display: flex; align-items: center; justify-content: center; background: rgba(10, 10, 12, 0.95); z-index: 50; border-bottom: 1px solid rgba(226, 192, 124, 0.15); }
+        .header-brand { width: 100%; height: 60px; display: flex; align-items: center; justify-content: center; background: rgba(5, 5, 5, 0.95); border-bottom: 1px solid rgba(212, 175, 55, 0.15); position: relative; }
         .brand-text { font-size: 18px; font-weight: 900; color: var(--primary); letter-spacing: 2px; }
-        .step-badge { position: absolute; right: 15px; background: rgba(226, 192, 124, 0.08); border: 1px solid var(--primary); color: var(--primary); font-size: 10px; padding: 4px 8px; border-radius: 12px; font-weight: bold; }
+        .step-badge { position: absolute; right: 15px; background: rgba(212, 175, 55, 0.05); border: 1px solid var(--primary); color: var(--primary); font-size: 10px; padding: 4px 8px; border-radius: 12px; font-weight: bold; }
 
-        .radar-section { flex: 0 0 auto; display: flex; flex-direction: column; background: radial-gradient(circle at center, rgba(20, 20, 24, 0.9) 0%, var(--bg) 100%); border-bottom: 1px solid rgba(255,255,255,0.03); padding-top: 20px; }
-        .score-board { display: flex; justify-content: space-between; align-items: flex-start; padding: 0 20px; z-index: 2; height: 60px; }
+        .radar-section { width: 100%; height: 260px; display: flex; flex-direction: column; background: radial-gradient(circle at center, rgba(18, 18, 18, 0.8) 0%, var(--bg) 100%); border-bottom: 1px solid rgba(255,255,255,0.03); padding-top: 15px; }
+        .score-board { display: flex; justify-content: space-between; align-items: flex-start; padding: 0 20px; z-index: 2; }
         .score-info { display: flex; flex-direction: column; }
-        .risk-label { font-size: 11px; color: #8A92A3; font-weight: bold; letter-spacing: 1px; }
-        .risk-score { font-size: 44px; font-weight: 900; color: var(--primary); text-shadow: 0 4px 15px rgba(226, 192, 124, 0.25); line-height: 1; margin-top: 4px; transition: color 0.3s; }
-        .risk-score.high { color: var(--danger); text-shadow: 0 4px 15px rgba(217, 83, 79, 0.3); }
+        .risk-label { font-size: 11px; color: #888; font-weight: bold; letter-spacing: 1px; }
+        /* 去除廉价发光，改为高级质感阴影 */
+        .risk-score { font-size: 44px; font-weight: 900; color: var(--primary); text-shadow: 0 2px 4px rgba(0,0,0,0.8); line-height: 1; margin-top: 4px; transition: color 0.3s; }
+        .risk-score.high { color: var(--danger-light); text-shadow: 0 2px 4px rgba(0,0,0,0.8); }
         
-        .status-tag { font-size: 11px; font-weight: bold; padding: 6px 12px; border-radius: 6px; background: rgba(226, 192, 124, 0.08); color: var(--primary); border: 1px solid rgba(226, 192, 124, 0.2); transition: 0.3s; }
-        .status-tag.warn { background: rgba(212, 175, 55, 0.08); color: var(--accent); border-color: rgba(212, 175, 55, 0.3); }
-        .status-tag.crit { background: rgba(217, 83, 79, 0.08); color: var(--danger); border-color: rgba(217, 83, 79, 0.3); }
+        .status-tag { font-size: 11px; font-weight: bold; padding: 6px 12px; border-radius: 6px; background: rgba(212, 175, 55, 0.05); color: var(--primary); border: 1px solid rgba(212, 175, 55, 0.3); transition: 0.3s; }
+        .status-tag.warn { background: rgba(197, 160, 89, 0.05); color: var(--accent); border-color: rgba(197, 160, 89, 0.3); }
+        .status-tag.crit { background: rgba(139, 0, 0, 0.05); color: var(--danger-light); border-color: rgba(139, 0, 0, 0.3); }
 
-        .radar-container { position: relative; width: 100%; height: 210px; margin-top: 5px; }
+        .radar-container { position: relative; width: 100%; height: 190px; margin-top: 10px; }
         #radarCanvas { width: 100%; height: 100%; position: absolute; top: 0; left: 0; z-index: 1; }
 
-        .matrix-scroll { flex: 1; overflow-y: auto; padding: 20px 15px 120px 15px; scrollbar-width: none; }
-        .matrix-scroll::-webkit-scrollbar { display: none; }
+        .matrix-scroll { padding: 20px 15px; }
         
         .question-group { margin-bottom: 25px; }
         .q-title { font-size: 14px; font-weight: 900; color: #D1D5DB; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
@@ -40,46 +41,44 @@
         
         .tags-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         
-        .tag-btn { background: var(--surface); border: 1px solid rgba(255,255,255,0.05); color: #8A92A3; padding: 12px 8px; border-radius: 8px; font-size: 12px; font-weight: bold; transition: all 0.2s; text-align: center; display: flex; align-items: center; justify-content: center; line-height: 1.3; cursor: pointer; }
-        .tag-btn.active { background: rgba(226, 192, 124, 0.1); border-color: var(--primary); color: #fff; box-shadow: inset 0 0 15px rgba(226, 192, 124, 0.1); transform: scale(1.02); }
-        .tag-btn.danger.active { background: rgba(217, 83, 79, 0.1); border-color: var(--danger); color: #fff; box-shadow: inset 0 0 15px rgba(217, 83, 79, 0.15); }
-        .tag-btn.custom-add { border: 1px dashed #475569; color: #8A92A3; background: transparent; grid-column: span 2; padding: 12px; }
+        .tag-btn { background: var(--surface); border: 1px solid rgba(255,255,255,0.05); color: #888; padding: 12px 8px; border-radius: 8px; font-size: 13px; font-weight: bold; transition: all 0.2s; text-align: center; display: flex; align-items: center; justify-content: center; line-height: 1.3; cursor: pointer; }
+        .tag-btn.active { background: rgba(212, 175, 55, 0.08); border-color: var(--primary); color: #fff; transform: scale(1.02); }
+        .tag-btn.danger.active { background: rgba(139, 0, 0, 0.1); border-color: var(--danger-light); color: #fff; }
+        .tag-btn.custom-add { border: 1px dashed #444; color: #888; background: transparent; grid-column: span 2; padding: 12px; }
         
-        /* 全新签名结果展示区 */
-        .signature-section { margin-top: 30px; padding: 20px; background: var(--surface); border-radius: 12px; border: 1px solid rgba(255,255,255,0.03); }
+        .signature-section { margin-top: 20px; padding: 20px; background: var(--surface); border-radius: 12px; border: 1px solid rgba(255,255,255,0.03); }
         .sig-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
         .sig-title { font-size: 13px; font-weight: bold; color: #D1D5DB; }
-        .sig-result-box { width: 100%; height: 100px; background: rgba(255,255,255,0.02); border: 1px dashed #475569; border-radius: 8px; display: flex; align-items: center; justify-content: center; overflow: hidden; cursor: pointer; transition: 0.3s; }
-        .sig-result-box:active { background: rgba(255,255,255,0.05); }
+        .sig-result-box { width: 100%; height: 100px; background: #0A0A0C; border: 1px dashed #444; border-radius: 8px; display: flex; align-items: center; justify-content: center; overflow: hidden; cursor: pointer; }
         .sig-placeholder { color: var(--primary); font-size: 13px; font-weight: bold; letter-spacing: 1px; }
-        #sigResultImg { width: 100%; height: 100%; object-fit: contain; display: none; filter: drop-shadow(0 0 2px rgba(226, 192, 124, 0.5)); }
+        #sigResultImg { width: 100%; height: 100%; object-fit: contain; display: none; }
 
-        .bottom-action { position: fixed; bottom: 0; left: 0; width: 100%; padding: 15px 20px 25px 20px; background: linear-gradient(to top, rgba(10,10,12,1) 60%, rgba(10,10,12,0)); z-index: 10; pointer-events: none;}
-        .btn-generate { pointer-events: auto; width: 100%; background: linear-gradient(135deg, #E2C07C, #D4AF37); color: #0A0A0C; border: none; padding: 16px; border-radius: 12px; font-size: 15px; font-weight: 900; box-shadow: 0 8px 20px rgba(226, 192, 124, 0.2); display: flex; justify-content: center; align-items: center; gap: 8px; }
+        .bottom-action { position: fixed; bottom: 0; left: 0; width: 100%; padding: 15px 20px 25px 20px; background: linear-gradient(to top, rgba(5,5,5,1) 60%, rgba(5,5,5,0)); z-index: 10; }
+        .btn-generate { width: 100%; background: linear-gradient(135deg, #D4AF37, #AA8A2A); color: #000; border: none; padding: 16px; border-radius: 12px; font-size: 16px; font-weight: 900; display: flex; justify-content: center; align-items: center; gap: 8px; box-shadow: 0 4px 15px rgba(212, 175, 55, 0.2); }
 
-        /* 🚀 彻底修复的暴力显隐输入窗 (纯JS控制 display) */
-        .input-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 99999; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
-        .input-box { background: var(--surface); width: 100%; max-width: 350px; padding: 25px; border-radius: 16px; border: 1px solid rgba(226, 192, 124, 0.3); box-shadow: 0 15px 40px rgba(0,0,0,0.9); }
-        .input-title { color: #fff; font-size: 16px; font-weight: bold; margin-bottom: 20px; text-align: center; }
-        .custom-input { width: 100%; padding: 15px; background: #0A0A0C; border: 1px solid #475569; color: #fff; border-radius: 8px; font-size: 16px; margin-bottom: 25px; outline: none; }
+        /* 🚀 彻底修复的输入窗（加入 -webkit-user-select: auto 等强制属性） */
+        .input-modal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.9); z-index: 999999; flex-direction: column; align-items: center; justify-content: center; }
+        .input-box { background: #121212; width: 85%; max-width: 350px; padding: 25px; border-radius: 16px; border: 1px solid rgba(212, 175, 55, 0.3); }
+        .input-title { color: #fff; font-size: 15px; font-weight: bold; margin-bottom: 20px; text-align: center; }
+        .custom-input { width: 100%; padding: 16px; background: #050505; border: 1px solid #444; color: #fff; border-radius: 8px; font-size: 16px; margin-bottom: 25px; outline: none; user-select: auto !important; -webkit-user-select: auto !important; pointer-events: auto !important; }
         .custom-input:focus { border-color: var(--primary); }
         .modal-btns { display: flex; gap: 15px; }
         .modal-btn { flex: 1; padding: 14px; border-radius: 8px; font-size: 15px; font-weight: bold; border: none; }
-        .modal-btn.cancel { background: #2A2A35; color: #8A92A3; }
-        .modal-btn.confirm { background: var(--primary); color: #0A0A0C; }
+        .modal-btn.cancel { background: #222; color: #888; }
+        .modal-btn.confirm { background: var(--primary); color: #000; }
 
         /* 🚀 全屏签字版 Modal */
-        .sig-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #0A0A0C; z-index: 100000; flex-direction: column; }
-        .sig-modal-header { height: 60px; display: flex; align-items: center; justify-content: center; color: var(--primary); font-weight: bold; font-size: 16px; border-bottom: 1px solid rgba(226,192,124,0.2); background: #141418; }
-        #fullscreenSigCanvas { flex: 1; width: 100%; touch-action: none; background: #0A0A0C; }
-        .sig-modal-footer { height: 80px; display: flex; gap: 15px; padding: 15px 20px; background: #141418; border-top: 1px solid rgba(255,255,255,0.05); }
+        .sig-modal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #050505; z-index: 999999; flex-direction: column; }
+        .sig-modal-header { height: 60px; display: flex; align-items: center; justify-content: center; color: var(--primary); font-weight: bold; font-size: 16px; border-bottom: 1px solid rgba(212, 175, 55, 0.15); background: #121212; }
+        #fullscreenSigCanvas { flex: 1; width: 100%; touch-action: none; background: #050505; }
+        .sig-modal-footer { height: 80px; display: flex; gap: 15px; padding: 15px 20px; background: #121212; border-top: 1px solid rgba(255,255,255,0.05); }
 
-        .poster-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 99999; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
-        .poster-scroll-area { max-height: 70vh; width: 100%; overflow-y: auto; border-radius: 12px; border: 1px solid var(--primary); box-shadow: 0 10px 40px rgba(226, 192, 124, 0.15); }
+        .poster-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 999999; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
+        .poster-scroll-area { max-height: 70vh; width: 100%; overflow-y: auto; border-radius: 12px; border: 1px solid var(--primary); }
         .poster-scroll-area::-webkit-scrollbar { display: none; }
         .poster-img { width: 100%; display: block; }
-        .poster-tip { color: #8A92A3; font-size: 13px; margin: 20px 0 15px 0; font-weight: bold; }
-        .btn-next { background: var(--primary); color: #0A0A0C; border: none; padding: 14px 35px; border-radius: 30px; font-weight: 900; font-size: 15px; }
+        .poster-tip { color: #888; font-size: 13px; margin: 20px 0 15px 0; font-weight: bold; }
+        .btn-next { background: var(--primary); color: #000; border: none; padding: 14px 35px; border-radius: 30px; font-weight: 900; font-size: 15px; }
     </style>
 </head>
 <body>
@@ -173,7 +172,7 @@
     <div class="input-modal" id="customInputModal">
         <div class="input-box">
             <div class="input-title" id="customInputTitle">请输入内容</div>
-            <input type="text" class="custom-input" id="customInputField" placeholder="触碰输入...">
+            <input type="text" class="custom-input" id="customInputField" placeholder="在此输入...">
             <div class="modal-btns">
                 <button class="modal-btn cancel" onclick="closeInput()">取消</button>
                 <button class="modal-btn confirm" onclick="confirmInput()">确认添加</button>
@@ -217,7 +216,7 @@
             ctx.scale(dpr, dpr);
             const w = rect.width, h = rect.height;
             const centerX = w / 2; const centerY = h / 2 + 10;
-            const radius = Math.min(w, h) / 2 * 0.75; const sides = 5;
+            const radius = Math.min(w, h) / 2 * 0.7; const sides = 5;
 
             ctx.clearRect(0, 0, w, h);
             ctx.lineWidth = 1;
@@ -230,10 +229,11 @@
                     if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
                 }
                 ctx.closePath();
-                ctx.strokeStyle = `rgba(226, 192, 124, ${0.08 * level})`; ctx.stroke();
+                // 哑光拉丝金网格线
+                ctx.strokeStyle = `rgba(212, 175, 55, ${0.1 * level})`; ctx.stroke();
             }
 
-            ctx.fillStyle = "#8A92A3"; ctx.font = "bold 11px sans-serif"; ctx.textAlign = "center"; ctx.textBaseline = "middle";
+            ctx.fillStyle = "#888"; ctx.font = "bold 11px sans-serif"; ctx.textAlign = "center"; ctx.textBaseline = "middle";
             for (let i = 0; i < sides; i++) {
                 let angle = (Math.PI * 2 * i) / sides - Math.PI / 2;
                 let x = centerX + radius * Math.cos(angle); let y = centerY + radius * Math.sin(angle);
@@ -254,15 +254,15 @@
             ctx.closePath();
             
             let totalScore = Math.round(Object.values(currentScores).reduce((a,b)=>a+b, 0) / 5);
-            let gradient = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, radius);
+            
+            // 顶级质感：香槟金 vs 勃艮第红 (去荧光)
+            ctx.lineWidth = 2;
             if(totalScore < 75) { 
-                gradient.addColorStop(0, "rgba(217, 83, 79, 0.5)"); gradient.addColorStop(1, "rgba(217, 83, 79, 0.05)");
-                ctx.fillStyle = gradient; ctx.strokeStyle = "#D9534F"; ctx.shadowColor = "rgba(217, 83, 79, 0.4)"; 
+                ctx.fillStyle = "rgba(139, 0, 0, 0.4)"; ctx.strokeStyle = "#B22222"; 
             } else { 
-                gradient.addColorStop(0, "rgba(226, 192, 124, 0.5)"); gradient.addColorStop(1, "rgba(226, 192, 124, 0.05)");
-                ctx.fillStyle = gradient; ctx.strokeStyle = "#E2C07C"; ctx.shadowColor = "rgba(226, 192, 124, 0.4)"; 
+                ctx.fillStyle = "rgba(212, 175, 55, 0.4)"; ctx.strokeStyle = "#D4AF37"; 
             }
-            ctx.shadowBlur = 15; ctx.lineWidth = 2; ctx.fill(); ctx.stroke(); ctx.shadowBlur = 0; 
+            ctx.fill(); ctx.stroke(); 
         }
 
         function animate() {
@@ -297,28 +297,27 @@
             recalculateScores();
         }
 
-        function recalculateScores() {
-            let newScores = { core: 95, joint: 95, meta: 95, posture: 95, muscle: 95 };
-            document.querySelectorAll('.tag-btn.active').forEach(tag => {
-                let impactStr = tag.getAttribute('data-impact');
-                if(impactStr) { let impact = JSON.parse(impactStr); for(let key in impact) newScores[key] += impact[key]; }
-                if(!impactStr && !tag.getAttribute('data-goal')) newScores.muscle -= 5;
-            });
-            targetScores = newScores;
-        }
-
-        // 🚀 暴力修复：绝对无死角输入窗逻辑
+        // 🚀 完全重构的防拦截弹窗唤醒逻辑
         function openInput(btn, impactStr, isDanger, title) {
             window.activeBtn = btn;
             window.activeImpact = impactStr;
             window.activeDanger = isDanger;
             
             document.getElementById('customInputTitle').innerText = title;
-            document.getElementById('customInputField').value = '';
-            document.getElementById('customInputModal').style.display = 'flex'; // 暴力展示
+            const inputField = document.getElementById('customInputField');
+            inputField.value = '';
+            
+            const modal = document.getElementById('customInputModal');
+            modal.style.display = 'flex';
+            
+            // 延迟让 iOS 有时间渲染 DOM 然后自动获取焦点
+            setTimeout(() => {
+                inputField.focus();
+            }, 50);
         }
         
         function closeInput() { 
+            document.getElementById('customInputField').blur();
             document.getElementById('customInputModal').style.display = 'none'; 
         }
         
@@ -338,27 +337,26 @@
                 recalculateScores(); 
                 closeInput();
             } else { 
-                alert("请先输入内容！"); 
+                alert("内容不能为空哦"); 
+                document.getElementById('customInputField').focus();
             }
         }
 
-        // 🚀 核心升级：全屏手写签字版
+        // 全屏签字版
         const fSigCanvas = document.getElementById('fullscreenSigCanvas');
         const fSigCtx = fSigCanvas.getContext('2d');
         let fIsDrawing = false;
 
         function openSigPad() {
             let modal = document.getElementById('sigModal');
-            modal.style.display = 'flex'; // 全屏展开
-            
-            // 初始化全屏画布大小
+            modal.style.display = 'flex';
             const dpr = window.devicePixelRatio || 1;
             fSigCanvas.width = fSigCanvas.clientWidth * dpr; 
             fSigCanvas.height = fSigCanvas.clientHeight * dpr;
             fSigCtx.scale(dpr, dpr); 
-            fSigCtx.lineWidth = 4; // 签字笔触加粗
+            fSigCtx.lineWidth = 4; 
             fSigCtx.lineCap = 'round'; 
-            fSigCtx.strokeStyle = '#E2C07C'; // 铂金笔迹
+            fSigCtx.strokeStyle = '#D4AF37'; // 拉丝金笔迹
             fSigCtx.clearRect(0, 0, fSigCanvas.width, fSigCanvas.height);
         }
 
@@ -378,17 +376,14 @@
         fSigCanvas.addEventListener('touchmove', e => { e.preventDefault(); if(fIsDrawing){ const p = getFPos(e); fSigCtx.lineTo(p.x, p.y); fSigCtx.stroke(); }}, {passive: false});
         fSigCanvas.addEventListener('touchend', () => fIsDrawing = false);
 
-        function clearSig() { 
-            fSigCtx.clearRect(0, 0, fSigCanvas.width, fSigCanvas.height); 
-        }
+        function clearSig() { fSigCtx.clearRect(0, 0, fSigCanvas.width, fSigCanvas.height); }
 
         function saveSig() {
-            // 将全屏签字的内容保存到主页面的图片框中
             let dataUrl = fSigCanvas.toDataURL("image/png");
             document.getElementById('sigResultImg').src = dataUrl;
             document.getElementById('sigResultImg').style.display = 'block';
             document.getElementById('sigPlaceholder').style.display = 'none';
-            document.getElementById('sigModal').style.display = 'none'; // 关闭全屏版
+            document.getElementById('sigModal').style.display = 'none';
         }
 
         function generatePoster() {
@@ -400,21 +395,17 @@
 
             if (navigator.vibrate) navigator.vibrate(50);
             let btn = document.querySelector('.btn-generate');
-            btn.innerHTML = "⏳ 正在渲染全景高清长图..."; btn.style.opacity = "0.7"; document.getElementById('actionBtnGroup').style.display = 'none';
+            btn.innerHTML = "⏳ 正在生成..."; btn.style.opacity = "0.7"; document.getElementById('actionBtnGroup').style.display = 'none';
             
-            let captureArea = document.getElementById('capture-area'); let scrollArea = document.getElementById('scrollArea');
-            let origHeight = captureArea.style.height; let origOverflow = scrollArea.style.overflowY; let origFlex = scrollArea.style.flex;
+            let captureArea = document.getElementById('capture-area');
             
-            scrollArea.style.overflowY = 'visible'; scrollArea.style.flex = 'none'; captureArea.style.height = captureArea.scrollHeight + 'px';
-
-            html2canvas(captureArea, { backgroundColor: "#0A0A0C", scale: 2, windowHeight: captureArea.scrollHeight }).then(canvas => {
-                captureArea.style.height = origHeight; scrollArea.style.overflowY = origOverflow; scrollArea.style.flex = origFlex;
+            // 流式布局截图极其稳定
+            html2canvas(captureArea, { backgroundColor: "#050505", scale: 2 }).then(canvas => {
                 document.getElementById('actionBtnGroup').style.display = 'block'; btn.innerHTML = "<span style='font-size: 20px;'>📸</span> 生成诊断报告并存档"; btn.style.opacity = "1";
                 document.getElementById('posterImg').src = canvas.toDataURL("image/jpeg", 0.9);
                 document.getElementById('posterOverlay').style.display = 'flex';
             }).catch(err => {
                 alert("生成长图失败，请重试！"); document.getElementById('actionBtnGroup').style.display = 'block';
-                captureArea.style.height = origHeight; scrollArea.style.overflowY = origOverflow; scrollArea.style.flex = origFlex;
             });
         }
 
