@@ -6,46 +6,57 @@
     <title>LUXIOU | ACE 医疗级风险排查</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
-        :root { --primary: #00f2fe; --accent: #00ff88; --danger: #ff007a; --bg: #090b14; --surface: #121826; }
+        :root { --primary: #00e5ff; --accent: #facc15; --danger: #f43f5e; --bg: #07090f; --surface: #111520; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; margin: 0; padding: 0; }
         
         body { background: var(--bg); color: #e2e8f0; font-family: "DIN Alternate", -apple-system, sans-serif; display: flex; flex-direction: column; height: 100svh; overflow: hidden; -webkit-font-smoothing: antialiased; }
         #capture-area { background: var(--bg); display: flex; flex-direction: column; height: 100%; width: 100%; }
 
-        .header-brand { flex: 0 0 60px; width: 100%; display: flex; align-items: center; justify-content: center; background: rgba(9, 11, 20, 0.95); z-index: 50; border-bottom: 1px solid rgba(255,0,122,0.3); }
-        .brand-text { font-size: 18px; font-weight: 900; color: #fff; letter-spacing: 2px; text-shadow: 0 0 8px rgba(255,0,122,0.6); }
-        .step-badge { position: absolute; right: 15px; background: rgba(255,0,122,0.1); border: 1px solid var(--danger); color: var(--danger); font-size: 10px; padding: 4px 8px; border-radius: 12px; font-weight: bold; }
+        .header-brand { flex: 0 0 60px; width: 100%; display: flex; align-items: center; justify-content: center; background: rgba(7, 9, 15, 0.95); z-index: 50; border-bottom: 1px solid rgba(244, 63, 94, 0.2); }
+        .brand-text { font-size: 18px; font-weight: 900; color: #fff; letter-spacing: 2px; text-shadow: 0 0 10px rgba(244, 63, 94, 0.4); }
+        .step-badge { position: absolute; right: 15px; background: rgba(244, 63, 94, 0.1); border: 1px solid var(--danger); color: var(--danger); font-size: 10px; padding: 4px 8px; border-radius: 12px; font-weight: bold; }
 
-        /* 新增：PAR-Q 风险评估雷达图 */
-        .radar-section { flex: 0 0 220px; position: relative; display: flex; align-items: center; justify-content: center; background: radial-gradient(circle at center, rgba(18, 24, 38, 0.9) 0%, var(--bg) 100%); border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .radar-section { flex: 0 0 240px; position: relative; display: flex; align-items: center; justify-content: center; background: radial-gradient(circle at center, rgba(17, 21, 32, 0.9) 0%, var(--bg) 100%); border-bottom: 1px solid rgba(255,255,255,0.03); }
         #parqRadar { width: 100%; height: 100%; position: absolute; top: 0; left: 0; z-index: 1; }
         .risk-panel { position: absolute; left: 20px; top: 20px; z-index: 2; display: flex; flex-direction: column; }
         .risk-label { font-size: 11px; color: #94a3b8; font-weight: 900; letter-spacing: 1px; }
-        .risk-score { font-size: 32px; font-weight: 900; color: var(--accent); text-shadow: 0 0 10px rgba(0,255,136,0.5); transition: color 0.3s; line-height: 1; margin-top: 6px; }
-        .risk-score.high { color: var(--danger); text-shadow: 0 0 15px rgba(255,0,122,0.6); }
+        .risk-score { font-size: 32px; font-weight: 900; color: var(--primary); text-shadow: 0 0 10px rgba(0,229,255,0.3); transition: color 0.3s; line-height: 1; margin: 6px 0; }
+        .risk-score.high { color: var(--danger); text-shadow: 0 0 15px rgba(244, 63, 94, 0.4); }
+        
+        /* 强力转化引导标语 */
+        .slogan-box { font-size: 11px; font-weight: bold; padding: 6px 10px; border-radius: 6px; background: rgba(0,229,255,0.05); color: #94a3b8; border: 1px solid rgba(0,229,255,0.1); max-width: 160px; line-height: 1.4; transition: 0.3s;}
+        .slogan-box.warn { background: rgba(250, 204, 21, 0.05); color: var(--accent); border-color: rgba(250, 204, 21, 0.2); }
+        .slogan-box.crit { background: rgba(244, 63, 94, 0.05); color: var(--danger); border-color: rgba(244, 63, 94, 0.2); }
 
-        .q-list { flex: 1; overflow-y: auto; padding: 20px 15px 110px 15px; scrollbar-width: none; }
+        .q-list { flex: 1; overflow-y: auto; padding: 20px 15px 120px 15px; scrollbar-width: none; }
         .q-list::-webkit-scrollbar { display: none; }
         
-        .cat-title { font-size: 14px; font-weight: 900; color: var(--primary); margin: 15px 0 10px 0; border-left: 4px solid var(--primary); padding-left: 8px; }
+        .cat-title { font-size: 14px; font-weight: 900; color: var(--primary); margin: 20px 0 12px 0; border-left: 4px solid var(--primary); padding-left: 8px; }
         
-        .q-item { background: var(--surface); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 15px; margin-bottom: 12px; }
-        .q-text { font-size: 13px; color: #cbd5e1; line-height: 1.6; font-weight: bold; margin-bottom: 12px; }
+        .q-item { background: var(--surface); border: 1px solid rgba(255,255,255,0.03); border-radius: 12px; padding: 16px; margin-bottom: 12px; }
+        .q-text { font-size: 14px; color: #e2e8f0; line-height: 1.6; font-weight: bold; margin-bottom: 15px; }
         
         .ans-group { display: flex; gap: 10px; }
-        .ans-btn { flex: 1; padding: 10px; text-align: center; border-radius: 8px; font-size: 14px; font-weight: bold; color: #64748b; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); transition: 0.2s; }
-        .ans-btn.no.active { background: rgba(0,255,136,0.1); border-color: var(--accent); color: var(--accent); box-shadow: 0 0 10px rgba(0,255,136,0.2); }
-        .ans-btn.yes.active { background: rgba(255,0,122,0.15); border-color: var(--danger); color: var(--danger); box-shadow: 0 0 10px rgba(255,0,122,0.3); }
+        .ans-btn { flex: 1; padding: 12px; text-align: center; border-radius: 8px; font-size: 14px; font-weight: bold; color: #64748b; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); transition: 0.2s; }
+        .ans-btn.no.active { background: rgba(0, 229, 255, 0.08); border-color: var(--primary); color: var(--primary); }
+        .ans-btn.yes.active { background: rgba(244, 63, 94, 0.08); border-color: var(--danger); color: var(--danger); box-shadow: inset 0 0 10px rgba(244, 63, 94, 0.1); }
 
-        .bottom-action { position: fixed; bottom: 0; left: 0; width: 100%; padding: 15px 20px 25px 20px; background: linear-gradient(to top, rgba(9,11,20,1) 60%, rgba(9,11,20,0)); z-index: 10; }
-        .btn-generate { width: 100%; background: var(--primary); color: #000; border: none; padding: 16px; border-radius: 16px; font-size: 16px; font-weight: 900; box-shadow: 0 8px 25px rgba(0,242,254,0.3); display: flex; justify-content: center; align-items: center; gap: 8px; }
+        /* 电子手写签名区 */
+        .signature-section { margin-top: 30px; padding: 20px; background: var(--surface); border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); }
+        .sig-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .sig-title { font-size: 14px; font-weight: bold; color: #fff; }
+        .btn-clear { background: transparent; border: 1px solid #475569; color: #94a3b8; font-size: 12px; padding: 4px 10px; border-radius: 4px; }
+        #sigCanvas { width: 100%; height: 120px; background: rgba(255,255,255,0.02); border: 1px dashed #475569; border-radius: 8px; touch-action: none; }
+
+        .bottom-action { position: fixed; bottom: 0; left: 0; width: 100%; padding: 15px 20px 25px 20px; background: linear-gradient(to top, rgba(7,9,15,1) 60%, rgba(7,9,15,0)); z-index: 10; pointer-events: none;}
+        .btn-generate { pointer-events: auto; width: 100%; background: var(--primary); color: #000; border: none; padding: 16px; border-radius: 16px; font-size: 16px; font-weight: 900; box-shadow: 0 8px 20px rgba(0,229,255,0.25); display: flex; justify-content: center; align-items: center; gap: 8px; }
 
         .poster-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 9999; flex-direction: column; align-items: center; justify-content: center; padding: 20px; opacity: 0; transition: opacity 0.3s; }
         .poster-overlay.active { display: flex; opacity: 1; }
-        .poster-scroll-area { max-height: 70vh; width: 100%; overflow-y: auto; border-radius: 12px; border: 2px solid var(--danger); box-shadow: 0 10px 40px rgba(255,0,122,0.4); }
+        .poster-scroll-area { max-height: 70vh; width: 100%; overflow-y: auto; border-radius: 12px; border: 1px solid var(--danger); box-shadow: 0 10px 40px rgba(244, 63, 94, 0.2); }
         .poster-scroll-area::-webkit-scrollbar { display: none; }
         .poster-img { width: 100%; display: block; }
-        .poster-tip { color: #fff; font-size: 15px; margin: 20px 0 15px 0; font-weight: bold; display: flex; align-items: center; gap: 8px; }
+        .poster-tip { color: #fff; font-size: 14px; margin: 20px 0 15px 0; font-weight: bold; }
         .btn-next { background: #fff; color: #000; border: none; padding: 14px 35px; border-radius: 30px; font-weight: 900; font-size: 15px; }
     </style>
 </head>
@@ -61,12 +72,22 @@
             <div class="risk-panel">
                 <span class="risk-label">身体风险状态评估</span>
                 <div class="risk-score" id="riskDisplay">安全 (LOW)</div>
+                <div class="slogan-box" id="sloganBox">各项机能运转良好，已具备高阶训练准入条件。</div>
             </div>
             <canvas id="parqRadar"></canvas>
         </div>
 
         <div class="q-list" id="scrollArea">
+            <div id="questionContainer"></div>
+
+            <div class="signature-section">
+                <div class="sig-header">
+                    <span class="sig-title">客户电子签名确认</span>
+                    <button class="btn-clear" onclick="clearSignature()">重新签名</button>
+                </div>
+                <canvas id="sigCanvas"></canvas>
             </div>
+        </div>
     </div> 
 
     <div class="bottom-action" id="actionBtnGroup">
@@ -77,60 +98,57 @@
 
     <div class="poster-overlay" id="posterOverlay">
         <div class="poster-scroll-area"><img id="posterImg" class="poster-img" src="" alt="PAR-Q 海报"></div>
-        <div class="poster-tip"><span style="color:var(--primary)">👇 长按上方图片，保存安全承诺存档</span></div>
+        <div class="poster-tip"><span style="color:var(--primary)">👇 长按上方图片，保存带签名的安全承诺</span></div>
         <button class="btn-next" onclick="goToNextStep()">进入 LUXIOU 全息扫描 ➔</button>
     </div>
 
     <script>
-        // ACE 标准 18 题题库分类与对应雷达图扣分权重
         const questionData = [
-            { title: "心血管与呼吸系统征兆", qs: [
+            { title: "一、 心血管与呼吸系统征兆", qs: [
                 { text: "1. 医生是否曾诊断您患有心脏病，或建议只能在医疗监督下运动？", impact: { cardio: -40 } },
                 { text: "2. 在休息、日常活动或轻微运动时，您是否会感到胸痛或胸闷？", impact: { cardio: -35 } },
                 { text: "3. 过去半年内，是否有过不明原因的头晕、晕厥或失去平衡？", impact: { cardio: -30, general: -20 } },
-                { text: "4. 直系亲属（男<55岁，女<65岁）是否有过心脏病发作或猝死史？", impact: { cardio: -25 } },
-                { text: "5. 您是否患有哮喘、慢阻肺(COPD)等呼吸系统疾病？", impact: { resp: -35 } },
-                { text: "6. 稍微活动一下（如上两层楼）是否就会感到异常的呼吸急促？", impact: { resp: -30, cardio: -15 } }
+                { text: "4. 直系亲属是否有过心脏病发作或猝死史？", impact: { cardio: -25 } },
+                { text: "5. 您是否患有哮喘、慢阻肺等呼吸系统疾病？", impact: { resp: -35 } },
+                { text: "6. 稍微活动一下是否就会感到异常的呼吸急促？", impact: { resp: -30, cardio: -15 } }
             ]},
-            { title: "代谢与慢性病史", qs: [
+            { title: "二、 代谢与慢性病史", qs: [
                 { text: "7. 您是否有高血压病史，或目前正在服用降压药物？", impact: { meta: -30, cardio: -20 } },
-                { text: "8. 您是否有糖尿病，或曾被告知空腹血糖/糖化血红蛋白偏高？", impact: { meta: -35 } },
-                { text: "9. 您是否患有严重高血脂（胆固醇或甘油三酯指标异常）？", impact: { meta: -25 } },
+                { text: "8. 您是否有糖尿病，或曾被告知空腹血糖偏高？", impact: { meta: -35 } },
+                { text: "9. 您是否患有严重高血脂（胆固醇指标异常）？", impact: { meta: -25 } },
                 { text: "10. 您目前是否吸烟，或戒烟时间不足6个月？", impact: { resp: -20, cardio: -10 } },
-                { text: "11. 您的脚踝或小腿是否经常出现不明原因的肿胀（水肿）？", impact: { meta: -20, cardio: -20 } }
+                { text: "11. 您的脚踝或小腿是否经常出现不明原因的水肿？", impact: { meta: -20, cardio: -20 } }
             ]},
-            { title: "骨骼关节与外伤史", qs: [
+            { title: "三、 骨骼关节与外伤史", qs: [
                 { text: "12. 您的脊柱、关节或骨骼是否有已被医生确诊的损伤？", impact: { ortho: -40 } },
-                { text: "13. 您的关节是否患有风湿或骨关节炎，并在活动后会加剧疼痛？", impact: { ortho: -35 } },
-                { text: "14. 您近期半年内是否接受过任何类型的外科手术，且尚在恢复期？", impact: { ortho: -25, general: -30 } }
+                { text: "13. 您的关节是否患有风湿或骨关节炎？", impact: { ortho: -35 } },
+                { text: "14. 近期半年内是否接受过任何外科手术尚在恢复期？", impact: { ortho: -25, general: -30 } }
             ]},
-            { title: "生活方式与综合指征", qs: [
-                { text: "15. 您的心脏是否经常出现不明原因的剧烈跳动、心悸或心律不齐？", impact: { cardio: -30 } },
-                { text: "16. 您是否长期极度久坐（每周运动少于3次，每次少于30分钟）？", impact: { general: -15 } },
-                { text: "17. 您是否被医生告知过体重基数过大，存在严重的肥胖相关风险？", impact: { meta: -25, ortho: -15 } },
-                { text: "18. 是否有其他任何疾病，医生建议您在进行健身前必须咨询专业意见？", impact: { general: -40 } }
+            { title: "四、 生活方式与综合指征", qs: [
+                { text: "15. 心脏是否经常出现不明原因的剧烈跳动或心悸？", impact: { cardio: -30 } },
+                { text: "16. 您是否长期极度久坐（每周运动少于3次）？", impact: { general: -15 } },
+                { text: "17. 是否被医生告知过存在严重的肥胖相关风险？", impact: { meta: -25, ortho: -15 } },
+                { text: "18. 是否有其他任何疾病，医生建议您运动前必须咨询专业意见？", impact: { general: -40 } }
             ]}
         ];
 
-        // 渲染 18 道题
-        const listDiv = document.getElementById('scrollArea');
-        questionData.forEach((group, gIdx) => {
-            listDiv.innerHTML += `<div class="cat-title">${group.title}</div>`;
-            group.qs.forEach((q, qIdx) => {
+        const container = document.getElementById('questionContainer');
+        questionData.forEach(group => {
+            let html = `<div class="cat-title">${group.title}</div>`;
+            group.qs.forEach(q => {
                 let impactStr = JSON.stringify(q.impact);
-                listDiv.innerHTML += `
+                html += `
                     <div class="q-item">
                         <div class="q-text">${q.text}</div>
                         <div class="ans-group">
                             <div class="ans-btn yes" data-impact='${impactStr}' onclick="selectAns(this, true)">是的 (YES)</div>
                             <div class="ans-btn no active" onclick="selectAns(this, false)">没有 (NO)</div>
                         </div>
-                    </div>
-                `;
+                    </div>`;
             });
+            container.innerHTML += html;
         });
 
-        // --- 雷达图系统 ---
         const canvas = document.getElementById('parqRadar');
         const ctx = canvas.getContext('2d');
         const labels = ["心血管系统", "骨骼与关节", "代谢状态", "呼吸系统", "综合指征"];
@@ -158,7 +176,7 @@
                     if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
                 }
                 ctx.closePath();
-                ctx.strokeStyle = `rgba(100, 116, 139, ${0.15 * level})`; ctx.stroke();
+                ctx.strokeStyle = `rgba(148, 163, 184, ${0.1 * level})`; ctx.stroke();
             }
 
             ctx.fillStyle = "#cbd5e1"; ctx.font = "bold 11px sans-serif"; ctx.textAlign = "center"; ctx.textBaseline = "middle";
@@ -181,18 +199,15 @@
             });
             ctx.closePath();
             
-            // 判断是否含有任何高风险项
             let hasRisk = Object.values(curScores).some(s => s < 90);
-            
             let gradient = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, radius);
             if(hasRisk) { 
-                gradient.addColorStop(0, "rgba(255, 0, 122, 0.5)"); gradient.addColorStop(1, "rgba(255, 0, 122, 0.1)");
-                ctx.fillStyle = gradient; ctx.strokeStyle = "#ff007a"; ctx.shadowColor = "#ff007a"; 
+                gradient.addColorStop(0, "rgba(244, 63, 94, 0.4)"); gradient.addColorStop(1, "rgba(244, 63, 94, 0.05)");
+                ctx.fillStyle = gradient; ctx.strokeStyle = "#f43f5e"; ctx.shadowColor = "#f43f5e"; 
             } else { 
-                gradient.addColorStop(0, "rgba(0, 255, 136, 0.5)"); gradient.addColorStop(1, "rgba(0, 255, 136, 0.1)");
-                ctx.fillStyle = gradient; ctx.strokeStyle = "#00ff88"; ctx.shadowColor = "#00ff88"; 
+                gradient.addColorStop(0, "rgba(0, 229, 255, 0.4)"); gradient.addColorStop(1, "rgba(0, 229, 255, 0.05)");
+                ctx.fillStyle = gradient; ctx.strokeStyle = "#00e5ff"; ctx.shadowColor = "#00e5ff"; 
             }
-            
             ctx.shadowBlur = 15; ctx.lineWidth = 2.5; ctx.fill(); ctx.stroke(); ctx.shadowBlur = 0; 
         }
 
@@ -207,12 +222,22 @@
             requestAnimationFrame(animate);
         }
 
+        // 🚀 核心恐吓与转化标语
         function updateRiskLabel() {
             let totalDeduction = 500 - Object.values(curScores).reduce((a,b)=>a+b, 0);
             let display = document.getElementById('riskDisplay');
-            if(totalDeduction === 0) { display.innerText = "安全 (LOW)"; display.className = "risk-score"; display.style.color = "var(--accent)"; }
-            else if(totalDeduction < 60) { display.innerText = "关注 (MOD)"; display.className = "risk-score high"; display.style.color = "#ffaa00"; }
-            else { display.innerText = "危险 (HIGH)"; display.className = "risk-score high"; display.style.color = "var(--danger)"; }
+            let slogan = document.getElementById('sloganBox');
+            
+            if(totalDeduction === 0) { 
+                display.innerText = "安全 (LOW)"; display.className = "risk-score"; 
+                slogan.className = "slogan-box"; slogan.innerText = "各项机能运转良好，具备高阶训练准入条件。";
+            } else if(totalDeduction < 60) { 
+                display.innerText = "关注 (MOD)"; display.className = "risk-score high"; display.style.color = "var(--accent)"; 
+                slogan.className = "slogan-box warn"; slogan.innerText = "存在潜在健康短板，建议立刻开展定制化恢复训练。";
+            } else { 
+                display.innerText = "危险 (HIGH)"; display.className = "risk-score high"; display.style.color = "var(--danger)"; 
+                slogan.className = "slogan-box crit"; slogan.innerText = "健康风险已超临界值！亟需专业医疗与康复级训练介入！";
+            }
         }
 
         function selectAns(btn, isYes) {
@@ -231,18 +256,54 @@
             tgtScores = newS;
         }
 
-        // 🚀 长图生成
+        // --- 手写签名板逻辑 ---
+        const sigCanvas = document.getElementById('sigCanvas');
+        const sigCtx = sigCanvas.getContext('2d');
+        let isDrawing = false;
+
+        function initSignature() {
+            const rect = sigCanvas.parentElement.getBoundingClientRect();
+            // 解决设备像素比导致的线条发虚
+            const dpr = window.devicePixelRatio || 1;
+            sigCanvas.width = rect.width * dpr;
+            sigCanvas.height = 120 * dpr;
+            sigCtx.scale(dpr, dpr);
+            sigCtx.lineWidth = 3;
+            sigCtx.lineCap = 'round';
+            sigCtx.strokeStyle = '#00e5ff'; // 科技蓝笔触
+        }
+
+        function getPos(e) {
+            const rect = sigCanvas.getBoundingClientRect();
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            return { x: clientX - rect.left, y: clientY - rect.top };
+        }
+
+        sigCanvas.addEventListener('mousedown', e => { isDrawing = true; const pos = getPos(e); sigCtx.beginPath(); sigCtx.moveTo(pos.x, pos.y); });
+        sigCanvas.addEventListener('mousemove', e => { if(isDrawing){ const pos = getPos(e); sigCtx.lineTo(pos.x, pos.y); sigCtx.stroke(); }});
+        sigCanvas.addEventListener('mouseup', () => isDrawing = false);
+        sigCanvas.addEventListener('mouseout', () => isDrawing = false);
+
+        sigCanvas.addEventListener('touchstart', e => { e.preventDefault(); isDrawing = true; const pos = getPos(e); sigCtx.beginPath(); sigCtx.moveTo(pos.x, pos.y); }, {passive: false});
+        sigCanvas.addEventListener('touchmove', e => { e.preventDefault(); if(isDrawing){ const pos = getPos(e); sigCtx.lineTo(pos.x, pos.y); sigCtx.stroke(); }}, {passive: false});
+        sigCanvas.addEventListener('touchend', () => isDrawing = false);
+
+        function clearSignature() {
+            sigCtx.clearRect(0, 0, sigCanvas.width, sigCanvas.height);
+        }
+
         function generatePoster() {
             if (navigator.vibrate) navigator.vibrate(50);
             let btn = document.querySelector('.btn-generate');
-            btn.innerHTML = "⏳ 正在生成医疗排查底档..."; btn.style.opacity = "0.7"; document.getElementById('actionBtnGroup').style.display = 'none';
+            btn.innerHTML = "⏳ 正在生成带签名的医疗底档..."; btn.style.opacity = "0.7"; document.getElementById('actionBtnGroup').style.display = 'none';
             
             let captureArea = document.getElementById('capture-area'); let scrollArea = document.getElementById('scrollArea');
             let origHeight = captureArea.style.height; let origOverflow = scrollArea.style.overflowY; let origFlex = scrollArea.style.flex;
             
             scrollArea.style.overflowY = 'visible'; scrollArea.style.flex = 'none'; captureArea.style.height = captureArea.scrollHeight + 'px';
 
-            html2canvas(captureArea, { backgroundColor: "#090b14", scale: 2, windowHeight: captureArea.scrollHeight }).then(canvas => {
+            html2canvas(captureArea, { backgroundColor: "#07090f", scale: 2, windowHeight: captureArea.scrollHeight }).then(canvas => {
                 captureArea.style.height = origHeight; scrollArea.style.overflowY = origOverflow; scrollArea.style.flex = origFlex;
                 document.getElementById('actionBtnGroup').style.display = 'block'; btn.innerHTML = "<span style='font-size: 20px;'>🛡️</span> 生成医疗排查底档并保存"; btn.style.opacity = "1";
                 document.getElementById('posterImg').src = canvas.toDataURL("image/jpeg", 0.9);
@@ -254,7 +315,7 @@
         }
 
         function goToNextStep() { window.location.href = 'case_detail.html'; }
-        window.onload = () => { drawRadar(); animate(); window.addEventListener('resize', drawRadar); };
+        window.onload = () => { drawRadar(); animate(); initSignature(); window.addEventListener('resize', () => { drawRadar(); initSignature(); }); };
     </script>
 </body>
 </html>
