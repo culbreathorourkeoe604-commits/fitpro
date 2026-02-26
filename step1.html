@@ -10,8 +10,6 @@
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; margin: 0; padding: 0; }
         
         body { background: var(--bg); color: #e2e8f0; font-family: "DIN Alternate", -apple-system, sans-serif; display: flex; flex-direction: column; height: 100svh; overflow: hidden; }
-        
-        /* 截图区域包装 */
         #capture-area { background: var(--bg); display: flex; flex-direction: column; height: 100%; width: 100%; }
 
         .header-brand { flex: 0 0 60px; width: 100%; display: flex; align-items: center; justify-content: center; background: rgba(11, 15, 25, 0.95); z-index: 50; border-bottom: 1px solid rgba(0,242,254,0.3); }
@@ -37,15 +35,13 @@
         .tag-btn { background: rgba(30, 41, 59, 0.5); border: 1px solid rgba(255,255,255,0.1); color: #94a3b8; padding: 8px 14px; border-radius: 12px; font-size: 12px; font-weight: 600; transition: all 0.3s; }
         .tag-btn.active { background: rgba(0, 242, 254, 0.1); border-color: var(--primary); color: #fff; box-shadow: 0 0 15px rgba(0,242,254,0.3); transform: scale(1.05); }
         .tag-btn.danger.active { background: rgba(255, 71, 87, 0.1); border-color: var(--danger); box-shadow: 0 0 15px rgba(255,71,87,0.3); }
+        .tag-btn.custom-add { border: 1px dashed var(--primary); color: var(--primary); background: transparent; }
 
         .bottom-action { position: fixed; bottom: 0; left: 0; width: 100%; padding: 15px 20px 25px 20px; background: linear-gradient(to top, rgba(11,15,25,1) 50%, rgba(11,15,25,0)); z-index: 10; }
         .btn-generate { width: 100%; background: var(--primary); color: #000; border: none; padding: 16px; border-radius: 16px; font-size: 16px; font-weight: 900; box-shadow: 0 8px 25px rgba(0,242,254,0.4); display: flex; justify-content: center; align-items: center; gap: 8px; }
 
-        /* 海报弹窗遮罩层 */
         .poster-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 9999; flex-direction: column; align-items: center; justify-content: center; padding: 20px; opacity: 0; transition: opacity 0.3s; }
         .poster-overlay.active { display: flex; opacity: 1; }
-        
-        /* 滚动查看长图 */
         .poster-scroll-area { max-height: 70vh; width: 100%; overflow-y: auto; border-radius: 12px; border: 2px solid var(--primary); box-shadow: 0 10px 40px rgba(0,242,254,0.4); }
         .poster-scroll-area::-webkit-scrollbar { display: none; }
         .poster-img { width: 100%; display: block; }
@@ -76,12 +72,13 @@
         <div class="matrix-scroll" id="scrollArea">
             
             <div class="question-group">
-                <div class="q-title">一、职业与作息 (Lifestyle)</div>
+                <div class="q-title">一、所属职业与作息 (Occupation & Lifestyle)</div>
                 <div class="tags-grid">
-                    <div class="tag-btn" data-impact='{"meta":-10, "posture":-10}' onclick="toggleTag(this)">💻 长期久坐/伏案办公</div>
-                    <div class="tag-btn" data-impact='{"joint":-15, "posture":-5}' onclick="toggleTag(this)">🧍‍♀️ 长期站立/经常穿高跟鞋</div>
-                    <div class="tag-btn" data-impact='{"meta":-15, "muscle":-5}' onclick="toggleTag(this)">🌙 频繁熬夜/睡眠质量差</div>
-                    <div class="tag-btn" data-impact='{"posture":-15, "core":-10}' onclick="toggleTag(this)">📱 长期低头玩手机/葛优瘫</div>
+                    <div class="tag-btn" data-impact='{"meta":-10, "posture":-15}' onclick="toggleTag(this)">💻 IT/互联网/金融 (极度久坐)</div>
+                    <div class="tag-btn" data-impact='{"joint":-15, "muscle":-10}' onclick="toggleTag(this)">👨‍🏫 医护/教师/零售 (长期久站)</div>
+                    <div class="tag-btn" data-impact='{"meta":-15, "core":-5}' onclick="toggleTag(this)">🥂 销售/高管 (应酬多/压力大)</div>
+                    <div class="tag-btn" data-impact='{"posture":-10, "meta":-15}' onclick="toggleTag(this)">🎥 主播/自由职业 (作息不规律)</div>
+                    <div class="tag-btn" data-impact='{"posture":-20, "core":-10}' onclick="toggleTag(this)">📱 长期低头玩手机/葛优瘫</div>
                 </div>
             </div>
 
@@ -90,18 +87,17 @@
                 <div class="tags-grid">
                     <div class="tag-btn" data-impact='{"meta":-20}' onclick="toggleTag(this)">🍰 重度甜食/奶茶控</div>
                     <div class="tag-btn" data-impact='{"meta":-15}' onclick="toggleTag(this)">🍻 频繁应酬/经常饮酒</div>
-                    <div class="tag-btn" data-impact='{"meta":-10}' onclick="toggleTag(this)">💧 每日饮水极少 (<1L)</div>
-                    <div class="tag-btn" data-impact='{"meta":-15}' onclick="toggleTag(this)">🍔 饮食重油盐/三餐不规律</div>
+                    <div class="tag-btn" data-impact='{"meta":-15}' onclick="toggleTag(this)">🍔 饮食重油盐/经常吃外卖</div>
                 </div>
             </div>
 
             <div class="question-group">
-                <div class="q-title">三、运动与伤病史 (Sports History)</div>
-                <div class="tags-grid">
+                <div class="q-title">三、运动与特异性伤病史 (Sports & Injuries)</div>
+                <div class="tags-grid" id="injuryBox">
                     <div class="tag-btn danger" data-impact='{"muscle":-20, "core":-10}' onclick="toggleTag(this, true)">🚫 几乎零运动基础</div>
                     <div class="tag-btn danger" data-impact='{"core":-25, "posture":-10}' onclick="toggleTag(this, true)">👼 产后未进行系统康复</div>
-                    <div class="tag-btn danger" data-impact='{"joint":-25, "muscle":-15}' onclick="toggleTag(this, true)">🩹 曾经崴脚/拉伤/脱臼</div>
                     <div class="tag-btn danger" data-impact='{"posture":-20, "muscle":-15}' onclick="toggleTag(this, true)">⚖️ 习惯单侧发力/常跷二郎腿</div>
+                    <div class="tag-btn custom-add" onclick="addCustomInjury(this)">➕ 手动录入特异性伤病</div>
                 </div>
             </div>
 
@@ -122,7 +118,9 @@
                     <div class="tag-btn" data-goal="fatloss" onclick="toggleTag(this)">🔥 极速减脂塑形</div>
                     <div class="tag-btn" data-goal="posture" onclick="toggleTag(this)">📐 体态与骨骼纠正</div>
                     <div class="tag-btn" data-goal="muscle" onclick="toggleTag(this)">💪 增肌与线条雕刻</div>
-                    <div class="tag-btn" data-goal="postpartum" onclick="toggleTag(this)">👼 产后机能修复</div>
+                    <div class="tag-btn" data-goal="postpartum" onclick="toggleTag(this)">👼 产后盆底肌/腹直肌修复</div>
+                    <div class="tag-btn" data-goal="health" onclick="toggleTag(this)">❤️ 亚健康调理/心肺提升</div>
+                    <div class="tag-btn" data-goal="shape" onclick="toggleTag(this)">🍑 局部精雕 (直角肩/蜜桃臀)</div>
                 </div>
             </div>
 
@@ -140,7 +138,7 @@
             <img id="posterImg" class="poster-img" src="" alt="诊断海报">
         </div>
         <div class="poster-tip"><span class="pulse-text">👇 长按上方图片，保存完整档案</span></div>
-        <button class="btn-next" onclick="goToNextStep()">进入 PAR-Q 身体排查 ➔</button>
+        <button class="btn-next" onclick="goToNextStep()">进入 PAR-Q 医疗排查 ➔</button>
     </div>
 
     <script>
@@ -221,6 +219,25 @@
             recalculateScores();
         }
 
+        // 🚀 新增：支持教练当面手动录入极其特殊的伤病！
+        function addCustomInjury(btn) {
+            let injury = prompt("请输入客户的具体伤病或不适（例如：右侧半月板二度损伤）：");
+            if(injury && injury.trim() !== "") {
+                // 动态创建一个新的危险标签
+                let newTag = document.createElement('div');
+                newTag.className = 'tag-btn danger active';
+                // 默认给予重度扣分（因为特异性伤病肯定影响关节和肌肉）
+                newTag.setAttribute('data-impact', '{"joint":-25, "muscle":-15, "core":-10}');
+                newTag.innerHTML = `⚠️ ${injury.trim()}`;
+                newTag.onclick = function() { toggleTag(this, true); };
+                
+                // 插入到加号按钮的前面
+                btn.parentNode.insertBefore(newTag, btn);
+                // 重新算分（雷达图会马上暴跌）
+                recalculateScores();
+            }
+        }
+
         function recalculateScores() {
             let newScores = { core: 95, joint: 95, meta: 95, posture: 95, muscle: 95 };
             document.querySelectorAll('.tag-btn.active').forEach(tag => {
@@ -234,42 +251,33 @@
             targetScores = newScores;
         }
 
-        // 🚀 核心海报生成引擎（已修复长图被切断问题）
         function generatePoster() {
             let goals = [];
             document.querySelectorAll('.tag-btn.active[data-goal]').forEach(t => goals.push(t.innerText));
             if(goals.length === 0) { alert("请至少在第五项选择一个【首要蜕变目标】！"); return; }
 
             if (navigator.vibrate) navigator.vibrate(50);
-            
             let btn = document.querySelector('.btn-generate');
             btn.innerHTML = "⏳ 正在渲染全景高清长图...";
             btn.style.opacity = "0.7";
             
-            // 隐藏按钮以免入镜
             document.getElementById('actionBtnGroup').style.display = 'none';
-            
-            // 【关键修复】彻底展开 DOM，解除滚动限制
             let captureArea = document.getElementById('capture-area');
             let scrollArea = document.getElementById('scrollArea');
             
-            // 记录原始样式
             let origHeight = captureArea.style.height;
             let origOverflow = scrollArea.style.overflowY;
             let origFlex = scrollArea.style.flex;
             
-            // 强行把滚动区撑开成完整高度
             scrollArea.style.overflowY = 'visible';
             scrollArea.style.flex = 'none';
             captureArea.style.height = captureArea.scrollHeight + 'px';
 
-            // 截取全景长图
             html2canvas(captureArea, {
                 backgroundColor: "#0b0f19",
                 scale: 2, 
-                windowHeight: captureArea.scrollHeight // 强制识别完整高度
+                windowHeight: captureArea.scrollHeight
             }).then(canvas => {
-                // 瞬间恢复原状
                 captureArea.style.height = origHeight;
                 scrollArea.style.overflowY = origOverflow;
                 scrollArea.style.flex = origFlex;
@@ -278,22 +286,16 @@
                 btn.innerHTML = "<span style='font-size: 20px;'>📸</span> 生成报告并保存相册";
                 btn.style.opacity = "1";
 
-                // 输出高清图片并展示
                 let imgData = canvas.toDataURL("image/jpeg", 0.9);
                 document.getElementById('posterImg').src = imgData;
                 document.getElementById('posterOverlay').classList.add('active');
-                
             }).catch(err => {
                 alert("生成长图失败，请重试！");
                 document.getElementById('actionBtnGroup').style.display = 'block';
-                // 失败也要记得恢复样式
-                captureArea.style.height = origHeight;
-                scrollArea.style.overflowY = origOverflow;
-                scrollArea.style.flex = origFlex;
+                captureArea.style.height = origHeight; scrollArea.style.overflowY = origOverflow; scrollArea.style.flex = origFlex;
             });
         }
 
-        // 🚀 跳转至 PAR-Q 健康问卷
         function goToNextStep() {
             window.location.href = 'parq.html';
         }
