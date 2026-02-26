@@ -3,21 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>LUXIOU | 全息数字化诊断 V11.0</title>
+    <title>LUXIOU | 全息数字化诊断 V11.1</title>
     <style>
         :root { --primary: #00f2fe; --accent: #00ff88; --danger: #ff4757; --bg: #0b0f19; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
-        body { background: var(--bg); color: #e2e8f0; font-family: -apple-system, sans-serif; margin: 0; padding: 0; overflow: hidden; touch-action: none; }
+        body { background: var(--bg); color: #e2e8f0; font-family: -apple-system, 'PingFang SC', sans-serif; margin: 0; padding: 0; overflow: hidden; touch-action: none; }
         
-        .header-brand { position: fixed; top: 0; left: 0; width: 100%; height: 50px; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.85); backdrop-filter: blur(10px); z-index: 5000; border-bottom: 2px solid var(--primary); }
-        .brand-text { font-size: 20px; font-weight: 900; color: #fff; letter-spacing: 2px; text-shadow: 0 0 10px var(--primary); }
-        .back-btn { position: absolute; left: 15px; color: #fff; text-decoration: none; font-size: 12px; border: 1px solid #444; padding: 5px 12px; border-radius: 20px; }
+        /* 顶部品牌 */
+        .header-brand { position: fixed; top: 0; left: 0; width: 100%; height: 55px; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.85); backdrop-filter: blur(10px); z-index: 5000; border-bottom: 1px solid rgba(0,242,254,0.3); }
+        .brand-text { font-size: 20px; font-weight: 900; color: #fff; letter-spacing: 2px; text-shadow: 0 0 15px rgba(0,242,254,0.6); }
+        .back-btn { position: absolute; left: 15px; color: #fff; text-decoration: none; font-size: 12px; border: 1px solid rgba(255,255,255,0.3); padding: 6px 14px; border-radius: 20px; backdrop-filter: blur(5px); }
 
-        .app-wrap { width: 100vw; height: 100vh; display: flex; flex-direction: column; padding: 10px; padding-top: 55px; }
+        /* 解决遮挡：拉大 padding-top 至 75px */
+        .app-wrap { width: 100vw; height: 100vh; display: flex; flex-direction: column; padding: 10px; padding-top: 75px; }
 
-        .category-box { display: flex; gap: 8px; overflow-x: auto; margin-bottom: 10px; padding-bottom: 5px; scrollbar-width: none; }
-        .cat-item { flex: 0 0 auto; padding: 8px 16px; background: #161e2e; border-radius: 10px; font-size: 13px; color: #fff; border: 1px solid #444; font-weight: bold; }
-        .cat-item.active { background: var(--primary); color: #000; border-color: #fff; box-shadow: 0 0 15px var(--primary); }
+        /* 高定版 7大分类导航 */
+        .category-box { display: flex; gap: 10px; overflow-x: auto; margin-bottom: 12px; padding-bottom: 5px; scrollbar-width: none; }
+        .category-box::-webkit-scrollbar { display: none; }
+        .cat-item { flex: 0 0 auto; padding: 8px 18px; background: rgba(22, 30, 46, 0.7); border-radius: 25px; font-size: 14px; color: #cbd5e1; border: 1px solid rgba(255,255,255,0.15); font-weight: 500; letter-spacing: 1px; backdrop-filter: blur(5px); transition: all 0.3s ease; cursor: pointer; }
+        /* 极致发光选中态 */
+        .cat-item.active { background: linear-gradient(135deg, var(--primary), var(--accent)); color: #000; border-color: transparent; font-weight: 900; box-shadow: 0 4px 15px rgba(0, 242, 254, 0.4); transform: translateY(-2px); text-shadow: none; }
 
         .stage-area { position: relative; flex: 1; width: 100%; display: flex; gap: 4px; margin-bottom: 10px; }
         .params-side { flex: 0 0 92px; display: flex; flex-direction: column; }
@@ -27,29 +32,11 @@
         .param-card label { font-size: 9px; color: #aaa; margin-bottom: 2px; }
         
         /* 交互数值区 */
-        .mini-wheel { 
-            color: var(--primary); 
-            font-size: 18px; 
-            font-weight: 900; 
-            height: 28px; 
-            line-height: 28px; 
-            background: rgba(0,242,254,0.1); 
-            border-radius: 4px; 
-            text-align: center;
-            touch-action: none; 
-            transition: 0.2s;
-        }
+        .mini-wheel { color: var(--primary); font-size: 18px; font-weight: 900; height: 28px; line-height: 28px; background: rgba(0,242,254,0.1); border-radius: 4px; text-align: center; touch-action: none; transition: 0.2s; }
         .mini-wheel.active { background: var(--primary); color: #000; transform: scale(1.05); }
 
         /* 动态差异突显区 */
-        .diff-tag { 
-            font-size: 11px; 
-            font-weight: 900; 
-            text-align: right; 
-            margin-top: 2px; 
-            letter-spacing: 0.5px;
-            transition: color 0.3s;
-        }
+        .diff-tag { font-size: 11px; font-weight: 900; text-align: right; margin-top: 2px; letter-spacing: 0.5px; transition: color 0.3s; }
 
         .main-viewer { flex: 1; background: #000; border-radius: 15px; position: relative; overflow: hidden; border: 1.5px solid #333; }
         .img-layer { position: absolute; width: 100%; height: 100%; background-size: contain; background-repeat: no-repeat; background-position: center; transition: 0.3s; }
@@ -61,7 +48,7 @@
         input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 22px; background: #fff; border: 3px solid var(--primary); border-radius: 50%; }
 
         .btn-group { display: grid; grid-template-columns: 1fr 1fr 1.2fr; gap: 10px; margin-top: 5px; }
-        .lux-btn { background: #1a2234; border: 1px solid #333; padding: 10px; border-radius: 10px; color: #fff; font-size: 11px; font-weight: bold; text-align: center; }
+        .lux-btn { background: #1a2234; border: 1px solid #333; padding: 10px; border-radius: 10px; color: #fff; font-size: 11px; font-weight: bold; text-align: center; cursor: pointer; }
         .btn-save { background: var(--primary); color: #000; border: none; box-shadow: 0 0 15px var(--primary); }
 
         #vault { height: 90px; overflow-y: auto; margin-top: 10px; border-top: 1px solid #222; }
@@ -109,7 +96,6 @@
         let anchors = Array(6).fill(0).map((_, i) => ({ x: 0.5, y: 0.15 + i * 0.14 }));
         let draggingIdx = -1;
 
-        // 重载预设数据，供初始展示
         const db = {
             posture: { name: "体态矫正", labels: ["颈椎前引", "圆肩偏离", "高低肩差", "骨盆前倾", "脊柱侧倾", "假胯宽度"], pre: [8.5, 25.0, 2.5, 18.0, 12.0, 98.0], post: [2.1, 8.0, 0.2, 7.0, 2.0, 91.0] },
             shoulder: { name: "直角肩", labels: ["一字肩角", "斜方肌厚", "锁骨展度", "肩峰差值", "颈根宽度", "背平整度"], pre: [145.0, 5.8, 150.0, 1.5, 14.0, 12.0], post: [178.0, 3.1, 175.0, 0.2, 11.5, 4.0] },
@@ -120,7 +106,6 @@
             hip: { name: "蜜桃臀", labels: ["臀围维度", "臀线高度", "大腿围度", "核心稳定", "臀中肌厚", "侧向支撑"], pre: [88.0, 5.2, 54.0, 3.0, 2.0, 15.0], post: [98.0, 2.1, 51.0, 9.0, 8.0, 85.0] }
         };
 
-        // 实时差异计算引擎
         function updateDiffs() {
             const lWheels = document.querySelectorAll('.card-l .mini-wheel');
             const rWheels = document.querySelectorAll('.card-r .mini-wheel');
@@ -135,15 +120,14 @@
                     let sign = diff > 0 ? '+' : '';
                     diffTags[i].innerText = `${sign}${diff}`;
 
-                    // 色彩暗示心理学
                     if (diff < 0) {
-                        diffTags[i].style.color = "var(--accent)"; // 绿色改善
+                        diffTags[i].style.color = "var(--accent)"; 
                         diffTags[i].style.textShadow = "0 0 5px rgba(0,255,136,0.4)";
                     } else if (diff > 0) {
-                        diffTags[i].style.color = "var(--danger)"; // 红色警告/增长
+                        diffTags[i].style.color = "var(--danger)"; 
                         diffTags[i].style.textShadow = "0 0 5px rgba(255,71,87,0.4)";
                     } else {
-                        diffTags[i].style.color = "#64748b"; // 灰色无变化
+                        diffTags[i].style.color = "#64748b"; 
                         diffTags[i].style.textShadow = "none";
                     }
                 }
@@ -159,7 +143,7 @@
                 const newVal = prompt("请输入精准参数", el.innerText);
                 if (newVal !== null && newVal !== "") {
                     el.innerText = parseFloat(newVal).toFixed(1);
-                    updateDiffs(); // 实时计算
+                    updateDiffs(); 
                 }
             });
 
@@ -175,7 +159,7 @@
                 if (!isMoving) return;
                 const delta = (startY - e.touches[0].clientY) * 0.2;
                 el.innerText = (startVal + delta).toFixed(1);
-                updateDiffs(); // 实时演算差值
+                updateDiffs(); 
                 e.preventDefault();
             }, { passive: false });
 
@@ -205,14 +189,12 @@
             if(el) { document.querySelectorAll('.cat-item').forEach(i => i.classList.remove('active')); el.classList.add('active'); }
             let hL = '', hR = '';
             d.labels.forEach((l, i) => {
-                // 加载预设参数
                 hL += `<div class="param-card card-l"><label>${l}(前)</label><div class="mini-wheel">${d.pre[i].toFixed(1)}</div></div>`;
-                // 右侧加入差值显示区 (diff-tag)
                 hR += `<div class="param-card card-r"><label>${l}(后)</label><div class="mini-wheel">${d.post[i].toFixed(1)}</div><div class="diff-tag">0.0</div></div>`;
             });
             document.getElementById('colL').innerHTML = hL; document.getElementById('colR').innerHTML = hR;
             document.querySelectorAll('.mini-wheel').forEach(initMiniWheel);
-            updateDiffs(); // 初次加载计算差值
+            updateDiffs(); 
             draw();
         }
 
@@ -260,7 +242,7 @@
                 const rWheel = document.querySelectorAll('.card-r .mini-wheel');
                 v.preVals.forEach((s, i) => lWheel[i].innerText = s);
                 v.postVals.forEach((s, i) => rWheel[i].innerText = s);
-                updateDiffs(); // 调取后重新演算
+                updateDiffs(); 
                 draw();
             }
         }
