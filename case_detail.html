@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>LUXIOU | 数字化全息诊断 V9.0</title>
+    <title>LUXIOU | 数字化全息档案 V10.0</title>
     <style>
         :root { --primary: #00f2fe; --accent: #00ff88; --bg: #0b0f19; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
@@ -16,39 +16,42 @@
 
         .app-wrap { width: 100vw; height: 100vh; display: flex; flex-direction: column; padding: 10px; padding-top: 55px; }
 
-        /* 7大板块高亮 */
+        /* 标题栏补全并高亮 */
         .category-box { display: flex; gap: 8px; overflow-x: auto; margin-bottom: 10px; padding-bottom: 5px; scrollbar-width: none; }
-        .cat-item { flex: 0 0 auto; padding: 8px 16px; background: #161e2e; border-radius: 10px; font-size: 13px; color: #fff; border: 1px solid #444; font-weight: bold; text-shadow: 0 0 5px rgba(255,255,255,0.5); }
-        .cat-item.active { background: var(--primary); color: #000; border-color: #fff; box-shadow: 0 0 15px var(--primary); text-shadow: none; }
+        .cat-item { flex: 0 0 auto; padding: 8px 16px; background: #161e2e; border-radius: 10px; font-size: 13px; color: #fff; border: 1px solid #444; font-weight: bold; }
+        .cat-item.active { background: var(--primary); color: #000; border-color: #fff; box-shadow: 0 0 15px var(--primary); }
 
-        /* 诊断视窗 */
-        .stage-area { position: relative; flex: 1; width: 100%; display: flex; gap: 4px; margin-bottom: 10px; overflow: hidden; }
+        /* 核心诊断区 */
+        .stage-area { position: relative; flex: 1; width: 100%; display: flex; gap: 4px; margin-bottom: 10px; }
         .params-side { flex: 0 0 90px; display: flex; flex-direction: column; }
-        .param-card { flex: 1; background: rgba(11, 15, 25, 0.9); border-bottom: 1px solid rgba(255,255,255,0.05); padding: 5px; display: flex; flex-direction: column; justify-content: center; }
+        .param-card { flex: 1; background: rgba(11, 15, 25, 0.9); border-bottom: 1px solid rgba(255,255,255,0.05); padding: 5px; display: flex; flex-direction: column; justify-content: center; position: relative; overflow: hidden; }
         .card-l { border-left: 4px solid #fff; }
         .card-r { border-right: 4px solid var(--primary); text-align: right; }
-        .param-card label { font-size: 9px; color: #aaa; margin-bottom: 2px; }
+        .param-card label { font-size: 9px; color: #aaa; margin-bottom: 2px; pointer-events: none; }
         
-        /* 微型滚动选择器 */
-        .wheel-select { background: transparent; color: var(--primary); border: none; font-size: 18px; font-weight: 900; width: 100%; appearance: none; text-align: inherit; }
+        /* 极简无感滚动数值 */
+        .mini-wheel { color: var(--primary); font-size: 18px; font-weight: 900; height: 24px; line-height: 24px; cursor: ns-resize; user-select: none; }
 
         .main-viewer { flex: 1; background: #000; border-radius: 15px; position: relative; overflow: hidden; border: 1.5px solid #333; }
         .img-layer { position: absolute; width: 100%; height: 100%; background-size: contain; background-repeat: no-repeat; background-position: center; transition: 0.3s; }
         #laserCanvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 100; touch-action: none; }
 
         /* 控制面板 */
-        .control-panel { background: rgba(16, 24, 39, 0.9); border-radius: 20px; padding: 15px; border: 1px solid rgba(255,255,255,0.1); }
-        .zoom-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 10px; }
+        .control-panel { background: rgba(16, 24, 39, 0.9); border-radius: 20px; padding: 12px; border: 1px solid rgba(255,255,255,0.1); }
+        .zoom-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 8px; }
         .zoom-item { font-size: 10px; color: var(--primary); font-weight: bold; }
         input[type=range] { width: 100%; -webkit-appearance: none; background: #1a2234; height: 5px; border-radius: 3px; }
         input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 22px; background: #fff; border: 3px solid var(--primary); border-radius: 50%; box-shadow: 0 0 10px var(--primary); }
 
-        .btn-group { display: grid; grid-template-columns: 1fr 1fr 1.2fr; gap: 10px; margin-top: 10px; }
-        .lux-btn { background: #1a2234; border: 1px solid #333; padding: 12px; border-radius: 12px; color: #fff; font-size: 12px; font-weight: bold; text-align: center; }
+        .btn-group { display: grid; grid-template-columns: 1fr 1fr 1.2fr; gap: 10px; margin-top: 5px; }
+        .lux-btn { background: #1a2234; border: 1px solid #333; padding: 10px; border-radius: 10px; color: #fff; font-size: 11px; font-weight: bold; text-align: center; }
         .btn-save { background: var(--primary); color: #000; border: none; box-shadow: 0 0 15px var(--primary); }
 
-        #vault { height: 80px; overflow-y: auto; margin-top: 10px; border-top: 1px solid #222; }
-        .v-item { background: #161e2e; padding: 10px; border-radius: 8px; margin-top: 6px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #333; }
+        /* 左滑删除列表样式 */
+        #vault { height: 90px; overflow-y: auto; margin-top: 10px; border-top: 1px solid #222; }
+        .v-item-wrap { position: relative; overflow: hidden; margin-top: 6px; border-radius: 8px; }
+        .v-item-content { position: relative; z-index: 2; background: #161e2e; padding: 12px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #333; transition: transform 0.3s ease; }
+        .delete-btn { position: absolute; right: 0; top: 0; height: 100%; width: 70px; background: #ff4757; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold; z-index: 1; border-radius: 0 8px 8px 0; }
     </style>
 </head>
 <body>
@@ -74,8 +77,7 @@
                 <div class="zoom-item">前照缩放 <input type="range" min="50" max="300" value="100" oninput="zoom('layB', this.value)"></div>
                 <div class="zoom-item">后照缩放 <input type="range" min="50" max="300" value="100" oninput="zoom('layA', this.value)"></div>
             </div>
-            <div style="display:flex; justify-content:space-between; font-size:10px; color:#fff; margin-bottom:5px;"><span>BEFORE</span><span>对比滑块</span><span>AFTER</span></div>
-            <input type="range" min="0" max="100" value="0" id="fadeSlider">
+            <input type="range" min="0" max="100" value="0" id="fadeSlider" style="margin-bottom:10px;">
             <div class="btn-group">
                 <div class="lux-btn" onclick="document.getElementById('fB').click()">📷 导入前照<input type="file" id="fB" hidden accept="image/*" onchange="processImg(this,'layB')"></div>
                 <div class="lux-btn" onclick="document.getElementById('fA').click()">📷 导入后照<input type="file" id="fA" hidden accept="image/*" onchange="processImg(this,'layA')"></div>
@@ -92,13 +94,13 @@
         let draggingIdx = -1;
 
         const db = {
-            posture: { name: "体态矫正", labels: ["颈椎前引", "圆肩偏离", "高低肩差", "骨盆前倾", "脊柱侧倾", "假胯宽度"], unit: "cm" },
-            shoulder: { name: "直角肩", labels: ["一字肩角", "斜方肌厚", "锁骨展度", "肩峰差值", "颈根宽度", "背平整度"], unit: "°" },
-            postpartum: { name: "产后康复", labels: ["腹直肌隙", "耻骨宽度", "内脏脂肪", "盆底肌力", "腹围减寸", "腰椎压力"], unit: "cm" },
-            muscle: { name: "增肌专场", labels: ["上臂维度", "胸围增长", "大腿围度", "背阔肌展", "力量评级", "肌肉质量"], unit: "cm" },
-            abs: { name: "马甲线", labels: ["皮下脂肪", "腹直肌隙", "腰围减寸", "侧腰厚度", "核心稳度", "腹部平整"], unit: "mm" },
-            fatloss: { name: "减脂塑形", labels: ["基础代谢", "内脏脂肪", "全身脂率", "BMI指数", "腰臀比例", "水分含量"], unit: "%" },
-            hip: { name: "蜜桃臀", labels: ["臀围维度", "臀线高度", "大腿围度", "核心稳定性", "臀中肌厚", "侧向支撑"], unit: "cm" }
+            posture: { name: "体态矫正", labels: ["颈椎前引", "圆肩偏离", "高低肩差", "骨盆前倾", "脊柱侧倾", "假胯宽度"] },
+            shoulder: { name: "直角肩", labels: ["一字肩角", "斜方肌厚", "锁骨展度", "肩峰差值", "颈根宽度", "背平整度"] },
+            postpartum: { name: "产后康复", labels: ["腹直肌隙", "耻骨宽度", "内脏脂肪", "盆底肌力", "腹围减寸", "腰腰围度"] },
+            muscle: { name: "增肌专场", labels: ["上臂维度", "胸围增长", "大腿围度", "背阔肌展", "力量评级", "肌肉质量"] },
+            abs: { name: "马甲线", labels: ["皮下脂肪", "腹直肌隙", "腰围减寸", "侧腰厚度", "核心稳度", "腹部平整"] },
+            fatloss: { name: "减脂塑形", labels: ["基础代谢", "内脏脂肪", "全身脂率", "BMI指数", "腰臀比例", "水分含量"] },
+            hip: { name: "蜜桃臀", labels: ["臀围维度", "臀线高度", "大腿围度", "核心稳定性", "臀中肌厚", "侧向支撑"] }
         };
 
         function draw() {
@@ -106,7 +108,7 @@
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             anchors.forEach((pt, i) => {
                 const boxY = (i * (canvas.height / 6)) + (canvas.height / 12);
-                ctx.strokeStyle = "rgba(0, 242, 254, 0.5)"; ctx.setLineDash([5, 5]);
+                ctx.strokeStyle = "rgba(0, 242, 254, 0.4)"; ctx.setLineDash([5, 5]);
                 ctx.beginPath(); ctx.moveTo(0, boxY); ctx.lineTo(pt.x*canvas.width, pt.y*canvas.height); ctx.stroke();
                 ctx.beginPath(); ctx.moveTo(canvas.width, boxY); ctx.lineTo(pt.x*canvas.width, pt.y*canvas.height); ctx.stroke();
                 ctx.setLineDash([]); ctx.fillStyle = "#00ff88"; ctx.beginPath();
@@ -114,30 +116,32 @@
             });
         }
 
-        function zoom(target, val) { document.getElementById(target).style.transform = `scale(${val/100})`; }
-
-        function createWheel(unit) {
-            let options = '';
-            for(let i=0; i<=200; i+=0.1) {
-                let v = i.toFixed(1);
-                options += `<option value="${v}${unit}">${v}${unit}</option>`;
-            }
-            return `<select class="wheel-select">${options}</select>`;
+        // 核心优化：纯手势数值滚轮（无遮挡，无弹窗）
+        function initMiniWheel(el) {
+            let startY = 0, startVal = 0;
+            el.addEventListener('touchstart', e => { startY = e.touches[0].clientY; startVal = parseFloat(el.innerText); e.stopPropagation(); });
+            el.addEventListener('touchmove', e => {
+                const delta = (startY - e.touches[0].clientY) * 0.1;
+                el.innerText = (startVal + delta).toFixed(1);
+                e.preventDefault();
+            });
         }
+
+        function zoom(target, val) { document.getElementById(target).style.transform = `scale(${val/100})`; }
 
         function loadSetup(key, el) {
             const d = db[key];
             if(el) { document.querySelectorAll('.cat-item').forEach(i => i.classList.remove('active')); el.classList.add('active'); }
             let hL = '', hR = '';
             d.labels.forEach(l => {
-                hL += `<div class="param-card card-l"><label>${l}</label>${createWheel(d.unit)}</div>`;
-                hR += `<div class="param-card card-r"><label>${l}</label>${createWheel(d.unit)}</div>`;
+                hL += `<div class="param-card card-l"><label>${l}</label><div class="mini-wheel">0.0</div></div>`;
+                hR += `<div class="param-card card-r"><label>${l}</label><div class="mini-wheel">0.0</div></div>`;
             });
             document.getElementById('colL').innerHTML = hL; document.getElementById('colR').innerHTML = hR;
+            document.querySelectorAll('.mini-wheel').forEach(initMiniWheel);
             draw();
         }
 
-        // 核心压缩逻辑：防止保存失败
         function processImg(i, t) {
             if(i.files[0]){
                 const r = new FileReader();
@@ -145,8 +149,7 @@
                     const img = new Image();
                     img.onload = () => {
                         const canvasTmp = document.createElement('canvas');
-                        const maxW = 800; // 限制宽度，防止体积过大
-                        const scale = maxW / img.width;
+                        const maxW = 800; const scale = maxW / img.width;
                         canvasTmp.width = maxW; canvasTmp.height = img.height * scale;
                         canvasTmp.getContext('2d').drawImage(img, 0, 0, canvasTmp.width, canvasTmp.height);
                         document.getElementById(t).style.backgroundImage = `url('${canvasTmp.toDataURL('image/jpeg', 0.6)}')`;
@@ -160,33 +163,56 @@
         
         function saveCase() {
             const name = prompt("存档名"); if(!name) return;
-            const vault = JSON.parse(localStorage.getItem('LUX_V9_DB') || '[]');
-            const preData = Array.from(document.querySelectorAll('.card-l select')).map(s => s.value);
-            const postData = Array.from(document.querySelectorAll('.card-r select')).map(s => s.value);
-            
-            try {
-                vault.unshift({ id: Date.now(), name, type: document.querySelector('.cat-item.active').innerText, imgB: document.getElementById('layB').style.backgroundImage, imgA: document.getElementById('layA').style.backgroundImage, anchors, preData, postData });
-                localStorage.setItem('LUX_V9_DB', JSON.stringify(vault));
-                renderVault(); alert("存档已同步至本地全息库！");
-            } catch(e) { alert("存档失败：存储空间已满，请删除旧案例后再试。"); }
+            const vault = JSON.parse(localStorage.getItem('LUX_V10_DB') || '[]');
+            const preVals = Array.from(document.querySelectorAll('.card-l .mini-wheel')).map(s => s.innerText);
+            const postVals = Array.from(document.querySelectorAll('.card-r .mini-wheel')).map(s => s.innerText);
+            vault.unshift({ id: Date.now(), name, type: document.querySelector('.cat-item.active').innerText, imgB: document.getElementById('layB').style.backgroundImage, imgA: document.getElementById('layA').style.backgroundImage, anchors, preVals, postVals });
+            localStorage.setItem('LUX_V10_DB', JSON.stringify(vault)); renderVault();
+        }
+
+        function deleteItem(id) {
+            let vault = JSON.parse(localStorage.getItem('LUX_V10_DB') || '[]');
+            vault = vault.filter(i => i.id !== id);
+            localStorage.setItem('LUX_V10_DB', JSON.stringify(vault));
+            renderVault();
         }
 
         function loadCase(id) {
-            const v = JSON.parse(localStorage.getItem('LUX_V9_DB') || '[]').find(x => x.id === id);
+            const v = JSON.parse(localStorage.getItem('LUX_V10_DB') || '[]').find(x => x.id === id);
             if(v) {
                 document.getElementById('layB').style.backgroundImage = v.imgB; document.getElementById('layA').style.backgroundImage = v.imgA;
-                anchors = v.anchors;
-                const lSel = document.querySelectorAll('.card-l select');
-                const rSel = document.querySelectorAll('.card-r select');
-                v.preData.forEach((val, idx) => lSel[idx].value = val);
-                v.postData.forEach((val, idx) => rSel[idx].value = val);
+                anchors = v.anchors; 
+                document.querySelectorAll('.card-l .mini-wheel').forEach((s, i) => s.innerText = v.preVals[i]);
+                document.querySelectorAll('.card-r .mini-wheel').forEach((s, i) => s.innerText = v.postVals[i]);
                 draw();
             }
         }
 
+        // 渲染列表并注入左滑手势
         function renderVault() {
-            const v = JSON.parse(localStorage.getItem('LUX_V9_DB') || '[]');
-            document.getElementById('vault').innerHTML = v.map(i => `<div class="v-item"><span><b>${i.name}</b> (${i.type})</span><button onclick="loadCase(${i.id})" style="background:var(--primary); border:none; padding:6px 15px; border-radius:8px; font-weight:bold;">调取</button></div>`).join('');
+            const v = JSON.parse(localStorage.getItem('LUX_V10_DB') || '[]');
+            const container = document.getElementById('vault');
+            container.innerHTML = v.map(i => `
+                <div class="v-item-wrap" data-id="${i.id}">
+                    <div class="delete-btn" onclick="deleteItem(${i.id})">删除</div>
+                    <div class="v-item-content" ontouchstart="swipeStart(event)" ontouchmove="swipeMove(event)" ontouchend="swipeEnd(event)">
+                        <span><b>${i.name}</b> (${i.type})</span>
+                        <button onclick="loadCase(${i.id})" style="background:var(--primary); border:none; padding:6px 15px; border-radius:6px; font-weight:bold;">调取</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // 左滑手势逻辑
+        let swipeX = 0;
+        function swipeStart(e) { swipeX = e.touches[0].clientX; }
+        function swipeMove(e) {
+            let diff = e.touches[0].clientX - swipeX;
+            if (diff < 0 && diff > -70) e.currentTarget.style.transform = `translateX(${diff}px)`;
+        }
+        function swipeEnd(e) {
+            let diff = e.changedTouches[0].clientX - swipeX;
+            e.currentTarget.style.transform = diff < -35 ? `translateX(-70px)` : `translateX(0)`;
         }
 
         const getCoord = (e, axis) => {
