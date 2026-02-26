@@ -6,60 +6,60 @@
     <title>LUXIOU | ACE 医疗级风险排查</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
-        :root { --primary: #00f2fe; --accent: #d4af37; --danger: #ff0844; --bg: #0b0f19; --surface: #151a28; }
+        :root { --primary: #E2C07C; --accent: #D4AF37; --danger: #D9534F; --bg: #0A0A0C; --surface: #141418; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; margin: 0; padding: 0; }
         
         body { background: var(--bg); color: #e2e8f0; font-family: "DIN Alternate", -apple-system, sans-serif; display: flex; flex-direction: column; height: 100svh; overflow: hidden; -webkit-font-smoothing: antialiased; }
         #capture-area { background: var(--bg); display: flex; flex-direction: column; height: 100%; width: 100%; }
 
-        .header-brand { flex: 0 0 60px; width: 100%; display: flex; align-items: center; justify-content: center; background: rgba(11, 15, 25, 0.95); z-index: 50; border-bottom: 1px solid rgba(255, 8, 68, 0.2); }
-        .brand-text { font-size: 18px; font-weight: 900; color: #fff; letter-spacing: 2px; text-shadow: 0 0 10px rgba(255, 8, 68, 0.4); }
-        .step-badge { position: absolute; right: 15px; background: rgba(255, 8, 68, 0.1); border: 1px solid var(--danger); color: var(--danger); font-size: 10px; padding: 4px 8px; border-radius: 12px; font-weight: bold; }
+        .header-brand { flex: 0 0 60px; width: 100%; display: flex; align-items: center; justify-content: center; background: rgba(10, 10, 12, 0.95); z-index: 50; border-bottom: 1px solid rgba(217, 83, 79, 0.2); }
+        .brand-text { font-size: 18px; font-weight: 900; color: #fff; letter-spacing: 2px; }
+        .step-badge { position: absolute; right: 15px; background: rgba(217, 83, 79, 0.1); border: 1px solid var(--danger); color: var(--danger); font-size: 10px; padding: 4px 8px; border-radius: 12px; font-weight: bold; }
 
-        /* 雷达图不重叠布局 */
-        .radar-section { flex: 0 0 auto; display: flex; flex-direction: column; background: radial-gradient(circle at center, rgba(21, 26, 40, 0.9) 0%, var(--bg) 100%); border-bottom: 1px solid rgba(255,255,255,0.03); padding-top: 15px; }
-        .score-board { display: flex; justify-content: space-between; align-items: flex-start; padding: 0 20px; z-index: 2; }
+        /* 绝对隔离的防重叠排版 */
+        .radar-section { flex: 0 0 auto; display: flex; flex-direction: column; background: radial-gradient(circle at center, rgba(20, 20, 24, 0.9) 0%, var(--bg) 100%); border-bottom: 1px solid rgba(255,255,255,0.03); padding-top: 15px; }
+        .score-board { display: flex; justify-content: space-between; align-items: flex-start; padding: 0 20px; z-index: 2; height: 65px;}
         .score-info { display: flex; flex-direction: column; }
-        .risk-label { font-size: 11px; color: #94a3b8; font-weight: 900; letter-spacing: 1px; }
-        .risk-score { font-size: 32px; font-weight: 900; color: var(--primary); text-shadow: 0 0 20px rgba(0,242,254,0.4); line-height: 1; margin: 6px 0; transition: color 0.3s;}
-        .risk-score.high { color: var(--danger); text-shadow: 0 0 20px rgba(255, 8, 68, 0.4); }
+        .risk-label { font-size: 11px; color: #8A92A3; font-weight: 900; letter-spacing: 1px; }
+        .risk-score { font-size: 32px; font-weight: 900; color: var(--primary); text-shadow: 0 4px 15px rgba(226, 192, 124, 0.3); line-height: 1; margin: 6px 0; transition: color 0.3s;}
+        .risk-score.high { color: var(--danger); text-shadow: 0 4px 15px rgba(217, 83, 79, 0.3); }
         
-        .slogan-box { font-size: 11px; font-weight: bold; padding: 6px 10px; border-radius: 6px; background: rgba(0,242,254,0.08); color: var(--primary); border: 1px solid rgba(0,242,254,0.2); max-width: 170px; line-height: 1.4; transition: 0.3s;}
+        .slogan-box { font-size: 11px; font-weight: bold; padding: 6px 10px; border-radius: 6px; background: rgba(226, 192, 124, 0.08); color: var(--primary); border: 1px solid rgba(226, 192, 124, 0.2); max-width: 170px; line-height: 1.4; transition: 0.3s;}
         .slogan-box.warn { background: rgba(212, 175, 55, 0.08); color: var(--accent); border-color: rgba(212, 175, 55, 0.3); }
-        .slogan-box.crit { background: rgba(255, 8, 68, 0.08); color: var(--danger); border-color: rgba(255, 8, 68, 0.3); }
+        .slogan-box.crit { background: rgba(217, 83, 79, 0.08); color: var(--danger); border-color: rgba(217, 83, 79, 0.3); }
 
-        .radar-container { position: relative; width: 100%; height: 180px; margin-top: -5px; }
+        .radar-container { position: relative; width: 100%; height: 180px; margin-top: 0px; }
         #parqRadar { width: 100%; height: 100%; position: absolute; top: 0; left: 0; z-index: 1; }
 
         .q-list { flex: 1; overflow-y: auto; padding: 10px 15px 120px 15px; scrollbar-width: none; }
         .q-list::-webkit-scrollbar { display: none; }
         
-        .cat-title { font-size: 14px; font-weight: 900; color: var(--primary); margin: 20px 0 12px 0; border-left: 4px solid var(--primary); padding-left: 8px; }
+        .cat-title { font-size: 13px; font-weight: 900; color: var(--primary); margin: 20px 0 12px 0; border-left: 3px solid var(--primary); padding-left: 8px; }
         
         .q-item { background: var(--surface); border: 1px solid rgba(255,255,255,0.03); border-radius: 12px; padding: 16px; margin-bottom: 12px; }
-        .q-text { font-size: 14px; color: #e2e8f0; line-height: 1.6; font-weight: bold; margin-bottom: 15px; }
+        .q-text { font-size: 13px; color: #D1D5DB; line-height: 1.6; font-weight: bold; margin-bottom: 15px; }
         
         .ans-group { display: flex; gap: 10px; }
-        .ans-btn { flex: 1; padding: 12px; text-align: center; border-radius: 8px; font-size: 14px; font-weight: bold; color: #64748b; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); transition: 0.2s; }
-        .ans-btn.no.active { background: rgba(0, 242, 254, 0.08); border-color: var(--primary); color: var(--primary); }
-        .ans-btn.yes.active { background: rgba(255, 8, 68, 0.08); border-color: var(--danger); color: var(--danger); box-shadow: inset 0 0 10px rgba(255, 8, 68, 0.15); }
+        .ans-btn { flex: 1; padding: 12px; text-align: center; border-radius: 8px; font-size: 13px; font-weight: bold; color: #8A92A3; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); transition: 0.2s; }
+        .ans-btn.no.active { background: rgba(226, 192, 124, 0.08); border-color: var(--primary); color: var(--primary); }
+        .ans-btn.yes.active { background: rgba(217, 83, 79, 0.08); border-color: var(--danger); color: var(--danger); box-shadow: inset 0 0 10px rgba(217, 83, 79, 0.15); }
 
-        .signature-section { margin-top: 30px; padding: 20px; background: var(--surface); border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); }
+        .signature-section { margin-top: 30px; padding: 20px; background: var(--surface); border-radius: 12px; border: 1px solid rgba(255,255,255,0.03); }
         .sig-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-        .sig-title { font-size: 14px; font-weight: bold; color: #fff; }
-        .btn-clear { background: transparent; border: 1px solid #475569; color: #94a3b8; font-size: 12px; padding: 4px 10px; border-radius: 4px; }
-        #sigCanvas { width: 100%; height: 120px; background: rgba(255,255,255,0.02); border: 1px dashed #475569; border-radius: 8px; touch-action: none; }
+        .sig-title { font-size: 13px; font-weight: bold; color: #D1D5DB; }
+        .btn-clear { background: transparent; border: 1px solid #475569; color: #8A92A3; font-size: 11px; padding: 4px 10px; border-radius: 4px; }
+        #sigCanvas { width: 100%; height: 120px; background: rgba(255,255,255,0.01); border: 1px dashed #475569; border-radius: 8px; touch-action: none; }
 
-        .bottom-action { position: fixed; bottom: 0; left: 0; width: 100%; padding: 15px 20px 25px 20px; background: linear-gradient(to top, rgba(11,15,25,1) 60%, rgba(11,15,25,0)); z-index: 10; pointer-events: none;}
-        .btn-generate { pointer-events: auto; width: 100%; background: var(--primary); color: #000; border: none; padding: 16px; border-radius: 16px; font-size: 16px; font-weight: 900; box-shadow: 0 8px 20px rgba(0,242,254,0.3); display: flex; justify-content: center; align-items: center; gap: 8px; }
+        .bottom-action { position: fixed; bottom: 0; left: 0; width: 100%; padding: 15px 20px 25px 20px; background: linear-gradient(to top, rgba(10,10,12,1) 60%, rgba(10,10,12,0)); z-index: 10; pointer-events: none;}
+        .btn-generate { pointer-events: auto; width: 100%; background: linear-gradient(135deg, #E2C07C, #D4AF37); color: #0A0A0C; border: none; padding: 16px; border-radius: 12px; font-size: 15px; font-weight: 900; box-shadow: 0 8px 20px rgba(226, 192, 124, 0.2); display: flex; justify-content: center; align-items: center; gap: 8px; }
 
         .poster-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 9999; flex-direction: column; align-items: center; justify-content: center; padding: 20px; opacity: 0; transition: opacity 0.3s; }
         .poster-overlay.active { display: flex; opacity: 1; }
-        .poster-scroll-area { max-height: 70vh; width: 100%; overflow-y: auto; border-radius: 12px; border: 1px solid var(--danger); box-shadow: 0 10px 40px rgba(255, 8, 68, 0.2); }
+        .poster-scroll-area { max-height: 70vh; width: 100%; overflow-y: auto; border-radius: 12px; border: 1px solid var(--danger); box-shadow: 0 10px 40px rgba(217, 83, 79, 0.2); }
         .poster-scroll-area::-webkit-scrollbar { display: none; }
         .poster-img { width: 100%; display: block; }
-        .poster-tip { color: #fff; font-size: 14px; margin: 20px 0 15px 0; font-weight: bold; }
-        .btn-next { background: #fff; color: #000; border: none; padding: 14px 35px; border-radius: 30px; font-weight: 900; font-size: 15px; box-shadow: 0 5px 20px rgba(255,255,255,0.2); }
+        .poster-tip { color: #8A92A3; font-size: 13px; margin: 20px 0 15px 0; font-weight: bold; }
+        .btn-next { background: var(--primary); color: #0A0A0C; border: none; padding: 14px 35px; border-radius: 30px; font-weight: 900; font-size: 15px; }
     </style>
 </head>
 <body>
@@ -169,7 +169,7 @@
             ctx.scale(dpr, dpr);
             const w = rect.width, h = rect.height;
             const centerX = w / 2; const centerY = h / 2 + 5;
-            const radius = Math.min(w, h) / 2 * 0.7; const sides = 5;
+            const radius = Math.min(w, h) / 2 * 0.75; const sides = 5;
 
             ctx.clearRect(0, 0, w, h);
             ctx.lineWidth = 1;
@@ -182,15 +182,15 @@
                     if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
                 }
                 ctx.closePath();
-                ctx.strokeStyle = `rgba(148, 163, 184, ${0.1 * level})`; ctx.stroke();
+                ctx.strokeStyle = `rgba(226, 192, 124, ${0.08 * level})`; ctx.stroke();
             }
 
-            ctx.fillStyle = "#cbd5e1"; ctx.font = "bold 11px sans-serif"; ctx.textAlign = "center"; ctx.textBaseline = "middle";
+            ctx.fillStyle = "#8A92A3"; ctx.font = "bold 11px sans-serif"; ctx.textAlign = "center"; ctx.textBaseline = "middle";
             for (let i = 0; i < sides; i++) {
                 let angle = (Math.PI * 2 * i) / sides - Math.PI / 2;
                 let x = centerX + radius * Math.cos(angle); let y = centerY + radius * Math.sin(angle);
                 ctx.beginPath(); ctx.moveTo(centerX, centerY); ctx.lineTo(x, y);
-                ctx.strokeStyle = "rgba(255,255,255,0.05)"; ctx.stroke();
+                ctx.strokeStyle = "rgba(255,255,255,0.03)"; ctx.stroke();
                 let labelX = centerX + (radius + 28) * Math.cos(angle); let labelY = centerY + (radius + 15) * Math.sin(angle);
                 ctx.fillText(labels[i], labelX, labelY);
             }
@@ -208,13 +208,13 @@
             let hasRisk = Object.values(curScores).some(s => s < 90);
             let gradient = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, radius);
             if(hasRisk) { 
-                gradient.addColorStop(0, "rgba(255, 8, 68, 0.6)"); gradient.addColorStop(1, "rgba(255, 8, 68, 0.1)");
-                ctx.fillStyle = gradient; ctx.strokeStyle = "#ff0844"; ctx.shadowColor = "#ff0844"; 
+                gradient.addColorStop(0, "rgba(217, 83, 79, 0.5)"); gradient.addColorStop(1, "rgba(217, 83, 79, 0.05)");
+                ctx.fillStyle = gradient; ctx.strokeStyle = "#D9534F"; ctx.shadowColor = "rgba(217, 83, 79, 0.4)"; 
             } else { 
-                gradient.addColorStop(0, "rgba(0, 242, 254, 0.6)"); gradient.addColorStop(1, "rgba(0, 242, 254, 0.1)");
-                ctx.fillStyle = gradient; ctx.strokeStyle = "#00f2fe"; ctx.shadowColor = "#00f2fe"; 
+                gradient.addColorStop(0, "rgba(226, 192, 124, 0.5)"); gradient.addColorStop(1, "rgba(226, 192, 124, 0.05)");
+                ctx.fillStyle = gradient; ctx.strokeStyle = "#E2C07C"; ctx.shadowColor = "rgba(226, 192, 124, 0.4)"; 
             }
-            ctx.shadowBlur = 15; ctx.lineWidth = 2.5; ctx.fill(); ctx.stroke(); ctx.shadowBlur = 0; 
+            ctx.shadowBlur = 15; ctx.lineWidth = 2; ctx.fill(); ctx.stroke(); ctx.shadowBlur = 0; 
         }
 
         function animate() {
@@ -228,10 +228,10 @@
             requestAnimationFrame(animate);
         }
 
-        // 🚀 彻底修复的小数点导致的状态锁死 Bug
+        // 🚀 彻底修复死锁 bug，强制四舍五入
         function updateRiskLabel() {
             let curSum = Object.values(curScores).reduce((a,b)=>a+b, 0);
-            let totalDeduction = Math.round(500 - curSum); // 强制取整
+            let totalDeduction = Math.round(500 - curSum); 
             
             let display = document.getElementById('riskDisplay');
             let slogan = document.getElementById('sloganBox');
@@ -271,7 +271,7 @@
             const rect = sigCanvas.parentElement.getBoundingClientRect();
             const dpr = window.devicePixelRatio || 1;
             sigCanvas.width = rect.width * dpr; sigCanvas.height = 120 * dpr;
-            sigCtx.scale(dpr, dpr); sigCtx.lineWidth = 3; sigCtx.lineCap = 'round'; sigCtx.strokeStyle = '#00f2fe';
+            sigCtx.scale(dpr, dpr); sigCtx.lineWidth = 3; sigCtx.lineCap = 'round'; sigCtx.strokeStyle = '#E2C07C';
         }
         function getPos(e) {
             const rect = sigCanvas.getBoundingClientRect();
@@ -297,7 +297,7 @@
             
             scrollArea.style.overflowY = 'visible'; scrollArea.style.flex = 'none'; captureArea.style.height = captureArea.scrollHeight + 'px';
 
-            html2canvas(captureArea, { backgroundColor: "#0b0f19", scale: 2, windowHeight: captureArea.scrollHeight }).then(canvas => {
+            html2canvas(captureArea, { backgroundColor: "#0A0A0C", scale: 2, windowHeight: captureArea.scrollHeight }).then(canvas => {
                 captureArea.style.height = origHeight; scrollArea.style.overflowY = origOverflow; scrollArea.style.flex = origFlex;
                 document.getElementById('actionBtnGroup').style.display = 'block'; btn.innerHTML = "<span style='font-size: 20px;'>🛡️</span> 生成医疗排查底档并保存"; btn.style.opacity = "1";
                 document.getElementById('posterImg').src = canvas.toDataURL("image/jpeg", 0.9);
