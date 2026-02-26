@@ -6,30 +6,28 @@
     <title>LUXIOU | ACE 医疗级风险排查</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
-        /* 顶级哑光奢华配色：拉丝金、勃艮第红、曜石黑 */
-        :root { --primary: #D4AF37; --accent: #C5A059; --danger: #8B0000; --danger-light: #B22222; --bg: #050505; --surface: #121212; }
+        :root { --primary: #D4AF37; --accent: #C5A059; --danger: #B22222; --bg: #050505; --surface: #121212; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; margin: 0; padding: 0; }
         
-        /* 取消高度锁定，自然滑动 */
         body { background: var(--bg); color: #e2e8f0; font-family: "DIN Alternate", sans-serif; overflow-y: auto; -webkit-font-smoothing: antialiased; }
         #capture-area { background: var(--bg); width: 100%; min-height: 100vh; padding-bottom: 120px; display: block; }
 
-        .header-brand { width: 100%; height: 60px; display: flex; align-items: center; justify-content: center; background: rgba(5, 5, 5, 0.95); border-bottom: 1px solid rgba(139, 0, 0, 0.3); position: relative; }
+        .header-brand { width: 100%; height: 60px; display: flex; align-items: center; justify-content: center; background: rgba(5, 5, 5, 0.95); border-bottom: 1px solid rgba(178, 34, 34, 0.3); position: relative; }
         .brand-text { font-size: 18px; font-weight: 900; color: #fff; letter-spacing: 2px; }
-        .step-badge { position: absolute; right: 15px; background: rgba(139, 0, 0, 0.1); border: 1px solid var(--danger-light); color: var(--danger-light); font-size: 10px; padding: 4px 8px; border-radius: 12px; font-weight: bold; }
+        .step-badge { position: absolute; right: 15px; background: rgba(178, 34, 34, 0.1); border: 1px solid var(--danger); color: var(--danger); font-size: 10px; padding: 4px 8px; border-radius: 12px; font-weight: bold; }
 
         .radar-section { width: 100%; height: 260px; display: flex; flex-direction: column; background: radial-gradient(circle at center, rgba(18, 18, 18, 0.8) 0%, var(--bg) 100%); border-bottom: 1px solid rgba(255,255,255,0.03); padding-top: 15px; }
         .score-board { display: flex; justify-content: space-between; align-items: flex-start; padding: 0 20px; z-index: 2; }
         .score-info { display: flex; flex-direction: column; }
         .risk-label { font-size: 11px; color: #888; font-weight: 900; letter-spacing: 1px; }
         .risk-score { font-size: 32px; font-weight: 900; color: var(--primary); text-shadow: 0 2px 4px rgba(0,0,0,0.8); line-height: 1; margin: 6px 0; transition: color 0.3s;}
-        .risk-score.high { color: var(--danger-light); text-shadow: 0 2px 4px rgba(0,0,0,0.8); }
+        .risk-score.high { color: var(--danger); text-shadow: 0 2px 4px rgba(0,0,0,0.8); }
         
         .slogan-box { font-size: 11px; font-weight: bold; padding: 6px 10px; border-radius: 6px; background: rgba(212, 175, 55, 0.05); color: var(--primary); border: 1px solid rgba(212, 175, 55, 0.2); max-width: 170px; line-height: 1.4; transition: 0.3s;}
         .slogan-box.warn { background: rgba(197, 160, 89, 0.05); color: var(--accent); border-color: rgba(197, 160, 89, 0.3); }
-        .slogan-box.crit { background: rgba(139, 0, 0, 0.05); color: var(--danger-light); border-color: rgba(139, 0, 0, 0.3); }
+        .slogan-box.crit { background: rgba(178, 34, 34, 0.05); color: var(--danger); border-color: rgba(178, 34, 34, 0.3); }
 
-        .radar-container { position: relative; width: 100%; height: 170px; margin-top: 5px; }
+        .radar-container { position: relative; width: 100%; height: 180px; margin-top: 5px; }
         #parqRadar { width: 100%; height: 100%; position: absolute; top: 0; left: 0; z-index: 1; }
 
         .q-list { padding: 10px 15px; }
@@ -42,29 +40,30 @@
         .ans-group { display: flex; gap: 10px; }
         .ans-btn { flex: 1; padding: 12px; text-align: center; border-radius: 8px; font-size: 13px; font-weight: bold; color: #888; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); transition: 0.2s; }
         .ans-btn.no.active { background: rgba(212, 175, 55, 0.08); border-color: var(--primary); color: var(--primary); }
-        .ans-btn.yes.active { background: rgba(139, 0, 0, 0.1); border-color: var(--danger-light); color: var(--danger-light); }
+        .ans-btn.yes.active { background: rgba(178, 34, 34, 0.1); border-color: var(--danger); color: var(--danger); }
 
-        .signature-section { margin-top: 20px; padding: 20px; background: var(--surface); border-radius: 12px; border: 1px solid rgba(255,255,255,0.03); }
-        .sig-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-        .sig-title { font-size: 13px; font-weight: bold; color: #D1D5DB; }
-        .sig-result-box { width: 100%; height: 100px; background: #0A0A0C; border: 1px dashed #444; border-radius: 8px; display: flex; align-items: center; justify-content: center; overflow: hidden; cursor: pointer; }
-        .sig-placeholder { color: var(--primary); font-size: 13px; font-weight: bold; letter-spacing: 1px; }
-        #sigResultImg { width: 100%; height: 100%; object-fit: contain; display: none; }
+        /* 🚀 合同级签名区 */
+        .signature-section { margin-top: 30px; padding: 20px 15px; background: var(--surface); border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); }
+        .sig-header { font-size: 12px; font-weight: bold; color: #888; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px; }
+        .contract-line { width: 100%; border-bottom: 1px solid #444; position: relative; height: 60px; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 5px; cursor: pointer; }
+        .pulse-text { color: var(--danger); font-size: 16px; font-weight: bold; animation: pulse 2s infinite; }
+        #sigResultImg { position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); height: 80px; display: none; }
+        @keyframes pulse { 0% { opacity: 0.6; } 50% { opacity: 1; } 100% { opacity: 0.6; } }
 
         .bottom-action { position: fixed; bottom: 0; left: 0; width: 100%; padding: 15px 20px 25px 20px; background: linear-gradient(to top, rgba(5,5,5,1) 60%, rgba(5,5,5,0)); z-index: 10; }
         .btn-generate { width: 100%; background: linear-gradient(135deg, #D4AF37, #AA8A2A); color: #000; border: none; padding: 16px; border-radius: 12px; font-size: 15px; font-weight: 900; box-shadow: 0 4px 15px rgba(212, 175, 55, 0.2); display: flex; justify-content: center; align-items: center; gap: 8px; }
 
-        /* 全屏签字版 Modal */
-        .sig-modal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #050505; z-index: 999999; flex-direction: column; }
-        .sig-modal-header { height: 60px; display: flex; align-items: center; justify-content: center; color: var(--primary); font-weight: bold; font-size: 16px; border-bottom: 1px solid rgba(212,175,55,0.15); background: #121212; }
-        #fullscreenSigCanvas { flex: 1; width: 100%; touch-action: none; background: #050505; }
-        .sig-modal-footer { height: 80px; display: flex; gap: 15px; padding: 15px 20px; background: #121212; border-top: 1px solid rgba(255,255,255,0.05); }
-        .modal-btn { flex: 1; padding: 14px; border-radius: 8px; font-size: 15px; font-weight: bold; border: none; }
-        .modal-btn.cancel { background: #222; color: #888; }
-        .modal-btn.confirm { background: var(--primary); color: #000; }
+        /* 🚀 白皮书全屏签字版 */
+        .sig-modal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #fff; z-index: 9999999; flex-direction: column; }
+        .sig-modal-header { height: 70px; display: flex; align-items: center; justify-content: center; color: #000; font-weight: 900; font-size: 16px; border-bottom: 1px solid #ddd; background: #f8f9fa; letter-spacing: 1px;}
+        #fullscreenSigCanvas { flex: 1; width: 100%; touch-action: none; background: #fff; }
+        .sig-modal-footer { height: 90px; display: flex; gap: 15px; padding: 20px; background: #f8f9fa; border-top: 1px solid #eee; }
+        .sig-btn { flex: 1; padding: 14px; border-radius: 8px; font-size: 16px; font-weight: bold; border: none; }
+        .sig-btn.cancel { background: #e2e8f0; color: #475569; }
+        .sig-btn.confirm { background: #000; color: #fff; }
 
-        .poster-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 999999; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
-        .poster-scroll-area { max-height: 70vh; width: 100%; overflow-y: auto; border-radius: 12px; border: 1px solid var(--danger-light); }
+        .poster-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 99999999; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
+        .poster-scroll-area { max-height: 70vh; width: 100%; overflow-y: auto; border-radius: 12px; border: 1px solid var(--danger); }
         .poster-scroll-area::-webkit-scrollbar { display: none; }
         .poster-img { width: 100%; display: block; }
         .poster-tip { color: #888; font-size: 13px; margin: 20px 0 15px 0; font-weight: bold; }
@@ -96,9 +95,9 @@
             <div id="questionContainer"></div>
 
             <div class="signature-section">
-                <div class="sig-header"><span class="sig-title">客户全屏电子签名确认</span></div>
-                <div class="sig-result-box" onclick="openSigPad()">
-                    <span class="sig-placeholder" id="sigPlaceholder">👉 点击此处 全屏手写签名</span>
+                <div class="sig-header">Medical Release / 医疗免责同意书签字</div>
+                <div class="contract-line" onclick="openSigPad()">
+                    <span id="sigPlaceholder" class="pulse-text">点击全屏手写签字</span>
                     <img id="sigResultImg" src="">
                 </div>
             </div>
@@ -106,11 +105,11 @@
     </div> 
 
     <div class="sig-modal" id="sigModal">
-        <div class="sig-modal-header">请在下方空白区域手写签名（同意安全须知）</div>
+        <div class="sig-modal-header">请在此确认您已如实填写上述健康情况</div>
         <canvas id="fullscreenSigCanvas"></canvas>
         <div class="sig-modal-footer">
-            <button class="modal-btn cancel" onclick="clearSig()">清除重写</button>
-            <button class="modal-btn confirm" onclick="saveSig()">确认签名</button>
+            <button class="sig-btn cancel" onclick="clearSig()">清除重写</button>
+            <button class="sig-btn confirm" onclick="saveSig()">确认签发</button>
         </div>
     </div>
 
@@ -217,7 +216,7 @@
             const keys = ['cardio', 'ortho', 'meta', 'resp', 'general'];
             keys.forEach((key, i) => {
                 let angle = (Math.PI * 2 * i) / sides - Math.PI / 2;
-                let val = Math.max(10, curScores[key]);
+                let val = Math.max(10, Math.min(100, curScores[key]));
                 let x = centerX + radius * (val / maxScore) * Math.cos(angle); let y = centerY + radius * (val / maxScore) * Math.sin(angle);
                 if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
             });
@@ -226,7 +225,7 @@
             let hasRisk = Object.values(curScores).some(s => s < 90);
             ctx.lineWidth = 2;
             if(hasRisk) { 
-                ctx.fillStyle = "rgba(139, 0, 0, 0.4)"; ctx.strokeStyle = "#B22222"; 
+                ctx.fillStyle = "rgba(178, 34, 34, 0.4)"; ctx.strokeStyle = "#B22222"; 
             } else { 
                 ctx.fillStyle = "rgba(212, 175, 55, 0.4)"; ctx.strokeStyle = "#D4AF37"; 
             }
@@ -258,7 +257,7 @@
                 display.innerText = "关注 (MOD)"; display.className = "risk-score high"; display.style.color = "var(--accent)"; 
                 slogan.className = "slogan-box warn"; slogan.innerText = "存在潜在健康短板，建议立刻开展定制化恢复训练。";
             } else { 
-                display.innerText = "危险 (HIGH)"; display.className = "risk-score high"; display.style.color = "var(--danger-light)"; 
+                display.innerText = "危险 (HIGH)"; display.className = "risk-score high"; display.style.color = "var(--danger)"; 
                 slogan.className = "slogan-box crit"; slogan.innerText = "健康风险已超临界值！亟需专业医疗与康复级干预！";
             }
         }
@@ -291,10 +290,13 @@
             fSigCanvas.width = fSigCanvas.clientWidth * dpr; 
             fSigCanvas.height = fSigCanvas.clientHeight * dpr;
             fSigCtx.scale(dpr, dpr); 
-            fSigCtx.lineWidth = 4; 
+            
+            fSigCtx.fillStyle = "#ffffff";
+            fSigCtx.fillRect(0, 0, fSigCanvas.width, fSigCanvas.height);
+
+            fSigCtx.lineWidth = 5; 
             fSigCtx.lineCap = 'round'; 
-            fSigCtx.strokeStyle = '#D4AF37'; 
-            fSigCtx.clearRect(0, 0, fSigCanvas.width, fSigCanvas.height);
+            fSigCtx.strokeStyle = '#000000'; 
         }
 
         function getFPos(e) {
@@ -313,7 +315,10 @@
         fSigCanvas.addEventListener('touchmove', e => { e.preventDefault(); if(fIsDrawing){ const p = getFPos(e); fSigCtx.lineTo(p.x, p.y); fSigCtx.stroke(); }}, {passive: false});
         fSigCanvas.addEventListener('touchend', () => fIsDrawing = false);
 
-        function clearSig() { fSigCtx.clearRect(0, 0, fSigCanvas.width, fSigCanvas.height); }
+        function clearSig() { 
+            fSigCtx.fillStyle = "#ffffff";
+            fSigCtx.fillRect(0, 0, fSigCanvas.width, fSigCanvas.height); 
+        }
 
         function saveSig() {
             let dataUrl = fSigCanvas.toDataURL("image/png");
@@ -325,7 +330,7 @@
 
         function generatePoster() {
             if(document.getElementById('sigPlaceholder').style.display !== 'none') {
-                alert("请点击底部【完成全屏电子签名】后再生成免责底档！"); return;
+                alert("请点击底部【完成全屏电子签字】后再生成免责底档！"); return;
             }
 
             if (navigator.vibrate) navigator.vibrate(50);
