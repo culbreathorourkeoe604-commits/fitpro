@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>LUXIOU | 全息数字化诊断 V13.0</title>
+    <title>LUXIOU | 全息数字化诊断 V14.0</title>
     <style>
         :root { --primary: #00f2fe; --accent: #00ff88; --danger: #ff4757; --bg: #0b0f19; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
@@ -47,7 +47,6 @@
         
         .mini-wheel { color: var(--primary); font-size: 19px; font-weight: 900; line-height: 1; cursor: ns-resize; touch-action: none; position: relative; display: inline-flex; align-items: baseline; }
         .mini-wheel::after { content: attr(data-unit); font-size: 10px; color: #64748b; margin-left: 2px; font-weight: 600; }
-        
         .diff-tag { font-size: 11px; font-weight: 900; margin-top: 4px; letter-spacing: 0.5px; transition: color 0.3s; }
 
         .main-viewer { flex: 1; background: #000; border-radius: 12px; position: relative; overflow: hidden; border: 1px solid #334155; box-shadow: 0 8px 25px rgba(0,0,0,0.6); }
@@ -55,28 +54,48 @@
         #laserCanvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 100; touch-action: none; }
 
         .control-panel { flex: 0 0 auto; background: rgba(16, 24, 39, 0.95); border-radius: 20px; padding: 15px; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 -5px 20px rgba(0,0,0,0.5); }
-        .zoom-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 12px; }
+        .zoom-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px; }
         input[type=range] { width: 100%; -webkit-appearance: none; background: #1e293b; height: 5px; border-radius: 3px; }
         input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 22px; background: #fff; border: 3px solid var(--primary); border-radius: 50%; box-shadow: 0 0 10px var(--primary); }
 
-        .btn-group { display: grid; grid-template-columns: 1fr 1fr 1.2fr; gap: 10px; margin-top: 10px; }
-        .lux-btn { background: #1e293b; border: 1px solid #334155; padding: 12px; border-radius: 10px; color: #fff; font-size: 12px; font-weight: bold; text-align: center; }
-        .btn-save { background: var(--primary); color: #000; border: none; box-shadow: 0 4px 15px rgba(0,242,254,0.4); }
+        /* 优化后的 2x2 按钮矩阵 */
+        .btn-group { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
+        .lux-btn { background: #1e293b; border: 1px solid #334155; padding: 12px; border-radius: 10px; color: #fff; font-size: 12px; font-weight: bold; text-align: center; display: flex; align-items: center; justify-content: center; gap: 5px;}
+        .btn-save { background: var(--primary); color: #000; border: none; box-shadow: 0 4px 15px rgba(0,242,254,0.3); }
+        .btn-vault { background: transparent; color: var(--primary); border: 1px solid var(--primary); }
 
-        /* 修复历史案例库排版重叠 */
-        #vault { height: 85px; overflow-y: auto; margin-top: 12px; border-top: 1px solid #334155; padding-top: 8px; }
-        .v-item-wrap { position: relative; overflow: hidden; margin-bottom: 8px; border-radius: 10px; background: var(--danger); }
+        /* 🚀 全新的抽屉式档案库 (Bottom Sheet) */
+        .modal-overlay { 
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; 
+            background: rgba(0,0,0,0.6); backdrop-filter: blur(5px); z-index: 9999; 
+            display: none; flex-direction: column; justify-content: flex-end; 
+            opacity: 0; transition: opacity 0.3s ease; 
+        }
+        .modal-overlay.show { opacity: 1; }
+        .vault-drawer { 
+            background: rgba(16, 24, 39, 0.98); width: 100%; max-height: 80vh; height: 75vh;
+            border-radius: 24px 24px 0 0; padding: 20px; border-top: 1px solid var(--primary); 
+            display: flex; flex-direction: column; box-shadow: 0 -10px 40px rgba(0,242,254,0.15); 
+            transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); 
+        }
+        .modal-overlay.show .vault-drawer { transform: translateY(0); }
+        .drawer-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 15px; }
+        .drawer-header h3 { margin: 0; color: #fff; font-size: 18px; font-weight: 900; letter-spacing: 1px;}
+        .close-btn { background: #334155; border: none; color: #fff; width: 32px; height: 32px; border-radius: 50%; font-weight: bold; font-size: 18px; display: flex; align-items: center; justify-content: center; }
+        
+        #vaultList { flex: 1; overflow-y: auto; padding-bottom: 40px; scrollbar-width: none; }
+        .v-item-wrap { position: relative; overflow: hidden; margin-bottom: 10px; border-radius: 12px; background: var(--danger); }
         .v-item-content { 
-            background: #161e2e; padding: 12px 15px; 
+            background: #1e293b; padding: 15px; 
             display: flex; justify-content: space-between; align-items: center; 
-            border: 1px solid #334155; border-radius: 10px; 
-            transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); width: 100%; position: relative; z-index: 2; box-sizing: border-box;
+            border: 1px solid #334155; border-radius: 12px; 
+            transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); position: relative; z-index: 2; 
         }
         .v-text-area { flex: 1; min-width: 0; margin-right: 10px; }
-        .v-title { display: block; color: var(--primary); font-size: 14px; font-weight: bold; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .v-sub { display: block; color: #94a3b8; font-size: 11px; margin-top: 3px; }
-        .v-btn-load { flex: 0 0 auto; background: var(--primary); color: #000; border: none; padding: 6px 14px; border-radius: 6px; font-weight: bold; font-size: 12px; }
-        .delete-btn { position: absolute; right: 0; top: 0; height: 100%; width: 75px; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: bold; z-index: 1; }
+        .v-title { display: block; color: var(--primary); font-size: 16px; font-weight: bold; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .v-sub { display: block; color: #94a3b8; font-size: 12px; margin-top: 4px; }
+        .v-btn-load { flex: 0 0 auto; background: var(--primary); color: #000; border: none; padding: 8px 18px; border-radius: 8px; font-weight: bold; font-size: 13px; box-shadow: 0 4px 10px rgba(0,242,254,0.3); }
+        .delete-btn { position: absolute; right: 0; top: 0; height: 100%; width: 80px; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: bold; z-index: 1; }
     </style>
 </head>
 <body>
@@ -105,12 +124,24 @@
             </div>
             <div style="display:flex; justify-content:space-between; font-size:10px; color:#94a3b8; font-weight:bold; margin-bottom:5px;"><span>BEFORE</span><span>滑动展现雷达形变</span><span>AFTER</span></div>
             <input type="range" min="0" max="100" value="0" id="fadeSlider">
+            
             <div class="btn-group">
                 <div class="lux-btn" onclick="document.getElementById('fB').click()">📷 导入前照<input type="file" id="fB" hidden accept="image/*" onchange="processImg(this,'layB')"></div>
                 <div class="lux-btn" onclick="document.getElementById('fA').click()">📷 导入后照<input type="file" id="fA" hidden accept="image/*" onchange="processImg(this,'layA')"></div>
                 <div class="lux-btn btn-save" onclick="saveCase()">💾 保存案例</div>
+                <div class="lux-btn btn-vault" onclick="openVault()">📂 历史档案库</div>
             </div>
-            <div id="vault"></div>
+        </div>
+    </div>
+
+    <div id="vaultModal" class="modal-overlay">
+        <div class="vault-drawer">
+            <div class="drawer-header">
+                <h3>历史全息档案库</h3>
+                <button class="close-btn" onclick="closeVault()">×</button>
+            </div>
+            <div id="vaultList">
+                </div>
         </div>
     </div>
 
@@ -118,12 +149,11 @@
         const canvas = document.getElementById('laserCanvas');
         const ctx = canvas.getContext('2d');
         
-        // 核心突破：引入独立的 Before 和 After 锚点
         let anchorsB = Array(6).fill(0).map((_, i) => ({ x: 0.5, y: 0.15 + i * 0.14 }));
         let anchorsA = Array(6).fill(0).map((_, i) => ({ x: 0.5, y: 0.15 + i * 0.14 }));
         let draggingIdx = -1;
         let currentUnit = "cm";
-        let activeSet = anchorsB; // 当前正在操作的锚点组
+        let activeSet = anchorsB;
 
         const db = {
             posture: { name: "体态矫正", unit: "cm", labels: ["颈前引", "圆肩度", "高低肩", "盆前倾", "脊柱侧", "假胯宽"], pre: [8.5, 25.0, 2.5, 18.0, 12.0, 98.0], post: [2.1, 8.0, 0.2, 7.0, 2.0, 91.0] },
@@ -181,28 +211,21 @@
             el.addEventListener('touchend', () => { isMoving = false; });
         }
 
-        // 核心动态形变绘制逻辑
         function draw() {
             canvas.width = canvas.offsetWidth; canvas.height = canvas.offsetHeight;
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
-            // 获取当前滑动比例 0~1
             let v = document.getElementById('fadeSlider').value / 100;
 
             for(let i=0; i<6; i++) {
-                // 插值计算当前应当展示的点位坐标 (平滑形变)
                 let currX = anchorsB[i].x * (1 - v) + anchorsA[i].x * v;
                 let currY = anchorsB[i].y * (1 - v) + anchorsA[i].y * v;
                 
                 const boxY = (i * (canvas.height / 6)) + (canvas.height / 12);
                 ctx.strokeStyle = "rgba(0, 242, 254, 0.5)"; ctx.lineWidth = 1.2; ctx.setLineDash([5, 4]);
                 
-                // 画左线
                 ctx.beginPath(); ctx.moveTo(0, boxY); ctx.lineTo(currX * canvas.width, currY * canvas.height); ctx.stroke();
-                // 画右线
                 ctx.beginPath(); ctx.moveTo(canvas.width, boxY); ctx.lineTo(currX * canvas.width, currY * canvas.height); ctx.stroke();
                 
-                // 画锚点
                 ctx.setLineDash([]); ctx.fillStyle = "#00ff88"; ctx.beginPath();
                 ctx.arc(currX * canvas.width, currY * canvas.height, 5, 0, Math.PI*2); ctx.fill();
             }
@@ -245,45 +268,63 @@
         
         function saveCase() {
             const name = prompt("输入客户姓名保存："); if(!name) return;
-            const vault = JSON.parse(localStorage.getItem('LUX_V13_DB') || '[]');
+            const vault = JSON.parse(localStorage.getItem('LUX_V14_DB') || '[]');
             const preVals = Array.from(document.querySelectorAll('.card-l .mini-wheel')).map(s => s.innerText);
             const postVals = Array.from(document.querySelectorAll('.card-r .mini-wheel')).map(s => s.innerText);
             vault.unshift({ 
                 id: Date.now(), name, type: document.querySelector('.cat-item.active').innerText, 
                 imgB: document.getElementById('layB').style.backgroundImage, 
                 imgA: document.getElementById('layA').style.backgroundImage, 
-                anchorsB, anchorsA, preVals, postVals // 保存两套锚点
+                anchorsB, anchorsA, preVals, postVals 
             });
-            localStorage.setItem('LUX_V13_DB', JSON.stringify(vault)); renderVault();
+            localStorage.setItem('LUX_V14_DB', JSON.stringify(vault)); 
+            alert("档案已保存！您可以点击【历史档案库】查看。");
+        }
+
+        // 抽屉系统逻辑
+        function openVault() {
+            renderVault();
+            const modal = document.getElementById('vaultModal');
+            modal.style.display = 'flex';
+            // 延迟一点添加 class 以触发过渡动画
+            setTimeout(() => modal.classList.add('show'), 10);
+        }
+
+        function closeVault() {
+            const modal = document.getElementById('vaultModal');
+            modal.classList.remove('show');
+            setTimeout(() => modal.style.display = 'none', 300); // 等待动画完成
         }
 
         function deleteItem(id) {
-            let vault = JSON.parse(localStorage.getItem('LUX_V13_DB') || '[]');
+            let vault = JSON.parse(localStorage.getItem('LUX_V14_DB') || '[]');
             vault = vault.filter(i => i.id !== id);
-            localStorage.setItem('LUX_V13_DB', JSON.stringify(vault));
+            localStorage.setItem('LUX_V14_DB', JSON.stringify(vault));
             renderVault();
         }
 
         function loadCase(id) {
-            const v = JSON.parse(localStorage.getItem('LUX_V13_DB') || '[]').find(x => x.id === id);
+            const v = JSON.parse(localStorage.getItem('LUX_V14_DB') || '[]').find(x => x.id === id);
             if(v) {
                 document.getElementById('layB').style.backgroundImage = v.imgB; document.getElementById('layA').style.backgroundImage = v.imgA;
-                
-                // 兼容老版本和双轨新版本
                 if(v.anchorsB && v.anchorsA) { anchorsB = v.anchorsB; anchorsA = v.anchorsA; }
-                else if (v.anchors) { anchorsB = JSON.parse(JSON.stringify(v.anchors)); anchorsA = JSON.parse(JSON.stringify(v.anchors)); }
-                
                 const lWheel = document.querySelectorAll('.card-l .mini-wheel');
                 const rWheel = document.querySelectorAll('.card-r .mini-wheel');
                 v.preVals.forEach((s, i) => lWheel[i].innerText = s);
                 v.postVals.forEach((s, i) => rWheel[i].innerText = s);
                 updateDiffs(); draw();
+                closeVault(); // 载入成功后自动收起抽屉
             }
         }
 
         function renderVault() {
-            const v = JSON.parse(localStorage.getItem('LUX_V13_DB') || '[]');
-            document.getElementById('vault').innerHTML = v.map(i => `
+            const v = JSON.parse(localStorage.getItem('LUX_V14_DB') || '[]');
+            const list = document.getElementById('vaultList');
+            if(v.length === 0) {
+                list.innerHTML = '<div style="text-align:center; color:#64748b; padding-top: 40px;">暂无历史档案</div>';
+                return;
+            }
+            list.innerHTML = v.map(i => `
                 <div class="v-item-wrap">
                     <div class="delete-btn" onclick="deleteItem(${i.id})">删除</div>
                     <div class="v-item-content" ontouchstart="swipeStart(event)" ontouchmove="swipeMove(event)" ontouchend="swipeEnd(event)">
@@ -301,14 +342,13 @@
         function swipeStart(e) { swipeX = e.touches[0].clientX; e.stopPropagation(); }
         function swipeMove(e) {
             let diff = e.touches[0].clientX - swipeX;
-            if (diff < 0 && diff > -75) e.currentTarget.style.transform = `translateX(${diff}px)`;
+            if (diff < 0 && diff > -80) e.currentTarget.style.transform = `translateX(${diff}px)`;
         }
         function swipeEnd(e) {
             let diff = e.changedTouches[0].clientX - swipeX;
-            e.currentTarget.style.transform = diff < -35 ? `translateX(-75px)` : `translateX(0)`;
+            e.currentTarget.style.transform = diff < -40 ? `translateX(-80px)` : `translateX(0)`;
         }
 
-        // 双轨智能拖拽判断
         const getCoord = (e, axis) => {
             const rect = canvas.getBoundingClientRect();
             const val = e.touches ? (axis === 'x' ? e.touches[0].clientX : e.touches[0].clientY) : (axis === 'x' ? e.clientX : e.clientY);
@@ -318,26 +358,17 @@
         canvas.addEventListener('touchstart', e => {
             let slider = document.getElementById('fadeSlider');
             let v = slider.value / 100;
-            
-            // 计算当前屏幕上展现的点
-            let displayPts = anchorsB.map((b, i) => ({
-                x: b.x * (1 - v) + anchorsA[i].x * v,
-                y: b.y * (1 - v) + anchorsA[i].y * v
-            }));
-
+            let displayPts = anchorsB.map((b, i) => ({ x: b.x * (1 - v) + anchorsA[i].x * v, y: b.y * (1 - v) + anchorsA[i].y * v }));
             const x = getCoord(e, 'x'); const y = getCoord(e, 'y');
             draggingIdx = displayPts.findIndex(a => Math.sqrt((a.x-x)**2 + (a.y-y)**2) < 0.08);
             
             if(draggingIdx !== -1) {
-                // 核心：点击瞄准点时，自动帮用户贴靠到 前照(0) 或 后照(100) 以便修改
                 if(v <= 0.5) {
                     slider.value = 0; activeSet = anchorsB;
-                    document.getElementById('layA').style.opacity = 0;
-                    document.getElementById('layB').style.opacity = 1;
+                    document.getElementById('layA').style.opacity = 0; document.getElementById('layB').style.opacity = 1;
                 } else {
                     slider.value = 100; activeSet = anchorsA;
-                    document.getElementById('layA').style.opacity = 1;
-                    document.getElementById('layB').style.opacity = 0;
+                    document.getElementById('layA').style.opacity = 1; document.getElementById('layB').style.opacity = 0;
                 }
                 draw(); e.preventDefault(); 
             }
@@ -345,7 +376,6 @@
 
         canvas.addEventListener('touchmove', e => {
             if(draggingIdx !== -1) {
-                // 修改对应的那组数据
                 activeSet[draggingIdx] = { x: Math.max(0, Math.min(1, getCoord(e, 'x'))), y: Math.max(0, Math.min(1, getCoord(e, 'y'))) };
                 draw(); e.preventDefault();
             }
@@ -355,12 +385,12 @@
         document.getElementById('fadeSlider').oninput = e => {
             document.getElementById('layA').style.opacity = e.target.value / 100;
             document.getElementById('layB').style.opacity = 1 - (e.target.value / 100);
-            draw(); // 滑动时实时更新线条（动态形变）
+            draw(); 
         };
 
         window.onload = () => {
             document.getElementById('catBox').innerHTML = Object.keys(db).map((k, i) => `<div class="cat-item ${i===0?'active':''}" onclick="loadSetup('${k}', this)">${db[k].name}</div>`).join('');
-            loadSetup('posture'); renderVault();
+            loadSetup('posture'); 
         };
     </script>
 </body>
