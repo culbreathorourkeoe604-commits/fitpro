@@ -6,7 +6,7 @@
     <title>LUXIOU | ACE 医疗级风险排查</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
-        :root { --primary: #D4AF37; --accent: #C5A059; --danger: #B22222; --bg: #050505; --surface: #121212; }
+        :root { --primary: #D4AF37; --warn: #FF8C00; --danger: #B22222; --bg: #050505; --surface: #121212; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; margin: 0; padding: 0; }
         
         body { background: var(--bg); color: #e2e8f0; font-family: "DIN Alternate", sans-serif; overflow-y: auto; -webkit-font-smoothing: antialiased; }
@@ -21,10 +21,11 @@
         .score-info { display: flex; flex-direction: column; }
         .risk-label { font-size: 11px; color: #888; font-weight: 900; letter-spacing: 1px; }
         .risk-score { font-size: 32px; font-weight: 900; color: var(--primary); text-shadow: 0 2px 4px rgba(0,0,0,0.8); line-height: 1; margin: 6px 0; transition: color 0.3s;}
-        .risk-score.high { color: var(--danger); text-shadow: 0 2px 4px rgba(0,0,0,0.8); }
+        .risk-score.mod { color: var(--warn); }
+        .risk-score.high { color: var(--danger); }
         
         .slogan-box { font-size: 11px; font-weight: bold; padding: 6px 10px; border-radius: 6px; background: rgba(212, 175, 55, 0.05); color: var(--primary); border: 1px solid rgba(212, 175, 55, 0.2); max-width: 170px; line-height: 1.4; transition: 0.3s;}
-        .slogan-box.warn { background: rgba(197, 160, 89, 0.05); color: var(--accent); border-color: rgba(197, 160, 89, 0.3); }
+        .slogan-box.warn { background: rgba(255, 140, 0, 0.05); color: var(--warn); border-color: rgba(255, 140, 0, 0.3); }
         .slogan-box.crit { background: rgba(178, 34, 34, 0.05); color: var(--danger); border-color: rgba(178, 34, 34, 0.3); }
 
         .radar-container { position: relative; width: 100%; height: 180px; margin-top: 5px; }
@@ -40,7 +41,6 @@
         .ans-btn.no.active { background: rgba(212, 175, 55, 0.08); border-color: var(--primary); color: var(--primary); }
         .ans-btn.yes.active { background: rgba(178, 34, 34, 0.1); border-color: var(--danger); color: var(--danger); }
 
-        /* 🚀 合同级签名区 */
         .signature-section { margin-top: 30px; padding: 20px 15px; background: var(--surface); border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); }
         .sig-header { font-size: 12px; font-weight: bold; color: #888; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px; }
         .contract-line { width: 100%; border-bottom: 1px solid #444; position: relative; height: 60px; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 5px; cursor: pointer; }
@@ -51,7 +51,6 @@
         .bottom-action { position: fixed; bottom: 0; left: 0; width: 100%; padding: 15px 20px 25px 20px; background: linear-gradient(to top, rgba(5,5,5,1) 60%, rgba(5,5,5,0)); z-index: 10; }
         .btn-generate { width: 100%; background: linear-gradient(135deg, #D4AF37, #AA8A2A); color: #000; border: none; padding: 16px; border-radius: 12px; font-size: 15px; font-weight: 900; box-shadow: 0 4px 15px rgba(212, 175, 55, 0.2); display: flex; justify-content: center; align-items: center; gap: 8px; }
 
-        /* 🚀 白皮书全屏防滑签字版 */
         .sig-modal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #fff; z-index: 9999999; flex-direction: column; overflow: hidden; overscroll-behavior: none;}
         .sig-modal-header { height: 70px; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; color: #000; font-weight: 900; font-size: 16px; border-bottom: 1px solid #ddd; background: #f8f9fa; }
         .btn-close-sig { font-size: 24px; color: #888; background: none; border: none; font-weight: bold; }
@@ -128,7 +127,6 @@
     </div>
 
     <script>
-        // 🚀 核心：修改扣分权重，不再一次性“打死”。最高单题扣15分。
         const questionData = [
             { title: "一、 心血管与呼吸系统征兆", qs: [
                 { text: "1. 医生是否曾诊断您患有心脏病，或建议只能在医疗监督下运动？", impact: { cardio: -15 } },
@@ -229,11 +227,15 @@
             ctx.closePath();
             
             let totalScore = Math.round(Object.values(curScores).reduce((a,b)=>a+b, 0) / 5);
+            
+            // 🚀 PAR-Q 的三级色彩雷达
             ctx.lineWidth = 2;
-            if(totalScore < 80) { 
-                ctx.fillStyle = "rgba(178, 34, 34, 0.4)"; ctx.strokeStyle = "#B22222"; 
-            } else { 
+            if(totalScore >= 90) {
                 ctx.fillStyle = "rgba(212, 175, 55, 0.4)"; ctx.strokeStyle = "#D4AF37"; 
+            } else if(totalScore >= 75) {
+                ctx.fillStyle = "rgba(255, 140, 0, 0.4)"; ctx.strokeStyle = "#FF8C00"; 
+            } else {
+                ctx.fillStyle = "rgba(178, 34, 34, 0.4)"; ctx.strokeStyle = "#B22222"; 
             }
             ctx.fill(); ctx.stroke(); 
         }
@@ -249,7 +251,6 @@
             requestAnimationFrame(animate);
         }
 
-        // 🚀 核心：专业销售级分层话术
         function updateRiskLabel() {
             let curSum = Object.values(curScores).reduce((a,b)=>a+b, 0);
             let avgScore = Math.round(curSum / 5); 
@@ -257,15 +258,16 @@
             let display = document.getElementById('riskDisplay');
             let slogan = document.getElementById('sloganBox');
             
-            if(avgScore >= 95) { 
+            // 🚀 核心：三段式降维打击话术
+            if(avgScore >= 90) { 
                 display.innerText = "安全 (LOW)"; display.className = "risk-score"; display.style.color = "var(--primary)";
                 slogan.className = "slogan-box"; slogan.innerText = "体征良好，具备各强度训练准入条件。";
-            } else if(avgScore >= 80) { 
-                display.innerText = "关注 (MOD)"; display.className = "risk-score high"; display.style.color = "var(--accent)"; 
-                slogan.className = "slogan-box warn"; slogan.innerText = "存在基础风险项，建议从低中强度定制方案开始。";
+            } else if(avgScore >= 75) { 
+                display.innerText = "关注 (MOD)"; display.className = "risk-score mod"; display.style.color = "var(--warn)"; 
+                slogan.className = "slogan-box warn"; slogan.innerText = "存在基础风险项，建议开启轻中度定制康复。";
             } else { 
                 display.innerText = "预警 (HIGH)"; display.className = "risk-score high"; display.style.color = "var(--danger)"; 
-                slogan.className = "slogan-box crit"; slogan.innerText = "存在特异性体征，需匹配医疗级康复干预及严密监测。";
+                slogan.className = "slogan-box crit"; slogan.innerText = "存在特异性体征，需匹配专业医疗级康复干预及严密监测。";
             }
         }
 
@@ -285,13 +287,12 @@
             tgtScores = newS;
         }
 
-        // 🚀 全面锁定的防乱飘签字版
         const fSigCanvas = document.getElementById('fullscreenSigCanvas');
         const fSigCtx = fSigCanvas.getContext('2d');
         let fIsDrawing = false;
 
         function openSigPad() {
-            document.body.style.overflow = 'hidden'; // 锁定背景滑动
+            document.body.style.overflow = 'hidden'; 
             let modal = document.getElementById('sigModal');
             modal.style.display = 'flex'; 
             
@@ -309,7 +310,7 @@
         }
 
         function closeSigPad() {
-            document.body.style.overflow = 'auto'; // 解除锁定
+            document.body.style.overflow = 'auto'; 
             document.getElementById('sigModal').style.display = 'none';
         }
 
