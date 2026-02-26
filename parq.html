@@ -2,69 +2,158 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>ACE 风险筛查 | SHANGHAI LUXIOU</title>
-    <script src="https://cdn.staticfile.net/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>LUXIOU | PAR-Q 健康排查</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
-        :root { --primary: #00f2fe; --bg: #0b0f19; }
-        body { background: var(--bg); color: #e2e8f0; font-family: -apple-system, sans-serif; margin: 0; padding: 20px; padding-top: 75px; }
-        .back-btn { position: fixed; top: 15px; left: 15px; z-index: 9999; background: rgba(0,0,0,0.6); color: #fff; padding: 10px 18px; border-radius: 50px; text-decoration: none; font-size: 14px; border: 1px solid rgba(255,255,255,0.4); backdrop-filter: blur(10px); font-weight: bold; }
-        .container { max-width: 600px; margin: 0 auto; background: rgba(30, 41, 59, 0.7); border-radius: 20px; padding: 25px; border: 1px solid rgba(255,255,255,0.1); }
-        h2 { color: var(--primary); text-align: center; margin-bottom: 25px; letter-spacing: 2px; }
-        .q-item { background: rgba(255,255,255,0.03); padding: 15px; border-radius: 12px; margin-bottom: 12px; border-left: 4px solid #334155; }
-        .q-text { font-size: 14px; margin-bottom: 10px; line-height: 1.6; }
-        .options { display: flex; gap: 10px; }
-        .opt { flex: 1; padding: 10px; text-align: center; background: rgba(255,255,255,0.05); border-radius: 8px; font-size: 13px; border: 1px solid transparent; }
-        .opt.active { background: var(--primary); color: #000; font-weight: bold; }
-        .sig-box { margin-top: 25px; border: 1px dashed #444; border-radius: 12px; background: #000; height: 180px; position: relative; }
-        canvas#signature { width: 100%; height: 100%; touch-action: none; cursor: crosshair; }
-        .btn-group { display: flex; gap: 10px; margin-top: 25px; max-width: 600px; margin-left: auto; margin-right: auto; padding-bottom: 50px; }
-        .btn { flex: 1; padding: 16px; border-radius: 12px; border: none; font-weight: bold; font-size: 15px; }
-        .btn-clear { background: #334155; color: #fff; }
-        .btn-save { background: linear-gradient(90deg, #00f2fe, #7000ff); color: #fff; }
+        :root { --primary: #00f2fe; --accent: #00ff88; --danger: #ff4757; --bg: #0b0f19; --surface: #1e293b; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; margin: 0; padding: 0; }
+        
+        body { background: var(--bg); color: #e2e8f0; font-family: "DIN Alternate", -apple-system, sans-serif; display: flex; flex-direction: column; height: 100svh; overflow: hidden; }
+        #capture-area { background: var(--bg); display: flex; flex-direction: column; height: 100%; width: 100%; }
+
+        .header-brand { flex: 0 0 60px; width: 100%; display: flex; align-items: center; justify-content: center; background: rgba(11, 15, 25, 0.95); z-index: 50; border-bottom: 1px solid rgba(0,242,254,0.3); }
+        .brand-text { font-size: 18px; font-weight: 900; color: #fff; letter-spacing: 2px; text-shadow: 0 0 10px rgba(0,242,254,0.8); }
+        .step-badge { position: absolute; right: 15px; background: rgba(255,71,87,0.1); border: 1px solid var(--danger); color: var(--danger); font-size: 10px; padding: 4px 8px; border-radius: 12px; font-weight: bold; }
+
+        .warning-banner { background: rgba(255,71,87,0.1); padding: 15px 20px; border-bottom: 1px solid rgba(255,71,87,0.3); color: #fff; font-size: 13px; line-height: 1.5; }
+        .warning-banner span { color: var(--danger); font-weight: bold; }
+
+        .q-list { flex: 1; overflow-y: auto; padding: 20px 15px 110px 15px; scrollbar-width: none; }
+        .q-list::-webkit-scrollbar { display: none; }
+        
+        .q-item { background: var(--surface); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 15px; margin-bottom: 15px; }
+        .q-text { font-size: 14px; color: #e2e8f0; line-height: 1.5; font-weight: bold; margin-bottom: 12px; }
+        
+        .ans-group { display: flex; gap: 10px; }
+        .ans-btn { flex: 1; padding: 10px; text-align: center; border-radius: 8px; font-size: 14px; font-weight: bold; color: #94a3b8; background: rgba(11, 15, 25, 0.6); border: 1px solid rgba(255,255,255,0.1); transition: 0.3s; }
+        .ans-btn.no.active { background: rgba(0,255,136,0.15); border-color: var(--accent); color: var(--accent); }
+        .ans-btn.yes.active { background: rgba(255,71,87,0.15); border-color: var(--danger); color: var(--danger); }
+
+        .bottom-action { position: fixed; bottom: 0; left: 0; width: 100%; padding: 15px 20px 25px 20px; background: linear-gradient(to top, rgba(11,15,25,1) 50%, rgba(11,15,25,0)); z-index: 10; }
+        .btn-generate { width: 100%; background: var(--primary); color: #000; border: none; padding: 16px; border-radius: 16px; font-size: 16px; font-weight: 900; box-shadow: 0 8px 25px rgba(0,242,254,0.4); display: flex; justify-content: center; align-items: center; gap: 8px; }
+
+        .poster-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 9999; flex-direction: column; align-items: center; justify-content: center; padding: 20px; opacity: 0; transition: opacity 0.3s; }
+        .poster-overlay.active { display: flex; opacity: 1; }
+        .poster-scroll-area { max-height: 70vh; width: 100%; overflow-y: auto; border-radius: 12px; border: 2px solid var(--danger); box-shadow: 0 10px 40px rgba(255,71,87,0.3); }
+        .poster-scroll-area::-webkit-scrollbar { display: none; }
+        .poster-img { width: 100%; display: block; }
+        
+        .poster-tip { color: #fff; font-size: 15px; margin: 20px 0 15px 0; font-weight: bold; letter-spacing: 1px; display: flex; align-items: center; gap: 8px; }
+        .btn-next { background: #fff; color: #000; border: none; padding: 14px 35px; border-radius: 30px; font-weight: 900; font-size: 15px; box-shadow: 0 5px 20px rgba(255,255,255,0.3); }
+        
+        @keyframes pulseTip { 0% { transform: scale(1); opacity: 0.8; } 50% { transform: scale(1.05); opacity: 1; } 100% { transform: scale(1); opacity: 0.8; } }
+        .pulse-text { animation: pulseTip 1.5s infinite; color: var(--primary); }
     </style>
 </head>
 <body>
-    <a href="./index.html" class="back-btn">← 返回中枢</a>
-    <div class="container" id="captureArea">
-        <h2>ACE 风险筛查 (PAR-Q)</h2>
-        <div id="questions"></div>
-        <div style="font-size:13px; color:var(--primary); margin: 25px 0 10px; font-weight: bold;">会员本人签字确认：</div>
-        <div class="sig-box"><canvas id="signature"></canvas></div>
+
+    <div id="capture-area">
+        <div class="header-brand">
+            <div class="brand-text">PAR-Q 医疗级健康排查</div>
+            <div class="step-badge">核心准入排查</div>
+        </div>
+        
+        <div class="warning-banner">
+            <span>⚠️ 提示：</span>为了您的训练安全，请如实评估以下 7 项国际标准医学排查指标。本页面将生成档案用于健康备书。
+        </div>
+
+        <div class="q-list" id="scrollArea">
+            </div>
+    </div> 
+
+    <div class="bottom-action" id="actionBtnGroup">
+        <button class="btn-generate" onclick="generatePoster()">
+            <span style="font-size: 20px;">🛡️</span> 确认无误，生成免责档案
+        </button>
     </div>
-    <div class="btn-group">
-        <button class="btn btn-clear" onclick="clearSig()">清除重签</button>
-        <button class="btn btn-save" onclick="saveReport()">生成评估报告</button>
+
+    <div class="poster-overlay" id="posterOverlay">
+        <div class="poster-scroll-area">
+            <img id="posterImg" class="poster-img" src="" alt="PAR-Q 海报">
+        </div>
+        <div class="poster-tip"><span class="pulse-text">👇 长按上方图片，作为安全健康承诺存档</span></div>
+        <button class="btn-next" onclick="goToNextStep()">进入 LUXIOU 全息舱扫描 ➔</button>
     </div>
+
     <script>
         const questions = [
-            "医生是否曾说您的心脏有问题？", "运动时您的胸部是否有疼痛感？", "过去月内不运动时是否有过胸痛？",
-            "是否曾因晕眩失去平衡？", "是否有因运动加重的骨关节问题？", "是否正在服用心脏/血压类药物？",
-            "是否知道其他不应参加运动的原因？", "直系亲属55岁前有心脏病史？", "您目前是否吸烟？",
-            "收缩压≥140或舒张压≥90？", "总胆固醇是否>200mg/dL？", "空腹血糖是否≥100mg/dL？",
-            "BMI指数是否大于30？", "每周运动是否少于3次？", "男>45岁或女>55岁？",
-            "是否有已知代谢性疾病？", "是否有肺部疾病史？", "近期是否有不明原因呼吸困难？"
+            "1. 医生是否曾告诉过您，您的心脏有问题，并建议您只能进行医生推荐的体育活动？",
+            "2. 当您进行体育活动时，您是否感到胸痛？",
+            "3. 过去几个月中，您在未进行体育活动时是否曾感到胸痛？",
+            "4. 您是否曾因头晕而失去平衡，或曾失去意识？",
+            "5. 您是否有骨骼或关节问题（如背部、膝盖或臀部），可能会因改变体育活动而加重？",
+            "6. 医生目前是否为您开具了治疗血压或心脏问题的处方药物？",
+            "7. 您是否知道有任何其他原因导致您不应进行体育活动？"
         ];
-        const qBox = document.getElementById('questions');
-        questions.forEach((q, i) => {
-            const div = document.createElement('div');
-            div.className = 'q-item';
-            div.innerHTML = `<div class="q-text">${i+1}. ${q}</div><div class="options">
-                <div class="opt" onclick="toggle(this)">是</div><div class="opt active" onclick="toggle(this)">否</div></div>`;
-            qBox.appendChild(div);
+
+        // 渲染问卷
+        const listDiv = document.getElementById('scrollArea');
+        questions.forEach((q, idx) => {
+            listDiv.innerHTML += `
+                <div class="q-item">
+                    <div class="q-text">${q}</div>
+                    <div class="ans-group">
+                        <div class="ans-btn yes" onclick="selectAns(this)">是的 (YES)</div>
+                        <div class="ans-btn no active" onclick="selectAns(this)">没有 (NO)</div>
+                    </div>
+                </div>
+            `;
         });
-        function toggle(el) { el.parentNode.querySelectorAll('.opt').forEach(o=>o.classList.remove('active')); el.classList.add('active'); }
-        const canvas = document.getElementById('signature');
-        const ctx = canvas.getContext('2d');
-        let drawing = false;
-        canvas.width = canvas.offsetWidth; canvas.height = canvas.offsetHeight;
-        const getPos = (e) => { const r = canvas.getBoundingClientRect(); return { x: (e.touches ? e.touches[0].clientX : e.clientX) - r.left, y: (e.touches ? e.touches[0].clientY : e.clientY) - r.top }; };
-        const start = (e) => { drawing = true; const p = getPos(e); ctx.beginPath(); ctx.moveTo(p.x, p.y); };
-        const move = (e) => { if(!drawing) return; const p = getPos(e); ctx.lineTo(p.x, p.y); ctx.strokeStyle = '#00f2fe'; ctx.lineWidth = 3; ctx.lineCap = 'round'; ctx.stroke(); e.preventDefault(); };
-        canvas.addEventListener('touchstart', start); canvas.addEventListener('touchmove', move); canvas.addEventListener('touchend', () => drawing = false);
-        canvas.addEventListener('mousedown', start); canvas.addEventListener('mousemove', move); canvas.addEventListener('mouseup', () => drawing = false);
-        function clearSig() { ctx.clearRect(0,0,canvas.width,canvas.height); }
-        function saveReport() { html2canvas(document.querySelector("#captureArea")).then(c => { const a = document.createElement('a'); a.download = 'LUXIOU_PARQ.png'; a.href = c.toDataURL(); a.click(); }); }
+
+        // 单选逻辑
+        function selectAns(btn) {
+            let siblings = btn.parentElement.children;
+            for(let i=0; i<siblings.length; i++) siblings[i].classList.remove('active');
+            btn.classList.add('active');
+        }
+
+        // 🚀 生成海报（同款截长图技术）
+        function generatePoster() {
+            if (navigator.vibrate) navigator.vibrate(50);
+            let btn = document.querySelector('.btn-generate');
+            btn.innerHTML = "⏳ 正在生成医疗级安全底档...";
+            btn.style.opacity = "0.7";
+            
+            document.getElementById('actionBtnGroup').style.display = 'none';
+            let captureArea = document.getElementById('capture-area');
+            let scrollArea = document.getElementById('scrollArea');
+            
+            let origHeight = captureArea.style.height;
+            let origOverflow = scrollArea.style.overflowY;
+            let origFlex = scrollArea.style.flex;
+            
+            scrollArea.style.overflowY = 'visible';
+            scrollArea.style.flex = 'none';
+            captureArea.style.height = captureArea.scrollHeight + 'px';
+
+            html2canvas(captureArea, {
+                backgroundColor: "#0b0f19",
+                scale: 2, 
+                windowHeight: captureArea.scrollHeight
+            }).then(canvas => {
+                captureArea.style.height = origHeight;
+                scrollArea.style.overflowY = origOverflow;
+                scrollArea.style.flex = origFlex;
+                
+                document.getElementById('actionBtnGroup').style.display = 'block';
+                btn.innerHTML = "<span style='font-size: 20px;'>🛡️</span> 确认无误，生成免责档案";
+                btn.style.opacity = "1";
+
+                let imgData = canvas.toDataURL("image/jpeg", 0.9);
+                document.getElementById('posterImg').src = imgData;
+                document.getElementById('posterOverlay').classList.add('active');
+                
+            }).catch(err => {
+                alert("生成档案失败，请重试！");
+                document.getElementById('actionBtnGroup').style.display = 'block';
+                captureArea.style.height = origHeight; scrollArea.style.overflowY = origOverflow; scrollArea.style.flex = origFlex;
+            });
+        }
+
+        function goToNextStep() {
+            window.location.href = 'case_detail.html'; // 答完题进入最后的高潮：全息舱扫描
+        }
     </script>
 </body>
 </html>
