@@ -7,10 +7,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         /* 顶级哑光奢华配色：拉丝金、勃艮第红、曜石黑 */
-        :root { --primary: #D4AF37; --accent: #C5A059; --danger: #8B0000; --danger-light: #B22222; --bg: #050505; --surface: #121212; }
+        :root { --primary: #D4AF37; --accent: #C5A059; --danger: #B22222; --bg: #050505; --surface: #121212; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; margin: 0; padding: 0; }
         
-        /* 🚀 核心修复：取消高度锁定，让页面自然滑动，杜绝任何遮挡！ */
         body { background: var(--bg); color: #e2e8f0; font-family: "DIN Alternate", "Helvetica Neue", sans-serif; overflow-y: auto; -webkit-font-smoothing: antialiased; }
         #capture-area { background: var(--bg); width: 100%; min-height: 100vh; padding-bottom: 120px; display: block; }
 
@@ -18,19 +17,18 @@
         .brand-text { font-size: 18px; font-weight: 900; color: var(--primary); letter-spacing: 2px; }
         .step-badge { position: absolute; right: 15px; background: rgba(212, 175, 55, 0.05); border: 1px solid var(--primary); color: var(--primary); font-size: 10px; padding: 4px 8px; border-radius: 12px; font-weight: bold; }
 
-        .radar-section { width: 100%; height: 260px; display: flex; flex-direction: column; background: radial-gradient(circle at center, rgba(18, 18, 18, 0.8) 0%, var(--bg) 100%); border-bottom: 1px solid rgba(255,255,255,0.03); padding-top: 15px; }
+        .radar-section { width: 100%; height: 270px; display: flex; flex-direction: column; background: radial-gradient(circle at center, rgba(18, 18, 18, 0.8) 0%, var(--bg) 100%); border-bottom: 1px solid rgba(255,255,255,0.03); padding-top: 15px; }
         .score-board { display: flex; justify-content: space-between; align-items: flex-start; padding: 0 20px; z-index: 2; }
         .score-info { display: flex; flex-direction: column; }
         .risk-label { font-size: 11px; color: #888; font-weight: bold; letter-spacing: 1px; }
-        /* 去除廉价发光，改为高级质感阴影 */
-        .risk-score { font-size: 44px; font-weight: 900; color: var(--primary); text-shadow: 0 2px 4px rgba(0,0,0,0.8); line-height: 1; margin-top: 4px; transition: color 0.3s; }
-        .risk-score.high { color: var(--danger-light); text-shadow: 0 2px 4px rgba(0,0,0,0.8); }
+        .risk-score { font-size: 46px; font-weight: 900; color: var(--primary); text-shadow: 0 2px 5px rgba(0,0,0,0.9); line-height: 1; margin-top: 4px; transition: color 0.3s; }
+        .risk-score.high { color: var(--danger); text-shadow: 0 2px 5px rgba(0,0,0,0.9); }
         
         .status-tag { font-size: 11px; font-weight: bold; padding: 6px 12px; border-radius: 6px; background: rgba(212, 175, 55, 0.05); color: var(--primary); border: 1px solid rgba(212, 175, 55, 0.3); transition: 0.3s; }
         .status-tag.warn { background: rgba(197, 160, 89, 0.05); color: var(--accent); border-color: rgba(197, 160, 89, 0.3); }
-        .status-tag.crit { background: rgba(139, 0, 0, 0.05); color: var(--danger-light); border-color: rgba(139, 0, 0, 0.3); }
+        .status-tag.crit { background: rgba(178, 34, 34, 0.05); color: var(--danger); border-color: rgba(178, 34, 34, 0.3); }
 
-        .radar-container { position: relative; width: 100%; height: 190px; margin-top: 10px; }
+        .radar-container { position: relative; width: 100%; height: 200px; margin-top: 5px; }
         #radarCanvas { width: 100%; height: 100%; position: absolute; top: 0; left: 0; z-index: 1; }
 
         .matrix-scroll { padding: 20px 15px; }
@@ -40,40 +38,44 @@
         .q-title::before { content: ''; display: block; width: 3px; height: 14px; background: var(--primary); }
         
         .tags-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        
         .tag-btn { background: var(--surface); border: 1px solid rgba(255,255,255,0.05); color: #888; padding: 12px 8px; border-radius: 8px; font-size: 13px; font-weight: bold; transition: all 0.2s; text-align: center; display: flex; align-items: center; justify-content: center; line-height: 1.3; cursor: pointer; }
         .tag-btn.active { background: rgba(212, 175, 55, 0.08); border-color: var(--primary); color: #fff; transform: scale(1.02); }
-        .tag-btn.danger.active { background: rgba(139, 0, 0, 0.1); border-color: var(--danger-light); color: #fff; }
+        .tag-btn.danger.active { background: rgba(178, 34, 34, 0.15); border-color: var(--danger); color: #fff; }
         .tag-btn.custom-add { border: 1px dashed #444; color: #888; background: transparent; grid-column: span 2; padding: 12px; }
         
-        .signature-section { margin-top: 20px; padding: 20px; background: var(--surface); border-radius: 12px; border: 1px solid rgba(255,255,255,0.03); }
-        .sig-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-        .sig-title { font-size: 13px; font-weight: bold; color: #D1D5DB; }
-        .sig-result-box { width: 100%; height: 100px; background: #0A0A0C; border: 1px dashed #444; border-radius: 8px; display: flex; align-items: center; justify-content: center; overflow: hidden; cursor: pointer; }
-        .sig-placeholder { color: var(--primary); font-size: 13px; font-weight: bold; letter-spacing: 1px; }
-        #sigResultImg { width: 100%; height: 100%; object-fit: contain; display: none; }
+        /* 🚀 重新设计的合同级签名区 */
+        .signature-section { margin-top: 30px; padding: 20px 15px; background: var(--surface); border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); }
+        .sig-header { font-size: 12px; font-weight: bold; color: #888; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px; }
+        .contract-line { width: 100%; border-bottom: 1px solid #444; position: relative; height: 60px; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 5px; cursor: pointer; }
+        .pulse-text { color: var(--primary); font-size: 16px; font-weight: bold; animation: pulse 2s infinite; }
+        #sigResultImg { position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); height: 80px; display: none; }
+        @keyframes pulse { 0% { opacity: 0.6; } 50% { opacity: 1; } 100% { opacity: 0.6; } }
 
         .bottom-action { position: fixed; bottom: 0; left: 0; width: 100%; padding: 15px 20px 25px 20px; background: linear-gradient(to top, rgba(5,5,5,1) 60%, rgba(5,5,5,0)); z-index: 10; }
         .btn-generate { width: 100%; background: linear-gradient(135deg, #D4AF37, #AA8A2A); color: #000; border: none; padding: 16px; border-radius: 12px; font-size: 16px; font-weight: 900; display: flex; justify-content: center; align-items: center; gap: 8px; box-shadow: 0 4px 15px rgba(212, 175, 55, 0.2); }
 
-        /* 🚀 彻底修复的输入窗（加入 -webkit-user-select: auto 等强制属性） */
-        .input-modal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.9); z-index: 999999; flex-direction: column; align-items: center; justify-content: center; }
+        /* 🚀 暴力修复：强制解绑 user-select 的核武器输入窗 */
+        .input-modal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.9); z-index: 9999999; flex-direction: column; align-items: center; justify-content: center; }
         .input-box { background: #121212; width: 85%; max-width: 350px; padding: 25px; border-radius: 16px; border: 1px solid rgba(212, 175, 55, 0.3); }
         .input-title { color: #fff; font-size: 15px; font-weight: bold; margin-bottom: 20px; text-align: center; }
-        .custom-input { width: 100%; padding: 16px; background: #050505; border: 1px solid #444; color: #fff; border-radius: 8px; font-size: 16px; margin-bottom: 25px; outline: none; user-select: auto !important; -webkit-user-select: auto !important; pointer-events: auto !important; }
+        /* 强制允许文本选择，关闭默认表单样式，强制层级 */
+        .custom-input { width: 100%; padding: 16px; background: #050505; border: 1px solid #444; color: #fff; border-radius: 8px; font-size: 16px; margin-bottom: 25px; outline: none; -webkit-appearance: none; appearance: none; -webkit-user-select: text !important; user-select: text !important; pointer-events: auto !important; z-index: 99999999; }
         .custom-input:focus { border-color: var(--primary); }
         .modal-btns { display: flex; gap: 15px; }
         .modal-btn { flex: 1; padding: 14px; border-radius: 8px; font-size: 15px; font-weight: bold; border: none; }
         .modal-btn.cancel { background: #222; color: #888; }
         .modal-btn.confirm { background: var(--primary); color: #000; }
 
-        /* 🚀 全屏签字版 Modal */
-        .sig-modal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #050505; z-index: 999999; flex-direction: column; }
-        .sig-modal-header { height: 60px; display: flex; align-items: center; justify-content: center; color: var(--primary); font-weight: bold; font-size: 16px; border-bottom: 1px solid rgba(212, 175, 55, 0.15); background: #121212; }
-        #fullscreenSigCanvas { flex: 1; width: 100%; touch-action: none; background: #050505; }
-        .sig-modal-footer { height: 80px; display: flex; gap: 15px; padding: 15px 20px; background: #121212; border-top: 1px solid rgba(255,255,255,0.05); }
+        /* 🚀 白皮书级别：全屏仿真签字版 */
+        .sig-modal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #fff; z-index: 9999999; flex-direction: column; }
+        .sig-modal-header { height: 70px; display: flex; align-items: center; justify-content: center; color: #000; font-weight: 900; font-size: 18px; border-bottom: 1px solid #ddd; background: #f8f9fa; letter-spacing: 2px;}
+        #fullscreenSigCanvas { flex: 1; width: 100%; touch-action: none; background: #fff; }
+        .sig-modal-footer { height: 90px; display: flex; gap: 15px; padding: 20px; background: #f8f9fa; border-top: 1px solid #eee; }
+        .sig-btn { flex: 1; padding: 14px; border-radius: 8px; font-size: 16px; font-weight: bold; border: none; }
+        .sig-btn.cancel { background: #e2e8f0; color: #475569; }
+        .sig-btn.confirm { background: #000; color: #fff; }
 
-        .poster-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 999999; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
+        .poster-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 99999999; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
         .poster-scroll-area { max-height: 70vh; width: 100%; overflow-y: auto; border-radius: 12px; border: 1px solid var(--primary); }
         .poster-scroll-area::-webkit-scrollbar { display: none; }
         .poster-img { width: 100%; display: block; }
@@ -159,9 +161,9 @@
             </div>
 
             <div class="signature-section">
-                <div class="sig-header"><span class="sig-title">客户全屏电子签名确认</span></div>
-                <div class="sig-result-box" onclick="openSigPad()">
-                    <span class="sig-placeholder" id="sigPlaceholder">👉 点击此处 全屏手写签名</span>
+                <div class="sig-header">Client Signature / 客户签字授权</div>
+                <div class="contract-line" onclick="openSigPad()">
+                    <span id="sigPlaceholder" class="pulse-text">点击全屏手写签名</span>
                     <img id="sigResultImg" src="">
                 </div>
             </div>
@@ -172,7 +174,7 @@
     <div class="input-modal" id="customInputModal">
         <div class="input-box">
             <div class="input-title" id="customInputTitle">请输入内容</div>
-            <input type="text" class="custom-input" id="customInputField" placeholder="在此输入...">
+            <input type="text" class="custom-input" id="customInputField" placeholder="在此输入..." ontouchstart="this.focus()">
             <div class="modal-btns">
                 <button class="modal-btn cancel" onclick="closeInput()">取消</button>
                 <button class="modal-btn confirm" onclick="confirmInput()">确认添加</button>
@@ -181,11 +183,11 @@
     </div>
 
     <div class="sig-modal" id="sigModal">
-        <div class="sig-modal-header">请在下方空白区域手写签名</div>
+        <div class="sig-modal-header">请在下方空白处签署您的姓名</div>
         <canvas id="fullscreenSigCanvas"></canvas>
         <div class="sig-modal-footer">
-            <button class="modal-btn cancel" onclick="clearSig()">清除重写</button>
-            <button class="modal-btn confirm" onclick="saveSig()">确认签名</button>
+            <button class="sig-btn cancel" onclick="clearSig()">清除重写</button>
+            <button class="sig-btn confirm" onclick="saveSig()">确认签名</button>
         </div>
     </div>
 
@@ -229,7 +231,6 @@
                     if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
                 }
                 ctx.closePath();
-                // 哑光拉丝金网格线
                 ctx.strokeStyle = `rgba(212, 175, 55, ${0.1 * level})`; ctx.stroke();
             }
 
@@ -239,7 +240,7 @@
                 let x = centerX + radius * Math.cos(angle); let y = centerY + radius * Math.sin(angle);
                 ctx.beginPath(); ctx.moveTo(centerX, centerY); ctx.lineTo(x, y);
                 ctx.strokeStyle = "rgba(255,255,255,0.03)"; ctx.stroke();
-                let labelX = centerX + (radius + 20) * Math.cos(angle); let labelY = centerY + (radius + 12) * Math.sin(angle);
+                let labelX = centerX + (radius + 25) * Math.cos(angle); let labelY = centerY + (radius + 15) * Math.sin(angle);
                 ctx.fillText(labels[i], labelX, labelY);
             }
 
@@ -247,7 +248,8 @@
             const keys = ['core', 'joint', 'meta', 'posture', 'muscle'];
             keys.forEach((key, i) => {
                 let angle = (Math.PI * 2 * i) / sides - Math.PI / 2;
-                let val = Math.max(20, currentScores[key]);
+                // 限制边界
+                let val = Math.max(20, Math.min(100, currentScores[key]));
                 let x = centerX + radius * (val / maxScore) * Math.cos(angle); let y = centerY + radius * (val / maxScore) * Math.sin(angle);
                 if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
             });
@@ -255,10 +257,9 @@
             
             let totalScore = Math.round(Object.values(currentScores).reduce((a,b)=>a+b, 0) / 5);
             
-            // 顶级质感：香槟金 vs 勃艮第红 (去荧光)
             ctx.lineWidth = 2;
             if(totalScore < 75) { 
-                ctx.fillStyle = "rgba(139, 0, 0, 0.4)"; ctx.strokeStyle = "#B22222"; 
+                ctx.fillStyle = "rgba(178, 34, 34, 0.4)"; ctx.strokeStyle = "#B22222"; 
             } else { 
                 ctx.fillStyle = "rgba(212, 175, 55, 0.4)"; ctx.strokeStyle = "#D4AF37"; 
             }
@@ -297,7 +298,7 @@
             recalculateScores();
         }
 
-        // 🚀 完全重构的防拦截弹窗唤醒逻辑
+        // 🚀 暴力的输入框逻辑
         function openInput(btn, impactStr, isDanger, title) {
             window.activeBtn = btn;
             window.activeImpact = impactStr;
@@ -307,13 +308,7 @@
             const inputField = document.getElementById('customInputField');
             inputField.value = '';
             
-            const modal = document.getElementById('customInputModal');
-            modal.style.display = 'flex';
-            
-            // 延迟让 iOS 有时间渲染 DOM 然后自动获取焦点
-            setTimeout(() => {
-                inputField.focus();
-            }, 50);
+            document.getElementById('customInputModal').style.display = 'flex';
         }
         
         function closeInput() { 
@@ -337,12 +332,11 @@
                 recalculateScores(); 
                 closeInput();
             } else { 
-                alert("内容不能为空哦"); 
-                document.getElementById('customInputField').focus();
+                alert("内容不能为空"); 
             }
         }
 
-        // 全屏签字版
+        // 白皮书级全屏签字板
         const fSigCanvas = document.getElementById('fullscreenSigCanvas');
         const fSigCtx = fSigCanvas.getContext('2d');
         let fIsDrawing = false;
@@ -354,10 +348,14 @@
             fSigCanvas.width = fSigCanvas.clientWidth * dpr; 
             fSigCanvas.height = fSigCanvas.clientHeight * dpr;
             fSigCtx.scale(dpr, dpr); 
-            fSigCtx.lineWidth = 4; 
+            
+            // 纯白背景
+            fSigCtx.fillStyle = "#ffffff";
+            fSigCtx.fillRect(0, 0, fSigCanvas.width, fSigCanvas.height);
+
+            fSigCtx.lineWidth = 5; 
             fSigCtx.lineCap = 'round'; 
-            fSigCtx.strokeStyle = '#D4AF37'; // 拉丝金笔迹
-            fSigCtx.clearRect(0, 0, fSigCanvas.width, fSigCanvas.height);
+            fSigCtx.strokeStyle = '#000000'; // 纯黑墨水
         }
 
         function getFPos(e) {
@@ -376,7 +374,10 @@
         fSigCanvas.addEventListener('touchmove', e => { e.preventDefault(); if(fIsDrawing){ const p = getFPos(e); fSigCtx.lineTo(p.x, p.y); fSigCtx.stroke(); }}, {passive: false});
         fSigCanvas.addEventListener('touchend', () => fIsDrawing = false);
 
-        function clearSig() { fSigCtx.clearRect(0, 0, fSigCanvas.width, fSigCanvas.height); }
+        function clearSig() { 
+            fSigCtx.fillStyle = "#ffffff";
+            fSigCtx.fillRect(0, 0, fSigCanvas.width, fSigCanvas.height); 
+        }
 
         function saveSig() {
             let dataUrl = fSigCanvas.toDataURL("image/png");
@@ -390,22 +391,21 @@
             let goals = []; document.querySelectorAll('.tag-btn.active[data-goal]').forEach(t => goals.push(t.innerText));
             if(goals.length === 0) { alert("请在第五项选择或输入一个【蜕变目标】！"); return; }
             if(document.getElementById('sigPlaceholder').style.display !== 'none') {
-                alert("请点击底部完成【全屏电子签名】后再生成报告！"); return;
+                alert("请点击底部【完成手写签名】后再生成报告！"); return;
             }
 
             if (navigator.vibrate) navigator.vibrate(50);
             let btn = document.querySelector('.btn-generate');
-            btn.innerHTML = "⏳ 正在生成..."; btn.style.opacity = "0.7"; document.getElementById('actionBtnGroup').style.display = 'none';
+            btn.innerHTML = "⏳ 正在生成档案..."; btn.style.opacity = "0.7"; document.getElementById('actionBtnGroup').style.display = 'none';
             
             let captureArea = document.getElementById('capture-area');
             
-            // 流式布局截图极其稳定
             html2canvas(captureArea, { backgroundColor: "#050505", scale: 2 }).then(canvas => {
                 document.getElementById('actionBtnGroup').style.display = 'block'; btn.innerHTML = "<span style='font-size: 20px;'>📸</span> 生成诊断报告并存档"; btn.style.opacity = "1";
                 document.getElementById('posterImg').src = canvas.toDataURL("image/jpeg", 0.9);
                 document.getElementById('posterOverlay').style.display = 'flex';
             }).catch(err => {
-                alert("生成长图失败，请重试！"); document.getElementById('actionBtnGroup').style.display = 'block';
+                alert("生成失败，请重试！"); document.getElementById('actionBtnGroup').style.display = 'block';
             });
         }
 
