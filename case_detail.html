@@ -2,59 +2,81 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>LUXIOU | 全息数字化诊断 V11.1</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>LUXIOU | 全息数字化诊断 V12.0</title>
     <style>
         :root { --primary: #00f2fe; --accent: #00ff88; --danger: #ff4757; --bg: #0b0f19; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
-        body { background: var(--bg); color: #e2e8f0; font-family: -apple-system, 'PingFang SC', sans-serif; margin: 0; padding: 0; overflow: hidden; touch-action: none; }
         
-        /* 顶部品牌 */
-        .header-brand { position: fixed; top: 0; left: 0; width: 100%; height: 55px; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.85); backdrop-filter: blur(10px); z-index: 5000; border-bottom: 1px solid rgba(0,242,254,0.3); }
-        .brand-text { font-size: 20px; font-weight: 900; color: #fff; letter-spacing: 2px; text-shadow: 0 0 15px rgba(0,242,254,0.6); }
-        .back-btn { position: absolute; left: 15px; color: #fff; text-decoration: none; font-size: 12px; border: 1px solid rgba(255,255,255,0.3); padding: 6px 14px; border-radius: 20px; backdrop-filter: blur(5px); }
+        /* 彻底重构的 Flex 底层：彻底杜绝遮挡 */
+        body { 
+            background: var(--bg); color: #e2e8f0; 
+            font-family: "DIN Alternate", -apple-system, "Helvetica Neue", sans-serif; 
+            margin: 0; padding: 0; overflow: hidden; touch-action: none;
+            display: flex; flex-direction: column; height: 100svh; /* 适配所有手机视口 */
+        }
+        
+        /* 顶部品牌栏：作为 Flex 容器的第一块积木 */
+        .header-brand { 
+            flex: 0 0 55px; width: 100%; display: flex; align-items: center; justify-content: center; 
+            background: rgba(11, 15, 25, 0.98); z-index: 50; 
+            border-bottom: 1px solid rgba(0,242,254,0.3); box-shadow: 0 4px 15px rgba(0,0,0,0.5); 
+            position: relative; /* 不再使用 fixed */
+        }
+        .brand-text { font-size: 20px; font-weight: 900; color: #fff; letter-spacing: 3px; text-shadow: 0 0 12px rgba(0,242,254,0.8); }
+        .back-btn { position: absolute; left: 15px; color: #fff; text-decoration: none; font-size: 13px; border: 1px solid rgba(255,255,255,0.3); padding: 5px 14px; border-radius: 20px; font-weight: 600; }
 
-        /* 解决遮挡：拉大 padding-top 至 75px */
-        .app-wrap { width: 100vw; height: 100vh; display: flex; flex-direction: column; padding: 10px; padding-top: 75px; }
+        /* 主体内容区：填满剩余空间 */
+        .app-content { flex: 1; min-height: 0; display: flex; flex-direction: column; padding: 12px; }
 
-        /* 高定版 7大分类导航 */
-        .category-box { display: flex; gap: 10px; overflow-x: auto; margin-bottom: 12px; padding-bottom: 5px; scrollbar-width: none; }
-        .category-box::-webkit-scrollbar { display: none; }
-        .cat-item { flex: 0 0 auto; padding: 8px 18px; background: rgba(22, 30, 46, 0.7); border-radius: 25px; font-size: 14px; color: #cbd5e1; border: 1px solid rgba(255,255,255,0.15); font-weight: 500; letter-spacing: 1px; backdrop-filter: blur(5px); transition: all 0.3s ease; cursor: pointer; }
-        /* 极致发光选中态 */
-        .cat-item.active { background: linear-gradient(135deg, var(--primary), var(--accent)); color: #000; border-color: transparent; font-weight: 900; box-shadow: 0 4px 15px rgba(0, 242, 254, 0.4); transform: translateY(-2px); text-shadow: none; }
+        /* 💡 7大板块：高级感胶囊设计 */
+        .category-box { flex: 0 0 auto; display: flex; gap: 10px; overflow-x: auto; margin-bottom: 12px; padding-bottom: 4px; scrollbar-width: none; }
+        .cat-item { 
+            flex: 0 0 auto; padding: 8px 18px; 
+            background: rgba(30, 41, 59, 0.6); /* 质感深空灰 */
+            border-radius: 20px; /* 圆润胶囊形 */
+            font-size: 13px; color: #94a3b8; border: 1px solid rgba(255, 255, 255, 0.1); 
+            font-weight: 600; letter-spacing: 0.5px; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .cat-item.active { 
+            background: var(--primary); color: #0b0f19; border: none; 
+            box-shadow: 0 0 16px rgba(0,242,254,0.5); font-weight: 900; transform: scale(1.03); 
+        }
 
-        .stage-area { position: relative; flex: 1; width: 100%; display: flex; gap: 4px; margin-bottom: 10px; }
+        /* 诊断视窗 */
+        .stage-area { flex: 1; min-height: 0; display: flex; gap: 6px; margin-bottom: 12px; }
         .params-side { flex: 0 0 92px; display: flex; flex-direction: column; }
-        .param-card { flex: 1; background: rgba(11, 15, 25, 0.9); border-bottom: 1px solid rgba(255,255,255,0.05); padding: 5px; display: flex; flex-direction: column; justify-content: center; position: relative; }
-        .card-l { border-left: 4px solid #fff; }
-        .card-r { border-right: 4px solid var(--primary); text-align: right; }
-        .param-card label { font-size: 9px; color: #aaa; margin-bottom: 2px; }
+        .param-card { flex: 1; background: rgba(11, 15, 25, 0.8); border-bottom: 1px solid rgba(255,255,255,0.05); padding: 5px; display: flex; flex-direction: column; justify-content: center; position: relative; }
+        .card-l { border-left: 3px solid #fff; border-radius: 8px 0 0 8px; align-items: flex-start; }
+        .card-r { border-right: 3px solid var(--primary); border-radius: 0 8px 8px 0; align-items: flex-end; text-align: right; }
+        .param-card label { font-size: 9px; color: #94a3b8; margin-bottom: 4px; font-weight: bold; }
         
-        /* 交互数值区 */
-        .mini-wheel { color: var(--primary); font-size: 18px; font-weight: 900; height: 28px; line-height: 28px; background: rgba(0,242,254,0.1); border-radius: 4px; text-align: center; touch-action: none; transition: 0.2s; }
-        .mini-wheel.active { background: var(--primary); color: #000; transform: scale(1.05); }
+        /* 极简参数数值（还原设计图：大号青色文字 + 后缀单位） */
+        .mini-wheel { color: var(--primary); font-size: 19px; font-weight: 900; line-height: 1; cursor: ns-resize; touch-action: none; position: relative; display: inline-flex; align-items: baseline; }
+        .mini-wheel::after { content: attr(data-unit); font-size: 10px; color: #64748b; margin-left: 2px; font-weight: 600; }
+        
+        .diff-tag { font-size: 11px; font-weight: 900; margin-top: 4px; letter-spacing: 0.5px; transition: color 0.3s; }
 
-        /* 动态差异突显区 */
-        .diff-tag { font-size: 11px; font-weight: 900; text-align: right; margin-top: 2px; letter-spacing: 0.5px; transition: color 0.3s; }
-
-        .main-viewer { flex: 1; background: #000; border-radius: 15px; position: relative; overflow: hidden; border: 1.5px solid #333; }
+        /* 全息图层 */
+        .main-viewer { flex: 1; background: #000; border-radius: 12px; position: relative; overflow: hidden; border: 1px solid #334155; box-shadow: 0 8px 25px rgba(0,0,0,0.6); }
         .img-layer { position: absolute; width: 100%; height: 100%; background-size: contain; background-repeat: no-repeat; background-position: center; transition: 0.3s; }
         #laserCanvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 100; touch-action: none; }
 
-        .control-panel { background: rgba(16, 24, 39, 0.95); border-radius: 20px; padding: 12px; border: 1px solid rgba(255,255,255,0.1); }
-        .zoom-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 8px; }
-        input[type=range] { width: 100%; -webkit-appearance: none; background: #1a2234; height: 5px; border-radius: 3px; }
-        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 22px; background: #fff; border: 3px solid var(--primary); border-radius: 50%; }
+        /* 底部控制台 */
+        .control-panel { flex: 0 0 auto; background: rgba(16, 24, 39, 0.95); border-radius: 20px; padding: 15px; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 -5px 20px rgba(0,0,0,0.5); }
+        .zoom-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 12px; }
+        input[type=range] { width: 100%; -webkit-appearance: none; background: #1e293b; height: 5px; border-radius: 3px; }
+        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 22px; background: #fff; border: 3px solid var(--primary); border-radius: 50%; box-shadow: 0 0 10px var(--primary); }
 
-        .btn-group { display: grid; grid-template-columns: 1fr 1fr 1.2fr; gap: 10px; margin-top: 5px; }
-        .lux-btn { background: #1a2234; border: 1px solid #333; padding: 10px; border-radius: 10px; color: #fff; font-size: 11px; font-weight: bold; text-align: center; cursor: pointer; }
-        .btn-save { background: var(--primary); color: #000; border: none; box-shadow: 0 0 15px var(--primary); }
+        .btn-group { display: grid; grid-template-columns: 1fr 1fr 1.2fr; gap: 10px; margin-top: 10px; }
+        .lux-btn { background: #1e293b; border: 1px solid #334155; padding: 12px; border-radius: 10px; color: #fff; font-size: 12px; font-weight: bold; text-align: center; }
+        .btn-save { background: var(--primary); color: #000; border: none; box-shadow: 0 4px 15px rgba(0,242,254,0.4); }
 
-        #vault { height: 90px; overflow-y: auto; margin-top: 10px; border-top: 1px solid #222; }
-        .v-item-wrap { position: relative; overflow: hidden; margin-top: 6px; }
-        .v-item-content { background: #161e2e; padding: 12px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #333; border-radius: 8px; transition: transform 0.3s; }
-        .delete-btn { position: absolute; right: 0; top: 0; height: 100%; width: 70px; background: var(--danger); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold; border-radius: 0 8px 8px 0; }
+        /* 案例库 */
+        #vault { height: 80px; overflow-y: auto; margin-top: 12px; border-top: 1px solid #334155; padding-top: 5px; }
+        .v-item-wrap { position: relative; overflow: hidden; margin-top: 8px; border-radius: 8px; }
+        .v-item-content { background: #161e2e; padding: 12px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #334155; border-radius: 8px; transition: transform 0.3s; }
+        .delete-btn { position: absolute; right: 0; top: 0; height: 100%; width: 75px; background: var(--danger); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold; border-radius: 0 8px 8px 0; }
     </style>
 </head>
 <body>
@@ -63,8 +85,9 @@
         <div class="brand-text">LUXIOU 全息数字化</div>
     </div>
 
-    <div class="app-wrap">
+    <div class="app-content">
         <div class="category-box" id="catBox"></div>
+        
         <div class="stage-area">
             <div class="params-side" id="colL"></div>
             <div class="main-viewer">
@@ -77,10 +100,11 @@
 
         <div class="control-panel">
             <div class="zoom-row">
-                <div><small style="color:var(--primary);font-size:9px">前缩放</small> <input type="range" min="50" max="300" value="100" oninput="zoom('layB', this.value)"></div>
-                <div><small style="color:var(--primary);font-size:9px">后缩放</small> <input type="range" min="50" max="300" value="100" oninput="zoom('layA', this.value)"></div>
+                <div><small style="color:var(--primary);font-size:10px;font-weight:bold;">前照变焦</small> <input type="range" min="50" max="300" value="100" oninput="zoom('layB', this.value)"></div>
+                <div><small style="color:var(--primary);font-size:10px;font-weight:bold;">后照变焦</small> <input type="range" min="50" max="300" value="100" oninput="zoom('layA', this.value)"></div>
             </div>
-            <input type="range" min="0" max="100" value="0" id="fadeSlider" style="margin-bottom:10px;">
+            <div style="display:flex; justify-content:space-between; font-size:10px; color:#94a3b8; font-weight:bold; margin-bottom:5px;"><span>BEFORE</span><span>全息对比分析</span><span>AFTER</span></div>
+            <input type="range" min="0" max="100" value="0" id="fadeSlider">
             <div class="btn-group">
                 <div class="lux-btn" onclick="document.getElementById('fB').click()">📷 导入前照<input type="file" id="fB" hidden accept="image/*" onchange="processImg(this,'layB')"></div>
                 <div class="lux-btn" onclick="document.getElementById('fA').click()">📷 导入后照<input type="file" id="fA" hidden accept="image/*" onchange="processImg(this,'layA')"></div>
@@ -95,15 +119,17 @@
         const ctx = canvas.getContext('2d');
         let anchors = Array(6).fill(0).map((_, i) => ({ x: 0.5, y: 0.15 + i * 0.14 }));
         let draggingIdx = -1;
+        let currentUnit = "cm"; // 追踪当前分类单位
 
+        // 数据库预设（引入了单位）
         const db = {
-            posture: { name: "体态矫正", labels: ["颈椎前引", "圆肩偏离", "高低肩差", "骨盆前倾", "脊柱侧倾", "假胯宽度"], pre: [8.5, 25.0, 2.5, 18.0, 12.0, 98.0], post: [2.1, 8.0, 0.2, 7.0, 2.0, 91.0] },
-            shoulder: { name: "直角肩", labels: ["一字肩角", "斜方肌厚", "锁骨展度", "肩峰差值", "颈根宽度", "背平整度"], pre: [145.0, 5.8, 150.0, 1.5, 14.0, 12.0], post: [178.0, 3.1, 175.0, 0.2, 11.5, 4.0] },
-            postpartum: { name: "产后康复", labels: ["腹直肌隙", "耻骨宽度", "内脏脂肪", "盆底肌力", "腹围减寸", "腰腹度数"], pre: [3.5, 12.0, 15.0, 2.0, 95.0, 9.0], post: [0.2, 9.0, 5.0, 5.0, 78.0, 2.0] },
-            muscle: { name: "增肌专场", labels: ["上臂维度", "胸围增长", "大腿围度", "背阔肌展", "力量评级", "肌肉质量"], pre: [31.0, 95.0, 52.0, 88.0, 2.0, 35.0], post: [38.0, 115.0, 61.0, 112.0, 5.0, 72.0] },
-            abs: { name: "马甲线", labels: ["皮脂脂肪", "腹直肌隙", "腰围减寸", "侧腰厚度", "核心稳度", "腹部平坦"], pre: [28.0, 2.5, 82.0, 15.0, 35.0, 12.0], post: [10.0, 0.2, 65.0, 5.0, 120.0, 2.0] },
-            fatloss: { name: "减脂塑形", labels: ["基础代谢", "内脏脂肪", "全身脂率", "BMI指数", "腰臀比例", "水分含量"], pre: [1250.0, 14.0, 35.0, 28.5, 0.92, 48.0], post: [1550.0, 4.0, 18.0, 22.1, 0.72, 62.0] },
-            hip: { name: "蜜桃臀", labels: ["臀围维度", "臀线高度", "大腿围度", "核心稳定", "臀中肌厚", "侧向支撑"], pre: [88.0, 5.2, 54.0, 3.0, 2.0, 15.0], post: [98.0, 2.1, 51.0, 9.0, 8.0, 85.0] }
+            posture: { name: "体态矫正", unit: "cm", labels: ["颈前引", "圆肩度", "高低肩", "盆前倾", "脊柱侧", "假胯宽"], pre: [8.5, 25.0, 2.5, 18.0, 12.0, 98.0], post: [2.1, 8.0, 0.2, 7.0, 2.0, 91.0] },
+            shoulder: { name: "直角肩", unit: "°", labels: ["一字肩角", "斜方肌厚", "锁骨展度", "肩峰差值", "颈根宽度", "背平整度"], pre: [145.0, 5.8, 150.0, 1.5, 14.0, 12.0], post: [178.0, 3.1, 175.0, 0.2, 11.5, 4.0] },
+            postpartum: { name: "产后康复", unit: "cm", labels: ["腹直肌隙", "耻骨宽度", "内脏脂肪", "盆底肌力", "腹围减寸", "腰腹度数"], pre: [3.5, 12.0, 15.0, 2.0, 95.0, 9.0], post: [0.2, 9.0, 5.0, 5.0, 78.0, 2.0] },
+            muscle: { name: "增肌专场", unit: "cm", labels: ["上臂维度", "胸围增长", "大腿围度", "背阔肌展", "力量评级", "肌肉质量"], pre: [31.0, 95.0, 52.0, 88.0, 2.0, 35.0], post: [38.0, 115.0, 61.0, 112.0, 5.0, 72.0] },
+            abs: { name: "马甲线", unit: "mm", labels: ["皮脂脂肪", "腹直肌隙", "腰围减寸", "侧腰厚度", "核心稳度", "腹部平坦"], pre: [28.0, 2.5, 82.0, 15.0, 35.0, 12.0], post: [10.0, 0.2, 65.0, 5.0, 120.0, 2.0] },
+            fatloss: { name: "减脂塑形", unit: "%", labels: ["基础代谢", "内脏脂肪", "全身脂率", "BMI指数", "腰臀比例", "水分含量"], pre: [1250.0, 14.0, 35.0, 28.5, 0.92, 48.0], post: [1550.0, 4.0, 18.0, 22.1, 0.72, 62.0] },
+            hip: { name: "蜜桃臀", unit: "cm", labels: ["臀围维度", "臀线高度", "大腿围度", "核心稳定", "臀中肌厚", "侧向支撑"], pre: [88.0, 5.2, 54.0, 3.0, 2.0, 15.0], post: [98.0, 2.1, 51.0, 9.0, 8.0, 85.0] }
         };
 
         function updateDiffs() {
@@ -116,18 +142,19 @@
                     let lVal = parseFloat(lWheels[i].innerText) || 0;
                     let rVal = parseFloat(rWheels[i].innerText) || 0;
                     let diff = (rVal - lVal).toFixed(1);
-                    
                     let sign = diff > 0 ? '+' : '';
-                    diffTags[i].innerText = `${sign}${diff}`;
+                    
+                    // 加上对应单位显示
+                    diffTags[i].innerText = `${sign}${diff}${currentUnit}`;
 
                     if (diff < 0) {
-                        diffTags[i].style.color = "var(--accent)"; 
-                        diffTags[i].style.textShadow = "0 0 5px rgba(0,255,136,0.4)";
+                        diffTags[i].style.color = "var(--accent)";
+                        diffTags[i].style.textShadow = "0 0 8px rgba(0,255,136,0.3)";
                     } else if (diff > 0) {
-                        diffTags[i].style.color = "var(--danger)"; 
-                        diffTags[i].style.textShadow = "0 0 5px rgba(255,71,87,0.4)";
+                        diffTags[i].style.color = "var(--danger)";
+                        diffTags[i].style.textShadow = "0 0 8px rgba(255,71,87,0.3)";
                     } else {
-                        diffTags[i].style.color = "#64748b"; 
+                        diffTags[i].style.color = "#475569";
                         diffTags[i].style.textShadow = "none";
                     }
                 }
@@ -135,38 +162,27 @@
         }
 
         function initMiniWheel(el) {
-            let startY = 0;
-            let startVal = 0;
-            let isMoving = false;
-
+            let startY = 0, startVal = 0, isMoving = false;
+            // 单击手动输入
             el.addEventListener('click', () => {
                 const newVal = prompt("请输入精准参数", el.innerText);
                 if (newVal !== null && newVal !== "") {
                     el.innerText = parseFloat(newVal).toFixed(1);
-                    updateDiffs(); 
+                    updateDiffs();
                 }
             });
-
+            // 垂直滑动调节
             el.addEventListener('touchstart', e => {
-                startY = e.touches[0].clientY;
-                startVal = parseFloat(el.innerText) || 0;
-                isMoving = true;
-                el.classList.add('active');
-                e.preventDefault(); 
+                startY = e.touches[0].clientY; startVal = parseFloat(el.innerText) || 0;
+                isMoving = true; e.preventDefault(); 
             }, { passive: false });
-
             el.addEventListener('touchmove', e => {
                 if (!isMoving) return;
-                const delta = (startY - e.touches[0].clientY) * 0.2;
+                const delta = (startY - e.touches[0].clientY) * 0.15; // 阻尼感
                 el.innerText = (startVal + delta).toFixed(1);
-                updateDiffs(); 
-                e.preventDefault();
+                updateDiffs(); e.preventDefault();
             }, { passive: false });
-
-            el.addEventListener('touchend', () => {
-                isMoving = false;
-                el.classList.remove('active');
-            });
+            el.addEventListener('touchend', () => { isMoving = false; });
         }
 
         function draw() {
@@ -174,11 +190,11 @@
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             anchors.forEach((pt, i) => {
                 const boxY = (i * (canvas.height / 6)) + (canvas.height / 12);
-                ctx.strokeStyle = "rgba(0, 242, 254, 0.4)"; ctx.setLineDash([5, 5]);
+                ctx.strokeStyle = "rgba(0, 242, 254, 0.5)"; ctx.lineWidth = 1.2; ctx.setLineDash([5, 4]);
                 ctx.beginPath(); ctx.moveTo(0, boxY); ctx.lineTo(pt.x*canvas.width, pt.y*canvas.height); ctx.stroke();
                 ctx.beginPath(); ctx.moveTo(canvas.width, boxY); ctx.lineTo(pt.x*canvas.width, pt.y*canvas.height); ctx.stroke();
                 ctx.setLineDash([]); ctx.fillStyle = "#00ff88"; ctx.beginPath();
-                ctx.arc(pt.x*canvas.width, pt.y*canvas.height, 6, 0, Math.PI*2); ctx.fill();
+                ctx.arc(pt.x*canvas.width, pt.y*canvas.height, 5, 0, Math.PI*2); ctx.fill();
             });
         }
 
@@ -186,18 +202,19 @@
 
         function loadSetup(key, el) {
             const d = db[key];
+            currentUnit = d.unit; // 更新全局单位
             if(el) { document.querySelectorAll('.cat-item').forEach(i => i.classList.remove('active')); el.classList.add('active'); }
             let hL = '', hR = '';
             d.labels.forEach((l, i) => {
-                hL += `<div class="param-card card-l"><label>${l}(前)</label><div class="mini-wheel">${d.pre[i].toFixed(1)}</div></div>`;
-                hR += `<div class="param-card card-r"><label>${l}(后)</label><div class="mini-wheel">${d.post[i].toFixed(1)}</div><div class="diff-tag">0.0</div></div>`;
+                hL += `<div class="param-card card-l"><label>${l}(前)</label><div class="mini-wheel" data-unit="${d.unit}">${d.pre[i].toFixed(1)}</div></div>`;
+                hR += `<div class="param-card card-r"><label>${l}(后)</label><div class="mini-wheel" data-unit="${d.unit}">${d.post[i].toFixed(1)}</div><div class="diff-tag">0.0${d.unit}</div></div>`;
             });
             document.getElementById('colL').innerHTML = hL; document.getElementById('colR').innerHTML = hR;
             document.querySelectorAll('.mini-wheel').forEach(initMiniWheel);
-            updateDiffs(); 
-            draw();
+            updateDiffs(); draw();
         }
 
+        // 图像无损压缩逻辑
         function processImg(i, t) {
             if(i.files[0]){
                 const r = new FileReader();
@@ -218,23 +235,23 @@
         }
         
         function saveCase() {
-            const name = prompt("存档名"); if(!name) return;
-            const vault = JSON.parse(localStorage.getItem('LUX_V11_DB') || '[]');
+            const name = prompt("输入客户姓名保存："); if(!name) return;
+            const vault = JSON.parse(localStorage.getItem('LUX_V12_DB') || '[]');
             const preVals = Array.from(document.querySelectorAll('.card-l .mini-wheel')).map(s => s.innerText);
             const postVals = Array.from(document.querySelectorAll('.card-r .mini-wheel')).map(s => s.innerText);
             vault.unshift({ id: Date.now(), name, type: document.querySelector('.cat-item.active').innerText, imgB: document.getElementById('layB').style.backgroundImage, imgA: document.getElementById('layA').style.backgroundImage, anchors, preVals, postVals });
-            localStorage.setItem('LUX_V11_DB', JSON.stringify(vault)); renderVault();
+            localStorage.setItem('LUX_V12_DB', JSON.stringify(vault)); renderVault();
         }
 
         function deleteItem(id) {
-            let vault = JSON.parse(localStorage.getItem('LUX_V11_DB') || '[]');
+            let vault = JSON.parse(localStorage.getItem('LUX_V12_DB') || '[]');
             vault = vault.filter(i => i.id !== id);
-            localStorage.setItem('LUX_V11_DB', JSON.stringify(vault));
+            localStorage.setItem('LUX_V12_DB', JSON.stringify(vault));
             renderVault();
         }
 
         function loadCase(id) {
-            const v = JSON.parse(localStorage.getItem('LUX_V11_DB') || '[]').find(x => x.id === id);
+            const v = JSON.parse(localStorage.getItem('LUX_V12_DB') || '[]').find(x => x.id === id);
             if(v) {
                 document.getElementById('layB').style.backgroundImage = v.imgB; document.getElementById('layA').style.backgroundImage = v.imgA;
                 anchors = v.anchors; 
@@ -242,35 +259,36 @@
                 const rWheel = document.querySelectorAll('.card-r .mini-wheel');
                 v.preVals.forEach((s, i) => lWheel[i].innerText = s);
                 v.postVals.forEach((s, i) => rWheel[i].innerText = s);
-                updateDiffs(); 
-                draw();
+                updateDiffs(); draw();
             }
         }
 
         function renderVault() {
-            const v = JSON.parse(localStorage.getItem('LUX_V11_DB') || '[]');
+            const v = JSON.parse(localStorage.getItem('LUX_V12_DB') || '[]');
             document.getElementById('vault').innerHTML = v.map(i => `
                 <div class="v-item-wrap">
                     <div class="delete-btn" onclick="deleteItem(${i.id})">删除</div>
                     <div class="v-item-content" ontouchstart="swipeStart(event)" ontouchmove="swipeMove(event)" ontouchend="swipeEnd(event)">
-                        <span><b>${i.name}</b> <small>(${i.type})</small></span>
-                        <button onclick="loadCase(${i.id})" style="background:var(--primary); border:none; padding:6px 12px; border-radius:6px; font-weight:bold;">载入</button>
+                        <span><b style="color:var(--primary); font-size:14px;">${i.name}</b> <small style="color:#94a3b8;">(${i.type})</small></span>
+                        <button onclick="loadCase(${i.id})" style="background:var(--primary); border:none; padding:6px 14px; border-radius:6px; font-weight:bold; color:#000;">载入全息</button>
                     </div>
                 </div>
             `).join('');
         }
 
+        // 案例滑动删除
         let swipeX = 0;
         function swipeStart(e) { swipeX = e.touches[0].clientX; e.stopPropagation(); }
         function swipeMove(e) {
             let diff = e.touches[0].clientX - swipeX;
-            if (diff < 0 && diff > -70) e.currentTarget.style.transform = `translateX(${diff}px)`;
+            if (diff < 0 && diff > -75) e.currentTarget.style.transform = `translateX(${diff}px)`;
         }
         function swipeEnd(e) {
             let diff = e.changedTouches[0].clientX - swipeX;
-            e.currentTarget.style.transform = diff < -35 ? `translateX(-70px)` : `translateX(0)`;
+            e.currentTarget.style.transform = diff < -35 ? `translateX(-75px)` : `translateX(0)`;
         }
 
+        // 雷达点全向拖拽
         const getCoord = (e, axis) => {
             const rect = canvas.getBoundingClientRect();
             const val = e.touches ? (axis === 'x' ? e.touches[0].clientX : e.touches[0].clientY) : (axis === 'x' ? e.clientX : e.clientY);
