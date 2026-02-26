@@ -3,47 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>LUXIOU | 全息数字化诊断 V12.0</title>
+    <title>LUXIOU | 全息数字化诊断 V13.0</title>
     <style>
         :root { --primary: #00f2fe; --accent: #00ff88; --danger: #ff4757; --bg: #0b0f19; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
         
-        /* 彻底重构的 Flex 底层：彻底杜绝遮挡 */
         body { 
             background: var(--bg); color: #e2e8f0; 
             font-family: "DIN Alternate", -apple-system, "Helvetica Neue", sans-serif; 
             margin: 0; padding: 0; overflow: hidden; touch-action: none;
-            display: flex; flex-direction: column; height: 100svh; /* 适配所有手机视口 */
+            display: flex; flex-direction: column; height: 100svh; 
         }
         
-        /* 顶部品牌栏：作为 Flex 容器的第一块积木 */
         .header-brand { 
             flex: 0 0 55px; width: 100%; display: flex; align-items: center; justify-content: center; 
             background: rgba(11, 15, 25, 0.98); z-index: 50; 
-            border-bottom: 1px solid rgba(0,242,254,0.3); box-shadow: 0 4px 15px rgba(0,0,0,0.5); 
-            position: relative; /* 不再使用 fixed */
+            border-bottom: 1px solid rgba(0,242,254,0.3); box-shadow: 0 4px 15px rgba(0,0,0,0.5); position: relative; 
         }
         .brand-text { font-size: 20px; font-weight: 900; color: #fff; letter-spacing: 3px; text-shadow: 0 0 12px rgba(0,242,254,0.8); }
         .back-btn { position: absolute; left: 15px; color: #fff; text-decoration: none; font-size: 13px; border: 1px solid rgba(255,255,255,0.3); padding: 5px 14px; border-radius: 20px; font-weight: 600; }
 
-        /* 主体内容区：填满剩余空间 */
         .app-content { flex: 1; min-height: 0; display: flex; flex-direction: column; padding: 12px; }
 
-        /* 💡 7大板块：高级感胶囊设计 */
         .category-box { flex: 0 0 auto; display: flex; gap: 10px; overflow-x: auto; margin-bottom: 12px; padding-bottom: 4px; scrollbar-width: none; }
+        .category-box::-webkit-scrollbar { display: none; }
         .cat-item { 
             flex: 0 0 auto; padding: 8px 18px; 
-            background: rgba(30, 41, 59, 0.6); /* 质感深空灰 */
-            border-radius: 20px; /* 圆润胶囊形 */
+            background: rgba(30, 41, 59, 0.6); border-radius: 20px; 
             font-size: 13px; color: #94a3b8; border: 1px solid rgba(255, 255, 255, 0.1); 
-            font-weight: 600; letter-spacing: 0.5px; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-weight: 600; letter-spacing: 0.5px; transition: all 0.3s ease;
         }
         .cat-item.active { 
             background: var(--primary); color: #0b0f19; border: none; 
             box-shadow: 0 0 16px rgba(0,242,254,0.5); font-weight: 900; transform: scale(1.03); 
         }
 
-        /* 诊断视窗 */
         .stage-area { flex: 1; min-height: 0; display: flex; gap: 6px; margin-bottom: 12px; }
         .params-side { flex: 0 0 92px; display: flex; flex-direction: column; }
         .param-card { flex: 1; background: rgba(11, 15, 25, 0.8); border-bottom: 1px solid rgba(255,255,255,0.05); padding: 5px; display: flex; flex-direction: column; justify-content: center; position: relative; }
@@ -51,18 +45,15 @@
         .card-r { border-right: 3px solid var(--primary); border-radius: 0 8px 8px 0; align-items: flex-end; text-align: right; }
         .param-card label { font-size: 9px; color: #94a3b8; margin-bottom: 4px; font-weight: bold; }
         
-        /* 极简参数数值（还原设计图：大号青色文字 + 后缀单位） */
         .mini-wheel { color: var(--primary); font-size: 19px; font-weight: 900; line-height: 1; cursor: ns-resize; touch-action: none; position: relative; display: inline-flex; align-items: baseline; }
         .mini-wheel::after { content: attr(data-unit); font-size: 10px; color: #64748b; margin-left: 2px; font-weight: 600; }
         
         .diff-tag { font-size: 11px; font-weight: 900; margin-top: 4px; letter-spacing: 0.5px; transition: color 0.3s; }
 
-        /* 全息图层 */
         .main-viewer { flex: 1; background: #000; border-radius: 12px; position: relative; overflow: hidden; border: 1px solid #334155; box-shadow: 0 8px 25px rgba(0,0,0,0.6); }
-        .img-layer { position: absolute; width: 100%; height: 100%; background-size: contain; background-repeat: no-repeat; background-position: center; transition: 0.3s; }
+        .img-layer { position: absolute; width: 100%; height: 100%; background-size: contain; background-repeat: no-repeat; background-position: center; transition: opacity 0.1s linear; }
         #laserCanvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 100; touch-action: none; }
 
-        /* 底部控制台 */
         .control-panel { flex: 0 0 auto; background: rgba(16, 24, 39, 0.95); border-radius: 20px; padding: 15px; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 -5px 20px rgba(0,0,0,0.5); }
         .zoom-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 12px; }
         input[type=range] { width: 100%; -webkit-appearance: none; background: #1e293b; height: 5px; border-radius: 3px; }
@@ -72,11 +63,20 @@
         .lux-btn { background: #1e293b; border: 1px solid #334155; padding: 12px; border-radius: 10px; color: #fff; font-size: 12px; font-weight: bold; text-align: center; }
         .btn-save { background: var(--primary); color: #000; border: none; box-shadow: 0 4px 15px rgba(0,242,254,0.4); }
 
-        /* 案例库 */
-        #vault { height: 80px; overflow-y: auto; margin-top: 12px; border-top: 1px solid #334155; padding-top: 5px; }
-        .v-item-wrap { position: relative; overflow: hidden; margin-top: 8px; border-radius: 8px; }
-        .v-item-content { background: #161e2e; padding: 12px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #334155; border-radius: 8px; transition: transform 0.3s; }
-        .delete-btn { position: absolute; right: 0; top: 0; height: 100%; width: 75px; background: var(--danger); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold; border-radius: 0 8px 8px 0; }
+        /* 修复历史案例库排版重叠 */
+        #vault { height: 85px; overflow-y: auto; margin-top: 12px; border-top: 1px solid #334155; padding-top: 8px; }
+        .v-item-wrap { position: relative; overflow: hidden; margin-bottom: 8px; border-radius: 10px; background: var(--danger); }
+        .v-item-content { 
+            background: #161e2e; padding: 12px 15px; 
+            display: flex; justify-content: space-between; align-items: center; 
+            border: 1px solid #334155; border-radius: 10px; 
+            transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); width: 100%; position: relative; z-index: 2; box-sizing: border-box;
+        }
+        .v-text-area { flex: 1; min-width: 0; margin-right: 10px; }
+        .v-title { display: block; color: var(--primary); font-size: 14px; font-weight: bold; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .v-sub { display: block; color: #94a3b8; font-size: 11px; margin-top: 3px; }
+        .v-btn-load { flex: 0 0 auto; background: var(--primary); color: #000; border: none; padding: 6px 14px; border-radius: 6px; font-weight: bold; font-size: 12px; }
+        .delete-btn { position: absolute; right: 0; top: 0; height: 100%; width: 75px; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: bold; z-index: 1; }
     </style>
 </head>
 <body>
@@ -103,7 +103,7 @@
                 <div><small style="color:var(--primary);font-size:10px;font-weight:bold;">前照变焦</small> <input type="range" min="50" max="300" value="100" oninput="zoom('layB', this.value)"></div>
                 <div><small style="color:var(--primary);font-size:10px;font-weight:bold;">后照变焦</small> <input type="range" min="50" max="300" value="100" oninput="zoom('layA', this.value)"></div>
             </div>
-            <div style="display:flex; justify-content:space-between; font-size:10px; color:#94a3b8; font-weight:bold; margin-bottom:5px;"><span>BEFORE</span><span>全息对比分析</span><span>AFTER</span></div>
+            <div style="display:flex; justify-content:space-between; font-size:10px; color:#94a3b8; font-weight:bold; margin-bottom:5px;"><span>BEFORE</span><span>滑动展现雷达形变</span><span>AFTER</span></div>
             <input type="range" min="0" max="100" value="0" id="fadeSlider">
             <div class="btn-group">
                 <div class="lux-btn" onclick="document.getElementById('fB').click()">📷 导入前照<input type="file" id="fB" hidden accept="image/*" onchange="processImg(this,'layB')"></div>
@@ -117,11 +117,14 @@
     <script>
         const canvas = document.getElementById('laserCanvas');
         const ctx = canvas.getContext('2d');
-        let anchors = Array(6).fill(0).map((_, i) => ({ x: 0.5, y: 0.15 + i * 0.14 }));
+        
+        // 核心突破：引入独立的 Before 和 After 锚点
+        let anchorsB = Array(6).fill(0).map((_, i) => ({ x: 0.5, y: 0.15 + i * 0.14 }));
+        let anchorsA = Array(6).fill(0).map((_, i) => ({ x: 0.5, y: 0.15 + i * 0.14 }));
         let draggingIdx = -1;
-        let currentUnit = "cm"; // 追踪当前分类单位
+        let currentUnit = "cm";
+        let activeSet = anchorsB; // 当前正在操作的锚点组
 
-        // 数据库预设（引入了单位）
         const db = {
             posture: { name: "体态矫正", unit: "cm", labels: ["颈前引", "圆肩度", "高低肩", "盆前倾", "脊柱侧", "假胯宽"], pre: [8.5, 25.0, 2.5, 18.0, 12.0, 98.0], post: [2.1, 8.0, 0.2, 7.0, 2.0, 91.0] },
             shoulder: { name: "直角肩", unit: "°", labels: ["一字肩角", "斜方肌厚", "锁骨展度", "肩峰差值", "颈根宽度", "背平整度"], pre: [145.0, 5.8, 150.0, 1.5, 14.0, 12.0], post: [178.0, 3.1, 175.0, 0.2, 11.5, 4.0] },
@@ -143,8 +146,6 @@
                     let rVal = parseFloat(rWheels[i].innerText) || 0;
                     let diff = (rVal - lVal).toFixed(1);
                     let sign = diff > 0 ? '+' : '';
-                    
-                    // 加上对应单位显示
                     diffTags[i].innerText = `${sign}${diff}${currentUnit}`;
 
                     if (diff < 0) {
@@ -163,46 +164,55 @@
 
         function initMiniWheel(el) {
             let startY = 0, startVal = 0, isMoving = false;
-            // 单击手动输入
             el.addEventListener('click', () => {
                 const newVal = prompt("请输入精准参数", el.innerText);
-                if (newVal !== null && newVal !== "") {
-                    el.innerText = parseFloat(newVal).toFixed(1);
-                    updateDiffs();
-                }
+                if (newVal !== null && newVal !== "") { el.innerText = parseFloat(newVal).toFixed(1); updateDiffs(); }
             });
-            // 垂直滑动调节
             el.addEventListener('touchstart', e => {
                 startY = e.touches[0].clientY; startVal = parseFloat(el.innerText) || 0;
                 isMoving = true; e.preventDefault(); 
             }, { passive: false });
             el.addEventListener('touchmove', e => {
                 if (!isMoving) return;
-                const delta = (startY - e.touches[0].clientY) * 0.15; // 阻尼感
+                const delta = (startY - e.touches[0].clientY) * 0.15;
                 el.innerText = (startVal + delta).toFixed(1);
                 updateDiffs(); e.preventDefault();
             }, { passive: false });
             el.addEventListener('touchend', () => { isMoving = false; });
         }
 
+        // 核心动态形变绘制逻辑
         function draw() {
             canvas.width = canvas.offsetWidth; canvas.height = canvas.offsetHeight;
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            anchors.forEach((pt, i) => {
+            
+            // 获取当前滑动比例 0~1
+            let v = document.getElementById('fadeSlider').value / 100;
+
+            for(let i=0; i<6; i++) {
+                // 插值计算当前应当展示的点位坐标 (平滑形变)
+                let currX = anchorsB[i].x * (1 - v) + anchorsA[i].x * v;
+                let currY = anchorsB[i].y * (1 - v) + anchorsA[i].y * v;
+                
                 const boxY = (i * (canvas.height / 6)) + (canvas.height / 12);
                 ctx.strokeStyle = "rgba(0, 242, 254, 0.5)"; ctx.lineWidth = 1.2; ctx.setLineDash([5, 4]);
-                ctx.beginPath(); ctx.moveTo(0, boxY); ctx.lineTo(pt.x*canvas.width, pt.y*canvas.height); ctx.stroke();
-                ctx.beginPath(); ctx.moveTo(canvas.width, boxY); ctx.lineTo(pt.x*canvas.width, pt.y*canvas.height); ctx.stroke();
+                
+                // 画左线
+                ctx.beginPath(); ctx.moveTo(0, boxY); ctx.lineTo(currX * canvas.width, currY * canvas.height); ctx.stroke();
+                // 画右线
+                ctx.beginPath(); ctx.moveTo(canvas.width, boxY); ctx.lineTo(currX * canvas.width, currY * canvas.height); ctx.stroke();
+                
+                // 画锚点
                 ctx.setLineDash([]); ctx.fillStyle = "#00ff88"; ctx.beginPath();
-                ctx.arc(pt.x*canvas.width, pt.y*canvas.height, 5, 0, Math.PI*2); ctx.fill();
-            });
+                ctx.arc(currX * canvas.width, currY * canvas.height, 5, 0, Math.PI*2); ctx.fill();
+            }
         }
 
         function zoom(target, val) { document.getElementById(target).style.transform = `scale(${val/100})`; }
 
         function loadSetup(key, el) {
             const d = db[key];
-            currentUnit = d.unit; // 更新全局单位
+            currentUnit = d.unit; 
             if(el) { document.querySelectorAll('.cat-item').forEach(i => i.classList.remove('active')); el.classList.add('active'); }
             let hL = '', hR = '';
             d.labels.forEach((l, i) => {
@@ -214,7 +224,6 @@
             updateDiffs(); draw();
         }
 
-        // 图像无损压缩逻辑
         function processImg(i, t) {
             if(i.files[0]){
                 const r = new FileReader();
@@ -236,25 +245,34 @@
         
         function saveCase() {
             const name = prompt("输入客户姓名保存："); if(!name) return;
-            const vault = JSON.parse(localStorage.getItem('LUX_V12_DB') || '[]');
+            const vault = JSON.parse(localStorage.getItem('LUX_V13_DB') || '[]');
             const preVals = Array.from(document.querySelectorAll('.card-l .mini-wheel')).map(s => s.innerText);
             const postVals = Array.from(document.querySelectorAll('.card-r .mini-wheel')).map(s => s.innerText);
-            vault.unshift({ id: Date.now(), name, type: document.querySelector('.cat-item.active').innerText, imgB: document.getElementById('layB').style.backgroundImage, imgA: document.getElementById('layA').style.backgroundImage, anchors, preVals, postVals });
-            localStorage.setItem('LUX_V12_DB', JSON.stringify(vault)); renderVault();
+            vault.unshift({ 
+                id: Date.now(), name, type: document.querySelector('.cat-item.active').innerText, 
+                imgB: document.getElementById('layB').style.backgroundImage, 
+                imgA: document.getElementById('layA').style.backgroundImage, 
+                anchorsB, anchorsA, preVals, postVals // 保存两套锚点
+            });
+            localStorage.setItem('LUX_V13_DB', JSON.stringify(vault)); renderVault();
         }
 
         function deleteItem(id) {
-            let vault = JSON.parse(localStorage.getItem('LUX_V12_DB') || '[]');
+            let vault = JSON.parse(localStorage.getItem('LUX_V13_DB') || '[]');
             vault = vault.filter(i => i.id !== id);
-            localStorage.setItem('LUX_V12_DB', JSON.stringify(vault));
+            localStorage.setItem('LUX_V13_DB', JSON.stringify(vault));
             renderVault();
         }
 
         function loadCase(id) {
-            const v = JSON.parse(localStorage.getItem('LUX_V12_DB') || '[]').find(x => x.id === id);
+            const v = JSON.parse(localStorage.getItem('LUX_V13_DB') || '[]').find(x => x.id === id);
             if(v) {
                 document.getElementById('layB').style.backgroundImage = v.imgB; document.getElementById('layA').style.backgroundImage = v.imgA;
-                anchors = v.anchors; 
+                
+                // 兼容老版本和双轨新版本
+                if(v.anchorsB && v.anchorsA) { anchorsB = v.anchorsB; anchorsA = v.anchorsA; }
+                else if (v.anchors) { anchorsB = JSON.parse(JSON.stringify(v.anchors)); anchorsA = JSON.parse(JSON.stringify(v.anchors)); }
+                
                 const lWheel = document.querySelectorAll('.card-l .mini-wheel');
                 const rWheel = document.querySelectorAll('.card-r .mini-wheel');
                 v.preVals.forEach((s, i) => lWheel[i].innerText = s);
@@ -264,19 +282,21 @@
         }
 
         function renderVault() {
-            const v = JSON.parse(localStorage.getItem('LUX_V12_DB') || '[]');
+            const v = JSON.parse(localStorage.getItem('LUX_V13_DB') || '[]');
             document.getElementById('vault').innerHTML = v.map(i => `
                 <div class="v-item-wrap">
                     <div class="delete-btn" onclick="deleteItem(${i.id})">删除</div>
                     <div class="v-item-content" ontouchstart="swipeStart(event)" ontouchmove="swipeMove(event)" ontouchend="swipeEnd(event)">
-                        <span><b style="color:var(--primary); font-size:14px;">${i.name}</b> <small style="color:#94a3b8;">(${i.type})</small></span>
-                        <button onclick="loadCase(${i.id})" style="background:var(--primary); border:none; padding:6px 14px; border-radius:6px; font-weight:bold; color:#000;">载入全息</button>
+                        <div class="v-text-area">
+                            <span class="v-title">${i.name}</span>
+                            <span class="v-sub">${i.type}</span>
+                        </div>
+                        <button class="v-btn-load" onclick="loadCase(${i.id})">载入全息</button>
                     </div>
                 </div>
             `).join('');
         }
 
-        // 案例滑动删除
         let swipeX = 0;
         function swipeStart(e) { swipeX = e.touches[0].clientX; e.stopPropagation(); }
         function swipeMove(e) {
@@ -288,20 +308,45 @@
             e.currentTarget.style.transform = diff < -35 ? `translateX(-75px)` : `translateX(0)`;
         }
 
-        // 雷达点全向拖拽
+        // 双轨智能拖拽判断
         const getCoord = (e, axis) => {
             const rect = canvas.getBoundingClientRect();
             const val = e.touches ? (axis === 'x' ? e.touches[0].clientX : e.touches[0].clientY) : (axis === 'x' ? e.clientX : e.clientY);
             return (val - (axis === 'x' ? rect.left : rect.top)) / (axis === 'x' ? canvas.width : canvas.height);
         };
+        
         canvas.addEventListener('touchstart', e => {
+            let slider = document.getElementById('fadeSlider');
+            let v = slider.value / 100;
+            
+            // 计算当前屏幕上展现的点
+            let displayPts = anchorsB.map((b, i) => ({
+                x: b.x * (1 - v) + anchorsA[i].x * v,
+                y: b.y * (1 - v) + anchorsA[i].y * v
+            }));
+
             const x = getCoord(e, 'x'); const y = getCoord(e, 'y');
-            draggingIdx = anchors.findIndex(a => Math.sqrt((a.x-x)**2 + (a.y-y)**2) < 0.08);
-            if(draggingIdx !== -1) e.preventDefault(); 
+            draggingIdx = displayPts.findIndex(a => Math.sqrt((a.x-x)**2 + (a.y-y)**2) < 0.08);
+            
+            if(draggingIdx !== -1) {
+                // 核心：点击瞄准点时，自动帮用户贴靠到 前照(0) 或 后照(100) 以便修改
+                if(v <= 0.5) {
+                    slider.value = 0; activeSet = anchorsB;
+                    document.getElementById('layA').style.opacity = 0;
+                    document.getElementById('layB').style.opacity = 1;
+                } else {
+                    slider.value = 100; activeSet = anchorsA;
+                    document.getElementById('layA').style.opacity = 1;
+                    document.getElementById('layB').style.opacity = 0;
+                }
+                draw(); e.preventDefault(); 
+            }
         }, {passive: false});
+
         canvas.addEventListener('touchmove', e => {
             if(draggingIdx !== -1) {
-                anchors[draggingIdx] = { x: Math.max(0, Math.min(1, getCoord(e, 'x'))), y: Math.max(0, Math.min(1, getCoord(e, 'y'))) };
+                // 修改对应的那组数据
+                activeSet[draggingIdx] = { x: Math.max(0, Math.min(1, getCoord(e, 'x'))), y: Math.max(0, Math.min(1, getCoord(e, 'y'))) };
                 draw(); e.preventDefault();
             }
         }, {passive: false});
@@ -310,6 +355,7 @@
         document.getElementById('fadeSlider').oninput = e => {
             document.getElementById('layA').style.opacity = e.target.value / 100;
             document.getElementById('layB').style.opacity = 1 - (e.target.value / 100);
+            draw(); // 滑动时实时更新线条（动态形变）
         };
 
         window.onload = () => {
