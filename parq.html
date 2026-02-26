@@ -6,29 +6,32 @@
     <title>LUXIOU | ACE 医疗级风险排查</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
-        :root { --primary: #00e5ff; --accent: #facc15; --danger: #f43f5e; --bg: #07090f; --surface: #111520; }
+        :root { --primary: #00f2fe; --accent: #d4af37; --danger: #ff0844; --bg: #0b0f19; --surface: #151a28; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; margin: 0; padding: 0; }
         
         body { background: var(--bg); color: #e2e8f0; font-family: "DIN Alternate", -apple-system, sans-serif; display: flex; flex-direction: column; height: 100svh; overflow: hidden; -webkit-font-smoothing: antialiased; }
         #capture-area { background: var(--bg); display: flex; flex-direction: column; height: 100%; width: 100%; }
 
-        .header-brand { flex: 0 0 60px; width: 100%; display: flex; align-items: center; justify-content: center; background: rgba(7, 9, 15, 0.95); z-index: 50; border-bottom: 1px solid rgba(244, 63, 94, 0.2); }
-        .brand-text { font-size: 18px; font-weight: 900; color: #fff; letter-spacing: 2px; text-shadow: 0 0 10px rgba(244, 63, 94, 0.4); }
-        .step-badge { position: absolute; right: 15px; background: rgba(244, 63, 94, 0.1); border: 1px solid var(--danger); color: var(--danger); font-size: 10px; padding: 4px 8px; border-radius: 12px; font-weight: bold; }
+        .header-brand { flex: 0 0 60px; width: 100%; display: flex; align-items: center; justify-content: center; background: rgba(11, 15, 25, 0.95); z-index: 50; border-bottom: 1px solid rgba(255, 8, 68, 0.2); }
+        .brand-text { font-size: 18px; font-weight: 900; color: #fff; letter-spacing: 2px; text-shadow: 0 0 10px rgba(255, 8, 68, 0.4); }
+        .step-badge { position: absolute; right: 15px; background: rgba(255, 8, 68, 0.1); border: 1px solid var(--danger); color: var(--danger); font-size: 10px; padding: 4px 8px; border-radius: 12px; font-weight: bold; }
 
-        .radar-section { flex: 0 0 240px; position: relative; display: flex; align-items: center; justify-content: center; background: radial-gradient(circle at center, rgba(17, 21, 32, 0.9) 0%, var(--bg) 100%); border-bottom: 1px solid rgba(255,255,255,0.03); }
-        #parqRadar { width: 100%; height: 100%; position: absolute; top: 0; left: 0; z-index: 1; }
-        .risk-panel { position: absolute; left: 20px; top: 20px; z-index: 2; display: flex; flex-direction: column; }
+        /* 雷达图不重叠布局 */
+        .radar-section { flex: 0 0 auto; display: flex; flex-direction: column; background: radial-gradient(circle at center, rgba(21, 26, 40, 0.9) 0%, var(--bg) 100%); border-bottom: 1px solid rgba(255,255,255,0.03); padding-top: 15px; }
+        .score-board { display: flex; justify-content: space-between; align-items: flex-start; padding: 0 20px; z-index: 2; }
+        .score-info { display: flex; flex-direction: column; }
         .risk-label { font-size: 11px; color: #94a3b8; font-weight: 900; letter-spacing: 1px; }
-        .risk-score { font-size: 32px; font-weight: 900; color: var(--primary); text-shadow: 0 0 10px rgba(0,229,255,0.3); transition: color 0.3s; line-height: 1; margin: 6px 0; }
-        .risk-score.high { color: var(--danger); text-shadow: 0 0 15px rgba(244, 63, 94, 0.4); }
+        .risk-score { font-size: 32px; font-weight: 900; color: var(--primary); text-shadow: 0 0 20px rgba(0,242,254,0.4); line-height: 1; margin: 6px 0; transition: color 0.3s;}
+        .risk-score.high { color: var(--danger); text-shadow: 0 0 20px rgba(255, 8, 68, 0.4); }
         
-        /* 强力转化引导标语 */
-        .slogan-box { font-size: 11px; font-weight: bold; padding: 6px 10px; border-radius: 6px; background: rgba(0,229,255,0.05); color: #94a3b8; border: 1px solid rgba(0,229,255,0.1); max-width: 160px; line-height: 1.4; transition: 0.3s;}
-        .slogan-box.warn { background: rgba(250, 204, 21, 0.05); color: var(--accent); border-color: rgba(250, 204, 21, 0.2); }
-        .slogan-box.crit { background: rgba(244, 63, 94, 0.05); color: var(--danger); border-color: rgba(244, 63, 94, 0.2); }
+        .slogan-box { font-size: 11px; font-weight: bold; padding: 6px 10px; border-radius: 6px; background: rgba(0,242,254,0.08); color: var(--primary); border: 1px solid rgba(0,242,254,0.2); max-width: 170px; line-height: 1.4; transition: 0.3s;}
+        .slogan-box.warn { background: rgba(212, 175, 55, 0.08); color: var(--accent); border-color: rgba(212, 175, 55, 0.3); }
+        .slogan-box.crit { background: rgba(255, 8, 68, 0.08); color: var(--danger); border-color: rgba(255, 8, 68, 0.3); }
 
-        .q-list { flex: 1; overflow-y: auto; padding: 20px 15px 120px 15px; scrollbar-width: none; }
+        .radar-container { position: relative; width: 100%; height: 180px; margin-top: -5px; }
+        #parqRadar { width: 100%; height: 100%; position: absolute; top: 0; left: 0; z-index: 1; }
+
+        .q-list { flex: 1; overflow-y: auto; padding: 10px 15px 120px 15px; scrollbar-width: none; }
         .q-list::-webkit-scrollbar { display: none; }
         
         .cat-title { font-size: 14px; font-weight: 900; color: var(--primary); margin: 20px 0 12px 0; border-left: 4px solid var(--primary); padding-left: 8px; }
@@ -38,26 +41,25 @@
         
         .ans-group { display: flex; gap: 10px; }
         .ans-btn { flex: 1; padding: 12px; text-align: center; border-radius: 8px; font-size: 14px; font-weight: bold; color: #64748b; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); transition: 0.2s; }
-        .ans-btn.no.active { background: rgba(0, 229, 255, 0.08); border-color: var(--primary); color: var(--primary); }
-        .ans-btn.yes.active { background: rgba(244, 63, 94, 0.08); border-color: var(--danger); color: var(--danger); box-shadow: inset 0 0 10px rgba(244, 63, 94, 0.1); }
+        .ans-btn.no.active { background: rgba(0, 242, 254, 0.08); border-color: var(--primary); color: var(--primary); }
+        .ans-btn.yes.active { background: rgba(255, 8, 68, 0.08); border-color: var(--danger); color: var(--danger); box-shadow: inset 0 0 10px rgba(255, 8, 68, 0.15); }
 
-        /* 电子手写签名区 */
         .signature-section { margin-top: 30px; padding: 20px; background: var(--surface); border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); }
         .sig-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
         .sig-title { font-size: 14px; font-weight: bold; color: #fff; }
         .btn-clear { background: transparent; border: 1px solid #475569; color: #94a3b8; font-size: 12px; padding: 4px 10px; border-radius: 4px; }
         #sigCanvas { width: 100%; height: 120px; background: rgba(255,255,255,0.02); border: 1px dashed #475569; border-radius: 8px; touch-action: none; }
 
-        .bottom-action { position: fixed; bottom: 0; left: 0; width: 100%; padding: 15px 20px 25px 20px; background: linear-gradient(to top, rgba(7,9,15,1) 60%, rgba(7,9,15,0)); z-index: 10; pointer-events: none;}
-        .btn-generate { pointer-events: auto; width: 100%; background: var(--primary); color: #000; border: none; padding: 16px; border-radius: 16px; font-size: 16px; font-weight: 900; box-shadow: 0 8px 20px rgba(0,229,255,0.25); display: flex; justify-content: center; align-items: center; gap: 8px; }
+        .bottom-action { position: fixed; bottom: 0; left: 0; width: 100%; padding: 15px 20px 25px 20px; background: linear-gradient(to top, rgba(11,15,25,1) 60%, rgba(11,15,25,0)); z-index: 10; pointer-events: none;}
+        .btn-generate { pointer-events: auto; width: 100%; background: var(--primary); color: #000; border: none; padding: 16px; border-radius: 16px; font-size: 16px; font-weight: 900; box-shadow: 0 8px 20px rgba(0,242,254,0.3); display: flex; justify-content: center; align-items: center; gap: 8px; }
 
         .poster-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 9999; flex-direction: column; align-items: center; justify-content: center; padding: 20px; opacity: 0; transition: opacity 0.3s; }
         .poster-overlay.active { display: flex; opacity: 1; }
-        .poster-scroll-area { max-height: 70vh; width: 100%; overflow-y: auto; border-radius: 12px; border: 1px solid var(--danger); box-shadow: 0 10px 40px rgba(244, 63, 94, 0.2); }
+        .poster-scroll-area { max-height: 70vh; width: 100%; overflow-y: auto; border-radius: 12px; border: 1px solid var(--danger); box-shadow: 0 10px 40px rgba(255, 8, 68, 0.2); }
         .poster-scroll-area::-webkit-scrollbar { display: none; }
         .poster-img { width: 100%; display: block; }
         .poster-tip { color: #fff; font-size: 14px; margin: 20px 0 15px 0; font-weight: bold; }
-        .btn-next { background: #fff; color: #000; border: none; padding: 14px 35px; border-radius: 30px; font-weight: 900; font-size: 15px; }
+        .btn-next { background: #fff; color: #000; border: none; padding: 14px 35px; border-radius: 30px; font-weight: 900; font-size: 15px; box-shadow: 0 5px 20px rgba(255,255,255,0.2); }
     </style>
 </head>
 <body>
@@ -69,12 +71,16 @@
         </div>
         
         <div class="radar-section">
-            <div class="risk-panel">
-                <span class="risk-label">身体风险状态评估</span>
-                <div class="risk-score" id="riskDisplay">安全 (LOW)</div>
+            <div class="score-board">
+                <div class="score-info">
+                    <span class="risk-label">身体风险状态评估</span>
+                    <span class="risk-score" id="riskDisplay">安全 (LOW)</span>
+                </div>
                 <div class="slogan-box" id="sloganBox">各项机能运转良好，已具备高阶训练准入条件。</div>
             </div>
-            <canvas id="parqRadar"></canvas>
+            <div class="radar-container">
+                <canvas id="parqRadar"></canvas>
+            </div>
         </div>
 
         <div class="q-list" id="scrollArea">
@@ -162,8 +168,8 @@
             canvas.width = rect.width * dpr; canvas.height = rect.height * dpr;
             ctx.scale(dpr, dpr);
             const w = rect.width, h = rect.height;
-            const centerX = w / 2 + 35; const centerY = h / 2;
-            const radius = Math.min(w, h) / 2 * 0.65; const sides = 5;
+            const centerX = w / 2; const centerY = h / 2 + 5;
+            const radius = Math.min(w, h) / 2 * 0.7; const sides = 5;
 
             ctx.clearRect(0, 0, w, h);
             ctx.lineWidth = 1;
@@ -202,11 +208,11 @@
             let hasRisk = Object.values(curScores).some(s => s < 90);
             let gradient = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, radius);
             if(hasRisk) { 
-                gradient.addColorStop(0, "rgba(244, 63, 94, 0.4)"); gradient.addColorStop(1, "rgba(244, 63, 94, 0.05)");
-                ctx.fillStyle = gradient; ctx.strokeStyle = "#f43f5e"; ctx.shadowColor = "#f43f5e"; 
+                gradient.addColorStop(0, "rgba(255, 8, 68, 0.6)"); gradient.addColorStop(1, "rgba(255, 8, 68, 0.1)");
+                ctx.fillStyle = gradient; ctx.strokeStyle = "#ff0844"; ctx.shadowColor = "#ff0844"; 
             } else { 
-                gradient.addColorStop(0, "rgba(0, 229, 255, 0.4)"); gradient.addColorStop(1, "rgba(0, 229, 255, 0.05)");
-                ctx.fillStyle = gradient; ctx.strokeStyle = "#00e5ff"; ctx.shadowColor = "#00e5ff"; 
+                gradient.addColorStop(0, "rgba(0, 242, 254, 0.6)"); gradient.addColorStop(1, "rgba(0, 242, 254, 0.1)");
+                ctx.fillStyle = gradient; ctx.strokeStyle = "#00f2fe"; ctx.shadowColor = "#00f2fe"; 
             }
             ctx.shadowBlur = 15; ctx.lineWidth = 2.5; ctx.fill(); ctx.stroke(); ctx.shadowBlur = 0; 
         }
@@ -222,21 +228,23 @@
             requestAnimationFrame(animate);
         }
 
-        // 🚀 核心恐吓与转化标语
+        // 🚀 彻底修复的小数点导致的状态锁死 Bug
         function updateRiskLabel() {
-            let totalDeduction = 500 - Object.values(curScores).reduce((a,b)=>a+b, 0);
+            let curSum = Object.values(curScores).reduce((a,b)=>a+b, 0);
+            let totalDeduction = Math.round(500 - curSum); // 强制取整
+            
             let display = document.getElementById('riskDisplay');
             let slogan = document.getElementById('sloganBox');
             
-            if(totalDeduction === 0) { 
-                display.innerText = "安全 (LOW)"; display.className = "risk-score"; 
-                slogan.className = "slogan-box"; slogan.innerText = "各项机能运转良好，具备高阶训练准入条件。";
+            if(totalDeduction <= 0) { 
+                display.innerText = "安全 (LOW)"; display.className = "risk-score"; display.style.color = "var(--primary)";
+                slogan.className = "slogan-box"; slogan.innerText = "各项机能运转良好，已具备高阶训练准入条件。";
             } else if(totalDeduction < 60) { 
                 display.innerText = "关注 (MOD)"; display.className = "risk-score high"; display.style.color = "var(--accent)"; 
                 slogan.className = "slogan-box warn"; slogan.innerText = "存在潜在健康短板，建议立刻开展定制化恢复训练。";
             } else { 
                 display.innerText = "危险 (HIGH)"; display.className = "risk-score high"; display.style.color = "var(--danger)"; 
-                slogan.className = "slogan-box crit"; slogan.innerText = "健康风险已超临界值！亟需专业医疗与康复级训练介入！";
+                slogan.className = "slogan-box crit"; slogan.innerText = "健康风险已超临界值！亟需专业医疗与康复级干预！";
             }
         }
 
@@ -256,42 +264,28 @@
             tgtScores = newS;
         }
 
-        // --- 手写签名板逻辑 ---
         const sigCanvas = document.getElementById('sigCanvas');
         const sigCtx = sigCanvas.getContext('2d');
         let isDrawing = false;
-
         function initSignature() {
             const rect = sigCanvas.parentElement.getBoundingClientRect();
-            // 解决设备像素比导致的线条发虚
             const dpr = window.devicePixelRatio || 1;
-            sigCanvas.width = rect.width * dpr;
-            sigCanvas.height = 120 * dpr;
-            sigCtx.scale(dpr, dpr);
-            sigCtx.lineWidth = 3;
-            sigCtx.lineCap = 'round';
-            sigCtx.strokeStyle = '#00e5ff'; // 科技蓝笔触
+            sigCanvas.width = rect.width * dpr; sigCanvas.height = 120 * dpr;
+            sigCtx.scale(dpr, dpr); sigCtx.lineWidth = 3; sigCtx.lineCap = 'round'; sigCtx.strokeStyle = '#00f2fe';
         }
-
         function getPos(e) {
             const rect = sigCanvas.getBoundingClientRect();
-            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-            return { x: clientX - rect.left, y: clientY - rect.top };
+            const x = e.touches ? e.touches[0].clientX : e.clientX;
+            const y = e.touches ? e.touches[0].clientY : e.clientY;
+            return { x: x - rect.left, y: y - rect.top };
         }
-
-        sigCanvas.addEventListener('mousedown', e => { isDrawing = true; const pos = getPos(e); sigCtx.beginPath(); sigCtx.moveTo(pos.x, pos.y); });
-        sigCanvas.addEventListener('mousemove', e => { if(isDrawing){ const pos = getPos(e); sigCtx.lineTo(pos.x, pos.y); sigCtx.stroke(); }});
-        sigCanvas.addEventListener('mouseup', () => isDrawing = false);
-        sigCanvas.addEventListener('mouseout', () => isDrawing = false);
-
-        sigCanvas.addEventListener('touchstart', e => { e.preventDefault(); isDrawing = true; const pos = getPos(e); sigCtx.beginPath(); sigCtx.moveTo(pos.x, pos.y); }, {passive: false});
-        sigCanvas.addEventListener('touchmove', e => { e.preventDefault(); if(isDrawing){ const pos = getPos(e); sigCtx.lineTo(pos.x, pos.y); sigCtx.stroke(); }}, {passive: false});
+        sigCanvas.addEventListener('mousedown', e => { isDrawing = true; const p = getPos(e); sigCtx.beginPath(); sigCtx.moveTo(p.x, p.y); });
+        sigCanvas.addEventListener('mousemove', e => { if(isDrawing){ const p = getPos(e); sigCtx.lineTo(p.x, p.y); sigCtx.stroke(); }});
+        sigCanvas.addEventListener('mouseup', () => isDrawing = false); sigCanvas.addEventListener('mouseout', () => isDrawing = false);
+        sigCanvas.addEventListener('touchstart', e => { e.preventDefault(); isDrawing = true; const p = getPos(e); sigCtx.beginPath(); sigCtx.moveTo(p.x, p.y); }, {passive: false});
+        sigCanvas.addEventListener('touchmove', e => { e.preventDefault(); if(isDrawing){ const p = getPos(e); sigCtx.lineTo(p.x, p.y); sigCtx.stroke(); }}, {passive: false});
         sigCanvas.addEventListener('touchend', () => isDrawing = false);
-
-        function clearSignature() {
-            sigCtx.clearRect(0, 0, sigCanvas.width, sigCanvas.height);
-        }
+        function clearSignature() { sigCtx.clearRect(0, 0, sigCanvas.width, sigCanvas.height); }
 
         function generatePoster() {
             if (navigator.vibrate) navigator.vibrate(50);
@@ -303,7 +297,7 @@
             
             scrollArea.style.overflowY = 'visible'; scrollArea.style.flex = 'none'; captureArea.style.height = captureArea.scrollHeight + 'px';
 
-            html2canvas(captureArea, { backgroundColor: "#07090f", scale: 2, windowHeight: captureArea.scrollHeight }).then(canvas => {
+            html2canvas(captureArea, { backgroundColor: "#0b0f19", scale: 2, windowHeight: captureArea.scrollHeight }).then(canvas => {
                 captureArea.style.height = origHeight; scrollArea.style.overflowY = origOverflow; scrollArea.style.flex = origFlex;
                 document.getElementById('actionBtnGroup').style.display = 'block'; btn.innerHTML = "<span style='font-size: 20px;'>🛡️</span> 生成医疗排查底档并保存"; btn.style.opacity = "1";
                 document.getElementById('posterImg').src = canvas.toDataURL("image/jpeg", 0.9);
