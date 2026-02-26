@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>LUXIOU | 全息数字化诊断 V15.1</title>
+    <title>LUXIOU | 全息数字化诊断 V16.0</title>
     <style>
         :root { --primary: #00f2fe; --accent: #00ff88; --danger: #ff4757; --bg: #0b0f19; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
@@ -41,7 +41,7 @@
         input[type=range] { width: 100%; -webkit-appearance: none; background: #1e293b; height: 5px; border-radius: 3px; }
         input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 22px; background: #fff; border: 3px solid var(--primary); border-radius: 50%; box-shadow: 0 0 10px var(--primary); }
 
-        .btn-group { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
+        .btn-group { display: grid; grid-template-columns: 1fr 1fr 1.2fr; gap: 10px; margin-top: 15px; }
         .lux-btn { background: #1e293b; border: 1px solid #334155; padding: 12px; border-radius: 10px; color: #fff; font-size: 12px; font-weight: bold; text-align: center; display: flex; align-items: center; justify-content: center; gap: 5px;}
         .btn-save { background: var(--primary); color: #000; border: none; box-shadow: 0 4px 15px rgba(0,242,254,0.3); }
         .btn-vault { background: transparent; color: var(--primary); border: 1px solid var(--primary); }
@@ -88,7 +88,7 @@
                 <div><small style="color:var(--primary);font-size:10px;font-weight:bold;">前照变焦</small> <input type="range" min="50" max="300" value="100" id="zoomB" oninput="zoomSlider('layB', this.value)"></div>
                 <div><small style="color:var(--primary);font-size:10px;font-weight:bold;">后照变焦</small> <input type="range" min="50" max="300" value="100" id="zoomA" oninput="zoomSlider('layA', this.value)"></div>
             </div>
-            <div style="display:flex; justify-content:space-between; font-size:10px; color:#94a3b8; font-weight:bold; margin-bottom:5px;"><span>BEFORE (前照手势)</span><span>中心滑动变线</span><span>AFTER (后照手势)</span></div>
+            <div style="display:flex; justify-content:space-between; font-size:10px; color:#94a3b8; font-weight:bold; margin-bottom:5px;"><span>BEFORE (前照手势)</span><span>中心滑动形变分析</span><span>AFTER (后照手势)</span></div>
             <input type="range" min="0" max="100" value="0" id="fadeSlider">
             
             <div class="btn-group">
@@ -111,6 +111,19 @@
     </div>
 
     <script>
+        // --- 核心防爆内存清理机制 (Auto-Cleaner) ---
+        function cleanOldData() {
+            let keysToDelete = [];
+            for (let i = 0; i < localStorage.length; i++) {
+                let key = localStorage.key(i);
+                // 扫描所有旧版本垃圾，保留当前最新版本 LUX_MASTER_V16
+                if (key && key.startsWith('LUX_') && key !== 'LUX_MASTER_V16') {
+                    keysToDelete.push(key);
+                }
+            }
+            keysToDelete.forEach(k => localStorage.removeItem(k));
+        }
+
         const canvas = document.getElementById('laserCanvas');
         const ctx = canvas.getContext('2d');
         
@@ -219,7 +232,6 @@
             updateDiffs(); draw();
         }
 
-        // 极限压缩，防止爆缓存
         function processImg(i, t) {
             if(i.files[0]){
                 const r = new FileReader();
@@ -227,11 +239,16 @@
                     const img = new Image();
                     img.onload = () => {
                         const canvasTmp = document.createElement('canvas');
-                        const maxW = 600; // 进一步压缩宽度
-                        const scale = maxW / img.width;
-                        canvasTmp.width = maxW; canvasTmp.height = img.height * scale;
+                        let maxW = 600; 
+                        // 修复：图片很小时，不要强行拉大浪费空间
+                        let scale = img.width > maxW ? maxW / img.width : 1;
+                        
+                        canvasTmp.width = img.width * scale;
+                        canvasTmp.height = img.height * scale;
                         canvasTmp.getContext('2d').drawImage(img, 0, 0, canvasTmp.width, canvasTmp.height);
-                        document.getElementById(t).style.backgroundImage = `url('${canvasTmp.toDataURL('image/jpeg', 0.5)}')`; // 压缩率调高
+                        
+                        // 极限压缩比 0.6，肉眼无损
+                        document.getElementById(t).style.backgroundImage = `url('${canvasTmp.toDataURL('image/jpeg', 0.6)}')`;
                         
                         imgState[t] = { scale: 1, x: 0, y: 0 };
                         document.getElementById(t === 'layB' ? 'zoomB' : 'zoomA').value = 100;
@@ -243,10 +260,10 @@
             }
         }
         
-        // 修复保存机制 + 容量满溢自动清理
+        // --- 修复版：带有自愈功能的保存系统 ---
         function saveCase() {
             const name = prompt("输入客户姓名保存："); if(!name) return;
-            let vault = JSON.parse(localStorage.getItem('LUX_V15_1_DB') || '[]');
+            let vault = JSON.parse(localStorage.getItem('LUX_MASTER_V16') || '[]');
             const preVals = Array.from(document.querySelectorAll('.card-l .mini-wheel')).map(s => s.innerText);
             const postVals = Array.from(document.querySelectorAll('.card-r .mini-wheel')).map(s => s.innerText);
             
@@ -258,32 +275,39 @@
                 imgState: JSON.parse(JSON.stringify(imgState)) 
             };
             
+            // 插入最新的案例在最前面
             vault.unshift(newCase);
 
-            try {
-                localStorage.setItem('LUX_V15_1_DB', JSON.stringify(vault));
-                alert("✅ 档案已成功保存！");
-                renderVault();
-            } catch (e) {
-                // 如果存爆了，自动顶掉最老的一个档案
-                alert("⚠️ 存储空间不足！系统将自动清理最旧的1个历史档案以释放空间...");
-                vault.pop(); // 移除最后一条
+            let saved = false;
+            while(vault.length > 0) {
                 try {
-                    localStorage.setItem('LUX_V15_1_DB', JSON.stringify(vault));
-                    alert("✅ 档案已成功保存！(已覆盖最旧记录)");
-                    renderVault();
-                } catch (err) {
-                    alert("❌ 保存失败，照片体积过大，请手动在档案库中删除几个案例后再试。");
+                    localStorage.setItem('LUX_MASTER_V16', JSON.stringify(vault));
+                    saved = true;
+                    break; // 保存成功，跳出循环
+                } catch (e) {
+                    // 如果存爆了，且列表里有旧数据，就删掉最老的那个腾空间
+                    if (vault.length > 1) {
+                        vault.pop(); 
+                    } else {
+                        break; // 只有1条也存不进去，说明单张图巨大或浏览器限制
+                    }
                 }
+            }
+
+            if(saved) {
+                alert("✅ 档案已成功保存至底层数据库！");
+                renderVault(); // 同步刷新列表
+            } else {
+                alert("❌ 保存失败：手机存储异常。请在无痕模式下重试。");
             }
         }
 
         function openVault() { renderVault(); const modal = document.getElementById('vaultModal'); modal.style.display = 'flex'; setTimeout(() => modal.classList.add('show'), 10); }
         function closeVault() { const modal = document.getElementById('vaultModal'); modal.classList.remove('show'); setTimeout(() => modal.style.display = 'none', 300); }
-        function deleteItem(id) { let vault = JSON.parse(localStorage.getItem('LUX_V15_1_DB') || '[]'); vault = vault.filter(i => i.id !== id); localStorage.setItem('LUX_V15_1_DB', JSON.stringify(vault)); renderVault(); }
+        function deleteItem(id) { let vault = JSON.parse(localStorage.getItem('LUX_MASTER_V16') || '[]'); vault = vault.filter(i => i.id !== id); localStorage.setItem('LUX_MASTER_V16', JSON.stringify(vault)); renderVault(); }
 
         function loadCase(id) {
-            const v = JSON.parse(localStorage.getItem('LUX_V15_1_DB') || '[]').find(x => x.id === id);
+            const v = JSON.parse(localStorage.getItem('LUX_MASTER_V16') || '[]').find(x => x.id === id);
             if(v) {
                 document.getElementById('layB').style.backgroundImage = v.imgB; document.getElementById('layA').style.backgroundImage = v.imgA;
                 if(v.anchorsB && v.anchorsA) { anchorsB = v.anchorsB; anchorsA = v.anchorsA; }
@@ -302,7 +326,7 @@
         }
 
         function renderVault() {
-            const v = JSON.parse(localStorage.getItem('LUX_V15_1_DB') || '[]');
+            const v = JSON.parse(localStorage.getItem('LUX_MASTER_V16') || '[]');
             const list = document.getElementById('vaultList');
             if(v.length === 0) { list.innerHTML = '<div style="text-align:center; color:#64748b; padding-top: 40px;">暂无历史档案</div>'; return; }
             list.innerHTML = v.map(i => `
@@ -391,6 +415,7 @@
         };
 
         window.onload = () => {
+            cleanOldData(); // 核心操作：启动自动清理引擎
             document.getElementById('catBox').innerHTML = Object.keys(db).map((k, i) => `<div class="cat-item ${i===0?'active':''}" onclick="loadSetup('${k}', this)">${db[k].name}</div>`).join('');
             loadSetup('posture'); 
         };
