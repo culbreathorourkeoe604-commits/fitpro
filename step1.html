@@ -6,23 +6,25 @@
     <title>LUXIOU | 智能痛点筛查矩阵</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
-        :root { --primary: #00f2fe; --accent: #00ff88; --danger: #ff4757; --bg: #0b0f19; --surface: #161e2e; }
+        :root { --primary: #00f2fe; --accent: #00ff88; --danger: #ff007a; --bg: #090b14; --surface: #121826; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; margin: 0; padding: 0; }
         
-        body { background: var(--bg); color: #e2e8f0; font-family: "DIN Alternate", -apple-system, sans-serif; display: flex; flex-direction: column; height: 100svh; overflow: hidden; }
+        /* 提升整体字体渲染清晰度 */
+        body { background: var(--bg); color: #e2e8f0; font-family: "DIN Alternate", -apple-system, sans-serif; display: flex; flex-direction: column; height: 100svh; overflow: hidden; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
         #capture-area { background: var(--bg); display: flex; flex-direction: column; height: 100%; width: 100%; }
 
-        .header-brand { flex: 0 0 60px; width: 100%; display: flex; align-items: center; justify-content: center; background: rgba(11, 15, 25, 0.95); z-index: 50; border-bottom: 1px solid rgba(0,242,254,0.3); }
-        .brand-text { font-size: 18px; font-weight: 900; color: #fff; letter-spacing: 2px; text-shadow: 0 0 10px rgba(0,242,254,0.8); }
+        .header-brand { flex: 0 0 60px; width: 100%; display: flex; align-items: center; justify-content: center; background: rgba(9, 11, 20, 0.95); z-index: 50; border-bottom: 1px solid rgba(0,242,254,0.3); }
+        .brand-text { font-size: 18px; font-weight: 900; color: #fff; letter-spacing: 2px; text-shadow: 0 0 8px rgba(0,242,254,0.6); }
         .step-badge { position: absolute; right: 15px; background: rgba(0,242,254,0.1); border: 1px solid var(--primary); color: var(--primary); font-size: 10px; padding: 4px 8px; border-radius: 12px; font-weight: bold; }
 
-        .radar-section { flex: 0 0 240px; position: relative; display: flex; align-items: center; justify-content: center; background: radial-gradient(circle at center, rgba(30, 41, 59, 0.8) 0%, var(--bg) 100%); border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .radar-section { flex: 0 0 250px; position: relative; display: flex; align-items: center; justify-content: center; background: radial-gradient(circle at center, rgba(18, 24, 38, 0.9) 0%, var(--bg) 100%); border-bottom: 1px solid rgba(255,255,255,0.05); }
         #radarCanvas { width: 100%; height: 100%; position: absolute; top: 0; left: 0; z-index: 1; }
         
         .risk-panel { position: absolute; left: 20px; top: 20px; z-index: 2; display: flex; flex-direction: column; }
-        .risk-label { font-size: 10px; color: #94a3b8; font-weight: bold; letter-spacing: 1px; }
-        .risk-score { font-size: 36px; font-weight: 900; color: var(--accent); text-shadow: 0 0 15px rgba(0,255,136,0.4); transition: color 0.3s; line-height: 1; margin-top: 4px; }
-        .risk-score.high { color: var(--danger); text-shadow: 0 0 15px rgba(255,71,87,0.5); }
+        .risk-label { font-size: 11px; color: #94a3b8; font-weight: 900; letter-spacing: 1px; text-shadow: 0 2px 4px rgba(0,0,0,0.8); }
+        /* 分数超高清锐化 */
+        .risk-score { font-size: 42px; font-weight: 900; color: var(--accent); text-shadow: 0 0 10px rgba(0,255,136,0.5), 0 2px 4px rgba(0,0,0,0.8); transition: color 0.3s; line-height: 1; margin-top: 6px; }
+        .risk-score.high { color: var(--danger); text-shadow: 0 0 15px rgba(255,0,122,0.6), 0 2px 4px rgba(0,0,0,0.8); }
 
         .matrix-scroll { flex: 1; overflow-y: auto; padding: 20px 15px 110px 15px; scrollbar-width: none; }
         .matrix-scroll::-webkit-scrollbar { display: none; }
@@ -32,25 +34,22 @@
         .q-title::before { content: ''; display: block; width: 4px; height: 14px; background: var(--primary); border-radius: 2px; box-shadow: 0 0 8px var(--primary); }
         
         .tags-grid { display: flex; flex-wrap: wrap; gap: 10px; }
-        .tag-btn { background: rgba(30, 41, 59, 0.5); border: 1px solid rgba(255,255,255,0.1); color: #94a3b8; padding: 8px 14px; border-radius: 12px; font-size: 12px; font-weight: 600; transition: all 0.3s; }
-        .tag-btn.active { background: rgba(0, 242, 254, 0.1); border-color: var(--primary); color: #fff; box-shadow: 0 0 15px rgba(0,242,254,0.3); transform: scale(1.05); }
-        .tag-btn.danger.active { background: rgba(255, 71, 87, 0.1); border-color: var(--danger); box-shadow: 0 0 15px rgba(255,71,87,0.3); }
-        .tag-btn.custom-add { border: 1px dashed var(--primary); color: var(--primary); background: transparent; }
+        .tag-btn { background: rgba(30, 41, 59, 0.5); border: 1px solid rgba(255,255,255,0.1); color: #94a3b8; padding: 10px 14px; border-radius: 12px; font-size: 12px; font-weight: bold; transition: all 0.2s; }
+        .tag-btn.active { background: rgba(0, 242, 254, 0.1); border-color: var(--primary); color: #fff; box-shadow: 0 0 12px rgba(0,242,254,0.3); transform: scale(1.03); }
+        .tag-btn.danger.active { background: rgba(255, 0, 122, 0.15); border-color: var(--danger); box-shadow: 0 0 15px rgba(255,0,122,0.4); }
+        .tag-btn.custom-add { border: 1px dashed #64748b; color: #94a3b8; background: transparent; display: flex; align-items: center; justify-content: center; width: 100%; padding: 12px;}
+        .tag-btn.custom-add:active { background: rgba(255,255,255,0.05); }
 
-        .bottom-action { position: fixed; bottom: 0; left: 0; width: 100%; padding: 15px 20px 25px 20px; background: linear-gradient(to top, rgba(11,15,25,1) 50%, rgba(11,15,25,0)); z-index: 10; }
-        .btn-generate { width: 100%; background: var(--primary); color: #000; border: none; padding: 16px; border-radius: 16px; font-size: 16px; font-weight: 900; box-shadow: 0 8px 25px rgba(0,242,254,0.4); display: flex; justify-content: center; align-items: center; gap: 8px; }
+        .bottom-action { position: fixed; bottom: 0; left: 0; width: 100%; padding: 15px 20px 25px 20px; background: linear-gradient(to top, rgba(9,11,20,1) 60%, rgba(9,11,20,0)); z-index: 10; }
+        .btn-generate { width: 100%; background: var(--primary); color: #000; border: none; padding: 16px; border-radius: 16px; font-size: 16px; font-weight: 900; box-shadow: 0 8px 25px rgba(0,242,254,0.3); display: flex; justify-content: center; align-items: center; gap: 8px; }
 
         .poster-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 9999; flex-direction: column; align-items: center; justify-content: center; padding: 20px; opacity: 0; transition: opacity 0.3s; }
         .poster-overlay.active { display: flex; opacity: 1; }
-        .poster-scroll-area { max-height: 70vh; width: 100%; overflow-y: auto; border-radius: 12px; border: 2px solid var(--primary); box-shadow: 0 10px 40px rgba(0,242,254,0.4); }
+        .poster-scroll-area { max-height: 70vh; width: 100%; overflow-y: auto; border-radius: 12px; border: 2px solid var(--primary); box-shadow: 0 10px 40px rgba(0,242,254,0.3); }
         .poster-scroll-area::-webkit-scrollbar { display: none; }
         .poster-img { width: 100%; display: block; }
-        
-        .poster-tip { color: #fff; font-size: 15px; margin: 20px 0 15px 0; font-weight: bold; letter-spacing: 1px; display: flex; align-items: center; gap: 8px; }
-        .btn-next { background: #fff; color: #000; border: none; padding: 14px 35px; border-radius: 30px; font-weight: 900; font-size: 15px; box-shadow: 0 5px 20px rgba(255,255,255,0.3); }
-        
-        @keyframes pulseTip { 0% { transform: scale(1); opacity: 0.8; } 50% { transform: scale(1.05); opacity: 1; } 100% { transform: scale(1); opacity: 0.8; } }
-        .pulse-text { animation: pulseTip 1.5s infinite; color: var(--accent); }
+        .poster-tip { color: #fff; font-size: 15px; margin: 20px 0 15px 0; font-weight: bold; display: flex; align-items: center; gap: 8px; }
+        .btn-next { background: #fff; color: #000; border: none; padding: 14px 35px; border-radius: 30px; font-weight: 900; font-size: 15px; box-shadow: 0 5px 20px rgba(255,255,255,0.2); }
     </style>
 </head>
 <body>
@@ -72,13 +71,12 @@
         <div class="matrix-scroll" id="scrollArea">
             
             <div class="question-group">
-                <div class="q-title">一、所属职业与作息 (Occupation & Lifestyle)</div>
+                <div class="q-title">一、所属职业与作息 (Occupation)</div>
                 <div class="tags-grid">
                     <div class="tag-btn" data-impact='{"meta":-10, "posture":-15}' onclick="toggleTag(this)">💻 IT/互联网/金融 (极度久坐)</div>
                     <div class="tag-btn" data-impact='{"joint":-15, "muscle":-10}' onclick="toggleTag(this)">👨‍🏫 医护/教师/零售 (长期久站)</div>
                     <div class="tag-btn" data-impact='{"meta":-15, "core":-5}' onclick="toggleTag(this)">🥂 销售/高管 (应酬多/压力大)</div>
-                    <div class="tag-btn" data-impact='{"posture":-10, "meta":-15}' onclick="toggleTag(this)">🎥 主播/自由职业 (作息不规律)</div>
-                    <div class="tag-btn" data-impact='{"posture":-20, "core":-10}' onclick="toggleTag(this)">📱 长期低头玩手机/葛优瘫</div>
+                    <div class="tag-btn custom-add" onclick="addCustomTag(this, '{\"meta\":-10, \"posture\":-10}', false, '请输入您的特殊职业或作息习惯：')">➕ 录入其他特殊职业/作息</div>
                 </div>
             </div>
 
@@ -87,17 +85,16 @@
                 <div class="tags-grid">
                     <div class="tag-btn" data-impact='{"meta":-20}' onclick="toggleTag(this)">🍰 重度甜食/奶茶控</div>
                     <div class="tag-btn" data-impact='{"meta":-15}' onclick="toggleTag(this)">🍻 频繁应酬/经常饮酒</div>
-                    <div class="tag-btn" data-impact='{"meta":-15}' onclick="toggleTag(this)">🍔 饮食重油盐/经常吃外卖</div>
+                    <div class="tag-btn custom-add" onclick="addCustomTag(this, '{\"meta\":-15}', false, '请输入特殊饮食偏好(如：长期节食)：')">➕ 录入其他不良饮食习惯</div>
                 </div>
             </div>
 
             <div class="question-group">
-                <div class="q-title">三、运动与特异性伤病史 (Sports & Injuries)</div>
-                <div class="tags-grid" id="injuryBox">
+                <div class="q-title">三、运动与伤病史 (Sports & Injuries)</div>
+                <div class="tags-grid">
                     <div class="tag-btn danger" data-impact='{"muscle":-20, "core":-10}' onclick="toggleTag(this, true)">🚫 几乎零运动基础</div>
                     <div class="tag-btn danger" data-impact='{"core":-25, "posture":-10}' onclick="toggleTag(this, true)">👼 产后未进行系统康复</div>
-                    <div class="tag-btn danger" data-impact='{"posture":-20, "muscle":-15}' onclick="toggleTag(this, true)">⚖️ 习惯单侧发力/常跷二郎腿</div>
-                    <div class="tag-btn custom-add" onclick="addCustomInjury(this)">➕ 手动录入特异性伤病</div>
+                    <div class="tag-btn danger custom-add" onclick="addCustomTag(this, '{\"joint\":-25, \"muscle\":-15, \"core\":-10}', true, '请输入具体伤病(如：半月板撕裂/腰突)：')">➕ 录入特异性伤病或骨骼问题</div>
                 </div>
             </div>
 
@@ -106,9 +103,7 @@
                 <div class="tags-grid">
                     <div class="tag-btn danger" data-impact='{"posture":-30, "joint":-10}' onclick="toggleTag(this, true)">⚡ 颈肩僵硬频繁酸胀</div>
                     <div class="tag-btn danger" data-impact='{"core":-25, "posture":-15}' onclick="toggleTag(this, true)">⚡ 极易腰酸背痛</div>
-                    <div class="tag-btn danger" data-impact='{"joint":-30, "core":-10}' onclick="toggleTag(this, true)">⚡ 膝关节弹响/跑步不适</div>
-                    <div class="tag-btn danger" data-impact='{"posture":-20, "core":-15}' onclick="toggleTag(this, true)">⚡ 骨盆前倾/小腹突出</div>
-                    <div class="tag-btn danger" data-impact='{"posture":-25, "joint":-10}' onclick="toggleTag(this, true)">⚡ 假胯宽/O型X型腿倾向</div>
+                    <div class="tag-btn danger custom-add" onclick="addCustomTag(this, '{\"joint\":-20, \"posture\":-15}', true, '请输入具体不适部位(如：足底筋膜炎)：')">➕ 录入其他身体疼痛感</div>
                 </div>
             </div>
 
@@ -120,7 +115,9 @@
                     <div class="tag-btn" data-goal="muscle" onclick="toggleTag(this)">💪 增肌与线条雕刻</div>
                     <div class="tag-btn" data-goal="postpartum" onclick="toggleTag(this)">👼 产后盆底肌/腹直肌修复</div>
                     <div class="tag-btn" data-goal="health" onclick="toggleTag(this)">❤️ 亚健康调理/心肺提升</div>
-                    <div class="tag-btn" data-goal="shape" onclick="toggleTag(this)">🍑 局部精雕 (直角肩/蜜桃臀)</div>
+                    <div class="tag-btn" data-goal="shape" onclick="toggleTag(this)">🍑 局部精雕 (直角肩/蜜桃臀/马甲线)</div>
+                    <div class="tag-btn" data-goal="sport" onclick="toggleTag(this)">🏃‍♂️ 运动表现提升 (马拉松/专项)</div>
+                    <div class="tag-btn custom-add" onclick="addCustomTag(this, null, false, '请输入您的个性化蜕变目标：')">➕ 录入其他定制目标</div>
                 </div>
             </div>
 
@@ -134,10 +131,8 @@
     </div>
 
     <div class="poster-overlay" id="posterOverlay">
-        <div class="poster-scroll-area">
-            <img id="posterImg" class="poster-img" src="" alt="诊断海报">
-        </div>
-        <div class="poster-tip"><span class="pulse-text">👇 长按上方图片，保存完整档案</span></div>
+        <div class="poster-scroll-area"><img id="posterImg" class="poster-img" src="" alt="诊断海报"></div>
+        <div class="poster-tip"><span style="color:var(--accent)">👇 长按上方图片，保存完整档案</span></div>
         <button class="btn-next" onclick="goToNextStep()">进入 PAR-Q 医疗排查 ➔</button>
     </div>
 
@@ -149,13 +144,22 @@
         let currentScores = { core: 95, joint: 95, meta: 95, posture: 95, muscle: 95 };
         let targetScores = { core: 95, joint: 95, meta: 95, posture: 95, muscle: 95 };
 
+        // 🚀 核心视网膜高清优化 + 极光幻彩色
         function drawRadar() {
-            canvas.width = canvas.parentElement.offsetWidth; canvas.height = canvas.parentElement.offsetHeight;
-            const w = canvas.width, h = canvas.height;
+            // 获取物理像素比，根治“太糊了”的问题
+            const dpr = window.devicePixelRatio || 1;
+            const rect = canvas.parentElement.getBoundingClientRect();
+            canvas.width = rect.width * dpr;
+            canvas.height = rect.height * dpr;
+            ctx.scale(dpr, dpr);
+            
+            const w = rect.width, h = rect.height;
             const centerX = w / 2 + 35; const centerY = h / 2;
             const radius = Math.min(w, h) / 2 * 0.65; const sides = 5;
 
             ctx.clearRect(0, 0, w, h);
+            
+            // 底图网格线
             ctx.lineWidth = 1;
             for (let level = 1; level <= 4; level++) {
                 ctx.beginPath();
@@ -166,10 +170,11 @@
                     if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
                 }
                 ctx.closePath();
-                ctx.strokeStyle = `rgba(0, 242, 254, ${0.1 * level})`; ctx.stroke();
+                ctx.strokeStyle = `rgba(100, 116, 139, ${0.15 * level})`; ctx.stroke();
             }
 
-            ctx.fillStyle = "#94a3b8"; ctx.font = "bold 11px sans-serif"; ctx.textAlign = "center"; ctx.textBaseline = "middle";
+            // 标签
+            ctx.fillStyle = "#cbd5e1"; ctx.font = "bold 12px sans-serif"; ctx.textAlign = "center"; ctx.textBaseline = "middle";
             for (let i = 0; i < sides; i++) {
                 let angle = (Math.PI * 2 * i) / sides - Math.PI / 2;
                 let x = centerX + radius * Math.cos(angle); let y = centerY + radius * Math.sin(angle);
@@ -179,6 +184,7 @@
                 ctx.fillText(labels[i], labelX, labelY);
             }
 
+            // 数据图层
             ctx.beginPath();
             const keys = ['core', 'joint', 'meta', 'posture', 'muscle'];
             keys.forEach((key, i) => {
@@ -190,9 +196,18 @@
             ctx.closePath();
             
             let totalScore = Object.values(currentScores).reduce((a,b)=>a+b, 0) / 5;
-            if(totalScore < 60) { ctx.fillStyle = "rgba(255, 71, 87, 0.3)"; ctx.strokeStyle = "var(--danger)"; ctx.shadowColor = "var(--danger)"; } 
-            else { ctx.fillStyle = "rgba(0, 242, 254, 0.3)"; ctx.strokeStyle = "var(--primary)"; ctx.shadowColor = "var(--primary)"; }
-            ctx.shadowBlur = 15; ctx.lineWidth = 2; ctx.fill(); ctx.stroke(); ctx.shadowBlur = 0; 
+            
+            // 更漂亮的极光渐变色
+            let gradient = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, radius);
+            if(totalScore < 60) { 
+                gradient.addColorStop(0, "rgba(255, 0, 122, 0.5)"); gradient.addColorStop(1, "rgba(255, 71, 87, 0.1)");
+                ctx.fillStyle = gradient; ctx.strokeStyle = "#ff007a"; ctx.shadowColor = "#ff007a"; 
+            } else { 
+                gradient.addColorStop(0, "rgba(0, 242, 254, 0.5)"); gradient.addColorStop(1, "rgba(0, 255, 136, 0.1)");
+                ctx.fillStyle = gradient; ctx.strokeStyle = "#00f2fe"; ctx.shadowColor = "#00f2fe"; 
+            }
+            
+            ctx.shadowBlur = 15; ctx.lineWidth = 2.5; ctx.fill(); ctx.stroke(); ctx.shadowBlur = 0; 
         }
 
         function animate() {
@@ -219,21 +234,20 @@
             recalculateScores();
         }
 
-        // 🚀 新增：支持教练当面手动录入极其特殊的伤病！
-        function addCustomInjury(btn) {
-            let injury = prompt("请输入客户的具体伤病或不适（例如：右侧半月板二度损伤）：");
-            if(injury && injury.trim() !== "") {
-                // 动态创建一个新的危险标签
+        // 🚀 全量开放的通用手动录入功能
+        function addCustomTag(btn, defaultImpact, isDanger, promptText) {
+            let text = prompt(promptText);
+            if(text && text.trim() !== "") {
                 let newTag = document.createElement('div');
-                newTag.className = 'tag-btn danger active';
-                // 默认给予重度扣分（因为特异性伤病肯定影响关节和肌肉）
-                newTag.setAttribute('data-impact', '{"joint":-25, "muscle":-15, "core":-10}');
-                newTag.innerHTML = `⚠️ ${injury.trim()}`;
-                newTag.onclick = function() { toggleTag(this, true); };
+                newTag.className = `tag-btn active ${isDanger ? 'danger' : ''}`;
                 
-                // 插入到加号按钮的前面
+                if(defaultImpact) { newTag.setAttribute('data-impact', defaultImpact); }
+                else { newTag.setAttribute('data-goal', 'custom'); }
+                
+                newTag.innerHTML = `${isDanger ? '⚠️' : '✨'} ${text.trim()}`;
+                newTag.onclick = function() { toggleTag(this, isDanger); };
+                
                 btn.parentNode.insertBefore(newTag, btn);
-                // 重新算分（雷达图会马上暴跌）
                 recalculateScores();
             }
         }
@@ -242,64 +256,37 @@
             let newScores = { core: 95, joint: 95, meta: 95, posture: 95, muscle: 95 };
             document.querySelectorAll('.tag-btn.active').forEach(tag => {
                 let impactStr = tag.getAttribute('data-impact');
-                if(impactStr) {
-                    let impact = JSON.parse(impactStr);
-                    for(let key in impact) newScores[key] += impact[key]; 
-                }
+                if(impactStr) { let impact = JSON.parse(impactStr); for(let key in impact) newScores[key] += impact[key]; }
                 if(!impactStr && !tag.getAttribute('data-goal')) newScores.muscle -= 5;
             });
             targetScores = newScores;
         }
 
         function generatePoster() {
-            let goals = [];
-            document.querySelectorAll('.tag-btn.active[data-goal]').forEach(t => goals.push(t.innerText));
+            let goals = []; document.querySelectorAll('.tag-btn.active[data-goal]').forEach(t => goals.push(t.innerText));
             if(goals.length === 0) { alert("请至少在第五项选择一个【首要蜕变目标】！"); return; }
-
             if (navigator.vibrate) navigator.vibrate(50);
+            
             let btn = document.querySelector('.btn-generate');
-            btn.innerHTML = "⏳ 正在渲染全景高清长图...";
-            btn.style.opacity = "0.7";
+            btn.innerHTML = "⏳ 正在渲染全景高清长图..."; btn.style.opacity = "0.7"; document.getElementById('actionBtnGroup').style.display = 'none';
             
-            document.getElementById('actionBtnGroup').style.display = 'none';
-            let captureArea = document.getElementById('capture-area');
-            let scrollArea = document.getElementById('scrollArea');
+            let captureArea = document.getElementById('capture-area'); let scrollArea = document.getElementById('scrollArea');
+            let origHeight = captureArea.style.height; let origOverflow = scrollArea.style.overflowY; let origFlex = scrollArea.style.flex;
             
-            let origHeight = captureArea.style.height;
-            let origOverflow = scrollArea.style.overflowY;
-            let origFlex = scrollArea.style.flex;
-            
-            scrollArea.style.overflowY = 'visible';
-            scrollArea.style.flex = 'none';
-            captureArea.style.height = captureArea.scrollHeight + 'px';
+            scrollArea.style.overflowY = 'visible'; scrollArea.style.flex = 'none'; captureArea.style.height = captureArea.scrollHeight + 'px';
 
-            html2canvas(captureArea, {
-                backgroundColor: "#0b0f19",
-                scale: 2, 
-                windowHeight: captureArea.scrollHeight
-            }).then(canvas => {
-                captureArea.style.height = origHeight;
-                scrollArea.style.overflowY = origOverflow;
-                scrollArea.style.flex = origFlex;
-                
-                document.getElementById('actionBtnGroup').style.display = 'block';
-                btn.innerHTML = "<span style='font-size: 20px;'>📸</span> 生成报告并保存相册";
-                btn.style.opacity = "1";
-
-                let imgData = canvas.toDataURL("image/jpeg", 0.9);
-                document.getElementById('posterImg').src = imgData;
+            html2canvas(captureArea, { backgroundColor: "#090b14", scale: 2, windowHeight: captureArea.scrollHeight }).then(canvas => {
+                captureArea.style.height = origHeight; scrollArea.style.overflowY = origOverflow; scrollArea.style.flex = origFlex;
+                document.getElementById('actionBtnGroup').style.display = 'block'; btn.innerHTML = "<span style='font-size: 20px;'>📸</span> 生成报告并保存相册"; btn.style.opacity = "1";
+                document.getElementById('posterImg').src = canvas.toDataURL("image/jpeg", 0.9);
                 document.getElementById('posterOverlay').classList.add('active');
             }).catch(err => {
-                alert("生成长图失败，请重试！");
-                document.getElementById('actionBtnGroup').style.display = 'block';
+                alert("生成长图失败，请重试！"); document.getElementById('actionBtnGroup').style.display = 'block';
                 captureArea.style.height = origHeight; scrollArea.style.overflowY = origOverflow; scrollArea.style.flex = origFlex;
             });
         }
 
-        function goToNextStep() {
-            window.location.href = 'parq.html';
-        }
-
+        function goToNextStep() { window.location.href = 'parq.html'; }
         window.onload = () => { drawRadar(); animate(); window.addEventListener('resize', drawRadar); };
     </script>
 </body>
