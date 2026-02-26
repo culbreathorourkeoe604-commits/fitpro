@@ -6,7 +6,8 @@
     <title>LUXIOU | 智能痛点筛查矩阵</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
-        :root { --primary: #D4AF37; --accent: #C5A059; --danger: #B22222; --bg: #050505; --surface: #121212; }
+        /* 铂金高定配色：拉丝金(安全)、琥珀橙(关注)、勃艮第红(危险) */
+        :root { --primary: #D4AF37; --warn: #FF8C00; --danger: #B22222; --bg: #050505; --surface: #121212; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; margin: 0; padding: 0; }
         
         body { background: var(--bg); color: #e2e8f0; font-family: "DIN Alternate", "Helvetica Neue", sans-serif; overflow-y: auto; -webkit-font-smoothing: antialiased; }
@@ -21,17 +22,17 @@
         .score-info { display: flex; flex-direction: column; }
         .risk-label { font-size: 11px; color: #888; font-weight: bold; letter-spacing: 1px; }
         .risk-score { font-size: 46px; font-weight: 900; color: var(--primary); text-shadow: 0 2px 5px rgba(0,0,0,0.9); line-height: 1; margin-top: 4px; transition: color 0.3s; }
-        .risk-score.high { color: var(--danger); text-shadow: 0 2px 5px rgba(0,0,0,0.9); }
+        .risk-score.mod { color: var(--warn); }
+        .risk-score.high { color: var(--danger); }
         
         .status-tag { font-size: 11px; font-weight: bold; padding: 6px 12px; border-radius: 6px; background: rgba(212, 175, 55, 0.05); color: var(--primary); border: 1px solid rgba(212, 175, 55, 0.3); transition: 0.3s; }
-        .status-tag.warn { background: rgba(197, 160, 89, 0.05); color: var(--accent); border-color: rgba(197, 160, 89, 0.3); }
+        .status-tag.warn { background: rgba(255, 140, 0, 0.05); color: var(--warn); border-color: rgba(255, 140, 0, 0.3); }
         .status-tag.crit { background: rgba(178, 34, 34, 0.05); color: var(--danger); border-color: rgba(178, 34, 34, 0.3); }
 
         .radar-container { position: relative; width: 100%; height: 200px; margin-top: 5px; }
         #radarCanvas { width: 100%; height: 100%; position: absolute; top: 0; left: 0; z-index: 1; }
 
         .matrix-scroll { padding: 20px 15px; }
-        
         .question-group { margin-bottom: 25px; }
         .q-title { font-size: 14px; font-weight: 900; color: #D1D5DB; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
         .q-title::before { content: ''; display: block; width: 3px; height: 14px; background: var(--primary); }
@@ -52,20 +53,19 @@
         .bottom-action { position: fixed; bottom: 0; left: 0; width: 100%; padding: 15px 20px 25px 20px; background: linear-gradient(to top, rgba(5,5,5,1) 60%, rgba(5,5,5,0)); z-index: 10; }
         .btn-generate { width: 100%; background: linear-gradient(135deg, #D4AF37, #AA8A2A); color: #000; border: none; padding: 16px; border-radius: 12px; font-size: 16px; font-weight: 900; display: flex; justify-content: center; align-items: center; gap: 8px; box-shadow: 0 4px 15px rgba(212, 175, 55, 0.2); }
 
+        /* 🚀 暴力的强制唤醒弹窗 */
         .input-modal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.9); z-index: 9999999; flex-direction: column; align-items: center; justify-content: center; }
         .input-box { background: #121212; width: 85%; max-width: 350px; padding: 25px; border-radius: 16px; border: 1px solid rgba(212, 175, 55, 0.3); }
         .input-title { color: #fff; font-size: 15px; font-weight: bold; margin-bottom: 20px; text-align: center; }
-        .custom-input { width: 100%; padding: 16px; background: #050505; border: 1px solid #444; color: #fff; border-radius: 8px; font-size: 16px; margin-bottom: 25px; outline: none; -webkit-appearance: none; appearance: none; -webkit-user-select: text !important; user-select: text !important; pointer-events: auto !important; z-index: 99999999; }
+        .custom-input { width: 100%; padding: 16px; background: #050505; border: 1px solid #444; color: #fff; border-radius: 8px; font-size: 16px; margin-bottom: 25px; outline: none; -webkit-appearance: none; appearance: none; -webkit-user-select: text !important; user-select: text !important; pointer-events: auto !important; }
         .custom-input:focus { border-color: var(--primary); }
         .modal-btns { display: flex; gap: 15px; }
         .modal-btn { flex: 1; padding: 14px; border-radius: 8px; font-size: 15px; font-weight: bold; border: none; }
         .modal-btn.cancel { background: #222; color: #888; }
         .modal-btn.confirm { background: var(--primary); color: #000; }
 
-        /* 🚀 极度稳定的白皮书全屏签字版 */
-        .sig-modal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #fff; z-index: 9999999; flex-direction: column; overflow: hidden; overscroll-behavior: none; }
-        .sig-modal-header { height: 70px; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; color: #000; font-weight: 900; font-size: 16px; border-bottom: 1px solid #ddd; background: #f8f9fa; }
-        .btn-close-sig { font-size: 24px; color: #888; background: none; border: none; font-weight: bold; padding: 0 10px; }
+        .sig-modal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #fff; z-index: 9999999; flex-direction: column; }
+        .sig-modal-header { height: 70px; display: flex; align-items: center; justify-content: center; color: #000; font-weight: 900; font-size: 18px; border-bottom: 1px solid #ddd; background: #f8f9fa; letter-spacing: 2px;}
         #fullscreenSigCanvas { flex: 1; width: 100%; touch-action: none; background: #fff; }
         .sig-modal-footer { height: 90px; display: flex; gap: 15px; padding: 20px; background: #f8f9fa; border-top: 1px solid #eee; }
         .sig-btn { flex: 1; padding: 14px; border-radius: 8px; font-size: 16px; font-weight: bold; border: none; }
@@ -105,44 +105,44 @@
             <div class="question-group">
                 <div class="q-title">一、职业与作息 (Occupation & Lifestyle)</div>
                 <div class="tags-grid">
-                    <div class="tag-btn" data-impact='{"meta":-10, "posture":-10}' onclick="toggleTag(this)">💻 极度久坐伏案</div>
-                    <div class="tag-btn" data-impact='{"joint":-10, "muscle":-5}' onclick="toggleTag(this)">🧍‍♀️ 长期站立/高跟鞋</div>
-                    <div class="tag-btn" data-impact='{"meta":-10, "core":-5}' onclick="toggleTag(this)">🥂 频繁应酬/高压</div>
-                    <div class="tag-btn" data-impact='{"posture":-10, "meta":-5}' onclick="toggleTag(this)">🌙 经常熬夜/昼夜颠倒</div>
-                    <div class="tag-btn custom-add" onclick="openInput(this, '{\"meta\":-10, \"posture\":-10}', false, '请输入特异性职业/作息：')">➕ 手动录入特异性职业/作息</div>
+                    <div class="tag-btn" data-impact='{"meta":-10, "posture":-15}' onclick="toggleTag(this)">💻 极度久坐伏案</div>
+                    <div class="tag-btn" data-impact='{"joint":-15, "muscle":-10}' onclick="toggleTag(this)">🧍‍♀️ 长期站立/高跟鞋</div>
+                    <div class="tag-btn" data-impact='{"meta":-15, "core":-5}' onclick="toggleTag(this)">🥂 频繁应酬/高压</div>
+                    <div class="tag-btn" data-impact='{"posture":-10, "meta":-15}' onclick="toggleTag(this)">🌙 经常熬夜/昼夜颠倒</div>
+                    <div class="tag-btn custom-add" data-impact='{"meta":-10, "posture":-10}' data-danger="false" data-title="请输入特异性职业/作息：" onclick="openInput(this)">➕ 手动录入特异性职业/作息</div>
                 </div>
             </div>
 
             <div class="question-group">
                 <div class="q-title">二、饮食与代谢 (Metabolism)</div>
                 <div class="tags-grid">
-                    <div class="tag-btn" data-impact='{"meta":-15}' onclick="toggleTag(this)">🍰 重度甜食奶茶控</div>
-                    <div class="tag-btn" data-impact='{"meta":-10}' onclick="toggleTag(this)">🍔 三餐外卖/重油盐</div>
-                    <div class="tag-btn" data-impact='{"meta":-5}' onclick="toggleTag(this)">💧 极少饮水(单日&lt;1L)</div>
-                    <div class="tag-btn" data-impact='{"meta":-15, "muscle":-10}' onclick="toggleTag(this)">🍽️ 长期极端节食</div>
-                    <div class="tag-btn custom-add" onclick="openInput(this, '{\"meta\":-10}', false, '请输入特殊饮食习惯：')">➕ 手动录入不良饮食结构</div>
+                    <div class="tag-btn" data-impact='{"meta":-20}' onclick="toggleTag(this)">🍰 重度甜食奶茶控</div>
+                    <div class="tag-btn" data-impact='{"meta":-15}' onclick="toggleTag(this)">🍔 三餐外卖/重油盐</div>
+                    <div class="tag-btn" data-impact='{"meta":-10}' onclick="toggleTag(this)">💧 极少饮水(单日&lt;1L)</div>
+                    <div class="tag-btn" data-impact='{"meta":-20, "muscle":-10}' onclick="toggleTag(this)">🍽️ 长期极端节食</div>
+                    <div class="tag-btn custom-add" data-impact='{"meta":-15}' data-danger="false" data-title="请输入特殊饮食习惯：" onclick="openInput(this)">➕ 手动录入不良饮食结构</div>
                 </div>
             </div>
 
             <div class="question-group">
                 <div class="q-title">三、运动与伤病史 (Sports & Injuries)</div>
                 <div class="tags-grid">
-                    <div class="tag-btn danger" data-impact='{"muscle":-15, "core":-10}' onclick="toggleTag(this, true)">🚫 几乎零运动基础</div>
-                    <div class="tag-btn danger" data-impact='{"core":-15, "posture":-10}' onclick="toggleTag(this, true)">👼 产后未系统康复</div>
-                    <div class="tag-btn danger" data-impact='{"joint":-20, "muscle":-10}' onclick="toggleTag(this, true)">🩹 骨骼/关节曾受损</div>
-                    <div class="tag-btn danger" data-impact='{"posture":-15}' onclick="toggleTag(this, true)">⚖️ 习惯单侧发力翘腿</div>
-                    <div class="tag-btn custom-add" onclick="openInput(this, '{\"joint\":-20, \"muscle\":-10}', true, '请输入具体伤病：')">➕ 手动录入特异性伤病史</div>
+                    <div class="tag-btn danger" data-impact='{"muscle":-20, "core":-10}' onclick="toggleTag(this, true)">🚫 几乎零运动基础</div>
+                    <div class="tag-btn danger" data-impact='{"core":-25, "posture":-10}' onclick="toggleTag(this, true)">👼 产后未系统康复</div>
+                    <div class="tag-btn danger" data-impact='{"joint":-25, "muscle":-15}' onclick="toggleTag(this, true)">🩹 骨骼/关节曾受损</div>
+                    <div class="tag-btn danger" data-impact='{"posture":-20}' onclick="toggleTag(this, true)">⚖️ 习惯单侧发力翘腿</div>
+                    <div class="tag-btn custom-add" data-impact='{"joint":-25, "muscle":-15, "core":-10}' data-danger="true" data-title="请输入具体伤病：" onclick="openInput(this)">➕ 手动录入特异性伤病史</div>
                 </div>
             </div>
 
             <div class="question-group">
                 <div class="q-title">四、疼痛与不适 (Pain Points)</div>
                 <div class="tags-grid">
-                    <div class="tag-btn danger" data-impact='{"posture":-20, "joint":-10}' onclick="toggleTag(this, true)">⚡ 颈肩频繁酸胀</div>
-                    <div class="tag-btn danger" data-impact='{"core":-20, "posture":-10}' onclick="toggleTag(this, true)">⚡ 极易腰酸背痛</div>
-                    <div class="tag-btn danger" data-impact='{"joint":-25, "core":-5}' onclick="toggleTag(this, true)">⚡ 膝盖弹响不适</div>
-                    <div class="tag-btn danger" data-impact='{"posture":-15, "core":-10}' onclick="toggleTag(this, true)">⚡ 骨盆前倾/塌腰</div>
-                    <div class="tag-btn custom-add" onclick="openInput(this, '{\"joint\":-15, \"posture\":-15}', true, '请输入具体不适部位：')">➕ 手动录入其他体态/疼痛感</div>
+                    <div class="tag-btn danger" data-impact='{"posture":-30, "joint":-10}' onclick="toggleTag(this, true)">⚡ 颈肩频繁酸胀</div>
+                    <div class="tag-btn danger" data-impact='{"core":-25, "posture":-15}' onclick="toggleTag(this, true)">⚡ 极易腰酸背痛</div>
+                    <div class="tag-btn danger" data-impact='{"joint":-30, "core":-10}' onclick="toggleTag(this, true)">⚡ 膝盖弹响不适</div>
+                    <div class="tag-btn danger" data-impact='{"posture":-20, "core":-15}' onclick="toggleTag(this, true)">⚡ 骨盆前倾/塌腰</div>
+                    <div class="tag-btn custom-add" data-impact='{"joint":-20, "posture":-15}' data-danger="true" data-title="请输入具体不适部位：" onclick="openInput(this)">➕ 手动录入其他体态/疼痛感</div>
                 </div>
             </div>
 
@@ -153,7 +153,7 @@
                     <div class="tag-btn" data-goal="posture" onclick="toggleTag(this)">📐 体态与骨骼纠正</div>
                     <div class="tag-btn" data-goal="muscle" onclick="toggleTag(this)">💪 增肌与线条雕刻</div>
                     <div class="tag-btn" data-goal="health" onclick="toggleTag(this)">❤️ 亚健康/心肺提升</div>
-                    <div class="tag-btn custom-add" onclick="openInput(this, null, false, '请输入您的定制目标：')">➕ 手动录入专属定制目标</div>
+                    <div class="tag-btn custom-add" data-goal="custom" data-danger="false" data-title="请输入您的定制目标：" onclick="openInput(this)">➕ 手动录入专属定制目标</div>
                 </div>
             </div>
 
@@ -180,10 +180,7 @@
     </div>
 
     <div class="sig-modal" id="sigModal">
-        <div class="sig-modal-header">
-            <span>请在下方空白处签署您的姓名</span>
-            <button class="btn-close-sig" onclick="closeSigPad()">×</button>
-        </div>
+        <div class="sig-modal-header">请在下方空白处签署您的姓名</div>
         <canvas id="fullscreenSigCanvas"></canvas>
         <div class="sig-modal-footer">
             <button class="sig-btn cancel" onclick="clearSig()">清除重写</button>
@@ -259,11 +256,14 @@
             
             let totalScore = Math.round(Object.values(currentScores).reduce((a,b)=>a+b, 0) / 5);
             
+            // 🚀 三级色彩雷达填充：金(>85) -> 橙(70-84) -> 红(<70)
             ctx.lineWidth = 2;
-            if(totalScore < 75) { 
-                ctx.fillStyle = "rgba(178, 34, 34, 0.4)"; ctx.strokeStyle = "#B22222"; 
-            } else { 
+            if(totalScore >= 85) {
                 ctx.fillStyle = "rgba(212, 175, 55, 0.4)"; ctx.strokeStyle = "#D4AF37"; 
+            } else if(totalScore >= 70) {
+                ctx.fillStyle = "rgba(255, 140, 0, 0.4)"; ctx.strokeStyle = "#FF8C00"; 
+            } else {
+                ctx.fillStyle = "rgba(178, 34, 34, 0.4)"; ctx.strokeStyle = "#B22222"; 
             }
             ctx.fill(); ctx.stroke(); 
         }
@@ -285,12 +285,13 @@
             let tag = document.getElementById('statusTag');
             display.innerText = total;
             
+            // 🚀 三级话术控制
             if(total >= 85) {
-                display.className = "risk-score"; tag.className = "status-tag"; tag.innerText = "机能优良 | 具备高阶训练条件";
+                display.className = "risk-score"; tag.className = "status-tag"; tag.innerText = "机能状态优良 | 继续保持";
             } else if (total >= 70) {
-                display.className = "risk-score"; tag.className = "status-tag warn"; tag.innerText = "机能亚健康 | 需定制针对性康复训练";
+                display.className = "risk-score mod"; tag.className = "status-tag warn"; tag.innerText = "亚健康预警 | 需定制针对性康复";
             } else {
-                display.className = "risk-score high"; tag.className = "status-tag crit"; tag.innerText = "体征预警 | 需严密监测与医疗级干预";
+                display.className = "risk-score high"; tag.className = "status-tag crit"; tag.innerText = "体征红灯 | 需严密监测与医疗级干预";
             }
         }
 
@@ -300,32 +301,43 @@
             recalculateScores();
         }
 
-        let activeBtn = null, activeImpact = null, activeDanger = false;
-        function openInput(btn, impactStr, isDanger, title) {
-            activeBtn = btn;
-            activeImpact = btn.getAttribute('data-impact');
-            activeDanger = isDanger;
+        // 🚀 核心修复：纯原生 DOM 属性获取，彻底规避括号语法崩溃
+        function openInput(btn) {
+            window.activeBtn = btn;
+            window.activeImpact = btn.getAttribute('data-impact');
+            window.activeDanger = btn.getAttribute('data-danger') === 'true';
+            window.activeGoal = btn.getAttribute('data-goal');
+            
+            let title = btn.getAttribute('data-title');
             document.getElementById('customInputTitle').innerText = title;
+            
             const inputField = document.getElementById('customInputField');
             inputField.value = '';
+            
             document.getElementById('customInputModal').style.display = 'flex';
         }
+        
         function closeInput() { 
             document.getElementById('customInputField').blur();
             document.getElementById('customInputModal').style.display = 'none'; 
         }
+        
         function confirmInput() {
             let text = document.getElementById('customInputField').value;
             if(text && text.trim() !== "") {
                 let newTag = document.createElement('div');
-                newTag.className = `tag-btn active ${activeDanger ? 'danger' : ''}`;
+                newTag.className = `tag-btn active ${window.activeDanger ? 'danger' : ''}`;
                 newTag.style.gridColumn = "span 1"; 
-                if(activeImpact) { newTag.setAttribute('data-impact', activeImpact); }
-                else { newTag.setAttribute('data-goal', 'custom'); }
-                newTag.innerHTML = `${activeDanger ? '⚠️' : '✨'} ${text.trim()}`;
-                newTag.onclick = function() { toggleTag(this, activeDanger); };
-                activeBtn.parentNode.insertBefore(newTag, activeBtn);
-                recalculateScores(); closeInput();
+                
+                if(window.activeImpact) { newTag.setAttribute('data-impact', window.activeImpact); }
+                if(window.activeGoal) { newTag.setAttribute('data-goal', window.activeGoal); }
+                
+                newTag.innerHTML = `${window.activeDanger ? '⚠️' : '✨'} ${text.trim()}`;
+                newTag.onclick = function() { toggleTag(this, window.activeDanger); };
+                
+                window.activeBtn.parentNode.insertBefore(newTag, window.activeBtn);
+                recalculateScores(); 
+                closeInput();
             } else { alert("内容不能为空哦"); }
         }
 
@@ -339,14 +351,12 @@
             targetScores = newScores;
         }
 
-        // 🚀 防乱飘签字版
         const fSigCanvas = document.getElementById('fullscreenSigCanvas');
         const fSigCtx = fSigCanvas.getContext('2d');
         let fIsDrawing = false;
 
         function openSigPad() {
-            // 锁定背景滑动
-            document.body.style.overflow = 'hidden'; 
+            document.body.style.overflow = 'hidden';
             let modal = document.getElementById('sigModal');
             modal.style.display = 'flex';
             const dpr = window.devicePixelRatio || 1;
@@ -359,7 +369,7 @@
         }
 
         function closeSigPad() {
-            document.body.style.overflow = 'auto'; // 解除锁定
+            document.body.style.overflow = 'auto';
             document.getElementById('sigModal').style.display = 'none';
         }
 
@@ -373,7 +383,6 @@
         fSigCanvas.addEventListener('mousedown', e => { fIsDrawing = true; const p = getFPos(e); fSigCtx.beginPath(); fSigCtx.moveTo(p.x, p.y); });
         fSigCanvas.addEventListener('mousemove', e => { if(fIsDrawing){ const p = getFPos(e); fSigCtx.lineTo(p.x, p.y); fSigCtx.stroke(); }});
         fSigCanvas.addEventListener('mouseup', () => fIsDrawing = false); fSigCanvas.addEventListener('mouseout', () => fIsDrawing = false);
-        // 关键防止画布默认滑动
         fSigCanvas.addEventListener('touchstart', e => { e.preventDefault(); fIsDrawing = true; const p = getFPos(e); fSigCtx.beginPath(); fSigCtx.moveTo(p.x, p.y); }, {passive: false});
         fSigCanvas.addEventListener('touchmove', e => { e.preventDefault(); if(fIsDrawing){ const p = getFPos(e); fSigCtx.lineTo(p.x, p.y); fSigCtx.stroke(); }}, {passive: false});
         fSigCanvas.addEventListener('touchend', e => { e.preventDefault(); fIsDrawing = false; }, {passive: false});
