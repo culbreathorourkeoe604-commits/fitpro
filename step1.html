@@ -11,7 +11,7 @@
         
         body { background: var(--bg); color: #e2e8f0; font-family: "DIN Alternate", -apple-system, sans-serif; display: flex; flex-direction: column; height: 100svh; overflow: hidden; }
         
-        /* 截图区域包装（保证海报生成的背景色也是黑金的） */
+        /* 截图区域包装 */
         #capture-area { background: var(--bg); display: flex; flex-direction: column; height: 100%; width: 100%; }
 
         .header-brand { flex: 0 0 60px; width: 100%; display: flex; align-items: center; justify-content: center; background: rgba(11, 15, 25, 0.95); z-index: 50; border-bottom: 1px solid rgba(0,242,254,0.3); }
@@ -41,10 +41,15 @@
         .bottom-action { position: fixed; bottom: 0; left: 0; width: 100%; padding: 15px 20px 25px 20px; background: linear-gradient(to top, rgba(11,15,25,1) 50%, rgba(11,15,25,0)); z-index: 10; }
         .btn-generate { width: 100%; background: var(--primary); color: #000; border: none; padding: 16px; border-radius: 16px; font-size: 16px; font-weight: 900; box-shadow: 0 8px 25px rgba(0,242,254,0.4); display: flex; justify-content: center; align-items: center; gap: 8px; }
 
-        /* 🚀 海报弹窗遮罩层 */
+        /* 海报弹窗遮罩层 */
         .poster-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 9999; flex-direction: column; align-items: center; justify-content: center; padding: 20px; opacity: 0; transition: opacity 0.3s; }
         .poster-overlay.active { display: flex; opacity: 1; }
-        .poster-img { max-width: 100%; max-height: 70vh; border-radius: 12px; border: 2px solid var(--primary); box-shadow: 0 10px 40px rgba(0,242,254,0.4); object-fit: contain; }
+        
+        /* 滚动查看长图 */
+        .poster-scroll-area { max-height: 70vh; width: 100%; overflow-y: auto; border-radius: 12px; border: 2px solid var(--primary); box-shadow: 0 10px 40px rgba(0,242,254,0.4); }
+        .poster-scroll-area::-webkit-scrollbar { display: none; }
+        .poster-img { width: 100%; display: block; }
+        
         .poster-tip { color: #fff; font-size: 15px; margin: 20px 0 15px 0; font-weight: bold; letter-spacing: 1px; display: flex; align-items: center; gap: 8px; }
         .btn-next { background: #fff; color: #000; border: none; padding: 14px 35px; border-radius: 30px; font-weight: 900; font-size: 15px; box-shadow: 0 5px 20px rgba(255,255,255,0.3); }
         
@@ -68,7 +73,7 @@
             <canvas id="radarCanvas"></canvas>
         </div>
 
-        <div class="matrix-scroll">
+        <div class="matrix-scroll" id="scrollArea">
             
             <div class="question-group">
                 <div class="q-title">一、职业与作息 (Lifestyle)</div>
@@ -122,16 +127,20 @@
             </div>
 
         </div>
-    </div> <div class="bottom-action" id="actionBtnGroup">
+    </div> 
+
+    <div class="bottom-action" id="actionBtnGroup">
         <button class="btn-generate" onclick="generatePoster()">
             <span style="font-size: 20px;">📸</span> 生成报告并保存相册
         </button>
     </div>
 
     <div class="poster-overlay" id="posterOverlay">
-        <img id="posterImg" class="poster-img" src="" alt="诊断海报">
-        <div class="poster-tip"><span class="pulse-text">👇 长按上方图片，保存到手机相册</span></div>
-        <button class="btn-next" onclick="goToNextStep()">进入 LUXIOU 全息舱 ➔</button>
+        <div class="poster-scroll-area">
+            <img id="posterImg" class="poster-img" src="" alt="诊断海报">
+        </div>
+        <div class="poster-tip"><span class="pulse-text">👇 长按上方图片，保存完整档案</span></div>
+        <button class="btn-next" onclick="goToNextStep()">进入 PAR-Q 身体排查 ➔</button>
     </div>
 
     <script>
@@ -225,7 +234,7 @@
             targetScores = newScores;
         }
 
-        // 🚀 核心海报生成与保存逻辑
+        // 🚀 核心海报生成引擎（已修复长图被切断问题）
         function generatePoster() {
             let goals = [];
             document.querySelectorAll('.tag-btn.active[data-goal]').forEach(t => goals.push(t.innerText));
@@ -234,44 +243,59 @@
             if (navigator.vibrate) navigator.vibrate(50);
             
             let btn = document.querySelector('.btn-generate');
-            btn.innerHTML = "⏳ 正在渲染专属高清海报...";
+            btn.innerHTML = "⏳ 正在渲染全景高清长图...";
             btn.style.opacity = "0.7";
             
-            // 截图前隐藏底部的按钮
+            // 隐藏按钮以免入镜
             document.getElementById('actionBtnGroup').style.display = 'none';
-            // 确保截图区域能够显示完整滚动内容
+            
+            // 【关键修复】彻底展开 DOM，解除滚动限制
             let captureArea = document.getElementById('capture-area');
-            let originalHeight = captureArea.style.height;
+            let scrollArea = document.getElementById('scrollArea');
+            
+            // 记录原始样式
+            let origHeight = captureArea.style.height;
+            let origOverflow = scrollArea.style.overflowY;
+            let origFlex = scrollArea.style.flex;
+            
+            // 强行把滚动区撑开成完整高度
+            scrollArea.style.overflowY = 'visible';
+            scrollArea.style.flex = 'none';
             captureArea.style.height = captureArea.scrollHeight + 'px';
 
-            // 调用 html2canvas 截屏
+            // 截取全景长图
             html2canvas(captureArea, {
                 backgroundColor: "#0b0f19",
-                scale: 2 // 提升清晰度，方便保存到相册
+                scale: 2, 
+                windowHeight: captureArea.scrollHeight // 强制识别完整高度
             }).then(canvas => {
-                // 恢复原状
-                captureArea.style.height = originalHeight;
+                // 瞬间恢复原状
+                captureArea.style.height = origHeight;
+                scrollArea.style.overflowY = origOverflow;
+                scrollArea.style.flex = origFlex;
+                
                 document.getElementById('actionBtnGroup').style.display = 'block';
                 btn.innerHTML = "<span style='font-size: 20px;'>📸</span> 生成报告并保存相册";
                 btn.style.opacity = "1";
 
-                // 将 Canvas 转换为图片数据
+                // 输出高清图片并展示
                 let imgData = canvas.toDataURL("image/jpeg", 0.9);
-                
-                // 将图片赋值给弹窗里的 img 标签
                 document.getElementById('posterImg').src = imgData;
-                
-                // 呼出遮罩层
                 document.getElementById('posterOverlay').classList.add('active');
+                
             }).catch(err => {
-                alert("生成海报失败，请重试！");
+                alert("生成长图失败，请重试！");
                 document.getElementById('actionBtnGroup').style.display = 'block';
+                // 失败也要记得恢复样式
+                captureArea.style.height = origHeight;
+                scrollArea.style.overflowY = origOverflow;
+                scrollArea.style.flex = origFlex;
             });
         }
 
+        // 🚀 跳转至 PAR-Q 健康问卷
         function goToNextStep() {
-            // 无论客户是否存了图，点击此按钮进入全息诊断
-            window.location.href = 'case_detail.html';
+            window.location.href = 'parq.html';
         }
 
         window.onload = () => { drawRadar(); animate(); window.addEventListener('resize', drawRadar); };
