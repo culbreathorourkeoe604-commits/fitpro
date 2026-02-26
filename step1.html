@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>LUXIOU | 智能痛点筛查矩阵</title>
+    <style>
+        :root { --primary: #00f2fe; --accent: #00ff88; --danger: #ff4757; --bg: #0b0f19; --surface: #161e2e; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; margin: 0; padding: 0; }
+        
+        body { background: var(--bg); color: #e2e8f0; font-family: "DIN Alternate", -apple-system, sans-serif; display: flex; flex-direction: column; height: 100svh; overflow: hidden; }
+        
+        /* 顶部导航 */
+        .header-brand { flex: 0 0 60px; width: 100%; display: flex; align-items: center; justify-content: center; background: rgba(11, 15, 25, 0.95); z-index: 50; border-bottom: 1px solid rgba(0,242,254,0.3); box-shadow: 0 4px 20px rgba(0,0,0,0.5); position: relative; }
+        .brand-text { font-size: 18px; font-weight: 900; color: #fff; letter-spacing: 2px; text-shadow: 0 0 10px rgba(0,242,254,0.8); }
+        .step-badge { position: absolute; right: 15px; background: rgba(0,242,254,0.1); border: 1px solid var(--primary); color: var(--primary); font-size: 10px; padding: 4px 8px; border-radius: 12px; font-weight: bold; }
+
+        /* 核心雷达展示区 */
+        .radar-section { flex: 0 0 240px; position: relative; display: flex; align-items: center; justify-content: center; background: radial-gradient(circle at center, rgba(30, 41, 59, 0.8) 0%, var(--bg) 100%); border-bottom: 1px solid rgba(255,255,255,0.05); }
+        #radarCanvas { width: 100%; height: 100%; position: absolute; top: 0; left: 0; z-index: 1; }
+        
+        /* 风险指数浮窗 */
+        .risk-panel { position: absolute; left: 20px; top: 20px; z-index: 2; display: flex; flex-direction: column; }
+        .risk-label { font-size: 10px; color: #94a3b8; font-weight: bold; letter-spacing: 1px; }
+        .risk-score { font-size: 36px; font-weight: 900; color: var(--accent); text-shadow: 0 0 15px rgba(0,255,136,0.4); transition: color 0.3s; line-height: 1; margin-top: 4px; }
+        .risk-score.high { color: var(--danger); text-shadow: 0 0 15px rgba(255,71,87,0.5); }
+
+        /* 交互题库区 */
+        .matrix-scroll { flex: 1; overflow-y: auto; padding: 20px 15px 100px 15px; scrollbar-width: none; }
+        .matrix-scroll::-webkit-scrollbar { display: none; }
+        
+        .question-group { margin-bottom: 25px; animation: slideUp 0.5s ease forwards; opacity: 0; transform: translateY(20px); }
+        .question-group:nth-child(1) { animation-delay: 0.1s; }
+        .question-group:nth-child(2) { animation-delay: 0.2s; }
+        .question-group:nth-child(3) { animation-delay: 0.3s; }
+        
+        .q-title { font-size: 14px; font-weight: 900; color: #fff; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+        .q-title::before { content: ''; display: block; width: 4px; height: 14px; background: var(--primary); border-radius: 2px; box-shadow: 0 0 8px var(--primary); }
+        
+        .tags-grid { display: flex; flex-wrap: wrap; gap: 10px; }
+        .tag-btn { 
+            background: rgba(30, 41, 59, 0.5); border: 1px solid rgba(255,255,255,0.1); 
+            color: #94a3b8; padding: 10px 16px; border-radius: 12px; font-size: 13px; font-weight: 600; 
+            transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); user-select: none; 
+        }
+        .tag-btn.active { 
+            background: rgba(0, 242, 254, 0.1); border-color: var(--primary); color: #fff; 
+            box-shadow: 0 0 15px rgba(0,242,254,0.3); transform: scale(1.05); 
+        }
+        .tag-btn.danger.active { 
+            background: rgba(255, 71, 87, 0.1); border-color: var(--danger); 
+            box-shadow: 0 0 15px rgba(255,71,87,0.3); 
+        }
+
+        /* 底部操作台 */
+        .bottom-action { position: fixed; bottom: 0; left: 0; width: 100%; padding: 15px 20px 25px 20px; background: linear-gradient(to top, rgba(11,15,25,1) 50%, rgba(11,15,25,0)); z-index: 100; pointer-events: none; }
+        .btn-generate { 
+            pointer-events: auto; width: 100%; background: var(--primary); color: #000; 
+            border: none; padding: 16px; border-radius: 16px; font-size: 16px; font-weight: 900; 
+            box-shadow: 0 8px 25px rgba(0,242,254,0.4); display: flex; justify-content: center; align-items: center; gap: 8px;
+            transition: transform 0.2s;
+        }
+        .btn-generate:active { transform: scale(0.96); }
+
+        @keyframes slideUp { to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+    <div class="header-brand">
+        <div class="brand-text">LUXIOU 智能筛查矩阵</div>
+        <div class="step-badge">STEP 01</div>
+    </div>
+
+    <div class="radar-section">
+        <div class="risk-panel">
+            <span class="risk-label">身体机能健康度</span>
+            <div class="risk-score" id="scoreDisplay">95</div>
+        </div>
+        <canvas id="radarCanvas"></canvas>
+    </div>
+
+    <div class="matrix-scroll">
+        <div class="question-group">
+            <div class="q-title">日常作息与习惯 (Lifestyle)</div>
+            <div class="tags-grid">
+                <div class="tag-btn" data-impact='{"meta":-15, "core":-10}' onclick="toggleTag(this)">💻 长期久坐办公</div>
+                <div class="tag-btn" data-impact='{"meta":-20, "joint":-5}' onclick="toggleTag(this)">🌙 经常熬夜/失眠</div>
+                <div class="tag-btn" data-impact='{"meta":-15}' onclick="toggleTag(this)">🍻 频繁应酬饮酒</div>
+                <div class="tag-btn" data-impact='{"meta":-20}' onclick="toggleTag(this)">🍰 重度甜食控</div>
+                <div class="tag-btn" data-impact='{"posture":-15}' onclick="toggleTag(this)">📱 长期低头玩手机</div>
+            </div>
+        </div>
+
+        <div class="question-group">
+            <div class="q-title">骨骼与疼痛反馈 (Pain Points)</div>
+            <div class="tags-grid">
+                <div class="tag-btn danger" data-impact='{"posture":-30, "joint":-10}' onclick="toggleTag(this, true)">⚡ 颈肩频繁酸胀</div>
+                <div class="tag-btn danger" data-impact='{"core":-25, "posture":-15}' onclick="toggleTag(this, true)">⚡ 极易腰酸背痛</div>
+                <div class="tag-btn danger" data-impact='{"joint":-30, "core":-10}' onclick="toggleTag(this, true)">⚡ 膝盖弹响或不适</div>
+                <div class="tag-btn danger" data-impact='{"posture":-20}' onclick="toggleTag(this, true)">⚡ 感觉高低肩/长短腿</div>
+                <div class="tag-btn danger" data-impact='{"core":-30}' onclick="toggleTag(this, true)">⚡ 产后漏尿/核心松弛</div>
+            </div>
+        </div>
+
+        <div class="question-group">
+            <div class="q-title">首要蜕变目标 (Primary Goal)</div>
+            <div class="tags-grid">
+                <div class="tag-btn" data-goal="fatloss" onclick="toggleTag(this)">🔥 极速减脂塑形</div>
+                <div class="tag-btn" data-goal="posture" onclick="toggleTag(this)">📐 体态与骨骼纠正</div>
+                <div class="tag-btn" data-goal="muscle" onclick="toggleTag(this)">💪 增肌与线条雕刻</div>
+                <div class="tag-btn" data-goal="postpartum" onclick="toggleTag(this)">👼 产后机能修复</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="bottom-action">
+        <button class="btn-generate" onclick="generateReport()">
+            <span style="font-size: 20px;">⚡</span> 生成全息诊断档案
+        </button>
+    </div>
+
+    <script>
+        // --- 核心雷达图引擎 ---
+        const canvas = document.getElementById('radarCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        // 5大核心维度
+        const labels = ["核心稳定", "关节健康", "基础代谢", "体态排列", "肌肉均衡"];
+        const maxScore = 100;
+        
+        // 初始满血状态
+        let currentScores = { core: 95, joint: 95, meta: 95, posture: 95, muscle: 95 };
+        // 动画目标状态
+        let targetScores = { core: 95, joint: 95, meta: 95, posture: 95, muscle: 95 };
+
+        function drawRadar() {
+            canvas.width = canvas.parentElement.offsetWidth;
+            canvas.height = canvas.parentElement.offsetHeight;
+            const w = canvas.width, h = canvas.height;
+            const centerX = w / 2 + 40; // 雷达图偏右一点，给左侧分数留空间
+            const centerY = h / 2;
+            const radius = Math.min(w, h) / 2 * 0.65;
+            const sides = 5;
+
+            ctx.clearRect(0, 0, w, h);
+
+            // 绘制底图网格 (赛博朋克风)
+            ctx.lineWidth = 1;
+            for (let level = 1; level <= 4; level++) {
+                ctx.beginPath();
+                for (let i = 0; i < sides; i++) {
+                    let angle = (Math.PI * 2 * i) / sides - Math.PI / 2;
+                    let x = centerX + radius * (level / 4) * Math.cos(angle);
+                    let y = centerY + radius * (level / 4) * Math.sin(angle);
+                    if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+                }
+                ctx.closePath();
+                ctx.strokeStyle = `rgba(0, 242, 254, ${0.1 * level})`;
+                ctx.stroke();
+            }
+
+            // 绘制轴线和标签
+            ctx.fillStyle = "#64748b";
+            ctx.font = "bold 10px sans-serif";
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            for (let i = 0; i < sides; i++) {
+                let angle = (Math.PI * 2 * i) / sides - Math.PI / 2;
+                let x = centerX + radius * Math.cos(angle);
+                let y = centerY + radius * Math.sin(angle);
+                
+                ctx.beginPath(); ctx.moveTo(centerX, centerY); ctx.lineTo(x, y);
+                ctx.strokeStyle = "rgba(255,255,255,0.05)"; ctx.stroke();
+
+                // 标签位置偏移
+                let labelX = centerX + (radius + 20) * Math.cos(angle);
+                let labelY = centerY + (radius + 15) * Math.sin(angle);
+                ctx.fillText(labels[i], labelX, labelY);
+            }
+
+            // 绘制动态数据多边形
+            ctx.beginPath();
+            const keys = ['core', 'joint', 'meta', 'posture', 'muscle'];
+            keys.forEach((key, i) => {
+                let angle = (Math.PI * 2 * i) / sides - Math.PI / 2;
+                let val = Math.max(20, currentScores[key]); // 最低20分保底，防图形崩溃
+                let x = centerX + radius * (val / maxScore) * Math.cos(angle);
+                let y = centerY + radius * (val / maxScore) * Math.sin(angle);
+                if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+            });
+            ctx.closePath();
+            
+            // 危险红色预警 vs 健康青色
+            let totalScore = Object.values(currentScores).reduce((a,b)=>a+b, 0) / 5;
+            if(totalScore < 60) {
+                ctx.fillStyle = "rgba(255, 71, 87, 0.3)";
+                ctx.strokeStyle = "var(--danger)";
+                ctx.shadowColor = "var(--danger)";
+            } else {
+                ctx.fillStyle = "rgba(0, 242, 254, 0.3)";
+                ctx.strokeStyle = "var(--primary)";
+                ctx.shadowColor = "var(--primary)";
+            }
+            ctx.shadowBlur = 15;
+            ctx.lineWidth = 2;
+            ctx.fill(); ctx.stroke();
+            ctx.shadowBlur = 0; // 重置阴影
+        }
+
+        // 动画循环：让分数和图形平滑过渡
+        function animate() {
+            let needsUpdate = false;
+            const keys = ['core', 'joint', 'meta', 'posture', 'muscle'];
+            keys.forEach(key => {
+                let diff = targetScores[key] - currentScores[key];
+                if (Math.abs(diff) > 0.5) {
+                    currentScores[key] += diff * 0.15; // 缓动速度
+                    needsUpdate = true;
+                }
+            });
+
+            if (needsUpdate) {
+                drawRadar();
+                updateTotalScore();
+            }
+            requestAnimationFrame(animate);
+        }
+
+        function updateTotalScore() {
+            let total = Object.values(currentScores).reduce((a,b)=>a+b, 0) / 5;
+            let display = document.getElementById('scoreDisplay');
+            display.innerText = Math.round(total);
+            if(total < 60) {
+                display.classList.add('high');
+            } else {
+                display.classList.remove('high');
+            }
+        }
+
+        // --- 交互逻辑 ---
+        function toggleTag(el, isDanger = false) {
+            el.classList.toggle('active');
+            if(isDanger && el.classList.contains('active')) {
+                el.classList.add('danger');
+            }
+
+            // 重新计算分数
+            recalculateScores();
+        }
+
+        function recalculateScores() {
+            // 重置为满血
+            let newScores = { core: 95, joint: 95, meta: 95, posture: 95, muscle: 95 };
+            
+            document.querySelectorAll('.tag-btn.active').forEach(tag => {
+                let impactStr = tag.getAttribute('data-impact');
+                if(impactStr) {
+                    let impact = JSON.parse(impactStr);
+                    for(let key in impact) {
+                        newScores[key] += impact[key]; // 扣分
+                    }
+                }
+                // 如果没有明确写明扣分的，随机扣除一点肌肉均衡，制造轻微变化
+                if(!impactStr && !tag.getAttribute('data-goal')) {
+                    newScores.muscle -= 5;
+                }
+            });
+
+            targetScores = newScores;
+        }
+
+        function generateReport() {
+            let goals = [];
+            document.querySelectorAll('.tag-btn.active[data-goal]').forEach(t => goals.push(t.innerText));
+            if(goals.length === 0) {
+                alert("请至少选择一项您的【首要蜕变目标】！");
+                return;
+            }
+
+            let finalScore = document.getElementById('scoreDisplay').innerText;
+            
+            // 震动反馈 (部分手机支持)
+            if (navigator.vibrate) navigator.vibrate(50);
+            
+            let btn = document.querySelector('.btn-generate');
+            btn.innerHTML = "⏳ 正在生成全息节点...";
+            btn.style.background = "#fff";
+            
+            setTimeout(() => {
+                // 这里可以写跳转逻辑：比如 window.location.href = 'v16_index.html'
+                alert(`筛查完毕！机能健康度：${finalScore}分。\n接下来将带您进入 LUXIOU 舱进行实体全息扫描。`);
+                btn.innerHTML = "<span style='font-size: 20px;'>⚡</span> 生成全息诊断档案";
+                btn.style.background = "var(--primary)";
+            }, 1000);
+        }
+
+        // 初始化
+        window.onload = () => {
+            drawRadar();
+            animate();
+            
+            // 监听窗口大小变化，重绘雷达图防拉伸
+            window.addEventListener('resize', drawRadar);
+        };
+    </script>
+</body>
+</html>
