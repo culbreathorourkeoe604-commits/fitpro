@@ -3,51 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>LUXIOU | 数字化全息档案 V10.0</title>
+    <title>LUXIOU | 数字化全息档案 V10.1</title>
     <style>
         :root { --primary: #00f2fe; --accent: #00ff88; --bg: #0b0f19; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
         body { background: var(--bg); color: #e2e8f0; font-family: -apple-system, sans-serif; margin: 0; padding: 0; overflow: hidden; touch-action: none; }
         
-        /* 顶部品牌 */
         .header-brand { position: fixed; top: 0; left: 0; width: 100%; height: 50px; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.85); backdrop-filter: blur(10px); z-index: 5000; border-bottom: 2px solid var(--primary); }
         .brand-text { font-size: 20px; font-weight: 900; color: #fff; letter-spacing: 2px; text-shadow: 0 0 10px var(--primary); }
         .back-btn { position: absolute; left: 15px; color: #fff; text-decoration: none; font-size: 12px; border: 1px solid #444; padding: 5px 12px; border-radius: 20px; }
 
         .app-wrap { width: 100vw; height: 100vh; display: flex; flex-direction: column; padding: 10px; padding-top: 55px; }
 
-        /* 标题栏补全并高亮 */
         .category-box { display: flex; gap: 8px; overflow-x: auto; margin-bottom: 10px; padding-bottom: 5px; scrollbar-width: none; }
         .cat-item { flex: 0 0 auto; padding: 8px 16px; background: #161e2e; border-radius: 10px; font-size: 13px; color: #fff; border: 1px solid #444; font-weight: bold; }
         .cat-item.active { background: var(--primary); color: #000; border-color: #fff; box-shadow: 0 0 15px var(--primary); }
 
-        /* 核心诊断区 */
         .stage-area { position: relative; flex: 1; width: 100%; display: flex; gap: 4px; margin-bottom: 10px; }
         .params-side { flex: 0 0 90px; display: flex; flex-direction: column; }
-        .param-card { flex: 1; background: rgba(11, 15, 25, 0.9); border-bottom: 1px solid rgba(255,255,255,0.05); padding: 5px; display: flex; flex-direction: column; justify-content: center; position: relative; overflow: hidden; }
+        .param-card { flex: 1; background: rgba(11, 15, 25, 0.9); border-bottom: 1px solid rgba(255,255,255,0.05); padding: 5px; display: flex; flex-direction: column; justify-content: center; position: relative; }
         .card-l { border-left: 4px solid #fff; }
         .card-r { border-right: 4px solid var(--primary); text-align: right; }
         .param-card label { font-size: 9px; color: #aaa; margin-bottom: 2px; pointer-events: none; }
         
-        /* 极简无感滚动数值 */
-        .mini-wheel { color: var(--primary); font-size: 18px; font-weight: 900; height: 24px; line-height: 24px; cursor: ns-resize; user-select: none; }
+        /* 交互数值区 */
+        .mini-wheel { color: var(--primary); font-size: 18px; font-weight: 900; height: 24px; line-height: 24px; cursor: ns-resize; user-select: none; border-radius: 4px; background: rgba(0,242,254,0.05); }
 
         .main-viewer { flex: 1; background: #000; border-radius: 15px; position: relative; overflow: hidden; border: 1.5px solid #333; }
         .img-layer { position: absolute; width: 100%; height: 100%; background-size: contain; background-repeat: no-repeat; background-position: center; transition: 0.3s; }
         #laserCanvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 100; touch-action: none; }
 
-        /* 控制面板 */
         .control-panel { background: rgba(16, 24, 39, 0.9); border-radius: 20px; padding: 12px; border: 1px solid rgba(255,255,255,0.1); }
         .zoom-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 8px; }
-        .zoom-item { font-size: 10px; color: var(--primary); font-weight: bold; }
         input[type=range] { width: 100%; -webkit-appearance: none; background: #1a2234; height: 5px; border-radius: 3px; }
-        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 22px; background: #fff; border: 3px solid var(--primary); border-radius: 50%; box-shadow: 0 0 10px var(--primary); }
+        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 22px; background: #fff; border: 3px solid var(--primary); border-radius: 50%; }
 
         .btn-group { display: grid; grid-template-columns: 1fr 1fr 1.2fr; gap: 10px; margin-top: 5px; }
         .lux-btn { background: #1a2234; border: 1px solid #333; padding: 10px; border-radius: 10px; color: #fff; font-size: 11px; font-weight: bold; text-align: center; }
         .btn-save { background: var(--primary); color: #000; border: none; box-shadow: 0 0 15px var(--primary); }
 
-        /* 左滑删除列表样式 */
         #vault { height: 90px; overflow-y: auto; margin-top: 10px; border-top: 1px solid #222; }
         .v-item-wrap { position: relative; overflow: hidden; margin-top: 6px; border-radius: 8px; }
         .v-item-content { position: relative; z-index: 2; background: #161e2e; padding: 12px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #333; transition: transform 0.3s ease; }
@@ -74,8 +68,8 @@
 
         <div class="control-panel">
             <div class="zoom-row">
-                <div class="zoom-item">前照缩放 <input type="range" min="50" max="300" value="100" oninput="zoom('layB', this.value)"></div>
-                <div class="zoom-item">后照缩放 <input type="range" min="50" max="300" value="100" oninput="zoom('layA', this.value)"></div>
+                <div><small style="color:var(--primary);font-size:9px">前缩放</small> <input type="range" min="50" max="300" value="100" oninput="zoom('layB', this.value)"></div>
+                <div><small style="color:var(--primary);font-size:9px">后缩放</small> <input type="range" min="50" max="300" value="100" oninput="zoom('layA', this.value)"></div>
             </div>
             <input type="range" min="0" max="100" value="0" id="fadeSlider" style="margin-bottom:10px;">
             <div class="btn-group">
@@ -103,6 +97,30 @@
             hip: { name: "蜜桃臀", labels: ["臀围维度", "臀线高度", "大腿围度", "核心稳定性", "臀中肌厚", "侧向支撑"] }
         };
 
+        // 重新设计的数值调整逻辑：修复滑动卡死
+        function initMiniWheel(el) {
+            let startY = 0;
+            let startVal = 0;
+
+            el.addEventListener('touchstart', e => {
+                startY = e.touches[0].clientY;
+                startVal = parseFloat(el.innerText) || 0;
+                e.stopPropagation();
+            }, { passive: false });
+
+            el.addEventListener('touchmove', e => {
+                const delta = (startY - e.touches[0].clientY) * 0.15; // 调整灵敏度
+                el.innerText = (startVal + delta).toFixed(1);
+                e.preventDefault();
+            }, { passive: false });
+
+            // 增加点击手动修改功能作为备份
+            el.addEventListener('dblclick', () => {
+                const newVal = prompt("手动输入数值", el.innerText);
+                if (newVal !== null) el.innerText = parseFloat(newVal).toFixed(1);
+            });
+        }
+
         function draw() {
             canvas.width = canvas.offsetWidth; canvas.height = canvas.offsetHeight;
             ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -113,17 +131,6 @@
                 ctx.beginPath(); ctx.moveTo(canvas.width, boxY); ctx.lineTo(pt.x*canvas.width, pt.y*canvas.height); ctx.stroke();
                 ctx.setLineDash([]); ctx.fillStyle = "#00ff88"; ctx.beginPath();
                 ctx.arc(pt.x*canvas.width, pt.y*canvas.height, 6, 0, Math.PI*2); ctx.fill();
-            });
-        }
-
-        // 核心优化：纯手势数值滚轮（无遮挡，无弹窗）
-        function initMiniWheel(el) {
-            let startY = 0, startVal = 0;
-            el.addEventListener('touchstart', e => { startY = e.touches[0].clientY; startVal = parseFloat(el.innerText); e.stopPropagation(); });
-            el.addEventListener('touchmove', e => {
-                const delta = (startY - e.touches[0].clientY) * 0.1;
-                el.innerText = (startVal + delta).toFixed(1);
-                e.preventDefault();
             });
         }
 
@@ -163,22 +170,22 @@
         
         function saveCase() {
             const name = prompt("存档名"); if(!name) return;
-            const vault = JSON.parse(localStorage.getItem('LUX_V10_DB') || '[]');
+            const vault = JSON.parse(localStorage.getItem('LUX_V10_1_DB') || '[]');
             const preVals = Array.from(document.querySelectorAll('.card-l .mini-wheel')).map(s => s.innerText);
             const postVals = Array.from(document.querySelectorAll('.card-r .mini-wheel')).map(s => s.innerText);
             vault.unshift({ id: Date.now(), name, type: document.querySelector('.cat-item.active').innerText, imgB: document.getElementById('layB').style.backgroundImage, imgA: document.getElementById('layA').style.backgroundImage, anchors, preVals, postVals });
-            localStorage.setItem('LUX_V10_DB', JSON.stringify(vault)); renderVault();
+            localStorage.setItem('LUX_V10_1_DB', JSON.stringify(vault)); renderVault();
         }
 
         function deleteItem(id) {
-            let vault = JSON.parse(localStorage.getItem('LUX_V10_DB') || '[]');
+            let vault = JSON.parse(localStorage.getItem('LUX_V10_1_DB') || '[]');
             vault = vault.filter(i => i.id !== id);
-            localStorage.setItem('LUX_V10_DB', JSON.stringify(vault));
+            localStorage.setItem('LUX_V10_1_DB', JSON.stringify(vault));
             renderVault();
         }
 
         function loadCase(id) {
-            const v = JSON.parse(localStorage.getItem('LUX_V10_DB') || '[]').find(x => x.id === id);
+            const v = JSON.parse(localStorage.getItem('LUX_V10_1_DB') || '[]').find(x => x.id === id);
             if(v) {
                 document.getElementById('layB').style.backgroundImage = v.imgB; document.getElementById('layA').style.backgroundImage = v.imgA;
                 anchors = v.anchors; 
@@ -188,24 +195,22 @@
             }
         }
 
-        // 渲染列表并注入左滑手势
         function renderVault() {
-            const v = JSON.parse(localStorage.getItem('LUX_V10_DB') || '[]');
+            const v = JSON.parse(localStorage.getItem('LUX_V10_1_DB') || '[]');
             const container = document.getElementById('vault');
             container.innerHTML = v.map(i => `
                 <div class="v-item-wrap" data-id="${i.id}">
                     <div class="delete-btn" onclick="deleteItem(${i.id})">删除</div>
                     <div class="v-item-content" ontouchstart="swipeStart(event)" ontouchmove="swipeMove(event)" ontouchend="swipeEnd(event)">
-                        <span><b>${i.name}</b> (${i.type})</span>
-                        <button onclick="loadCase(${i.id})" style="background:var(--primary); border:none; padding:6px 15px; border-radius:6px; font-weight:bold;">调取</button>
+                        <span><b>${i.name}</b> <small>(${i.type})</small></span>
+                        <button onclick="loadCase(${i.id})" style="background:var(--primary); border:none; padding:6px 12px; border-radius:6px; font-weight:bold;">载入</button>
                     </div>
                 </div>
             `).join('');
         }
 
-        // 左滑手势逻辑
         let swipeX = 0;
-        function swipeStart(e) { swipeX = e.touches[0].clientX; }
+        function swipeStart(e) { swipeX = e.touches[0].clientX; e.stopPropagation(); }
         function swipeMove(e) {
             let diff = e.touches[0].clientX - swipeX;
             if (diff < 0 && diff > -70) e.currentTarget.style.transform = `translateX(${diff}px)`;
