@@ -16,7 +16,6 @@
         .brand-text { font-size: 18px; font-weight: 900; color: #fff; letter-spacing: 2px; }
         .step-badge { position: absolute; right: 15px; background: rgba(217, 83, 79, 0.1); border: 1px solid var(--danger); color: var(--danger); font-size: 10px; padding: 4px 8px; border-radius: 12px; font-weight: bold; }
 
-        /* 绝对隔离的防重叠排版 */
         .radar-section { flex: 0 0 auto; display: flex; flex-direction: column; background: radial-gradient(circle at center, rgba(20, 20, 24, 0.9) 0%, var(--bg) 100%); border-bottom: 1px solid rgba(255,255,255,0.03); padding-top: 15px; }
         .score-board { display: flex; justify-content: space-between; align-items: flex-start; padding: 0 20px; z-index: 2; height: 65px;}
         .score-info { display: flex; flex-direction: column; }
@@ -44,17 +43,28 @@
         .ans-btn.no.active { background: rgba(226, 192, 124, 0.08); border-color: var(--primary); color: var(--primary); }
         .ans-btn.yes.active { background: rgba(217, 83, 79, 0.08); border-color: var(--danger); color: var(--danger); box-shadow: inset 0 0 10px rgba(217, 83, 79, 0.15); }
 
+        /* 全新签名结果展示区 */
         .signature-section { margin-top: 30px; padding: 20px; background: var(--surface); border-radius: 12px; border: 1px solid rgba(255,255,255,0.03); }
-        .sig-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .sig-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
         .sig-title { font-size: 13px; font-weight: bold; color: #D1D5DB; }
-        .btn-clear { background: transparent; border: 1px solid #475569; color: #8A92A3; font-size: 11px; padding: 4px 10px; border-radius: 4px; }
-        #sigCanvas { width: 100%; height: 120px; background: rgba(255,255,255,0.01); border: 1px dashed #475569; border-radius: 8px; touch-action: none; }
+        .sig-result-box { width: 100%; height: 100px; background: rgba(255,255,255,0.02); border: 1px dashed #475569; border-radius: 8px; display: flex; align-items: center; justify-content: center; overflow: hidden; cursor: pointer; transition: 0.3s; }
+        .sig-result-box:active { background: rgba(255,255,255,0.05); }
+        .sig-placeholder { color: var(--primary); font-size: 13px; font-weight: bold; letter-spacing: 1px; }
+        #sigResultImg { width: 100%; height: 100%; object-fit: contain; display: none; filter: drop-shadow(0 0 2px rgba(226, 192, 124, 0.5)); }
 
         .bottom-action { position: fixed; bottom: 0; left: 0; width: 100%; padding: 15px 20px 25px 20px; background: linear-gradient(to top, rgba(10,10,12,1) 60%, rgba(10,10,12,0)); z-index: 10; pointer-events: none;}
         .btn-generate { pointer-events: auto; width: 100%; background: linear-gradient(135deg, #E2C07C, #D4AF37); color: #0A0A0C; border: none; padding: 16px; border-radius: 12px; font-size: 15px; font-weight: 900; box-shadow: 0 8px 20px rgba(226, 192, 124, 0.2); display: flex; justify-content: center; align-items: center; gap: 8px; }
 
-        .poster-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 9999; flex-direction: column; align-items: center; justify-content: center; padding: 20px; opacity: 0; transition: opacity 0.3s; }
-        .poster-overlay.active { display: flex; opacity: 1; }
+        /* 🚀 全屏签字版 Modal */
+        .sig-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #0A0A0C; z-index: 100000; flex-direction: column; }
+        .sig-modal-header { height: 60px; display: flex; align-items: center; justify-content: center; color: var(--primary); font-weight: bold; font-size: 16px; border-bottom: 1px solid rgba(226,192,124,0.2); background: #141418; }
+        #fullscreenSigCanvas { flex: 1; width: 100%; touch-action: none; background: #0A0A0C; }
+        .sig-modal-footer { height: 80px; display: flex; gap: 15px; padding: 15px 20px; background: #141418; border-top: 1px solid rgba(255,255,255,0.05); }
+        .modal-btn { flex: 1; padding: 12px; border-radius: 8px; font-size: 15px; font-weight: bold; border: none; }
+        .modal-btn.cancel { background: #2A2A35; color: #8A92A3; }
+        .modal-btn.confirm { background: var(--primary); color: #0A0A0C; }
+
+        .poster-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 99999; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
         .poster-scroll-area { max-height: 70vh; width: 100%; overflow-y: auto; border-radius: 12px; border: 1px solid var(--danger); box-shadow: 0 10px 40px rgba(217, 83, 79, 0.2); }
         .poster-scroll-area::-webkit-scrollbar { display: none; }
         .poster-img { width: 100%; display: block; }
@@ -87,14 +97,23 @@
             <div id="questionContainer"></div>
 
             <div class="signature-section">
-                <div class="sig-header">
-                    <span class="sig-title">客户电子签名确认</span>
-                    <button class="btn-clear" onclick="clearSignature()">重新签名</button>
+                <div class="sig-header"><span class="sig-title">客户全屏电子签名确认</span></div>
+                <div class="sig-result-box" onclick="openSigPad()">
+                    <span class="sig-placeholder" id="sigPlaceholder">👉 点击此处 全屏手写签名</span>
+                    <img id="sigResultImg" src="">
                 </div>
-                <canvas id="sigCanvas"></canvas>
             </div>
         </div>
     </div> 
+
+    <div class="sig-modal" id="sigModal">
+        <div class="sig-modal-header">请在下方空白区域手写签名（同意安全须知）</div>
+        <canvas id="fullscreenSigCanvas"></canvas>
+        <div class="sig-modal-footer">
+            <button class="modal-btn cancel" onclick="clearSig()">清除重写</button>
+            <button class="modal-btn confirm" onclick="saveSig()">确认签名</button>
+        </div>
+    </div>
 
     <div class="bottom-action" id="actionBtnGroup">
         <button class="btn-generate" onclick="generatePoster()">
@@ -228,7 +247,6 @@
             requestAnimationFrame(animate);
         }
 
-        // 🚀 彻底修复死锁 bug，强制四舍五入
         function updateRiskLabel() {
             let curSum = Object.values(curScores).reduce((a,b)=>a+b, 0);
             let totalDeduction = Math.round(500 - curSum); 
@@ -264,30 +282,60 @@
             tgtScores = newS;
         }
 
-        const sigCanvas = document.getElementById('sigCanvas');
-        const sigCtx = sigCanvas.getContext('2d');
-        let isDrawing = false;
-        function initSignature() {
-            const rect = sigCanvas.parentElement.getBoundingClientRect();
+        // 🚀 全屏签字版逻辑
+        const fSigCanvas = document.getElementById('fullscreenSigCanvas');
+        const fSigCtx = fSigCanvas.getContext('2d');
+        let fIsDrawing = false;
+
+        function openSigPad() {
+            let modal = document.getElementById('sigModal');
+            modal.style.display = 'flex'; // 强制全屏显示
+            
+            // 获取全屏尺寸初始化 Canvas
             const dpr = window.devicePixelRatio || 1;
-            sigCanvas.width = rect.width * dpr; sigCanvas.height = 120 * dpr;
-            sigCtx.scale(dpr, dpr); sigCtx.lineWidth = 3; sigCtx.lineCap = 'round'; sigCtx.strokeStyle = '#E2C07C';
+            fSigCanvas.width = fSigCanvas.clientWidth * dpr; 
+            fSigCanvas.height = fSigCanvas.clientHeight * dpr;
+            fSigCtx.scale(dpr, dpr); 
+            fSigCtx.lineWidth = 4; // 加粗更有气场
+            fSigCtx.lineCap = 'round'; 
+            fSigCtx.strokeStyle = '#E2C07C'; // 铂金墨水
+            fSigCtx.clearRect(0, 0, fSigCanvas.width, fSigCanvas.height);
         }
-        function getPos(e) {
-            const rect = sigCanvas.getBoundingClientRect();
+
+        function getFPos(e) {
+            const rect = fSigCanvas.getBoundingClientRect();
             const x = e.touches ? e.touches[0].clientX : e.clientX;
             const y = e.touches ? e.touches[0].clientY : e.clientY;
             return { x: x - rect.left, y: y - rect.top };
         }
-        sigCanvas.addEventListener('mousedown', e => { isDrawing = true; const p = getPos(e); sigCtx.beginPath(); sigCtx.moveTo(p.x, p.y); });
-        sigCanvas.addEventListener('mousemove', e => { if(isDrawing){ const p = getPos(e); sigCtx.lineTo(p.x, p.y); sigCtx.stroke(); }});
-        sigCanvas.addEventListener('mouseup', () => isDrawing = false); sigCanvas.addEventListener('mouseout', () => isDrawing = false);
-        sigCanvas.addEventListener('touchstart', e => { e.preventDefault(); isDrawing = true; const p = getPos(e); sigCtx.beginPath(); sigCtx.moveTo(p.x, p.y); }, {passive: false});
-        sigCanvas.addEventListener('touchmove', e => { e.preventDefault(); if(isDrawing){ const p = getPos(e); sigCtx.lineTo(p.x, p.y); sigCtx.stroke(); }}, {passive: false});
-        sigCanvas.addEventListener('touchend', () => isDrawing = false);
-        function clearSignature() { sigCtx.clearRect(0, 0, sigCanvas.width, sigCanvas.height); }
+
+        fSigCanvas.addEventListener('mousedown', e => { fIsDrawing = true; const p = getFPos(e); fSigCtx.beginPath(); fSigCtx.moveTo(p.x, p.y); });
+        fSigCanvas.addEventListener('mousemove', e => { if(fIsDrawing){ const p = getFPos(e); fSigCtx.lineTo(p.x, p.y); fSigCtx.stroke(); }});
+        fSigCanvas.addEventListener('mouseup', () => fIsDrawing = false); 
+        fSigCanvas.addEventListener('mouseout', () => fIsDrawing = false);
+
+        fSigCanvas.addEventListener('touchstart', e => { e.preventDefault(); fIsDrawing = true; const p = getFPos(e); fSigCtx.beginPath(); fSigCtx.moveTo(p.x, p.y); }, {passive: false});
+        fSigCanvas.addEventListener('touchmove', e => { e.preventDefault(); if(fIsDrawing){ const p = getFPos(e); fSigCtx.lineTo(p.x, p.y); fSigCtx.stroke(); }}, {passive: false});
+        fSigCanvas.addEventListener('touchend', () => fIsDrawing = false);
+
+        function clearSig() { 
+            fSigCtx.clearRect(0, 0, fSigCanvas.width, fSigCanvas.height); 
+        }
+
+        function saveSig() {
+            // 将全屏画布保存为图片放回主屏幕
+            let dataUrl = fSigCanvas.toDataURL("image/png");
+            document.getElementById('sigResultImg').src = dataUrl;
+            document.getElementById('sigResultImg').style.display = 'block';
+            document.getElementById('sigPlaceholder').style.display = 'none';
+            document.getElementById('sigModal').style.display = 'none';
+        }
 
         function generatePoster() {
+            if(document.getElementById('sigPlaceholder').style.display !== 'none') {
+                alert("请点击底部【完成全屏电子签名】后再生成免责底档！"); return;
+            }
+
             if (navigator.vibrate) navigator.vibrate(50);
             let btn = document.querySelector('.btn-generate');
             btn.innerHTML = "⏳ 正在生成带签名的医疗底档..."; btn.style.opacity = "0.7"; document.getElementById('actionBtnGroup').style.display = 'none';
@@ -301,7 +349,7 @@
                 captureArea.style.height = origHeight; scrollArea.style.overflowY = origOverflow; scrollArea.style.flex = origFlex;
                 document.getElementById('actionBtnGroup').style.display = 'block'; btn.innerHTML = "<span style='font-size: 20px;'>🛡️</span> 生成医疗排查底档并保存"; btn.style.opacity = "1";
                 document.getElementById('posterImg').src = canvas.toDataURL("image/jpeg", 0.9);
-                document.getElementById('posterOverlay').classList.add('active');
+                document.getElementById('posterOverlay').style.display = 'flex';
             }).catch(err => {
                 alert("生成档案失败，请重试！"); document.getElementById('actionBtnGroup').style.display = 'block';
                 captureArea.style.height = origHeight; scrollArea.style.overflowY = origOverflow; scrollArea.style.flex = origFlex;
@@ -309,7 +357,7 @@
         }
 
         function goToNextStep() { window.location.href = 'case_detail.html'; }
-        window.onload = () => { drawRadar(); animate(); initSignature(); window.addEventListener('resize', () => { drawRadar(); initSignature(); }); };
+        window.onload = () => { drawRadar(); animate(); window.addEventListener('resize', drawRadar); };
     </script>
 </body>
 </html>
