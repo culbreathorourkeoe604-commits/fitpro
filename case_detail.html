@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>LUXIOU | 全息数字化诊断 V15.0</title>
+    <title>LUXIOU | 全息数字化诊断 V15.1</title>
     <style>
         :root { --primary: #00f2fe; --accent: #00ff88; --danger: #ff4757; --bg: #0b0f19; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
@@ -46,7 +46,6 @@
         .btn-save { background: var(--primary); color: #000; border: none; box-shadow: 0 4px 15px rgba(0,242,254,0.3); }
         .btn-vault { background: transparent; color: var(--primary); border: 1px solid var(--primary); }
 
-        /* 抽屉库保持不变 */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.6); backdrop-filter: blur(5px); z-index: 9999; display: none; flex-direction: column; justify-content: flex-end; opacity: 0; transition: opacity 0.3s ease; }
         .modal-overlay.show { opacity: 1; }
         .vault-drawer { background: rgba(16, 24, 39, 0.98); width: 100%; max-height: 80vh; height: 75vh; border-radius: 24px 24px 0 0; padding: 20px; border-top: 1px solid var(--primary); display: flex; flex-direction: column; box-shadow: 0 -10px 40px rgba(0,242,254,0.15); transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); }
@@ -115,12 +114,7 @@
         const canvas = document.getElementById('laserCanvas');
         const ctx = canvas.getContext('2d');
         
-        // --- 核心：照片位移与缩放的独立状态库 ---
-        let imgState = {
-            layB: { scale: 1, x: 0, y: 0 },
-            layA: { scale: 1, x: 0, y: 0 }
-        };
-
+        let imgState = { layB: { scale: 1, x: 0, y: 0 }, layA: { scale: 1, x: 0, y: 0 } };
         let anchorsB = Array(6).fill(0).map((_, i) => ({ x: 0.5, y: 0.15 + i * 0.14 }));
         let anchorsA = Array(6).fill(0).map((_, i) => ({ x: 0.5, y: 0.15 + i * 0.14 }));
         let draggingIdx = -1;
@@ -136,7 +130,6 @@
             hip: { name: "蜜桃臀", unit: "cm", labels: ["臀围维度", "臀线高度", "大腿围度", "核心稳定", "臀中肌厚", "侧向支撑"], pre: [88.0, 5.2, 54.0, 3.0, 2.0, 15.0], post: [98.0, 2.1, 51.0, 9.0, 8.0, 85.0] }
         };
 
-        // --- 图片变换应用引擎 ---
         function applyTransform(targetId) {
             let s = imgState[targetId];
             document.getElementById(targetId).style.transform = `translate(${s.x}px, ${s.y}px) scale(${s.scale})`;
@@ -226,6 +219,7 @@
             updateDiffs(); draw();
         }
 
+        // 极限压缩，防止爆缓存
         function processImg(i, t) {
             if(i.files[0]){
                 const r = new FileReader();
@@ -233,12 +227,12 @@
                     const img = new Image();
                     img.onload = () => {
                         const canvasTmp = document.createElement('canvas');
-                        const maxW = 800; const scale = maxW / img.width;
+                        const maxW = 600; // 进一步压缩宽度
+                        const scale = maxW / img.width;
                         canvasTmp.width = maxW; canvasTmp.height = img.height * scale;
                         canvasTmp.getContext('2d').drawImage(img, 0, 0, canvasTmp.width, canvasTmp.height);
-                        document.getElementById(t).style.backgroundImage = `url('${canvasTmp.toDataURL('image/jpeg', 0.6)}')`;
+                        document.getElementById(t).style.backgroundImage = `url('${canvasTmp.toDataURL('image/jpeg', 0.5)}')`; // 压缩率调高
                         
-                        // 图片上传后重置其位移和缩放
                         imgState[t] = { scale: 1, x: 0, y: 0 };
                         document.getElementById(t === 'layB' ? 'zoomB' : 'zoomA').value = 100;
                         applyTransform(t); draw();
@@ -249,41 +243,56 @@
             }
         }
         
+        // 修复保存机制 + 容量满溢自动清理
         function saveCase() {
             const name = prompt("输入客户姓名保存："); if(!name) return;
-            const vault = JSON.parse(localStorage.getItem('LUX_V15_DB') || '[]');
+            let vault = JSON.parse(localStorage.getItem('LUX_V15_1_DB') || '[]');
             const preVals = Array.from(document.querySelectorAll('.card-l .mini-wheel')).map(s => s.innerText);
             const postVals = Array.from(document.querySelectorAll('.card-r .mini-wheel')).map(s => s.innerText);
-            vault.unshift({ 
+            
+            const newCase = { 
                 id: Date.now(), name, type: document.querySelector('.cat-item.active').innerText, 
                 imgB: document.getElementById('layB').style.backgroundImage, 
                 imgA: document.getElementById('layA').style.backgroundImage, 
                 anchorsB, anchorsA, preVals, postVals, 
-                imgState: JSON.parse(JSON.stringify(imgState)) // 核心：保存平移缩放数据
-            });
-            localStorage.setItem('LUX_V15_DB', JSON.stringify(vault)); 
-            alert("档案已保存！");
+                imgState: JSON.parse(JSON.stringify(imgState)) 
+            };
+            
+            vault.unshift(newCase);
+
+            try {
+                localStorage.setItem('LUX_V15_1_DB', JSON.stringify(vault));
+                alert("✅ 档案已成功保存！");
+                renderVault();
+            } catch (e) {
+                // 如果存爆了，自动顶掉最老的一个档案
+                alert("⚠️ 存储空间不足！系统将自动清理最旧的1个历史档案以释放空间...");
+                vault.pop(); // 移除最后一条
+                try {
+                    localStorage.setItem('LUX_V15_1_DB', JSON.stringify(vault));
+                    alert("✅ 档案已成功保存！(已覆盖最旧记录)");
+                    renderVault();
+                } catch (err) {
+                    alert("❌ 保存失败，照片体积过大，请手动在档案库中删除几个案例后再试。");
+                }
+            }
         }
 
         function openVault() { renderVault(); const modal = document.getElementById('vaultModal'); modal.style.display = 'flex'; setTimeout(() => modal.classList.add('show'), 10); }
         function closeVault() { const modal = document.getElementById('vaultModal'); modal.classList.remove('show'); setTimeout(() => modal.style.display = 'none', 300); }
-        function deleteItem(id) { let vault = JSON.parse(localStorage.getItem('LUX_V15_DB') || '[]'); vault = vault.filter(i => i.id !== id); localStorage.setItem('LUX_V15_DB', JSON.stringify(vault)); renderVault(); }
+        function deleteItem(id) { let vault = JSON.parse(localStorage.getItem('LUX_V15_1_DB') || '[]'); vault = vault.filter(i => i.id !== id); localStorage.setItem('LUX_V15_1_DB', JSON.stringify(vault)); renderVault(); }
 
         function loadCase(id) {
-            const v = JSON.parse(localStorage.getItem('LUX_V15_DB') || '[]').find(x => x.id === id);
+            const v = JSON.parse(localStorage.getItem('LUX_V15_1_DB') || '[]').find(x => x.id === id);
             if(v) {
                 document.getElementById('layB').style.backgroundImage = v.imgB; document.getElementById('layA').style.backgroundImage = v.imgA;
-                
                 if(v.anchorsB && v.anchorsA) { anchorsB = v.anchorsB; anchorsA = v.anchorsA; }
-                
-                // 恢复位置与缩放
                 if(v.imgState) {
                     imgState = v.imgState;
                     document.getElementById('zoomB').value = imgState.layB.scale * 100;
                     document.getElementById('zoomA').value = imgState.layA.scale * 100;
                     applyTransform('layB'); applyTransform('layA');
                 }
-
                 const lWheel = document.querySelectorAll('.card-l .mini-wheel');
                 const rWheel = document.querySelectorAll('.card-r .mini-wheel');
                 v.preVals.forEach((s, i) => lWheel[i].innerText = s);
@@ -293,7 +302,7 @@
         }
 
         function renderVault() {
-            const v = JSON.parse(localStorage.getItem('LUX_V15_DB') || '[]');
+            const v = JSON.parse(localStorage.getItem('LUX_V15_1_DB') || '[]');
             const list = document.getElementById('vaultList');
             if(v.length === 0) { list.innerHTML = '<div style="text-align:center; color:#64748b; padding-top: 40px;">暂无历史档案</div>'; return; }
             list.innerHTML = v.map(i => `
@@ -312,7 +321,7 @@
         function swipeMove(e) { let diff = e.touches[0].clientX - swipeX; if (diff < 0 && diff > -80) e.currentTarget.style.transform = `translateX(${diff}px)`; }
         function swipeEnd(e) { let diff = e.changedTouches[0].clientX - swipeX; e.currentTarget.style.transform = diff < -40 ? `translateX(-80px)` : `translateX(0)`; }
 
-        // --- 手势引擎重构 (支持单指拖动图片 + 双指缩放 + 拖拽雷达线) ---
+        // --- 手势引擎 ---
         let isPanning = false, isPinching = false;
         let lastPanX = 0, lastPanY = 0, initialPinchDist = 0, initialScale = 1;
         let activeImgId = 'layB';
@@ -330,23 +339,19 @@
             activeImgId = getActiveImgId();
 
             if (e.touches.length === 1) {
-                // 1. 判断是否点中了雷达线锚点
                 let displayPts = anchorsB.map((b, i) => ({ x: b.x * (1 - v) + anchorsA[i].x * v, y: b.y * (1 - v) + anchorsA[i].y * v }));
                 const x = getCoord(e, 'x'); const y = getCoord(e, 'y');
                 draggingIdx = displayPts.findIndex(a => Math.sqrt((a.x-x)**2 + (a.y-y)**2) < 0.08);
                 
                 if(draggingIdx !== -1) {
-                    // 吸附逻辑
                     if(v <= 0.5) { slider.value = 0; document.getElementById('layA').style.opacity = 0; document.getElementById('layB').style.opacity = 1; } 
                     else { slider.value = 100; document.getElementById('layA').style.opacity = 1; document.getElementById('layB').style.opacity = 0; }
                     draw(); e.preventDefault(); 
                 } else {
-                    // 没有点中锚点，进入【图片单指拖拽】模式
                     isPanning = true;
                     lastPanX = e.touches[0].clientX; lastPanY = e.touches[0].clientY;
                 }
             } else if (e.touches.length === 2) {
-                // 进入【图片双指缩放】模式
                 isPinching = true; draggingIdx = -1; isPanning = false;
                 initialPinchDist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
                 initialScale = imgState[activeImgId].scale;
@@ -357,19 +362,16 @@
             activeImgId = getActiveImgId();
 
             if(draggingIdx !== -1) {
-                // 拖动雷达线
                 let targetSet = document.getElementById('fadeSlider').value < 50 ? anchorsB : anchorsA;
                 targetSet[draggingIdx] = { x: Math.max(0, Math.min(1, getCoord(e, 'x'))), y: Math.max(0, Math.min(1, getCoord(e, 'y'))) };
                 draw(); e.preventDefault();
             } else if (isPanning && e.touches.length === 1) {
-                // 单指拖拽图片
                 let dx = e.touches[0].clientX - lastPanX;
                 let dy = e.touches[0].clientY - lastPanY;
                 imgState[activeImgId].x += dx; imgState[activeImgId].y += dy;
                 lastPanX = e.touches[0].clientX; lastPanY = e.touches[0].clientY;
                 applyTransform(activeImgId); e.preventDefault();
             } else if (isPinching && e.touches.length === 2) {
-                // 双指捏合图片
                 let currentDist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
                 let scaleDiff = currentDist / initialPinchDist;
                 let newScale = Math.max(0.5, Math.min(3, initialScale * scaleDiff));
