@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>LUXIOU | 90天高定推演路线图</title>
+    <style>
+        /* 顶级哑光奢华配色 */
+        :root { --primary: #D4AF37; --accent: #C5A059; --bg: #050505; --surface: #121212; --text-main: #E2E8F0; --text-sub: #8A92A3; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; margin: 0; padding: 0; }
+        
+        body { background: var(--bg); color: var(--text-main); font-family: "DIN Alternate", "Helvetica Neue", sans-serif; overflow-y: auto; -webkit-font-smoothing: antialiased; }
+        
+        .header-brand { width: 100%; height: 60px; display: flex; align-items: center; justify-content: center; background: rgba(5, 5, 5, 0.95); border-bottom: 1px solid rgba(212, 175, 55, 0.15); position: sticky; top: 0; z-index: 50; backdrop-filter: blur(10px); }
+        .brand-text { font-size: 18px; font-weight: 900; color: var(--primary); letter-spacing: 2px; }
+        .step-badge { position: absolute; right: 15px; background: rgba(212, 175, 55, 0.05); border: 1px solid var(--primary); color: var(--primary); font-size: 10px; padding: 4px 8px; border-radius: 12px; font-weight: bold; }
+
+        /* 顶部处理动画区 */
+        .processing-header { padding: 25px 20px 15px 20px; background: radial-gradient(circle at top, rgba(20, 20, 24, 0.8) 0%, var(--bg) 100%); border-bottom: 1px solid rgba(255,255,255,0.03); }
+        .sys-status { font-size: 11px; color: var(--primary); letter-spacing: 2px; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; text-transform: uppercase;}
+        .sys-status::before { content: ''; display: inline-block; width: 6px; height: 6px; background: var(--primary); border-radius: 50%; box-shadow: 0 0 8px var(--primary); animation: blink 1s infinite; }
+        .main-title { font-size: 26px; font-weight: 900; margin-bottom: 5px; color: #fff; letter-spacing: 1px; }
+        .sub-title { font-size: 12px; color: var(--text-sub); line-height: 1.5; }
+
+        @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
+
+        /* 时间轴主区域 */
+        .timeline-container { padding: 25px 20px 120px 20px; position: relative; }
+        
+        /* 贯穿的拉丝金主轴线 */
+        .timeline-line { position: absolute; left: 35px; top: 30px; bottom: 120px; width: 2px; background: rgba(255,255,255,0.05); }
+        .timeline-progress { position: absolute; top: 0; left: 0; width: 100%; background: linear-gradient(to bottom, var(--primary), var(--accent)); transition: height 0.5s ease-out; }
+
+        /* 阶段卡片 */
+        .phase-block { display: flex; margin-bottom: 40px; position: relative; opacity: 0.3; transform: translateY(20px); transition: all 0.6s cubic-bezier(0.2, 0.8, 0.2, 1); }
+        .phase-block.active { opacity: 1; transform: translateY(0); }
+        
+        /* 左侧时间节点 */
+        .phase-left { width: 30px; flex-shrink: 0; display: flex; justify-content: center; position: relative; z-index: 2; }
+        .phase-dot { width: 14px; height: 14px; background: var(--bg); border: 2px solid #444; border-radius: 50%; margin-top: 5px; transition: all 0.4s; }
+        .phase-block.active .phase-dot { border-color: var(--primary); background: var(--primary); box-shadow: 0 0 15px rgba(212, 175, 55, 0.4); }
+
+        /* 右侧内容面板 */
+        .phase-right { flex: 1; padding-left: 20px; }
+        .day-label { font-size: 11px; color: var(--primary); font-weight: 900; letter-spacing: 1px; margin-bottom: 4px; text-transform: uppercase; }
+        .phase-card { background: var(--surface); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 18px; margin-top: 8px; position: relative; overflow: hidden; }
+        .phase-block.active .phase-card { border-color: rgba(212, 175, 55, 0.3); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        
+        /* 装饰背景光 */
+        .phase-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 2px; background: linear-gradient(90deg, transparent, var(--primary), transparent); opacity: 0; transition: 0.5s; }
+        .phase-block.active .phase-card::before { opacity: 1; }
+
+        .phase-title { font-size: 18px; font-weight: 900; color: #fff; margin-bottom: 10px; }
+        .phase-desc { font-size: 13px; color: var(--text-sub); line-height: 1.6; margin-bottom: 15px; }
+        
+        .tag-row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 15px; }
+        .tech-tag { font-size: 11px; font-weight: bold; background: rgba(255,255,255,0.03); color: #ccc; padding: 4px 8px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.05); }
+        .phase-block.active .tech-tag { background: rgba(212, 175, 55, 0.08); border-color: rgba(212, 175, 55, 0.2); color: var(--primary); }
+
+        /* 数据指标横条 */
+        .data-bar-group { margin-top: 10px; }
+        .data-item { margin-bottom: 8px; }
+        .data-label { display: flex; justify-content: space-between; font-size: 11px; color: #888; font-weight: bold; margin-bottom: 4px; }
+        .bar-bg { width: 100%; height: 4px; background: #222; border-radius: 2px; overflow: hidden; }
+        .bar-fill { height: 100%; background: var(--primary); width: 0%; transition: width 1s ease-out 0.3s; }
+
+        /* 底部成单按钮 */
+        .bottom-action { position: fixed; bottom: 0; left: 0; width: 100%; padding: 15px 20px 25px 20px; background: linear-gradient(to top, rgba(5,5,5,1) 70%, rgba(5,5,5,0)); z-index: 10; }
+        .btn-generate { width: 100%; background: linear-gradient(135deg, #D4AF37, #AA8A2A); color: #000; border: none; padding: 16px; border-radius: 12px; font-size: 16px; font-weight: 900; display: flex; justify-content: center; align-items: center; gap: 8px; box-shadow: 0 4px 20px rgba(212, 175, 55, 0.25); cursor: pointer;}
+        .btn-generate:active { transform: scale(0.98); }
+    </style>
+</head>
+<body>
+
+    <div class="header-brand">
+        <div class="brand-text">LUXIOU 定制推演</div>
+        <div class="step-badge">推演阶段</div>
+    </div>
+
+    <div class="processing-header">
+        <div class="sys-status">System Analyzing ... 100%</div>
+        <div class="main-title">90天全息蜕变路线图</div>
+        <div class="sub-title">基于您的骨骼数据与医学排查结果，AI 系统已为您生成以下三阶段科学重塑方案。</div>
+    </div>
+
+    <div class="timeline-container" id="timelineBox">
+        <div class="timeline-line">
+            <div class="timeline-progress" id="timeProgress"></div>
+        </div>
+
+        <div class="phase-block" data-progress="25" data-fill1="85" data-fill2="100">
+            <div class="phase-left"><div class="phase-dot"></div></div>
+            <div class="phase-right">
+                <div class="day-label">Phase 01 / Day 1 - 30</div>
+                <div class="phase-card">
+                    <div class="phase-title">结构重建与机能唤醒</div>
+                    <div class="phase-desc">停止错误发力！首月核心目标是解除疼痛代偿，回正骨盆与脊柱力学，彻底打开限制您代谢的枷锁。</div>
+                    <div class="tag-row">
+                        <div class="tech-tag">筋膜彻底松解</div>
+                        <div class="tech-tag">骨骼排列回正</div>
+                        <div class="tech-tag">深层核心激活</div>
+                    </div>
+                    <div class="data-bar-group">
+                        <div class="data-item">
+                            <div class="data-label"><span>疼痛代偿消除率</span><span>85%</span></div>
+                            <div class="bar-bg"><div class="bar-fill fill-target-1"></div></div>
+                        </div>
+                        <div class="data-item">
+                            <div class="data-label"><span>关节活动度恢复</span><span>100%</span></div>
+                            <div class="bar-bg"><div class="bar-fill fill-target-2"></div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="phase-block" data-progress="65" data-fill1="90" data-fill2="75">
+            <div class="phase-left"><div class="phase-dot"></div></div>
+            <div class="phase-right">
+                <div class="day-label">Phase 02 / Day 31 - 60</div>
+                <div class="phase-card">
+                    <div class="phase-title">极速燃脂与代谢重置</div>
+                    <div class="phase-desc">在健康骨架的基础上，引入复合力量与高阶心肺训练。将身体打造成“24小时持续燃脂的火炉”。</div>
+                    <div class="tag-row">
+                        <div class="tech-tag">EPOC 后燃效应</div>
+                        <div class="tech-tag">大肌群复合做功</div>
+                        <div class="tech-tag">糖脂代谢跃迁</div>
+                    </div>
+                    <div class="data-bar-group">
+                        <div class="data-item">
+                            <div class="data-label"><span>基础代谢提升率</span><span>+ 15%</span></div>
+                            <div class="bar-bg"><div class="bar-fill fill-target-1"></div></div>
+                        </div>
+                        <div class="data-item">
+                            <div class="data-label"><span>内脏脂肪剥离进度</span><span>75%</span></div>
+                            <div class="bar-bg"><div class="bar-fill fill-target-2"></div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="phase-block" data-progress="100" data-fill1="95" data-fill2="100">
+            <div class="phase-left"><div class="phase-dot"></div></div>
+            <div class="phase-right">
+                <div class="day-label">Phase 03 / Day 61 - 90</div>
+                <div class="phase-card">
+                    <div class="phase-title">线条精雕与抗复发固化</div>
+                    <div class="phase-desc">最后的冲刺！针对目标部位（直角肩、马甲线、蜜桃臀）进行肌纤维肥大训练，并将健康体态永久固化。</div>
+                    <div class="tag-row">
+                        <div class="tech-tag">局部神经募集</div>
+                        <div class="tech-tag">肌张力重新分配</div>
+                        <div class="tech-tag">机能永久固化</div>
+                    </div>
+                    <div class="data-bar-group">
+                        <div class="data-item">
+                            <div class="data-label"><span>线条清晰度显现</span><span>95%</span></div>
+                            <div class="bar-bg"><div class="bar-fill fill-target-1"></div></div>
+                        </div>
+                        <div class="data-item">
+                            <div class="data-label"><span>体态抗反弹固化率</span><span>100%</span></div>
+                            <div class="bar-bg"><div class="bar-fill fill-target-2"></div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="bottom-action">
+        <button class="btn-generate" onclick="goToPrice()">
+            <span style="font-size: 20px;">💎</span> 获取您的专属黑金报价
+        </button>
+    </div>
+
+    <script>
+        // 🚀 页面滚动监听引擎：控制主轴生长与卡片点亮
+        const timelineBox = document.getElementById('timelineBox');
+        const timeProgress = document.getElementById('timeProgress');
+        const blocks = document.querySelectorAll('.phase-block');
+
+        function checkScroll() {
+            let triggerBottom = window.innerHeight * 0.8; // 屏幕 80% 位置为触发线
+            let currentProgress = 0;
+
+            blocks.forEach((block, index) => {
+                const blockTop = block.getBoundingClientRect().top;
+                
+                if (blockTop < triggerBottom) {
+                    block.classList.add('active');
+                    currentProgress = block.getAttribute('data-progress');
+                    
+                    // 触发卡片内部的数据条动画
+                    let fill1 = block.getAttribute('data-fill1');
+                    let fill2 = block.getAttribute('data-fill2');
+                    block.querySelector('.fill-target-1').style.width = fill1 + '%';
+                    block.querySelector('.fill-target-2').style.width = fill2 + '%';
+                } else {
+                    block.classList.remove('active');
+                    block.querySelector('.fill-target-1').style.width = '0%';
+                    block.querySelector('.fill-target-2').style.width = '0%';
+                }
+            });
+
+            // 更新左侧主光柱的高度
+            timeProgress.style.height = currentProgress + '%';
+        }
+
+        // 绑定滚动事件
+        window.addEventListener('scroll', checkScroll);
+        
+        // 页面加载完成后延迟 300ms 触发第一次动画，拉满科技感
+        window.onload = () => {
+            setTimeout(checkScroll, 300);
+        };
+
+        // 跳转至最终报价页面
+        function goToPrice() {
+            // 给按钮加点反馈动画
+            let btn = document.querySelector('.btn-generate');
+            btn.innerHTML = "⏳ 正在生成核算...";
+            btn.style.opacity = "0.8";
+            
+            setTimeout(() => {
+                window.location.href = 'price.html';
+            }, 600);
+        }
+    </script>
+</body>
+</html>
