@@ -6,7 +6,6 @@
     <title>LUXIOU | 智能痛点筛查矩阵</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
-        /* 顶级哑光奢华配色：拉丝金、勃艮第红、曜石黑 */
         :root { --primary: #D4AF37; --accent: #C5A059; --danger: #B22222; --bg: #050505; --surface: #121212; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; margin: 0; padding: 0; }
         
@@ -43,7 +42,6 @@
         .tag-btn.danger.active { background: rgba(178, 34, 34, 0.15); border-color: var(--danger); color: #fff; }
         .tag-btn.custom-add { border: 1px dashed #444; color: #888; background: transparent; grid-column: span 2; padding: 12px; }
         
-        /* 合同级白皮书签名区 */
         .signature-section { margin-top: 30px; padding: 20px 15px; background: var(--surface); border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); }
         .sig-header { font-size: 12px; font-weight: bold; color: #888; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px; }
         .contract-line { width: 100%; border-bottom: 1px solid #444; position: relative; height: 60px; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 5px; cursor: pointer; }
@@ -54,20 +52,20 @@
         .bottom-action { position: fixed; bottom: 0; left: 0; width: 100%; padding: 15px 20px 25px 20px; background: linear-gradient(to top, rgba(5,5,5,1) 60%, rgba(5,5,5,0)); z-index: 10; }
         .btn-generate { width: 100%; background: linear-gradient(135deg, #D4AF37, #AA8A2A); color: #000; border: none; padding: 16px; border-radius: 12px; font-size: 16px; font-weight: 900; display: flex; justify-content: center; align-items: center; gap: 8px; box-shadow: 0 4px 15px rgba(212, 175, 55, 0.2); }
 
-        /* 🚀 彻底修复的输入弹窗，强力唤醒键盘 */
         .input-modal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.9); z-index: 9999999; flex-direction: column; align-items: center; justify-content: center; }
         .input-box { background: #121212; width: 85%; max-width: 350px; padding: 25px; border-radius: 16px; border: 1px solid rgba(212, 175, 55, 0.3); }
         .input-title { color: #fff; font-size: 15px; font-weight: bold; margin-bottom: 20px; text-align: center; }
-        .custom-input { width: 100%; padding: 16px; background: #1a1a1a; border: 1px solid #D4AF37; color: #fff; border-radius: 8px; font-size: 16px; margin-bottom: 25px; outline: none; -webkit-user-select: auto !important; user-select: auto !important; }
-        .custom-input:focus { box-shadow: 0 0 10px rgba(212, 175, 55, 0.3); }
+        .custom-input { width: 100%; padding: 16px; background: #050505; border: 1px solid #444; color: #fff; border-radius: 8px; font-size: 16px; margin-bottom: 25px; outline: none; -webkit-appearance: none; appearance: none; -webkit-user-select: text !important; user-select: text !important; pointer-events: auto !important; z-index: 99999999; }
+        .custom-input:focus { border-color: var(--primary); }
         .modal-btns { display: flex; gap: 15px; }
         .modal-btn { flex: 1; padding: 14px; border-radius: 8px; font-size: 15px; font-weight: bold; border: none; }
         .modal-btn.cancel { background: #222; color: #888; }
         .modal-btn.confirm { background: var(--primary); color: #000; }
 
-        /* 白皮书全屏签字版 */
-        .sig-modal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #fff; z-index: 9999999; flex-direction: column; }
-        .sig-modal-header { height: 70px; display: flex; align-items: center; justify-content: center; color: #000; font-weight: 900; font-size: 18px; border-bottom: 1px solid #ddd; background: #f8f9fa; letter-spacing: 2px;}
+        /* 🚀 极度稳定的白皮书全屏签字版 */
+        .sig-modal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #fff; z-index: 9999999; flex-direction: column; overflow: hidden; overscroll-behavior: none; }
+        .sig-modal-header { height: 70px; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; color: #000; font-weight: 900; font-size: 16px; border-bottom: 1px solid #ddd; background: #f8f9fa; }
+        .btn-close-sig { font-size: 24px; color: #888; background: none; border: none; font-weight: bold; padding: 0 10px; }
         #fullscreenSigCanvas { flex: 1; width: 100%; touch-action: none; background: #fff; }
         .sig-modal-footer { height: 90px; display: flex; gap: 15px; padding: 20px; background: #f8f9fa; border-top: 1px solid #eee; }
         .sig-btn { flex: 1; padding: 14px; border-radius: 8px; font-size: 16px; font-weight: bold; border: none; }
@@ -107,44 +105,44 @@
             <div class="question-group">
                 <div class="q-title">一、职业与作息 (Occupation & Lifestyle)</div>
                 <div class="tags-grid">
-                    <div class="tag-btn" data-impact='{"meta":-10, "posture":-15}' onclick="toggleTag(this)">💻 极度久坐伏案</div>
-                    <div class="tag-btn" data-impact='{"joint":-15, "muscle":-10}' onclick="toggleTag(this)">🧍‍♀️ 长期站立/高跟鞋</div>
-                    <div class="tag-btn" data-impact='{"meta":-15, "core":-5}' onclick="toggleTag(this)">🥂 频繁应酬/高压</div>
-                    <div class="tag-btn" data-impact='{"posture":-10, "meta":-15}' onclick="toggleTag(this)">🌙 经常熬夜/昼夜颠倒</div>
-                    <div class="tag-btn custom-add" data-impact='{"meta":-10, "posture":-10}' onclick="openInput(this, false, '请输入特异性职业/作息：')">➕ 手动录入特异性职业/作息</div>
+                    <div class="tag-btn" data-impact='{"meta":-10, "posture":-10}' onclick="toggleTag(this)">💻 极度久坐伏案</div>
+                    <div class="tag-btn" data-impact='{"joint":-10, "muscle":-5}' onclick="toggleTag(this)">🧍‍♀️ 长期站立/高跟鞋</div>
+                    <div class="tag-btn" data-impact='{"meta":-10, "core":-5}' onclick="toggleTag(this)">🥂 频繁应酬/高压</div>
+                    <div class="tag-btn" data-impact='{"posture":-10, "meta":-5}' onclick="toggleTag(this)">🌙 经常熬夜/昼夜颠倒</div>
+                    <div class="tag-btn custom-add" onclick="openInput(this, '{\"meta\":-10, \"posture\":-10}', false, '请输入特异性职业/作息：')">➕ 手动录入特异性职业/作息</div>
                 </div>
             </div>
 
             <div class="question-group">
                 <div class="q-title">二、饮食与代谢 (Metabolism)</div>
                 <div class="tags-grid">
-                    <div class="tag-btn" data-impact='{"meta":-20}' onclick="toggleTag(this)">🍰 重度甜食奶茶控</div>
-                    <div class="tag-btn" data-impact='{"meta":-15}' onclick="toggleTag(this)">🍔 三餐外卖/重油盐</div>
-                    <div class="tag-btn" data-impact='{"meta":-10}' onclick="toggleTag(this)">💧 极少饮水(单日&lt;1L)</div>
-                    <div class="tag-btn" data-impact='{"meta":-20, "muscle":-10}' onclick="toggleTag(this)">🍽️ 长期极端节食</div>
-                    <div class="tag-btn custom-add" data-impact='{"meta":-15}' onclick="openInput(this, false, '请输入特殊饮食习惯：')">➕ 手动录入不良饮食结构</div>
+                    <div class="tag-btn" data-impact='{"meta":-15}' onclick="toggleTag(this)">🍰 重度甜食奶茶控</div>
+                    <div class="tag-btn" data-impact='{"meta":-10}' onclick="toggleTag(this)">🍔 三餐外卖/重油盐</div>
+                    <div class="tag-btn" data-impact='{"meta":-5}' onclick="toggleTag(this)">💧 极少饮水(单日&lt;1L)</div>
+                    <div class="tag-btn" data-impact='{"meta":-15, "muscle":-10}' onclick="toggleTag(this)">🍽️ 长期极端节食</div>
+                    <div class="tag-btn custom-add" onclick="openInput(this, '{\"meta\":-10}', false, '请输入特殊饮食习惯：')">➕ 手动录入不良饮食结构</div>
                 </div>
             </div>
 
             <div class="question-group">
                 <div class="q-title">三、运动与伤病史 (Sports & Injuries)</div>
                 <div class="tags-grid">
-                    <div class="tag-btn danger" data-impact='{"muscle":-20, "core":-10}' onclick="toggleTag(this, true)">🚫 几乎零运动基础</div>
-                    <div class="tag-btn danger" data-impact='{"core":-25, "posture":-10}' onclick="toggleTag(this, true)">👼 产后未系统康复</div>
-                    <div class="tag-btn danger" data-impact='{"joint":-25, "muscle":-15}' onclick="toggleTag(this, true)">🩹 骨骼/关节曾受损</div>
-                    <div class="tag-btn danger" data-impact='{"posture":-20}' onclick="toggleTag(this, true)">⚖️ 习惯单侧发力翘腿</div>
-                    <div class="tag-btn custom-add" data-impact='{"joint":-25, "muscle":-15, "core":-10}' onclick="openInput(this, true, '请输入具体伤病：')">➕ 手动录入特异性伤病史</div>
+                    <div class="tag-btn danger" data-impact='{"muscle":-15, "core":-10}' onclick="toggleTag(this, true)">🚫 几乎零运动基础</div>
+                    <div class="tag-btn danger" data-impact='{"core":-15, "posture":-10}' onclick="toggleTag(this, true)">👼 产后未系统康复</div>
+                    <div class="tag-btn danger" data-impact='{"joint":-20, "muscle":-10}' onclick="toggleTag(this, true)">🩹 骨骼/关节曾受损</div>
+                    <div class="tag-btn danger" data-impact='{"posture":-15}' onclick="toggleTag(this, true)">⚖️ 习惯单侧发力翘腿</div>
+                    <div class="tag-btn custom-add" onclick="openInput(this, '{\"joint\":-20, \"muscle\":-10}', true, '请输入具体伤病：')">➕ 手动录入特异性伤病史</div>
                 </div>
             </div>
 
             <div class="question-group">
                 <div class="q-title">四、疼痛与不适 (Pain Points)</div>
                 <div class="tags-grid">
-                    <div class="tag-btn danger" data-impact='{"posture":-30, "joint":-10}' onclick="toggleTag(this, true)">⚡ 颈肩频繁酸胀</div>
-                    <div class="tag-btn danger" data-impact='{"core":-25, "posture":-15}' onclick="toggleTag(this, true)">⚡ 极易腰酸背痛</div>
-                    <div class="tag-btn danger" data-impact='{"joint":-30, "core":-10}' onclick="toggleTag(this, true)">⚡ 膝盖弹响不适</div>
-                    <div class="tag-btn danger" data-impact='{"posture":-20, "core":-15}' onclick="toggleTag(this, true)">⚡ 骨盆前倾/塌腰</div>
-                    <div class="tag-btn custom-add" data-impact='{"joint":-20, "posture":-15}' onclick="openInput(this, true, '请输入具体不适部位：')">➕ 手动录入其他体态/疼痛感</div>
+                    <div class="tag-btn danger" data-impact='{"posture":-20, "joint":-10}' onclick="toggleTag(this, true)">⚡ 颈肩频繁酸胀</div>
+                    <div class="tag-btn danger" data-impact='{"core":-20, "posture":-10}' onclick="toggleTag(this, true)">⚡ 极易腰酸背痛</div>
+                    <div class="tag-btn danger" data-impact='{"joint":-25, "core":-5}' onclick="toggleTag(this, true)">⚡ 膝盖弹响不适</div>
+                    <div class="tag-btn danger" data-impact='{"posture":-15, "core":-10}' onclick="toggleTag(this, true)">⚡ 骨盆前倾/塌腰</div>
+                    <div class="tag-btn custom-add" onclick="openInput(this, '{\"joint\":-15, \"posture\":-15}', true, '请输入具体不适部位：')">➕ 手动录入其他体态/疼痛感</div>
                 </div>
             </div>
 
@@ -155,14 +153,14 @@
                     <div class="tag-btn" data-goal="posture" onclick="toggleTag(this)">📐 体态与骨骼纠正</div>
                     <div class="tag-btn" data-goal="muscle" onclick="toggleTag(this)">💪 增肌与线条雕刻</div>
                     <div class="tag-btn" data-goal="health" onclick="toggleTag(this)">❤️ 亚健康/心肺提升</div>
-                    <div class="tag-btn custom-add" onclick="openInput(this, false, '请输入您的定制目标：')">➕ 手动录入专属定制目标</div>
+                    <div class="tag-btn custom-add" onclick="openInput(this, null, false, '请输入您的定制目标：')">➕ 手动录入专属定制目标</div>
                 </div>
             </div>
 
             <div class="signature-section">
                 <div class="sig-header">Client Signature / 客户签字授权</div>
                 <div class="contract-line" onclick="openSigPad()">
-                    <span id="sigPlaceholder" class="pulse-text">点击此处 全屏手写签名</span>
+                    <span id="sigPlaceholder" class="pulse-text">点击全屏手写签名</span>
                     <img id="sigResultImg" src="">
                 </div>
             </div>
@@ -173,7 +171,7 @@
     <div class="input-modal" id="customInputModal">
         <div class="input-box">
             <div class="input-title" id="customInputTitle">请输入内容</div>
-            <input type="text" class="custom-input" id="customInputField" placeholder="在此输入...">
+            <input type="text" class="custom-input" id="customInputField" placeholder="在此输入..." ontouchstart="this.focus()">
             <div class="modal-btns">
                 <button class="modal-btn cancel" onclick="closeInput()">取消</button>
                 <button class="modal-btn confirm" onclick="confirmInput()">确认添加</button>
@@ -182,7 +180,10 @@
     </div>
 
     <div class="sig-modal" id="sigModal">
-        <div class="sig-modal-header">请在下方空白处签署您的姓名</div>
+        <div class="sig-modal-header">
+            <span>请在下方空白处签署您的姓名</span>
+            <button class="btn-close-sig" onclick="closeSigPad()">×</button>
+        </div>
         <canvas id="fullscreenSigCanvas"></canvas>
         <div class="sig-modal-footer">
             <button class="sig-btn cancel" onclick="clearSig()">清除重写</button>
@@ -210,12 +211,11 @@
         let currentScores = { core: 95, joint: 95, meta: 95, posture: 95, muscle: 95 };
         let targetScores = { core: 95, joint: 95, meta: 95, posture: 95, muscle: 95 };
 
-        // 🚀 强化的雷达渲染逻辑，杜绝死机
         function drawRadar() {
             if(!canvas) return;
             const dpr = window.devicePixelRatio || 1;
             const rect = canvas.parentElement.getBoundingClientRect();
-            if(rect.width === 0) return; // 防止页面未渲染时报错
+            if(rect.width === 0) return; 
             
             canvas.width = rect.width * dpr; canvas.height = rect.height * dpr;
             ctx.scale(dpr, dpr);
@@ -286,11 +286,11 @@
             display.innerText = total;
             
             if(total >= 85) {
-                display.className = "risk-score"; tag.className = "status-tag"; tag.innerText = "机能状态优良 | 继续保持";
+                display.className = "risk-score"; tag.className = "status-tag"; tag.innerText = "机能优良 | 具备高阶训练条件";
             } else if (total >= 70) {
-                display.className = "risk-score"; tag.className = "status-tag warn"; tag.innerText = "亚健康预警 | 需系统干预";
+                display.className = "risk-score"; tag.className = "status-tag warn"; tag.innerText = "机能亚健康 | 需定制针对性康复训练";
             } else {
-                display.className = "risk-score high"; tag.className = "status-tag crit"; tag.innerText = "机能亮红灯 | 极易引发损伤";
+                display.className = "risk-score high"; tag.className = "status-tag crit"; tag.innerText = "体征预警 | 需严密监测与医疗级干预";
             }
         }
 
@@ -300,26 +300,20 @@
             recalculateScores();
         }
 
-        // 🚀 核心修复：纯粹读取属性，绝不污染 HTML
         let activeBtn = null, activeImpact = null, activeDanger = false;
-        
-        function openInput(btn, isDanger, title) {
+        function openInput(btn, impactStr, isDanger, title) {
             activeBtn = btn;
             activeImpact = btn.getAttribute('data-impact');
             activeDanger = isDanger;
-            
             document.getElementById('customInputTitle').innerText = title;
             const inputField = document.getElementById('customInputField');
             inputField.value = '';
-            
             document.getElementById('customInputModal').style.display = 'flex';
         }
-        
         function closeInput() { 
             document.getElementById('customInputField').blur();
             document.getElementById('customInputModal').style.display = 'none'; 
         }
-        
         function confirmInput() {
             let text = document.getElementById('customInputField').value;
             if(text && text.trim() !== "") {
@@ -328,16 +322,11 @@
                 newTag.style.gridColumn = "span 1"; 
                 if(activeImpact) { newTag.setAttribute('data-impact', activeImpact); }
                 else { newTag.setAttribute('data-goal', 'custom'); }
-                
                 newTag.innerHTML = `${activeDanger ? '⚠️' : '✨'} ${text.trim()}`;
                 newTag.onclick = function() { toggleTag(this, activeDanger); };
-                
                 activeBtn.parentNode.insertBefore(newTag, activeBtn);
-                recalculateScores(); 
-                closeInput();
-            } else { 
-                alert("请先输入内容！"); 
-            }
+                recalculateScores(); closeInput();
+            } else { alert("内容不能为空哦"); }
         }
 
         function recalculateScores() {
@@ -350,25 +339,28 @@
             targetScores = newScores;
         }
 
-        // 🚀 白皮书全屏签字板
+        // 🚀 防乱飘签字版
         const fSigCanvas = document.getElementById('fullscreenSigCanvas');
         const fSigCtx = fSigCanvas.getContext('2d');
         let fIsDrawing = false;
 
         function openSigPad() {
+            // 锁定背景滑动
+            document.body.style.overflow = 'hidden'; 
             let modal = document.getElementById('sigModal');
             modal.style.display = 'flex';
             const dpr = window.devicePixelRatio || 1;
             fSigCanvas.width = fSigCanvas.clientWidth * dpr; 
             fSigCanvas.height = fSigCanvas.clientHeight * dpr;
             fSigCtx.scale(dpr, dpr); 
-            
             fSigCtx.fillStyle = "#ffffff";
             fSigCtx.fillRect(0, 0, fSigCanvas.width, fSigCanvas.height);
+            fSigCtx.lineWidth = 5; fSigCtx.lineCap = 'round'; fSigCtx.strokeStyle = '#000000'; 
+        }
 
-            fSigCtx.lineWidth = 5; 
-            fSigCtx.lineCap = 'round'; 
-            fSigCtx.strokeStyle = '#000000'; // 万宝龙黑墨水
+        function closeSigPad() {
+            document.body.style.overflow = 'auto'; // 解除锁定
+            document.getElementById('sigModal').style.display = 'none';
         }
 
         function getFPos(e) {
@@ -380,39 +372,32 @@
 
         fSigCanvas.addEventListener('mousedown', e => { fIsDrawing = true; const p = getFPos(e); fSigCtx.beginPath(); fSigCtx.moveTo(p.x, p.y); });
         fSigCanvas.addEventListener('mousemove', e => { if(fIsDrawing){ const p = getFPos(e); fSigCtx.lineTo(p.x, p.y); fSigCtx.stroke(); }});
-        fSigCanvas.addEventListener('mouseup', () => fIsDrawing = false); 
-        fSigCanvas.addEventListener('mouseout', () => fIsDrawing = false);
-
+        fSigCanvas.addEventListener('mouseup', () => fIsDrawing = false); fSigCanvas.addEventListener('mouseout', () => fIsDrawing = false);
+        // 关键防止画布默认滑动
         fSigCanvas.addEventListener('touchstart', e => { e.preventDefault(); fIsDrawing = true; const p = getFPos(e); fSigCtx.beginPath(); fSigCtx.moveTo(p.x, p.y); }, {passive: false});
         fSigCanvas.addEventListener('touchmove', e => { e.preventDefault(); if(fIsDrawing){ const p = getFPos(e); fSigCtx.lineTo(p.x, p.y); fSigCtx.stroke(); }}, {passive: false});
-        fSigCanvas.addEventListener('touchend', () => fIsDrawing = false);
+        fSigCanvas.addEventListener('touchend', e => { e.preventDefault(); fIsDrawing = false; }, {passive: false});
 
-        function clearSig() { 
-            fSigCtx.fillStyle = "#ffffff";
-            fSigCtx.fillRect(0, 0, fSigCanvas.width, fSigCanvas.height); 
-        }
+        function clearSig() { fSigCtx.fillStyle = "#ffffff"; fSigCtx.fillRect(0, 0, fSigCanvas.width, fSigCanvas.height); }
 
         function saveSig() {
             let dataUrl = fSigCanvas.toDataURL("image/png");
             document.getElementById('sigResultImg').src = dataUrl;
             document.getElementById('sigResultImg').style.display = 'block';
             document.getElementById('sigPlaceholder').style.display = 'none';
-            document.getElementById('sigModal').style.display = 'none';
+            closeSigPad();
         }
 
         function generatePoster() {
             let goals = []; document.querySelectorAll('.tag-btn.active[data-goal]').forEach(t => goals.push(t.innerText));
             if(goals.length === 0) { alert("请在第五项选择或输入一个【蜕变目标】！"); return; }
             if(document.getElementById('sigPlaceholder').style.display !== 'none') {
-                alert("请点击底部【完成全屏签字】后再生成报告！"); return;
+                alert("请点击底部【完成手写签名】后再生成报告！"); return;
             }
-
             if (navigator.vibrate) navigator.vibrate(50);
             let btn = document.querySelector('.btn-generate');
-            btn.innerHTML = "⏳ 正在生成..."; btn.style.opacity = "0.7"; document.getElementById('actionBtnGroup').style.display = 'none';
-            
+            btn.innerHTML = "⏳ 正在生成档案..."; btn.style.opacity = "0.7"; document.getElementById('actionBtnGroup').style.display = 'none';
             let captureArea = document.getElementById('capture-area');
-            
             html2canvas(captureArea, { backgroundColor: "#050505", scale: 2 }).then(canvas => {
                 document.getElementById('actionBtnGroup').style.display = 'block'; btn.innerHTML = "<span style='font-size: 20px;'>📸</span> 生成诊断报告并存档"; btn.style.opacity = "1";
                 document.getElementById('posterImg').src = canvas.toDataURL("image/jpeg", 0.9);
@@ -421,14 +406,8 @@
                 alert("生成失败，请重试！"); document.getElementById('actionBtnGroup').style.display = 'block';
             });
         }
-
         function goToNextStep() { window.location.href = 'parq.html'; }
-        
-        // 确保雷达图能正确加载
-        window.onload = () => { 
-            setTimeout(() => { drawRadar(); animate(); }, 100);
-            window.addEventListener('resize', drawRadar); 
-        };
+        window.onload = () => { setTimeout(() => { drawRadar(); animate(); }, 100); window.addEventListener('resize', drawRadar); };
     </script>
 </body>
 </html>
