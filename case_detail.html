@@ -5,52 +5,60 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>LUXIOU | 全息诊断与方案库</title>
     <style>
-        /* 铂金高定配色：拉丝金、黑曜石 */
+        /* 铂金高定配色 */
         :root { --primary: #D4AF37; --accent: #C5A059; --danger: #B22222; --bg: #050505; --surface: #121212; --text-main: #E2E8F0; --text-sub: #8A92A3; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; margin: 0; padding: 0; }
         
         body { background: var(--bg); color: var(--text-main); font-family: "DIN Alternate", "Helvetica Neue", sans-serif; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
         
-        /* 顶部导航 */
         .header-brand { width: 100%; height: 60px; display: flex; align-items: center; justify-content: center; background: rgba(5, 5, 5, 0.95); position: sticky; top: 0; z-index: 50; }
         .brand-text { font-size: 18px; font-weight: 900; color: var(--primary); letter-spacing: 2px; }
         
-        /* 核心：双标签切换栏 */
         .tab-nav { display: flex; width: 100%; background: var(--bg); border-bottom: 1px solid rgba(255,255,255,0.05); position: sticky; top: 60px; z-index: 40; }
         .tab-btn { flex: 1; text-align: center; padding: 15px 0; font-size: 14px; font-weight: bold; color: var(--text-sub); transition: 0.3s; position: relative; }
         .tab-btn.active { color: var(--primary); }
         .tab-btn::after { content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 0; height: 3px; background: var(--primary); transition: 0.3s; border-radius: 3px 3px 0 0; }
         .tab-btn.active::after { width: 40%; }
 
-        /* 内容区容器 */
         .content-area { width: 100%; padding-bottom: 120px; }
         .tab-content { display: none; animation: fadeIn 0.4s ease-out; }
         .tab-content.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* ================= Tab 1: 全息扫描样式 ================= */
+        /* ================= Tab 1: 极简自动化扫描舱 ================= */
         .scan-container { padding: 20px; display: flex; flex-direction: column; align-items: center; }
-        .scan-title { font-size: 20px; font-weight: 900; margin-bottom: 20px; color: #fff; letter-spacing: 1px; width: 100%; text-align: left;}
+        .scan-title { font-size: 20px; font-weight: 900; margin-bottom: 20px; color: #fff; letter-spacing: 1px; width: 100%; text-align: left; display: flex; justify-content: space-between; align-items: center;}
         
-        /* 模拟 3D 骨骼扫描仪 */
+        /* 教练的一键神器按钮 */
+        .btn-start-scan { background: rgba(212, 175, 55, 0.1); border: 1px solid var(--primary); color: var(--primary); padding: 8px 16px; border-radius: 20px; font-size: 12px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .btn-start-scan:active { background: var(--primary); color: #000; }
+
         .scanner-box { width: 100%; height: 350px; background: radial-gradient(circle at center, #1a1a1a 0%, #050505 100%); border: 1px solid rgba(212, 175, 55, 0.2); border-radius: 16px; position: relative; overflow: hidden; display: flex; justify-content: center; align-items: center; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
         .scanner-grid { position: absolute; width: 100%; height: 100%; background-image: linear-gradient(rgba(212, 175, 55, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(212, 175, 55, 0.05) 1px, transparent 1px); background-size: 20px 20px; }
-        /* 上下扫描线 */
-        .scan-line { position: absolute; left: 0; top: 0; width: 100%; height: 2px; background: var(--primary); box-shadow: 0 0 15px 2px rgba(212, 175, 55, 0.6); animation: scanAnim 3s linear infinite; z-index: 3;}
+        
+        /* 扫描线动画 (初始隐藏，点击启动) */
+        .scan-line { display: none; position: absolute; left: 0; top: 0; width: 100%; height: 2px; background: var(--primary); box-shadow: 0 0 20px 3px rgba(212, 175, 55, 0.8); z-index: 3;}
+        .scan-line.active { display: block; animation: scanAnim 1.5s ease-in-out infinite; }
         @keyframes scanAnim { 0% { top: 0; opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { top: 100%; opacity: 0; } }
         
-        .human-silhouette { width: 120px; height: 280px; background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23D4AF37" opacity="0.3"><path d="M12 2C10.9 2 10 2.9 10 4C10 5.1 10.9 6 12 6C13.1 6 14 5.1 14 4C14 2.9 13.1 2 12 2M10.5 22H13.5V15H16V8C16 6.9 15.1 6 14 6H10C8.9 6 8 6.9 8 8V15H10.5V22Z"/></svg>') no-repeat center; background-size: contain; position: relative; z-index: 2; }
-        
-        .diag-tags { width: 100%; margin-top: 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .human-silhouette { width: 120px; height: 280px; background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23D4AF37" opacity="0.3"><path d="M12 2C10.9 2 10 2.9 10 4C10 5.1 10.9 6 12 6C13.1 6 14 5.1 14 4C14 2.9 13.1 2 12 2M10.5 22H13.5V15H16V8C16 6.9 15.1 6 14 6H10C8.9 6 8 6.9 8 8V15H10.5V22Z"/></svg>') no-repeat center; background-size: contain; position: relative; z-index: 2; transition: filter 0.5s; }
+        .human-silhouette.analyzing { filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.8)); opacity: 0.8; }
+
+        /* 扫描进度条文本 */
+        .scan-status-text { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); font-size: 11px; color: var(--primary); font-weight: bold; letter-spacing: 2px; text-transform: uppercase; z-index: 10; display: none; }
+
+        /* 诊断结果 (初始隐藏) */
+        .diag-tags { width: 100%; margin-top: 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; opacity: 0; transform: translateY(20px); transition: all 0.6s; pointer-events: none;}
+        .diag-tags.show { opacity: 1; transform: translateY(0); pointer-events: auto;}
         .diag-card { background: var(--surface); padding: 15px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); }
         .diag-val { font-size: 20px; font-weight: 900; color: var(--primary); margin-bottom: 5px; }
         .diag-label { font-size: 11px; color: var(--text-sub); }
         .diag-val.warn { color: var(--danger); }
 
-        /* ================= Tab 2: 方案库(时间轴)样式 ================= */
+        /* ================= Tab 2: 方案库(365天大满贯) ================= */
         .processing-header { padding: 25px 20px 15px 20px; background: radial-gradient(circle at top, rgba(20, 20, 24, 0.8) 0%, var(--bg) 100%); border-bottom: 1px solid rgba(255,255,255,0.03); }
         .sys-status { font-size: 11px; color: var(--primary); letter-spacing: 2px; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; text-transform: uppercase;}
-        .sys-status::before { content: ''; display: inline-block; width: 6px; height: 6px; background: var(--primary); border-radius: 50%; box-shadow: 0 0 8px var(--primary); animation: blink 1s infinite; }
+        .sys-status::before { content: ''; display: inline-block; width: 6px; height: 6px; background: var(--primary); border-radius: 50%; animation: blink 1s infinite; }
         .main-title { font-size: 24px; font-weight: 900; margin-bottom: 5px; color: #fff; letter-spacing: 1px; }
         .sub-title { font-size: 12px; color: var(--text-sub); line-height: 1.5; }
 
@@ -72,21 +80,25 @@
         
         .phase-title { font-size: 17px; font-weight: 900; color: #fff; margin-bottom: 10px; }
         .phase-desc { font-size: 13px; color: var(--text-sub); line-height: 1.6; margin-bottom: 15px; }
+
+        /* 新增：目标效果预测模块 */
+        .effect-projection { margin-top: 40px; padding: 25px 20px; background: #0a0a0a; border-radius: 16px; border: 1px solid rgba(212,175,55,0.2); }
+        .effect-title { text-align: center; color: var(--primary); font-size: 15px; font-weight: bold; letter-spacing: 2px; margin-bottom: 20px; text-transform: uppercase; }
+        .effect-compare { display: flex; justify-content: space-between; align-items: center; }
+        .eff-box { flex: 1; display: flex; flex-direction: column; align-items: center; }
         
-        .tag-row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 15px; }
-        .tech-tag { font-size: 11px; font-weight: bold; background: rgba(255,255,255,0.03); color: #ccc; padding: 4px 8px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.05); transition: 0.4s; }
-        .phase-block.active .tech-tag { background: rgba(212, 175, 55, 0.08); border-color: rgba(212, 175, 55, 0.2); color: var(--primary); }
+        /* 科技感线框小图 */
+        .eff-img { width: 80px; height: 180px; background-size: contain; background-repeat: no-repeat; background-position: center; margin-bottom: 10px; opacity: 0.8; }
+        .eff-img.before { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23888"><path d="M11 2C9.9 2 9 2.9 9 4C9 5.1 9.9 6 11 6C12.1 6 13 5.1 13 4C13 2.9 12.1 2 11 2M9.5 22H12.5V15H15V8C15 6.9 14.1 6 13 6H9C7.9 6 7 6.9 7 8V15H9.5V22Z"/></svg>'); filter: grayscale(1); transform: skewX(-5deg); }
+        .eff-img.after { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23D4AF37"><path d="M12 2C10.9 2 10 2.9 10 4C10 5.1 10.9 6 12 6C13.1 6 14 5.1 14 4C14 2.9 13.1 2 12 2M10.5 22H13.5V15H16V8C16 6.9 15.1 6 14 6H10C8.9 6 8 6.9 8 8V15H10.5V22Z"/></svg>'); filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.6)); }
+        
+        .eff-label { font-size: 12px; font-weight: bold; color: #fff; background: #222; padding: 4px 10px; border-radius: 10px; }
+        .eff-label.gold { background: rgba(212, 175, 55, 0.2); color: var(--primary); border: 1px solid var(--primary); }
+        .eff-arrow { font-size: 24px; color: var(--primary); opacity: 0.5; animation: slideRight 1.5s infinite; }
+        @keyframes slideRight { 0% { transform: translateX(-5px); opacity: 0.2; } 50% { transform: translateX(5px); opacity: 1; } 100% { transform: translateX(-5px); opacity: 0.2; } }
 
-        .data-bar-group { margin-top: 10px; }
-        .data-item { margin-bottom: 8px; }
-        .data-label { display: flex; justify-content: space-between; font-size: 11px; color: #888; font-weight: bold; margin-bottom: 4px; }
-        .bar-bg { width: 100%; height: 4px; background: #222; border-radius: 2px; overflow: hidden; }
-        .bar-fill { height: 100%; background: var(--primary); width: 0%; transition: width 1s ease-out 0.3s; }
-
-        /* 底部成单按钮 */
         .bottom-action { position: fixed; bottom: 0; left: 0; width: 100%; padding: 15px 20px 25px 20px; background: linear-gradient(to top, rgba(5,5,5,1) 70%, rgba(5,5,5,0)); z-index: 10; }
         .btn-generate { width: 100%; background: linear-gradient(135deg, #D4AF37, #AA8A2A); color: #000; border: none; padding: 16px; border-radius: 12px; font-size: 16px; font-weight: 900; display: flex; justify-content: center; align-items: center; gap: 8px; box-shadow: 0 4px 20px rgba(212, 175, 55, 0.25); cursor: pointer;}
-        .btn-generate:active { transform: scale(0.98); }
     </style>
 </head>
 <body>
@@ -97,36 +109,41 @@
 
     <div class="tab-nav">
         <div class="tab-btn active" onclick="switchTab('scan', this)">骨骼全息档案</div>
-        <div class="tab-btn" onclick="switchTab('plan', this)">高定方案库(基础)</div>
+        <div class="tab-btn" onclick="switchTab('plan', this)">年度高定方案</div>
     </div>
 
     <div class="content-area">
         
         <div id="tab-scan" class="tab-content active">
             <div class="scan-container">
-                <div class="scan-title">AI 体态断层解析</div>
+                <div class="scan-title">
+                    <span>体态断层解析</span>
+                    <button class="btn-start-scan" onclick="startFakeScan(this)">⚡ 启动 AI 深度扫描</button>
+                </div>
+                
                 <div class="scanner-box">
                     <div class="scanner-grid"></div>
-                    <div class="scan-line"></div>
-                    <div class="human-silhouette"></div>
+                    <div class="scan-line" id="scanLine"></div>
+                    <div class="human-silhouette" id="scanBody"></div>
+                    <div class="scan-status-text" id="scanText">System Ready</div>
                 </div>
 
-                <div class="diag-tags">
+                <div class="diag-tags" id="diagResult">
                     <div class="diag-card">
                         <div class="diag-val warn">重度</div>
-                        <div class="diag-label">骨盆前倾/脊柱曲度</div>
+                        <div class="diag-label">骨盆前倾 / 曲度异常</div>
                     </div>
                     <div class="diag-card">
                         <div class="diag-val">右侧</div>
                         <div class="diag-label">主要疼痛代偿受力点</div>
                     </div>
                     <div class="diag-card">
-                        <div class="diag-val warn">- 18%</div>
-                        <div class="diag-label">基础代谢受损评估</div>
+                        <div class="diag-val warn">- 22%</div>
+                        <div class="diag-label">基础代谢受损严重</div>
                     </div>
                     <div class="diag-card">
-                        <div class="diag-val">中级</div>
-                        <div class="diag-label">内脏脂肪堆积风险</div>
+                        <div class="diag-val">高级</div>
+                        <div class="diag-label">深层内脏脂肪风险</div>
                     </div>
                 </div>
             </div>
@@ -134,9 +151,9 @@
 
         <div id="tab-plan" class="tab-content">
             <div class="processing-header">
-                <div class="sys-status">Model Rendered ... 100%</div>
-                <div class="main-title">90天高定蜕变推演</div>
-                <div class="sub-title">基于全息扫描与医学排查矩阵，AI 专家库已成功为您匹配以下三阶段重塑方案。</div>
+                <div class="sys-status">Model Rendered ... 365 DAYS</div>
+                <div class="main-title">年度高定重塑推演</div>
+                <div class="sub-title">系统已为您匹配 5 阶段终极方案。不只是减脂，更是基因与力学结构的重写。</div>
             </div>
 
             <div class="timeline-container" id="timelineBox">
@@ -144,80 +161,72 @@
                     <div class="timeline-progress" id="timeProgress"></div>
                 </div>
 
-                <div class="phase-block" data-progress="25" data-fill1="85" data-fill2="100">
+                <div class="phase-block" data-progress="15">
                     <div class="phase-left"><div class="phase-dot"></div></div>
                     <div class="phase-right">
                         <div class="day-label">Phase 01 / Day 1 - 30</div>
                         <div class="phase-card">
-                            <div class="phase-title">结构重建与机能唤醒</div>
-                            <div class="phase-desc">停止错误发力！首月核心目标是解除疼痛代偿，回正骨盆与脊柱力学，彻底打开限制您代谢的枷锁。</div>
-                            <div class="tag-row">
-                                <div class="tech-tag">筋膜彻底松解</div>
-                                <div class="tech-tag">骨骼排列回正</div>
-                                <div class="tech-tag">深层核心激活</div>
-                            </div>
-                            <div class="data-bar-group">
-                                <div class="data-item">
-                                    <div class="data-label"><span>疼痛代偿消除率</span><span>85%</span></div>
-                                    <div class="bar-bg"><div class="bar-fill fill-target-1"></div></div>
-                                </div>
-                                <div class="data-item">
-                                    <div class="data-label"><span>关节活动度恢复</span><span>100%</span></div>
-                                    <div class="bar-bg"><div class="bar-fill fill-target-2"></div></div>
-                                </div>
-                            </div>
+                            <div class="phase-title">结构重建与疼痛剥离</div>
+                            <div class="phase-desc">解除神经代偿，回正骨盆与脊柱力学。打开限制您健康代谢的物理枷锁。</div>
                         </div>
                     </div>
                 </div>
 
-                <div class="phase-block" data-progress="65" data-fill1="90" data-fill2="75">
+                <div class="phase-block" data-progress="35">
                     <div class="phase-left"><div class="phase-dot"></div></div>
                     <div class="phase-right">
                         <div class="day-label">Phase 02 / Day 31 - 60</div>
                         <div class="phase-card">
                             <div class="phase-title">极速燃脂与代谢重置</div>
-                            <div class="phase-desc">在健康骨架的基础上，引入复合力量与高阶心肺训练。将身体打造成“24小时持续燃脂的火炉”。</div>
-                            <div class="tag-row">
-                                <div class="tech-tag">EPOC 后燃效应</div>
-                                <div class="tech-tag">大肌群复合做功</div>
-                                <div class="tech-tag">糖脂代谢跃迁</div>
-                            </div>
-                            <div class="data-bar-group">
-                                <div class="data-item">
-                                    <div class="data-label"><span>基础代谢提升率</span><span>+ 15%</span></div>
-                                    <div class="bar-bg"><div class="bar-fill fill-target-1"></div></div>
-                                </div>
-                                <div class="data-item">
-                                    <div class="data-label"><span>内脏脂肪剥离进度</span><span>75%</span></div>
-                                    <div class="bar-bg"><div class="bar-fill fill-target-2"></div></div>
-                                </div>
-                            </div>
+                            <div class="phase-desc">引入高阶心肺与复合力量。彻底清空多余游离脂肪，将身体打造成持续燃脂火炉。</div>
                         </div>
                     </div>
                 </div>
 
-                <div class="phase-block" data-progress="100" data-fill1="95" data-fill2="100">
+                <div class="phase-block" data-progress="55">
                     <div class="phase-left"><div class="phase-dot"></div></div>
                     <div class="phase-right">
                         <div class="day-label">Phase 03 / Day 61 - 90</div>
                         <div class="phase-card">
-                            <div class="phase-title">线条精雕与抗复发固化</div>
-                            <div class="phase-desc">最后的冲刺！针对目标部位进行肌纤维肥大训练，雕刻肌肉线条，并将健康体态永久固化。</div>
-                            <div class="tag-row">
-                                <div class="tech-tag">局部神经募集</div>
-                                <div class="tech-tag">肌张力重新分配</div>
-                                <div class="tech-tag">机能永久固化</div>
-                            </div>
-                            <div class="data-bar-group">
-                                <div class="data-item">
-                                    <div class="data-label"><span>线条清晰度显现</span><span>95%</span></div>
-                                    <div class="bar-bg"><div class="bar-fill fill-target-1"></div></div>
-                                </div>
-                                <div class="data-item">
-                                    <div class="data-label"><span>体态抗反弹固化率</span><span>100%</span></div>
-                                    <div class="bar-bg"><div class="bar-fill fill-target-2"></div></div>
-                                </div>
-                            </div>
+                            <div class="phase-title">形体精雕与线条显现</div>
+                            <div class="phase-desc">针对您的目标部位（直角肩、马甲线、蜜桃臀）进行肌纤维肥大训练，打造高级视觉比例。</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="phase-block" data-progress="75">
+                    <div class="phase-left"><div class="phase-dot"></div></div>
+                    <div class="phase-right">
+                        <div class="day-label">Phase 04 / Day 91 - 180 (6 Months)</div>
+                        <div class="phase-card" style="border-color: rgba(212,175,55,0.5);">
+                            <div class="phase-title">机能跃迁与内分泌调理</div>
+                            <div class="phase-desc">脂肪不再反弹的核心期。系统性剥离深层内脏脂肪，重塑您的饮食神经递质，让瘦身成为潜意识本能。</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="phase-block" data-progress="100">
+                    <div class="phase-left"><div class="phase-dot"></div></div>
+                    <div class="phase-right">
+                        <div class="day-label">Phase 05 / Day 181 - 365 (1 Year)</div>
+                        <div class="phase-card" style="background: linear-gradient(145deg, #1a1a1a, #0a0a0a); border-color: var(--primary);">
+                            <div class="phase-title" style="color: var(--primary);">逆龄定型与极品体态固化</div>
+                            <div class="phase-desc">这不仅是体型的改变，更是骨密度的增加与抗衰老机制的启动。赋予您抵御岁月痕迹的顶级肉体盔甲。</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="effect-projection">
+                    <div class="effect-title">✦ 365 天 AI 终极体态推演 ✦</div>
+                    <div class="effect-compare">
+                        <div class="eff-box">
+                            <div class="eff-img before"></div>
+                            <div class="eff-label">DAY 1 现状</div>
+                        </div>
+                        <div class="eff-arrow">➔</div>
+                        <div class="eff-box">
+                            <div class="eff-img after"></div>
+                            <div class="eff-label gold">DAY 365 目标</div>
                         </div>
                     </div>
                 </div>
@@ -228,31 +237,65 @@
 
     <div class="bottom-action">
         <button class="btn-generate" onclick="goToPrice()">
-            <span style="font-size: 20px;">💎</span> 获取您的专属黑金报价
+            <span style="font-size: 20px;">💎</span> 立即解锁您的专属黑金报价
         </button>
     </div>
 
     <script>
-        // 🚀 核心：平滑的标签页切换引擎
+        // 🚀 平滑标签切换
         function switchTab(tabId, el) {
-            // 切换按钮高亮
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
             el.classList.add('active');
-
-            // 切换内容显隐
             document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
             document.getElementById('tab-' + tabId).classList.add('active');
 
-            // 如果切换到了方案库，立刻触发一次时间轴动画
             if(tabId === 'plan') {
-                setTimeout(checkScroll, 50);
+                setTimeout(checkScroll, 50); // 触发一次时间轴刷新
             }
         }
 
-        // 🚀 时间轴滚动点亮引擎
+        // 🚀 教练装逼神器：一键虚假扫描引擎
+        function startFakeScan(btn) {
+            btn.style.display = 'none'; // 藏起按钮
+            
+            let line = document.getElementById('scanLine');
+            let body = document.getElementById('scanBody');
+            let text = document.getElementById('scanText');
+            let result = document.getElementById('diagResult');
+
+            line.classList.add('active');
+            body.classList.add('analyzing');
+            text.style.display = 'block';
+
+            // 伪装的进度话术
+            let statuses = ["Connecting Data...", "Scanning Spine...", "Analyzing Pelvic Tilt...", "Calculating Metabolism...", "Finalizing Report..."];
+            let i = 0;
+            
+            let interval = setInterval(() => {
+                text.innerText = statuses[i];
+                i++;
+                if(i >= statuses.length) {
+                    clearInterval(interval);
+                    // 3 秒后停止动画，弹出震撼的“严重缺陷”结果
+                    setTimeout(() => {
+                        line.classList.remove('active');
+                        body.classList.remove('analyzing');
+                        text.innerText = "Analysis Complete";
+                        text.style.color = "#888";
+                        
+                        // 弹出痛点面板 (自动生成，不用教练手动填)
+                        result.classList.add('show');
+                        
+                        // 手机震动一下，增加逼真感
+                        if(navigator.vibrate) navigator.vibrate([100, 50, 100]);
+                    }, 500);
+                }
+            }, 600);
+        }
+
+        // 🚀 时间轴滚动引擎（兼容 5 个阶段）
         const timeProgress = document.getElementById('timeProgress');
         function checkScroll() {
-            // 只有当 tab-plan 处于显示状态时才执行动画计算
             if(!document.getElementById('tab-plan').classList.contains('active')) return;
 
             let triggerBottom = window.innerHeight * 0.85; 
@@ -264,31 +307,23 @@
                 if (blockTop < triggerBottom) {
                     block.classList.add('active');
                     currentProgress = block.getAttribute('data-progress');
-                    
-                    let fill1 = block.getAttribute('data-fill1');
-                    let fill2 = block.getAttribute('data-fill2');
-                    block.querySelector('.fill-target-1').style.width = fill1 + '%';
-                    block.querySelector('.fill-target-2').style.width = fill2 + '%';
                 } else {
                     block.classList.remove('active');
-                    block.querySelector('.fill-target-1').style.width = '0%';
-                    block.querySelector('.fill-target-2').style.width = '0%';
                 }
             });
             timeProgress.style.height = currentProgress + '%';
         }
 
-        // 绑定滚动事件
         window.addEventListener('scroll', checkScroll);
 
-        // 跳转至最终 3D 报价页面
+        // 跳转至最终报价
         function goToPrice() {
             let btn = document.querySelector('.btn-generate');
-            btn.innerHTML = "⏳ 正在拉取核算系统...";
+            btn.innerHTML = "⏳ 系统正在核算权限...";
             btn.style.opacity = "0.8";
             setTimeout(() => {
                 window.location.href = 'price.html';
-            }, 600);
+            }, 800);
         }
     </script>
 </body>
