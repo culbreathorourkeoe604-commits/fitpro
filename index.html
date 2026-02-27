@@ -26,25 +26,20 @@
         .brand-card { background: var(--card-bg); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; padding: 25px 20px; text-align: center; margin-bottom: 25px; margin-top: 10px; }
         .brand-card h1 { margin: 0; font-size: 24px; letter-spacing: 4px; color: var(--primary); text-shadow: 0 0 15px var(--primary); }
         
-        /* 🚀 升级后的入口按钮组 */
+        /* 入口按钮组 */
         .btn-group { width: 100%; display: flex; flex-direction: column; gap: 12px; margin-bottom: 30px; }
         .radar-btn { display: flex; align-items: center; justify-content: center; width: 100%; padding: 16px; border-radius: 12px; font-weight: bold; font-size: 15px; text-decoration: none; color: #fff; transition: transform 0.2s, filter 0.2s; letter-spacing: 1px;}
         .radar-btn:active { transform: scale(0.98); filter: brightness(1.1); }
         
-        /* A: 智能筛查矩阵 */
         .btn-a { background: linear-gradient(90deg, #4facfe, #00f2fe); box-shadow: 0 5px 15px rgba(0, 242, 254, 0.3); border: none; }
-        /* B: ACE 风险评估 */
         .btn-b { background: rgba(255,255,255,0.05); border: 1px solid var(--secondary); color: #e2e8f0; }
-        /* C: VIP 全息体测 */
         .btn-c { background: linear-gradient(90deg, var(--secondary), #e100ff); box-shadow: 0 5px 15px rgba(112, 0, 255, 0.3); border: none; }
         
-        /* 下方四大库 */
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; flex: 1; }
         .card { background: #111; border: 2px solid transparent; border-radius: 16px; overflow: hidden; position: relative; height: 160px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
         .card img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.8); }
         .card-info { position: absolute; bottom: 0; width: 100%; padding: 12px 5px; font-size: 11px; text-align: center; font-weight: bold; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: #fff; }
         
-        /* 弹窗及产品库专属三选项卡样式 */
         #modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 1000; flex-direction: column; align-items: center; padding-top: 50px; backdrop-filter: blur(15px); }
         .tab-box { display: flex; gap: 8px; margin-bottom: 15px; width: 92%; }
         .tab-box.triple .tab { font-size: 11px; padding: 8px 5px; flex: 1; background: rgba(255,255,255,0.05); border-radius: 8px; text-align: center; color: #fff; border: 1px solid transparent; }
@@ -78,13 +73,16 @@
             <img src="case.jpg" loading="lazy">
             <div class="card-info">【档案库】</div>
         </div>
-        <div class="card" style="border-color:#eab308" onclick="showModule('方案库','基础方案','plan_1.jpg','强化方案','plan_2.jpg')">
+        
+        <div class="card" style="border-color:#eab308" onclick="window.location.href='./solution.html'">
             <img src="plan.jpg" loading="lazy"><div class="card-info">【方案库】</div>
         </div>
+        
         <div class="card" style="border-color:#22d3ee" onclick="showModule('背书库','资质证书','cert_1.jpg','荣誉奖项','cert_2.jpg')">
             <img src="cert.jpg" loading="lazy"><div class="card-info">【背书库】</div>
         </div>
-        <div class="card" style="border-color:#f472b6" onclick="showTripleModule()">
+        
+        <div class="card" style="border-color:#f472b6" onclick="window.location.href='./price.html'">
             <img src="product.jpg" loading="lazy"><div class="card-info">【产品库】</div>
         </div>
     </div>
@@ -127,19 +125,6 @@
                 <div class="tab" onclick="switchTab(this, '${i2}')">${t2}</div>
             `;
             document.getElementById('modalImg').src = i1;
-            m.style.display = 'flex';
-        }
-
-        function showTripleModule() {
-            const m = document.getElementById('modal');
-            document.getElementById('modalTitle').innerText = '产品库';
-            // 支持三选项卡逻辑
-            document.getElementById('tabBox').innerHTML = `
-                <div class="tab active" onclick="switchTab(this, 'prod_reg_1.jpg')">常规课程</div>
-                <div class="tab" onclick="switchTab(this, 'prod_feat_1.jpg')">特色课程</div>
-                <div class="tab" onclick="switchTab(this, 'prod_sub_1.jpg')">包月系统</div>
-            `;
-            document.getElementById('modalImg').src = 'prod_reg_1.jpg';
             m.style.display = 'flex';
         }
 
