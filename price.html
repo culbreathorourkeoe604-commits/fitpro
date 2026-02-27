@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>LUXIOU | 黑金报价中枢</title>
+    <style>
+        /* 铂金高定配色 */
+        :root { --primary: #D4AF37; --primary-light: #F9E596; --accent: #C5A059; --bg: #050505; --surface: #121212; --text-main: #E2E8F0; --text-sub: #8A92A3; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; margin: 0; padding: 0; }
+        
+        body { background: var(--bg); color: var(--text-main); font-family: "DIN Alternate", "Helvetica Neue", sans-serif; overflow-x: hidden; -webkit-font-smoothing: antialiased; display: flex; flex-direction: column; min-height: 100vh; }
+        
+        .header-brand { width: 100%; height: 60px; display: flex; align-items: center; justify-content: center; background: rgba(5, 5, 5, 0.95); position: sticky; top: 0; z-index: 50; border-bottom: 1px solid rgba(212, 175, 55, 0.15); backdrop-filter: blur(10px);}
+        .brand-text { font-size: 18px; font-weight: 900; color: var(--primary); letter-spacing: 2px; }
+
+        .title-sec { text-align: center; padding: 25px 20px 15px; }
+        .main-title { font-size: 24px; font-weight: 900; margin-bottom: 5px; color: #fff; letter-spacing: 1px; }
+        .sub-title { font-size: 12px; color: var(--text-sub); }
+
+        /* 🚀 核心：双轨计价拨动开关 */
+        .toggle-container { width: 100%; display: flex; justify-content: center; padding: 10px 0 25px; }
+        .toggle-bg { background: #1a1a1a; border-radius: 30px; display: flex; position: relative; width: 260px; height: 44px; border: 1px solid #333; box-shadow: inset 0 2px 5px rgba(0,0,0,0.5); }
+        .toggle-btn { flex: 1; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: bold; color: #888; z-index: 2; transition: 0.3s; }
+        .toggle-btn.active { color: #000; }
+        .toggle-slider { position: absolute; top: 2px; left: 2px; width: calc(50% - 2px); height: 38px; background: linear-gradient(135deg, var(--primary), var(--accent)); border-radius: 20px; transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); z-index: 1; box-shadow: 0 2px 10px rgba(212, 175, 55, 0.4); }
+
+        /* 滑动容器 */
+        .swiper-container { width: 100%; padding: 0 20px 40px; display: flex; flex-direction: column; gap: 20px; }
+        
+        .price-section { display: none; flex-direction: column; gap: 25px; animation: fadeIn 0.5s ease; }
+        .price-section.active { display: flex; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* 🚀 3D 翻转卡片核心代码 */
+        .card-wrapper { perspective: 1000px; width: 100%; height: 200px; cursor: pointer; }
+        .card-inner { width: 100%; height: 100%; position: relative; transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275); transform-style: preserve-3d; }
+        .card-wrapper.is-flipped .card-inner { transform: rotateY(180deg); }
+
+        /* 卡片正反面通用 */
+        .card-face { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; -webkit-backface-visibility: hidden; border-radius: 16px; padding: 25px 20px; display: flex; flex-direction: column; justify-content: center; border: 1px solid rgba(255,255,255,0.05); }
+        
+        /* 卡片正面 */
+        .card-front { background: linear-gradient(145deg, #151515, #0a0a0a); box-shadow: 0 15px 35px rgba(0,0,0,0.6); }
+        /* 尊享卡正面特效 */
+        .card-front.vip { background: linear-gradient(145deg, #1f1a10, #0a0805); border-color: rgba(212, 175, 55, 0.3); box-shadow: 0 15px 35px rgba(212, 175, 55, 0.15); }
+        
+        /* 卡片背面 (权益展示) */
+        .card-back { background: var(--primary); transform: rotateY(180deg); color: #000; box-shadow: 0 15px 35px rgba(212, 175, 55, 0.3); }
+
+        /* 正面排版 */
+        .card-badge { align-self: flex-start; background: rgba(255,255,255,0.1); color: var(--text-sub); font-size: 10px; padding: 4px 10px; border-radius: 12px; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px;}
+        .vip .card-badge { background: var(--primary); color: #000; font-weight: bold; }
+        
+        .card-title { font-size: 20px; font-weight: 900; color: #fff; margin-bottom: 5px; }
+        .vip .card-title { color: var(--primary); }
+        
+        .card-price-row { display: flex; align-items: flex-end; gap: 5px; margin-top: 15px; }
+        .price-symbol { font-size: 16px; color: var(--primary); font-weight: bold; padding-bottom: 4px; }
+        .vip .price-symbol { color: #fff; }
+        .price-num { font-size: 42px; font-weight: 900; color: #fff; line-height: 1; }
+        .price-unit { font-size: 12px; color: var(--text-sub); padding-bottom: 6px; }
+
+        .flip-hint { position: absolute; bottom: 15px; right: 20px; font-size: 10px; color: var(--primary); display: flex; align-items: center; gap: 4px; animation: pulse 2s infinite; }
+        .vip .flip-hint { color: var(--text-sub); }
+
+        /* 背面权益排版 */
+        .back-title { font-size: 16px; font-weight: 900; margin-bottom: 15px; border-bottom: 1px solid rgba(0,0,0,0.1); padding-bottom: 8px; }
+        .privilege-list { display: flex; flex-direction: column; gap: 10px; }
+        .privilege-item { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: bold; }
+        .privilege-item::before { content: '✦'; font-size: 14px; }
+        
+        @keyframes pulse { 0% { opacity: 0.5; transform: translateX(0); } 50% { opacity: 1; transform: translateX(3px); } 100% { opacity: 0.5; transform: translateX(0); } }
+
+        .bottom-action { margin-top: auto; padding: 20px; background: linear-gradient(to top, rgba(5,5,5,1) 50%, rgba(5,5,5,0)); position: sticky; bottom: 0; z-index: 10; }
+        .btn-generate { width: 100%; background: linear-gradient(135deg, #D4AF37, #AA8A2A); color: #000; border: none; padding: 16px; border-radius: 12px; font-size: 16px; font-weight: 900; display: flex; justify-content: center; align-items: center; box-shadow: 0 4px 20px rgba(212, 175, 55, 0.25); cursor: pointer;}
+        .btn-generate:active { transform: scale(0.98); }
+    </style>
+</head>
+<body>
+
+    <div class="header-brand">
+        <div class="brand-text">LUXIOU 财务核算</div>
+    </div>
+
+    <div class="title-sec">
+        <div class="main-title">系统报价与权益中枢</div>
+        <div class="sub-title">请选择最契合您阶段目标的投入方式。点击卡片查看尊享权益。</div>
+    </div>
+
+    <div class="toggle-container">
+        <div class="toggle-bg" onclick="togglePricing()">
+            <div class="toggle-slider" id="slider"></div>
+            <div class="toggle-btn active" id="btn-package">课包定制模式</div>
+            <div class="toggle-btn" id="btn-monthly">包月尊享模式</div>
+        </div>
+    </div>
+
+    <div class="swiper-container">
+        
+        <div id="view-package" class="price-section active">
+            
+            <div class="card-wrapper" onclick="this.classList.toggle('is-flipped')">
+                <div class="card-inner">
+                    <div class="card-face card-front">
+                        <div class="card-badge">Base Level</div>
+                        <div class="card-title">结构重塑包 (12课时)</div>
+                        <div class="sub-title">专注疼痛剥离与骨架回正</div>
+                        <div class="card-price-row">
+                            <span class="price-symbol">¥</span><span class="price-num">500</span><span class="price-unit">/ 课时</span>
+                        </div>
+                        <div class="flip-hint">点击翻转查看权益 ➔</div>
+                    </div>
+                    <div class="card-face card-back">
+                        <div class="back-title">包含特权</div>
+                        <div class="privilege-list">
+                            <div class="privilege-item">1v1 结构重建训练 (12次)</div>
+                            <div class="privilege-item">单次筋膜深度松解</div>
+                            <div class="privilege-item">月度全息体态复测 (1次)</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-wrapper" onclick="this.classList.toggle('is-flipped')">
+                <div class="card-inner">
+                    <div class="card-face card-front vip">
+                        <div class="card-badge">Most Popular</div>
+                        <div class="card-title">全息进化包 (36课时)</div>
+                        <div class="sub-title">解决痛点并完成初阶形体雕刻</div>
+                        <div class="card-price-row">
+                            <span class="price-symbol">¥</span><span class="price-num">450</span><span class="price-unit">/ 课时</span>
+                        </div>
+                        <div class="flip-hint">点击翻转查看权益 ➔</div>
+                    </div>
+                    <div class="card-face card-back">
+                        <div class="back-title">高定特权 (解锁)</div>
+                        <div class="privilege-list">
+                            <div class="privilege-item">1v1 全息进化训练 (36次)</div>
+                            <div class="privilege-item">运动营养饮食定制干预</div>
+                            <div class="privilege-item">训练日高级补剂免费提供</div>
+                            <div class="privilege-item">全息体态复测 (3次)</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div id="view-monthly" class="price-section">
+            
+            <div class="card-wrapper" onclick="this.classList.toggle('is-flipped')">
+                <div class="card-inner">
+                    <div class="card-face card-front">
+                        <div class="card-badge">Flexible</div>
+                        <div class="card-title">黄金体验月卡</div>
+                        <div class="sub-title">30天不限次极速突击</div>
+                        <div class="card-price-row">
+                            <span class="price-symbol">¥</span><span class="price-num">8,800</span><span class="price-unit">/ 30天</span>
+                        </div>
+                        <div class="flip-hint">点击翻转查看权益 ➔</div>
+                    </div>
+                    <div class="card-face card-back">
+                        <div class="back-title">全包权益</div>
+                        <div class="privilege-list">
+                            <div class="privilege-item">全月无限制 1v1 私教预约</div>
+                            <div class="privilege-item">训练计划随时动态调整</div>
+                            <div class="privilege-item">全天候饮食监控指导</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-wrapper" onclick="this.classList.toggle('is-flipped')">
+                <div class="card-inner">
+                    <div class="card-face card-front vip">
+                        <div class="card-badge">Best Value</div>
+                        <div class="card-title">铂金蜕变季卡</div>
+                        <div class="sub-title">90天全息重塑，稳固防反弹</div>
+                        <div class="card-price-row">
+                            <span class="price-symbol">¥</span><span class="price-num">19,800</span><span class="price-unit">/ 90天 (约 ¥6600/月)</span>
+                        </div>
+                        <div class="flip-hint">点击翻转查看权益 ➔</div>
+                    </div>
+                    <div class="card-face card-back">
+                        <div class="back-title">黑金级特权 (全解)</div>
+                        <div class="privilege-list">
+                            <div class="privilege-item">季卡期无限制 1v1 预约</div>
+                            <div class="privilege-item">首席总监级教练优先排课</div>
+                            <div class="privilege-item">全套定制营养餐免费配送(30天)</div>
+                            <div class="privilege-item">每月 2 次深层筋膜运动康复</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="bottom-action">
+        <button class="btn-generate" onclick="alert('恭喜老板，签约成功！后续可对接支付系统。')">
+            确认选择此方案并建档签约
+        </button>
+    </div>
+
+    <script>
+        let isPackageMode = true;
+        
+        function togglePricing() {
+            const slider = document.getElementById('slider');
+            const btnPkg = document.getElementById('btn-package');
+            const btnMon = document.getElementById('btn-monthly');
+            const viewPkg = document.getElementById('view-package');
+            const viewMon = document.getElementById('view-monthly');
+
+            // 复位所有的翻转状态
+            document.querySelectorAll('.card-wrapper').forEach(card => {
+                card.classList.remove('is-flipped');
+            });
+
+            if(isPackageMode) {
+                // 切换到包月模式
+                slider.style.transform = 'translateX(100%)';
+                btnPkg.classList.remove('active');
+                btnMon.classList.add('active');
+                
+                viewPkg.classList.remove('active');
+                setTimeout(() => viewMon.classList.add('active'), 50);
+                
+                isPackageMode = false;
+            } else {
+                // 切换回课包模式
+                slider.style.transform = 'translateX(0)';
+                btnMon.classList.remove('active');
+                btnPkg.classList.add('active');
+                
+                viewMon.classList.remove('active');
+                setTimeout(() => viewPkg.classList.add('active'), 50);
+                
+                isPackageMode = true;
+            }
+        }
+    </script>
+</body>
+</html>
