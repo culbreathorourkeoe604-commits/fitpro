@@ -19,12 +19,13 @@
         .main-title { font-size: 22px; font-weight: 900; color: #fff; margin-bottom: 8px; letter-spacing: 1px;}
         .sub-title { font-size: 12px; color: var(--text-sub); line-height: 1.5; }
 
-        /* 🚀 方案陈列室 */
-        .gallery-container { padding: 10px 15px 40px; display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        /* 🚀 方案陈列室 (修复底部遮挡，增加 padding-bottom) */
+        .gallery-container { padding: 10px 15px 100px; display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
         
         .sol-card { position: relative; height: 180px; border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; justify-content: flex-end; cursor: pointer; border: 1px solid rgba(255,255,255,0.05); box-shadow: 0 10px 20px rgba(0,0,0,0.5); transition: 0.3s; }
         .sol-card:active { transform: scale(0.96); border-color: var(--primary); }
         
+        /* 6个类目的高级渐变背景 */
         .bg-1 { background: linear-gradient(180deg, rgba(20,25,35,0.8), #050505); } 
         .bg-2 { background: linear-gradient(180deg, rgba(35,15,15,0.8), #050505); } 
         .bg-3 { background: linear-gradient(180deg, rgba(25,15,35,0.8), #050505); } 
@@ -63,7 +64,7 @@
         .feedback-section { margin-top: 20px; background: #0a0a0c; border: 1px solid rgba(212, 175, 55, 0.15); border-radius: 16px; padding: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
         .fb-header { text-align: center; font-size: 15px; font-weight: 900; color: var(--primary); margin-bottom: 20px; letter-spacing: 2px; }
         
-        /* 🚨 核心修复：锁死雷达容器大小，防止溢出 */
+        /* 锁死雷达容器大小 */
         .radar-container { width: 100%; height: 220px; position: relative; display: flex; justify-content: center; align-items: center; overflow: hidden; }
         canvas { position: absolute; z-index: 1; }
 
@@ -72,7 +73,8 @@
         .fb-bar-bg { width: 100%; height: 6px; background: #222; border-radius: 3px; overflow: hidden; }
         .fb-bar-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--primary)); width: 0%; transition: width 1.5s cubic-bezier(0.2, 0.8, 0.2, 1); }
 
-        .bottom-action { position: fixed; bottom: 0; left: 0; width: 100%; padding: 15px 20px 25px; background: linear-gradient(to top, rgba(5,5,5,1) 60%, rgba(5,5,5,0)); z-index: 100; }
+        /* 底部行动按钮 (在详情页和主页都显示) */
+        .bottom-action-fixed { position: fixed; bottom: 0; left: 0; width: 100%; padding: 15px 20px 25px; background: linear-gradient(to top, rgba(5,5,5,1) 60%, rgba(5,5,5,0)); z-index: 100; }
         .btn-generate { width: 100%; background: linear-gradient(135deg, var(--primary), #AA8A2A); color: #000; border: none; padding: 16px; border-radius: 12px; font-size: 16px; font-weight: 900; box-shadow: 0 8px 25px rgba(212, 175, 55, 0.3); cursor: pointer;}
     </style>
 </head>
@@ -84,52 +86,65 @@
 
     <div class="intro-sec">
         <div class="main-title">六大尊享重塑矩阵</div>
-        <div class="sub-title">系统已根据您的医学排查与体态评估，开放以下靶向重塑方案。请选择契合您的目标类别。</div>
+        <div class="sub-title">系统已根据您的运动风险与体态评估，开放以下靶向重塑方案。请选择契合您的目标类别。</div>
     </div>
 
     <div class="gallery-container">
+        
         <div class="sol-card bg-1" onclick="openDetail('posture')">
             <div class="card-content">
                 <div class="c-icon">📐</div>
-                <div class="c-title">骨骼与体态重塑</div>
-                <div class="c-desc">纠正圆肩驼背/骨盆前倾，重建脊柱中立位，消除疼痛代偿。</div>
+                <div class="c-title">体态矫正与结构优化</div>
+                <div class="c-desc">针对圆肩驼背/骨盆前倾，通过专业训练改善身体姿态，提升气质。</div>
             </div>
         </div>
+
         <div class="sol-card bg-2" onclick="openDetail('fatloss')">
             <div class="card-content">
                 <div class="c-icon">🔥</div>
-                <div class="c-title">极速代谢跃迁</div>
-                <div class="c-desc">突破顽固平台期，剥离内脏脂肪，将身体重塑为24H燃脂火炉。</div>
+                <div class="c-title">高效燃脂与代谢激活</div>
+                <div class="c-desc">突破平台期，科学降低体脂率，打造全天候高效能代谢身体。</div>
             </div>
         </div>
+
         <div class="sol-card bg-3" onclick="openDetail('shape')">
             <div class="card-content">
                 <div class="c-icon">👗</div>
-                <div class="c-title">维密骨相精雕</div>
-                <div class="c-desc">专攻蜜桃臀、马甲线、直角肩，打造极具视觉冲击力的S型比例。</div>
+                <div class="c-title">S型曲线精雕训练</div>
+                <div class="c-desc">专注打造蜜桃臀、马甲线与肩背线条，塑造极具美感的身体比例。</div>
             </div>
         </div>
+
         <div class="sol-card bg-4" onclick="openDetail('postpartum')">
             <div class="card-content">
                 <div class="c-icon">🤱</div>
-                <div class="c-title">赫本级产后归位</div>
-                <div class="c-desc">内源性修复腹直肌分离与盆底肌松弛，安全重返少女体态。</div>
+                <div class="c-title">产后核心与体形恢复</div>
+                <div class="c-desc">针对产后腹部松弛与核心无力，安全有效地帮助身体机能回归。</div>
             </div>
         </div>
+
         <div class="sol-card bg-5" onclick="openDetail('rehab')">
             <div class="card-content">
                 <div class="c-icon">🩹</div>
-                <div class="c-title">无痛机能康复</div>
-                <div class="c-desc">针对关节弹响与陈旧劳损，切断代偿，重建关节无痛护甲。</div>
+                <div class="c-title">运动功能提升与防护</div>
+                <div class="c-desc">针对运动受限与不适，优化关节灵活性与稳定性，预防运动损伤。</div>
             </div>
         </div>
+
         <div class="sol-card bg-6" onclick="openDetail('antiaging')">
             <div class="card-content">
                 <div class="c-icon">🧬</div>
-                <div class="c-title">铂金逆龄抗衰</div>
-                <div class="c-desc">提升骨密度与心肺机能，对抗肌肉流失，打造冻龄肉体盔甲。</div>
+                <div class="c-title">活力体能与状态焕新</div>
+                <div class="c-desc">通过科学训练提升肌肉质量与心肺功能，保持充沛精力与年轻体态。</div>
             </div>
         </div>
+
+    </div>
+
+    <div class="bottom-action-fixed">
+        <button class="btn-generate" onclick="window.location.href='./price.html'">
+            ✦ 立即查看方案匹配报价 ✦
+        </button>
     </div>
 
     <div class="detail-modal" id="detailModal">
@@ -139,69 +154,64 @@
         </div>
         
         <div class="modal-body" id="modalBody"></div>
-
-        <div class="bottom-action">
-            <button class="btn-generate" onclick="window.location.href='./price.html'">
-                ✦ 立即查看方案匹配报价 ✦
-            </button>
-        </div>
     </div>
 
     <script>
+        // 数据内容已同步合规化更新
         const planData = {
             'posture': {
-                title: '骨骼与体态重塑方案',
-                desc: '长期的伏案与不良习惯，让您的脊柱与骨盆严重偏离中立位。本方案将解绑受限筋膜，唤醒深层稳定肌，赋予您极其挺拔的气质与无痛的机能。',
-                p1: '筋膜解绑与结构回正', d1: '松解胸小肌与髂腰肌等过度紧张肌群，利用手法与呼吸配合，物理层面上纠正骨盆倾角与颈椎前引。',
-                p2: '核心唤醒与张力重构', d2: '在回正的骨架上，重新建立神经对深层背部肌与腹横肌的募集能力，形成“天然肌肉塑身衣”。',
-                p3: '运动轨迹固化', d3: '引入动态复合动作，将正确的发力模式刻入潜意识，确保日常生活中体态永不反弹。',
-                radar: { labels: ['脊柱曲度', '骨盆中立', '颈椎健康', '核心力量', '体态气质'], start: [30, 20, 30, 40, 40], end: [95, 100, 95, 85, 100] },
-                barText: '疼痛代偿消除率', barVal: '100%'
+                title: '体态矫正与结构优化方案',
+                desc: '长期的久坐与不良习惯导致身体姿态偏离。本方案通过针对性训练，改善受限部位，强化核心稳定，帮您重塑挺拔身姿。',
+                p1: '灵活性改善与姿态调整', d1: '通过专业拉伸与特定动作，放松过度紧张的肌肉群，初步改善圆肩、头前引等体态问题。',
+                p2: '核心激活与稳定建立', d2: '重点强化腹部深层与背部肌群的力量，建立身体的天然稳定核心，减轻日常姿态维持的压力。',
+                p3: '动作模式固化', d3: '将正确的身体排列融入功能性训练中，形成肌肉记忆，保持长期的良好体态。',
+                radar: { labels: ['姿态挺拔', '核心稳定', '肩颈舒适', '体态美观', '自信气质'], start: [30, 20, 30, 40, 40], end: [95, 100, 95, 85, 100] },
+                barText: '体态改善预估', barVal: '100%'
             },
             'fatloss': {
-                title: '极速代谢跃迁方案',
-                desc: '不再是痛苦的节食！基于EPOC（运动后过量氧耗）原理，全面清空多余皮下及内脏游离脂肪，重写您的易瘦代谢基因。',
-                p1: '糖原排空与代谢唤醒', d1: '通过大肌群主导的抗阻力训练，消耗体内储备糖原，强制身体进入初步的脂肪氧化通道。',
-                p2: '高容量燃脂与内脏清理', d2: '引入高阶间歇性代谢训练(HIIT)，产生强烈后燃效应，靶向剥离极其顽固的深层内脏脂肪。',
-                p3: '激素平衡与基因重写', d3: '配合定制营养框架，稳定胰岛素分泌，提升基础代谢基数，让身体在睡眠中持续消耗热量。',
-                radar: { labels: ['体脂下降', '基础代谢', '内脏脂肪安全', '心肺体能', '线条初显'], start: [20, 30, 40, 30, 20], end: [100, 95, 100, 90, 85] },
-                barText: '顽固脂肪剥离度', barVal: '95%'
+                title: '高效燃脂与代谢激活方案',
+                desc: '告别无效节食！通过科学的运动组合提升身体代谢水平，高效消耗多余脂肪，建立不易胖的体质。',
+                p1: '代谢唤醒与体能激活', d1: '利用全身性抗阻力训练，激活身体各大肌群，提高基础代谢率，让身体进入燃脂状态。',
+                p2: '高效能燃脂训练', d2: '引入高强度间歇训练(HIIT)等高效手段，制造强大的运动后燃效应，持续消耗热量。',
+                p3: '易瘦体质构建', d3: '通过持续的肌肉量提升与代谢优化，配合合理的饮食建议，稳定体脂率，保持理想身材。',
+                radar: { labels: ['体脂降低', '基础代谢', '身体紧致', '心肺耐力', '线条显现'], start: [20, 30, 40, 30, 20], end: [100, 95, 100, 90, 85] },
+                barText: '减脂效果预估', barVal: '95%'
             },
             'shape': {
-                title: '维密级骨相精雕方案',
-                desc: '拒绝干瘪瘦弱！基于高级解剖学，对目标肌群进行“剥离与填充”。专攻马甲线、蜜桃臀与直角肩，打造极具视觉杀伤力的S型比例。',
-                p1: '弱点靶向激活', d1: '针对臀大肌上侧、三角肌中束等视觉核心点进行孤立唤醒，建立极强的“念动一致”神经连结。',
-                p2: '肌纤维肥大与填充', d2: '利用渐进式超负荷与离心收缩技术，迫使目标区域肌纤维撕裂与超量恢复，实现饱满的3D填充感。',
-                p3: '视觉比例拉扯精雕', d3: '通过收紧腰腹核心与强化背部外沿宽度，在视觉上拉大肩臀比，呈现漏斗形的极致身材。',
-                radar: { labels: ['臀部饱满度', '肩背宽度', '腰腹紧致', '四肢比例', '肌肉质感'], start: [30, 40, 30, 50, 40], end: [100, 95, 90, 100, 95] },
-                barText: '视觉比例改善度', barVal: '100%'
+                title: 'S型曲线精雕训练方案',
+                desc: '针对性打造理想身材比例！通过专业训练精准刺激目标部位，塑造紧致、有线条感的迷人曲线。',
+                p1: '目标部位精准激活', d1: '针对臀部、肩部等核心塑形区域进行孤立训练，建立良好的肌肉发力感。',
+                p2: '塑形强化阶段', d2: '采用渐进式负荷训练，刺激肌肉生长与线条刻画，提升身体的视觉美感与比例。',
+                p3: '整体比例优化', d3: '结合核心收紧与全身协调训练，进一步凸显腰臀比，打造流畅、协调的S型身材曲线。',
+                radar: { labels: ['臀部线条', '肩背美感', '腰腹紧致', '身材比例', '肌肉质感'], start: [30, 40, 30, 50, 40], end: [100, 95, 90, 100, 95] },
+                barText: '身型优化预估', barVal: '100%'
             },
             'postpartum': {
-                title: '赫本级产后归位方案',
-                desc: '避开所有高危运动误区！采用医疗级保守康复手段，无痛、安全地缝合腹直肌裂隙，恢复盆底肌弹性，将松弛的躯干重新收紧。',
-                p1: '盆底肌与内源缝合', d1: '绝对禁止传统卷腹！通过特定的横向呼吸法与普拉提控制，优先重建盆底功能，安全闭合腹直肌。',
-                p2: '骨盆稳定与腰痛消除', d2: '强化臀中肌与核心带，改善因孕晚期造成的骨盆过度前倾，彻底拔除产后腰背酸痛的根源。',
-                p3: '温和减脂与皮肤紧致', d3: '在核心完全稳定的前提下，引入无跳跃抗阻代谢组，剥离孕期顽固囤积，收紧松弛肌肤。',
-                radar: { labels: ['腹直肌愈合', '盆底肌功能', '骨盆复位', '核心收紧', '产后减脂'], start: [15, 20, 30, 20, 40], end: [100, 95, 100, 90, 85] },
-                barText: '产前机能恢复率', barVal: '95%'
+                title: '产后核心与体形恢复方案',
+                desc: '安全、科学的产后恢复计划！专注于核心肌群功能的重建与身体形态的恢复，帮助新手妈妈重拾自信状态。',
+                p1: '核心功能唤醒', d1: '通过温和的呼吸训练与基础核心控制动作，逐步激活并增强盆底肌与腹横肌的功能。',
+                p2: '体态与稳定性提升', d2: '强化臀部与核心力量，改善产后常见的骨盆前倾等体态问题，提升身体核心区域的稳定性。',
+                p3: '全身塑形与体能恢复', d3: '在核心稳定的基础上，逐步加入全身性塑形与体能训练，帮助身体机能与体形全面回归。',
+                radar: { labels: ['核心恢复', '盆底肌力', '体态改善', '腹部收紧', '体能回归'], start: [15, 20, 30, 20, 40], end: [100, 95, 100, 90, 85] },
+                barText: '机能恢复预估', barVal: '95%'
             },
             'rehab': {
-                title: '无痛机能康复方案',
-                desc: '打破“疼就必须绝对静养”的恶性循环。通过精准的神经肌肉调控，重建受损关节的力学稳定性，帮您安全、自信地重返运动赛场。',
-                p1: '炎症抑制与代偿切断', d1: '利用特定手法释放受限关节周围软组织的张力，找出引起疼痛的错误发力源头并强行切断。',
-                p2: '等长收缩与护甲构建', d2: '在无痛的角度范围内，增强受损关节周边的肌腱韧带强度，打造坚固的“生物肌肉护膝/护腰”。',
-                p3: '动态平衡与重返赛场', d3: '引入闭链运动与不平衡介质训练，重建关节本体感觉，逐步完成复杂运动轨迹的脱敏与适应。',
-                radar: { labels: ['关节无痛度', '活动度恢复', '抗炎消肿', '周围肌力', '运动信心'], start: [20, 30, 20, 40, 15], end: [100, 95, 100, 90, 100] },
-                barText: '无痛活动度重塑', barVal: '100%'
+                title: '运动功能提升与防护方案',
+                desc: '打破运动受限！通过科学的评估与训练，改善关节活动度，增强肌肉力量与控制力，预防运动损伤。',
+                p1: '灵活性与张力释放', d1: '针对紧张、受限的肌肉与关节进行拉伸与放松，改善身体的柔韧性与基础活动范围。',
+                p2: '稳定性与力量构建', d2: '加强关节周围肌肉的力量与稳定性训练，建立身体的天然保护机制，提高运动安全性。',
+                p3: '功能性动作优化', d3: '通过模拟日常生活或专项运动的动作模式训练，提升身体的整体协调性与运动表现。',
+                radar: { labels: ['运动舒适度', '关节灵活', '肌肉力量', '动作控制', '运动信心'], start: [20, 30, 20, 40, 15], end: [100, 95, 100, 90, 100] },
+                barText: '功能提升预估', barVal: '100%'
             },
             'antiaging': {
-                title: '铂金逆龄抗衰方案',
-                desc: '抗衰老不仅仅是护肤！系统性提升骨密度、增加肌肉储备量、焕活心肺引擎，用顶级的物理训练对抗岁月，打造不老的肉体盔甲。',
-                p1: '关节润滑与系统预热', d1: '通过多维度的灵活性训练，促进关节滑液分泌，恢复身体各部位生锈、卡顿的原始机能。',
-                p2: '阻力骨密与抗流失', d2: '引入安全的重物抗阻训练，刺激成骨细胞活跃，大幅提升骨密度，同时对抗自然年龄的肌肉萎缩。',
-                p3: '内分泌唤醒与心肺定型', d3: '配合周期性有氧刺激，提升最大摄氧量(VO2 Max)，促进生长激素分泌，由内而外焕发极致年轻态。',
-                radar: { labels: ['骨密度提升', '肌肉保有率', '心肺肺活量', '关节灵活', '精神活力'], start: [40, 30, 40, 30, 30], end: [95, 90, 100, 95, 100] },
-                barText: '逆龄机能综合指标', barVal: '95%'
+                title: '活力体能与状态焕新方案',
+                desc: '通过系统的体能训练对抗岁月痕迹！提升肌肉质量，增强心肺功能，保持充沛的精力和年轻的身体状态。',
+                p1: '基础体能激活', d1: '通过低强度的全身性活动与灵活性训练，唤醒身体机能，为后续训练做好准备。',
+                p2: '力量储备与肌肉保养', d2: '进行安全有效的抗阻力训练，刺激肌肉生长，维持肌肉量，提升身体的基础力量储备。',
+                p3: '心肺提升与状态保持', d3: '结合适度的有氧训练，提高心肺耐力，促进血液循环，焕发持久的身体活力与年轻状态。',
+                radar: { labels: ['肌肉质量', '体能精力', '心肺功能', '身体灵活', '年轻状态'], start: [40, 30, 40, 30, 30], end: [95, 90, 100, 95, 100] },
+                barText: '状态焕新预估', barVal: '95%'
             }
         };
 
@@ -217,24 +227,24 @@
                     <div class="m-hero-title">${data.title}</div>
                     <div class="m-hero-desc">${data.desc}</div>
                 </div>
-                <div class="phase-title-main">重塑路径推演</div>
+                <div class="phase-title-main">训练路径推演</div>
                 <div class="phase-box">
-                    <div class="p-step">PHASE 01 / 首阶</div>
+                    <div class="p-step">阶段一 / 基础</div>
                     <div class="p-name">${data.p1}</div>
                     <div class="p-detail">${data.d1}</div>
                 </div>
                 <div class="phase-box">
-                    <div class="p-step">PHASE 02 / 进阶</div>
+                    <div class="p-step">阶段二 / 进阶</div>
                     <div class="p-name">${data.p2}</div>
                     <div class="p-detail">${data.d2}</div>
                 </div>
                 <div class="phase-box">
-                    <div class="p-step">PHASE 03 / 终局</div>
+                    <div class="p-step">阶段三 / 巩固</div>
                     <div class="p-name">${data.p3}</div>
                     <div class="p-detail">${data.d3}</div>
                 </div>
                 <div class="feedback-section">
-                    <div class="fb-header">✦ AI 目标收益预估 ✦</div>
+                    <div class="fb-header">✦ AI 训练目标预估 ✦</div>
                     <div class="fb-bar-group">
                         <div class="fb-bar-label"><span>${data.barText}</span><span style="color:var(--primary)">${data.barVal}</span></div>
                         <div class="fb-bar-bg"><div class="fb-bar-fill" id="dynamicBar"></div></div>
@@ -243,7 +253,7 @@
                         <canvas id="detailRadar"></canvas>
                     </div>
                 </div>
-            `;
+                <div style="height: 80px;"></div> `;
             
             modal.classList.add('show');
             setTimeout(() => {
@@ -257,39 +267,24 @@
             cancelAnimationFrame(animReq);
         }
 
-        // 🚨 核心修复：锁死 CSS 物理尺寸，防止 Retina 屏幕缩放暴走
+        // 锁死 CSS 物理尺寸，防止 Retina 屏幕缩放暴走
         function drawRadar(config) {
             const canvas = document.getElementById('detailRadar');
             if(!canvas) return;
             const ctx = canvas.getContext('2d');
-            
-            // 获取设备的像素比 (苹果手机通常是 2 或 3)
             const dpr = window.devicePixelRatio || 1;
-            
-            // 定义逻辑尺寸
             const w = 300; const h = 220;
-            
-            // 🚨 这一步极其重要：用 CSS 死死锁住画布在屏幕上的物理大小 🚨
             canvas.style.width = w + "px";
             canvas.style.height = h + "px";
-            
-            // 放大内部渲染画布以保持高清不发虚
             canvas.width = w * dpr; 
             canvas.height = h * dpr;
             ctx.scale(dpr, dpr);
-            
-            // 雷达图中心点稍微往下移一点，给上面的文字留空间
             const centerX = w / 2; const centerY = h / 2 + 10;
-            
-            // 半径缩小，给周围的文字留出充足的排版呼吸空间
-            const radius = 60; 
-            const sides = 5;
+            const radius = 60; const sides = 5;
             let progress = 0;
 
             function renderFrame() {
                 ctx.clearRect(0, 0, w, h);
-                
-                // 画雷达底层网格
                 ctx.lineWidth = 1;
                 for (let level = 1; level <= 4; level++) {
                     ctx.beginPath();
@@ -302,29 +297,17 @@
                     ctx.closePath();
                     ctx.strokeStyle = `rgba(212, 175, 55, ${0.1 * level})`; ctx.stroke();
                 }
-
-                // 绘制外圈文字标签
-                ctx.fillStyle = "#A0A0AB"; // 字体颜色更柔和高级
-                ctx.font = "bold 11px sans-serif"; 
-                ctx.textAlign = "center"; 
-                ctx.textBaseline = "middle";
+                ctx.fillStyle = "#A0A0AB"; ctx.font = "bold 11px sans-serif"; ctx.textAlign = "center"; ctx.textBaseline = "middle";
                 for (let i = 0; i < sides; i++) {
                     let angle = (Math.PI * 2 * i) / sides - Math.PI / 2;
-                    let x = centerX + radius * Math.cos(angle); 
-                    let y = centerY + radius * Math.sin(angle);
-                    
-                    // 画连接小线条
+                    let x = centerX + radius * Math.cos(angle); let y = centerY + radius * Math.sin(angle);
                     ctx.beginPath(); ctx.moveTo(centerX, centerY); ctx.lineTo(x, y);
                     ctx.strokeStyle = "rgba(255,255,255,0.05)"; ctx.stroke();
-                    
-                    // 计算文字坐标 (向外扩张 22 像素，绝不重叠)
                     let textOffset = 22;
                     let labelX = centerX + (radius + textOffset) * Math.cos(angle); 
                     let labelY = centerY + (radius + textOffset) * Math.sin(angle);
                     ctx.fillText(config.labels[i], labelX, labelY);
                 }
-
-                // 绘制底层阴影 (糟糕的现状)
                 ctx.beginPath();
                 for (let i = 0; i < sides; i++) {
                     let angle = (Math.PI * 2 * i) / sides - Math.PI / 2;
@@ -334,12 +317,9 @@
                 }
                 ctx.closePath();
                 ctx.fillStyle = "rgba(178, 34, 34, 0.3)"; ctx.fill();
-
-                // 绘制正在膨胀的金色前景 (目标预期)
                 progress += 0.025; 
                 if(progress > 1) progress = 1;
-                let ease = 1 - Math.pow(1 - progress, 3); // 平滑减速动画
-
+                let ease = 1 - Math.pow(1 - progress, 3);
                 ctx.beginPath();
                 for (let i = 0; i < sides; i++) {
                     let angle = (Math.PI * 2 * i) / sides - Math.PI / 2;
@@ -349,14 +329,11 @@
                     if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
                 }
                 ctx.closePath();
-                
                 ctx.lineWidth = 2;
                 ctx.fillStyle = `rgba(212, 175, 55, ${0.2 + 0.3 * ease})`; 
                 ctx.strokeStyle = `rgba(212, 175, 55, ${0.5 + 0.5 * ease})`;
                 ctx.shadowBlur = 10 * ease; ctx.shadowColor = "rgba(212, 175, 55, 0.6)";
                 ctx.fill(); ctx.stroke(); ctx.shadowBlur = 0;
-
-                // 循环渲染下一帧直到动画结束
                 if(progress < 1) animReq = requestAnimationFrame(renderFrame);
             }
             renderFrame();
