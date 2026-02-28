@@ -11,7 +11,6 @@
         
         body { background: var(--bg); color: var(--text-main); font-family: "DIN Alternate", "Helvetica Neue", sans-serif; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
         
-        /* 顶部标题栏 */
         .header-brand { width: 100%; height: 60px; display: flex; align-items: center; justify-content: center; background: rgba(5, 5, 5, 0.85); position: sticky; top: 0; z-index: 50; border-bottom: 1px solid rgba(212, 175, 55, 0.15); backdrop-filter: blur(15px);}
         .brand-text { font-size: 18px; font-weight: 900; color: var(--primary); letter-spacing: 2px; }
         
@@ -33,7 +32,6 @@
         .c-title { font-size: 15px; font-weight: 900; color: #fff; margin-bottom: 6px; letter-spacing: 1px;}
         .c-desc { font-size: 11px; color: #888; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 
-        /* 全屏详情模态框 */
         .detail-modal { position: fixed; top: 100vh; left: 0; width: 100%; height: 100vh; background: var(--bg); z-index: 999; transition: top 0.5s cubic-bezier(0.2, 0.8, 0.2, 1); display: flex; flex-direction: column; }
         .detail-modal.show { top: 0; }
 
@@ -49,12 +47,12 @@
         .m-hero-title { font-size: 22px; font-weight: 900; color: #fff; margin-bottom: 10px; letter-spacing: 1px; position: relative; z-index: 2;}
         .m-hero-desc { font-size: 13px; color: var(--text-sub); line-height: 1.6; position: relative; z-index: 2;}
         
-        /* 🚨 核心升级一：出勤频率配置面板 */
-        .freq-panel { background: rgba(212,175,55,0.05); border: 1px solid rgba(212,175,55,0.3); border-radius: 12px; padding: 15px; margin-bottom: 25px; box-shadow: inset 0 0 20px rgba(0,0,0,0.5); }
-        .freq-title { font-size: 13px; color: var(--primary); font-weight: bold; margin-bottom: 12px; display: flex; align-items: center; gap: 6px;}
-        .freq-group { display: flex; gap: 8px; }
-        .freq-btn { flex: 1; text-align: center; padding: 10px 0; border-radius: 8px; background: #111; border: 1px solid #333; color: #888; font-size: 14px; font-weight: 900; cursor: pointer; transition: 0.3s; line-height: 1.3;}
-        .freq-btn span { font-size: 10px; font-weight: normal; color: #666; }
+        /* 🚨 核心升级：精密的五段式出勤频率面板 */
+        .freq-panel { background: rgba(212,175,55,0.05); border: 1px solid rgba(212,175,55,0.3); border-radius: 12px; padding: 15px 10px; margin-bottom: 25px; box-shadow: inset 0 0 20px rgba(0,0,0,0.5); }
+        .freq-title { font-size: 13px; color: var(--primary); font-weight: bold; margin-bottom: 12px; padding-left: 5px; display: flex; align-items: center; gap: 6px;}
+        .freq-group { display: flex; gap: 6px; }
+        .freq-btn { flex: 1; text-align: center; padding: 8px 0; border-radius: 8px; background: #111; border: 1px solid #333; color: #888; font-size: 13px; font-weight: 900; cursor: pointer; transition: 0.3s; line-height: 1.3;}
+        .freq-btn span { font-size: 9px; font-weight: normal; color: #666; display: block; transform: scale(0.9);}
         .freq-btn.active { background: linear-gradient(135deg, #2A2210, #0A0A0C); border-color: var(--primary); color: var(--primary); box-shadow: 0 4px 10px rgba(212,175,55,0.2);}
         .freq-btn.active span { color: #aaa; }
 
@@ -96,7 +94,6 @@
         .sp-text { color: #ccc; }
         .sp-text strong { color: var(--primary); font-weight: bold; text-shadow: 0 0 8px rgba(212,175,55,0.3); }
 
-        /* 教练配课滑动步进器 */
         .custom-builder { margin-top: 15px; border-top: 1px dashed rgba(212,175,55,0.3); padding-top: 15px; display: flex; flex-direction: column; gap: 12px; }
         .cb-item { display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.5); padding: 10px 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05);}
         .cb-label { font-size: 14px; color: #fff; font-weight: bold; display: flex; flex-direction: column; gap: 4px;}
@@ -106,7 +103,6 @@
         .cb-btn:active { background: rgba(212,175,55,0.2); }
         .cb-input { width: 40px; text-align: center; background: #000; border: none; border-left: 1px solid #333; border-right: 1px solid #333; color: #fff; font-size: 16px; font-weight: 900; padding: 6px 0; outline: none; pointer-events: none;}
 
-        /* 可视化投射图 */
         .visual-feedback-section { margin-top: 30px; background: #0a0a0c; border: 1px solid rgba(212, 175, 55, 0.15); border-radius: 16px; padding: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
         .fb-header { text-align: center; font-size: 15px; font-weight: 900; color: var(--primary); margin-bottom: 15px; letter-spacing: 2px; }
         .visual-card { width: 100%; height: 300px; border-radius: 12px; overflow: hidden; position: relative; border: 1px solid rgba(255,255,255,0.1); background: #111;}
@@ -115,7 +111,6 @@
         .visual-title { color: var(--primary); font-size: 20px; font-weight: 900; letter-spacing: 1px; margin-bottom: 6px; text-shadow: 0 2px 5px rgba(0,0,0,0.8);}
         .visual-desc { color: #ddd; font-size: 13px; line-height: 1.5; text-shadow: 0 1px 3px rgba(0,0,0,0.8); }
 
-        /* 购物车底栏 */
         .checkout-bar { position: fixed; bottom: 0; left: 0; width: 100%; padding: 15px 20px 25px; background: rgba(10, 10, 12, 0.98); border-top: 1px solid rgba(212,175,55,0.3); box-shadow: 0 -10px 30px rgba(0,0,0,0.8); z-index: 100; backdrop-filter: blur(15px); display: flex; justify-content: space-between; align-items: center; }
         .checkout-info { display: flex; flex-direction: column; gap: 4px; }
         .c-info-label { font-size: 11px; color: #888; font-weight: bold; letter-spacing: 1px; }
@@ -160,8 +155,10 @@
         
         .uc-price-box { text-align: right; }
         .uc-ori-total { font-size: 11px; color: #888; text-decoration: line-through; margin-bottom: 2px; }
-        .uc-new-total { font-size: 22px; font-weight: 900; color: #fff; }
+        .uc-new-total { font-size: 22px; font-weight: 900; color: #fff; display: flex; align-items: baseline; justify-content: flex-end; gap: 4px;}
         .premium .uc-new-total { font-size: 26px; color: #fff; text-shadow: 0 0 10px rgba(212,175,55,0.4);}
+        .uc-price-unit { font-size: 11px; color: #888; margin-top: 4px; display: flex; align-items: center; justify-content: flex-end; gap: 4px;}
+        .newbie-tag { background: var(--primary); color: #000; padding: 2px 6px; border-radius: 4px; font-weight: bold; font-size: 10px; }
 
         .uc-btn { width: 100%; padding: 12px; border-radius: 8px; font-size: 14px; font-weight: bold; border: none; cursor: pointer; position: relative; z-index: 10;}
         .anchor .uc-btn { background: #333; color: #fff; }
@@ -256,15 +253,15 @@
     <div class="upsell-modal" id="upsellModal">
         <div class="up-header">
             <div>
-                <div class="up-title">✦ 智能匹配分轨方案 ✦</div>
-                <div class="up-sub" id="up-sub-text">系统已为您接入 <strong style="color:var(--primary)">【首次建档专享】</strong> 破冰费率：</div>
+                <div class="up-title" id="up-main-title">✦ 智能匹配双轨方案 ✦</div>
+                <div class="up-sub" id="up-sub-text">基于您选择的阶段与出勤频率，为您精准匹配以下方案：</div>
             </div>
             <button class="up-close" onclick="closeUpsellModal()">×</button>
         </div>
         
         <div id="standard-upsell-content">
             <div class="up-card anchor">
-                <div class="uc-title">方案一：极致重塑包 (高阶锚定)</div>
+                <div class="uc-title" id="up-a-title">方案一：【周期延伸】极致重塑包</div>
                 <div class="uc-breakdown">
                     <div class="uc-brk-row"><span>常规阶梯单价:</span> <span><del id="up-a-unit-ori">¥400/节</del></span></div>
                     <div class="uc-brk-row hl"><span>首购破冰单价:</span> <span id="up-a-unit-new">¥350/节</span></div>
@@ -280,7 +277,7 @@
             </div>
 
             <div class="up-card premium">
-                <div class="uc-title">方案二：黄金周期核心包</div>
+                <div class="uc-title" id="up-b-title">方案二：【目标直达】完美匹配包</div>
                 <div class="uc-breakdown">
                     <div class="uc-brk-row"><span>常规阶梯单价:</span> <span><del id="up-b-unit-ori">¥420/节</del></span></div>
                     <div class="uc-brk-row hl"><span>首购破冰单价:</span> <span id="up-b-unit-new">¥350/节</span></div>
@@ -296,7 +293,7 @@
             </div>
 
             <div class="up-card basic">
-                <div class="uc-title">方案三：低门槛启动包</div>
+                <div class="uc-title" id="up-c-title">方案三：【初阶体验】基础启动包</div>
                 <div class="uc-breakdown">
                     <div class="uc-brk-row"><span>常规阶梯单价:</span> <span><del id="up-c-unit-ori">¥440/节</del></span></div>
                     <div class="uc-brk-row hl"><span>首购破冰单价:</span> <span id="up-c-unit-new">¥350/节</span></div>
@@ -304,7 +301,7 @@
                 <div class="uc-footer">
                     <div class="uc-sessions" id="up-c-sessions">-- <span>节</span></div>
                     <div class="uc-price-box">
-                        <div class="uc-ori-total" id="up-c-ori">原总价 ¥--</div>
+                        <div class="uc-ori-total" id="up-c-ori">原价 ¥--</div>
                         <div class="uc-new-total">¥ <span id="up-c-new">--</span></div>
                     </div>
                 </div>
@@ -360,7 +357,6 @@
     </div>
 
     <script>
-        // ======= 底层价格与周期数据 =======
         const priceTiers = {
             'regular': [ { t: 100, p: 350 }, { t: 72, p: 380 }, { t: 48, p: 400 }, { t: 24, p: 420 }, { t: 0, p: 440 } ],
             'feature': [ { t: 100, p: 380 }, { t: 72, p: 400 }, { t: 48, p: 420 }, { t: 24, p: 440 }, { t: 0, p: 460 } ]
@@ -380,16 +376,16 @@
             return m * 3888;
         }
 
-        // 🚨 注入底层的周数逻辑 (p1_w:4表示4周)，用于配合出勤频率动态算课时
+        // 🚨 底层周数与加粗语料
         const planData = {
             'posture': {
                 type: 'feature', icon: '<svg viewBox="0 0 24 24"><path d="M12 5v14"/><path d="M8 9l4-4 4 4"/><path d="M8 19l4 4 4-4"/></svg>',
                 title: '体态矫正与结构优化', desc: '物理层面的结构重组，彻底切断疼痛代偿。',
-                p1_name: '筋膜解绑与痛点清零', p1_time: '周期: 4周 (首月)', p1_w: 4,
+                p1_name: '筋膜解绑与痛点清零', p1_w: 4,
                 p1_goal: '<strong>打破骨骼错误排列</strong>，恢复关节活动度。', p1_tech: '深层剥离胸小肌与髂腰肌。', p1_feel: '练完感觉<strong>肩颈彻底放松</strong>。',
-                p2_name: '弱点唤醒与核心重构', p2_time: '周期: 8周 (第2-3月)', p2_w: 8,
+                p2_name: '弱点唤醒与核心重构', p2_w: 8,
                 p2_goal: '<strong>激活休眠的肌肉</strong>，建立天然肌肉内衣。', p2_tech: '普拉提孤立性募集腹横肌。', p2_feel: '核心产生<strong>强烈的支撑感</strong>。',
-                p3_name: '动作模式固化定型', p3_time: '周期: 12周 (第4-6月)', p3_w: 12,
+                p3_name: '动作模式固化定型', p3_w: 12,
                 p3_goal: '将正确排列<strong>刻入神经潜意识</strong>。', p3_tech: '复合抗阻结合生活轨迹二次重塑。', p3_feel: '不自觉地<strong>保持挺拔高姿态</strong>。',
                 img1: 'https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=600&q=80', 
                 img2: 'https://images.unsplash.com/photo-1599901860904-17e6ed7083a0?auto=format&fit=crop&w=600&q=80', 
@@ -399,11 +395,11 @@
             'fatloss': {
                 type: 'regular', icon: '<svg viewBox="0 0 24 24"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>',
                 title: '高效燃脂与代谢激活', desc: '重写身体基因，打造“24小时持续燃脂的火炉”。',
-                p1_name: '糖原排空与代谢唤醒', p1_time: '周期: 4周 (首月)', p1_w: 4,
+                p1_name: '糖原排空与代谢唤醒', p1_w: 4,
                 p1_goal: '<strong>强行切入脂肪氧化通道</strong>。', p1_tech: '循环抗阻配合低GI饮食干预。', p1_feel: '迅速<strong>排干体内顽固水肿</strong>，体重掉秤快。',
-                p2_name: '高容量顽固脂肪剥离', p2_time: '周期: 8周 (第2-3月)', p2_w: 8,
+                p2_name: '高容量顽固脂肪剥离', p2_w: 8,
                 p2_goal: '靶向清理内脏脂肪，<strong>强力突破平台期</strong>。', p2_tech: 'HIIT激发强烈运动后燃效应。', p2_feel: '<strong>腰腹围度明显缩小</strong>，穿衣宽松。',
-                p3_name: '易瘦体质终极定型', p3_time: '周期: 12周 (第4-6月)', p3_w: 12,
+                p3_name: '易瘦体质终极定型', p3_w: 12,
                 p3_goal: '让身体在<strong>睡眠中持续燃烧热量</strong>。', p3_tech: '肌肥大训练提升整体肌肉储备。', p3_feel: '<strong>偶尔放纵吃喝不再反弹</strong>。',
                 img1: 'https://images.unsplash.com/photo-1584735175315-9d5df23860e6?auto=format&fit=crop&w=600&q=80', 
                 img2: 'https://images.unsplash.com/photo-1608228079968-c7681eaef81e?auto=format&fit=crop&w=600&q=80', 
@@ -413,11 +409,11 @@
             'shape': {
                 type: 'regular', icon: '<svg viewBox="0 0 24 24"><path d="M5 22h14"/><path d="M5 2h14"/><path d="M17 22v-4.172a2 2 0 0 0-.586-1.414L12 12l-4.414 4.414A2 2 0 0 0 7 17.828V22"/><path d="M7 2v4.172a2 2 0 0 0 .586 1.414L12 12l4.414-4.414A2 2 0 0 0 17 6.172V2"/></svg>',
                 title: 'S型曲线精雕训练', desc: '物理剥离与3D填充，打造极具视觉杀伤力的身材比例。',
-                p1_name: '目标靶向极速激活', p1_time: '周期: 4周 (首月)', p1_w: 4,
+                p1_name: '目标靶向极速激活', p1_w: 4,
                 p1_goal: '纠正错误发力，避免<strong>“练臀先粗腿”</strong>。', p1_tech: '孤立唤醒臀大肌上部与三角肌中束。', p1_feel: '体会到目标肌肉的<strong>深层酸胀泵感</strong>。',
-                p2_name: '弱点区域3D物理填充', p2_time: '周期: 8周 (第2-3月)', p2_w: 8,
+                p2_name: '弱点区域3D物理填充', p2_w: 8,
                 p2_goal: '迫使肌纤维超量恢复，实现<strong>局部的饱满填充</strong>。', p2_tech: '渐进式超负荷，运用慢速离心控制。', p2_feel: '<strong>蜜桃臀逐渐饱满上翘</strong>，肩线平直。',
-                p3_name: '视觉比例拉扯精雕', p3_time: '周期: 12周 (第4-6月)', p3_w: 12,
+                p3_name: '视觉比例拉扯精雕', p3_w: 12,
                 p3_goal: '强行呈现出<strong>极致的漏斗形曲线</strong>。', p3_tech: '强化背部阔度，极致压缩腰围数据。', p3_feel: 'S曲线完全固化，<strong>拍照自带高级感</strong>。',
                 img1: 'https://images.unsplash.com/photo-1574680096145-d05b474e2155?auto=format&fit=crop&w=600&q=80', 
                 img2: 'https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?auto=format&fit=crop&w=600&q=80', 
@@ -427,11 +423,11 @@
             'postpartum': {
                 type: 'feature', icon: '<svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>',
                 title: '产后核心与体形恢复', desc: '无痛安全缝合腹直肌裂隙，助您重返少女级健康体态。',
-                p1_name: '盆底肌与内源安全修复', p1_time: '周期: 4周 (首月)', p1_w: 4,
+                p1_name: '盆底肌与内源安全修复', p1_w: 4,
                 p1_goal: '重建盆底功能，<strong>绝对禁止传统卷腹</strong>。', p1_tech: '横向呼吸法温和唤醒腹横肌。', p1_feel: '<strong>漏尿改善</strong>，核心脏器有明显归位感。',
-                p2_name: '腹直肌物理闭合', p2_time: '周期: 8周 (第2-3月)', p2_w: 8,
+                p2_name: '腹直肌物理闭合', p2_w: 8,
                 p2_goal: '安全缝合腹部裂隙，改善<strong>骨盆过度前倾</strong>。', p2_tech: '抗旋转与抗伸展训练，强化深层核心。', p2_feel: '腹直肌间距肉眼收窄，<strong>腰背酸痛大幅缓解</strong>。',
-                p3_name: '温和减脂与皮肤收紧', p3_time: '周期: 12周 (第4-6月)', p3_w: 12,
+                p3_name: '温和减脂与皮肤收紧', p3_w: 12,
                 p3_goal: '在安全前提下，<strong>剥离孕期囤积脂肪</strong>。', p3_tech: '无跳跃温和抗阻代谢组。', p3_feel: '逐步<strong>穿回孕前尺码衣服</strong>，皮肤恢复紧致。',
                 img1: 'https://images.unsplash.com/photo-1609899536866-99396547465a?auto=format&fit=crop&w=600&q=80', 
                 img2: 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=600&q=80', 
@@ -441,11 +437,11 @@
             'rehab': {
                 type: 'feature', icon: '<svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>',
                 title: '运动功能提升与防护', desc: '精准神经肌肉调控，重建受损关节力学稳定性。',
-                p1_name: '炎症消除与代偿切断', p1_time: '周期: 4周 (首月)', p1_w: 4,
+                p1_name: '炎症消除与代偿切断', p1_w: 4,
                 p1_goal: '找出引起疼痛的<strong>错误发力源</strong>。', p1_tech: '激痛点按压技术释放代偿关节。', p1_feel: '<strong>弹响明显减少</strong>，尖锐刺痛感消失。',
-                p2_name: '受损关节肌肉护甲构建', p2_time: '周期: 8周 (第2-3月)', p2_w: 8,
+                p2_name: '受损关节肌肉护甲构建', p2_w: 8,
                 p2_goal: '增强韧带强度，打造<strong>生物学护膝护腰</strong>。', p2_tech: '无痛角度内等长收缩强化深层小肌群。', p2_feel: '关节产生<strong>极强包裹感</strong>，发力不发虚。',
-                p3_name: '动态脱敏与赛场重返', p3_time: '周期: 12周 (第4-6月)', p3_w: 12,
+                p3_name: '动态脱敏与赛场重返', p3_w: 12,
                 p3_goal: '重建本体感觉，<strong>适应复杂运动轨迹</strong>。', p3_tech: '闭链与不平衡介质高阶神经调控。', p3_feel: '能<strong>极其自信地完成复杂动作</strong>，无惧损伤。',
                 img1: 'https://images.unsplash.com/photo-1609899517237-77d357b03007?auto=format&fit=crop&w=600&q=80', 
                 img2: 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?auto=format&fit=crop&w=600&q=80', 
@@ -455,11 +451,11 @@
             'antiaging': {
                 type: 'regular', icon: '<svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>',
                 title: '活力体能与状态焕新', desc: '提升骨密度与肌肉储备，为您打造不老的肉体盔甲。',
-                p1_name: '机能唤醒与润滑系统', p1_time: '周期: 4周 (首月)', p1_w: 4,
+                p1_name: '机能唤醒与润滑系统', p1_w: 4,
                 p1_goal: '促进滑液分泌，<strong>全面恢复生锈卡顿的机能</strong>。', p1_tech: '关节活动度打磨与全身筋膜链拉伸。', p1_feel: '<strong>晨起僵硬感消失，深度睡眠延长</strong>。',
-                p2_name: '骨密度与防流失储备', p2_time: '周期: 8周 (第2-3月)', p2_w: 8,
+                p2_name: '骨密度与防流失储备', p2_w: 8,
                 p2_goal: '刺激成骨细胞活跃，<strong>暴力对抗肌肉萎缩</strong>。', p2_tech: '重物抗阻配合慢速离心收缩技术。', p2_feel: '拎重物不吃力，<strong>下楼梯膝盖绝不发软</strong>。',
-                p3_name: '引擎重置与荷尔蒙唤醒', p3_time: '周期: 12周 (第4-6月)', p3_w: 12,
+                p3_name: '引擎重置与荷尔蒙唤醒', p3_w: 12,
                 p3_goal: '提升最大摄氧量，由内而外焕发<strong>极致年轻态</strong>。', p3_tech: '稳态有氧配合心率变异率科学监控。', p3_feel: '爬楼梯不喘，<strong>气色红润，精力爆表</strong>。',
                 img1: 'https://images.unsplash.com/photo-1576678927484-cc907957088c?auto=format&fit=crop&w=600&q=80', 
                 img2: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=600&q=80', 
@@ -469,12 +465,12 @@
         };
 
         let currentPlanKey = '';
-        let globalTotalExact = 0; // 精确核算的课时数
-        let userFreq = 3; // 默认出勤频率 3次/周
+        let globalTotalExact = 0; 
+        let userFreq = 3; 
 
         function openDetail(key) {
             currentPlanKey = key;
-            userFreq = 3; // 每次打开重置频率
+            userFreq = 3; 
             const data = planData[key];
             const modal = document.getElementById('detailModal');
             const body = document.getElementById('modalBody');
@@ -489,9 +485,11 @@
                 <div class="freq-panel">
                     <div class="freq-title">✦ 设定预期每周出勤频率 (用于科学排课)</div>
                     <div class="freq-group">
-                        <div class="freq-btn" data-f="2" onclick="setFreq(2)">2 次/周<br><span>稳步蜕变</span></div>
-                        <div class="freq-btn active" data-f="3" onclick="setFreq(3)">3 次/周<br><span>黄金频率</span></div>
-                        <div class="freq-btn" data-f="4" onclick="setFreq(4)">4 次/周<br><span>极速冲刺</span></div>
+                        <div class="freq-btn" data-f="1" onclick="setFreq(1)">1次/周<br><span>保持唤醒</span></div>
+                        <div class="freq-btn" data-f="2" onclick="setFreq(2)">2次/周<br><span>稳步蜕变</span></div>
+                        <div class="freq-btn active" data-f="3" onclick="setFreq(3)">3次/周<br><span>黄金频率</span></div>
+                        <div class="freq-btn" data-f="4" onclick="setFreq(4)">4次/周<br><span>极速冲刺</span></div>
+                        <div class="freq-btn" data-f="5" onclick="setFreq(5)">5次+/周<br><span>极致自律</span></div>
                     </div>
                 </div>
                 
@@ -501,8 +499,8 @@
                     <div class="check-circle"></div>
                     <div class="p-step">● PHASE 01 / 阶段一</div>
                     <div class="p-cycle-highlight">
-                        <div class="cycle-row"><span class="icon">⏱</span> ${data.p1_time}</div>
-                        <div class="cycle-row"><span class="icon">🎯</span> 需配课时：<span class="highlight-text" id="p1-val">12 节</span></div>
+                        <div class="cycle-row"><span class="icon">⏱</span> 阶段耗时：<span class="highlight-text">${data.p1_w} 周</span></div>
+                        <div class="cycle-row"><span class="icon">🎯</span> 需配课时：<span class="highlight-text" id="p1-val">${data.p1_w * userFreq} 节</span></div>
                     </div>
                     <div class="p-name">${data.p1_name}</div>
                     <div class="sales-points">
@@ -516,8 +514,8 @@
                     <div class="check-circle"></div>
                     <div class="p-step">● PHASE 02 / 阶段二</div>
                     <div class="p-cycle-highlight">
-                        <div class="cycle-row"><span class="icon">⏱</span> ${data.p2_time}</div>
-                        <div class="cycle-row"><span class="icon">🎯</span> 需配课时：<span class="highlight-text" id="p2-val">24 节</span></div>
+                        <div class="cycle-row"><span class="icon">⏱</span> 阶段耗时：<span class="highlight-text">${data.p2_w} 周</span></div>
+                        <div class="cycle-row"><span class="icon">🎯</span> 需配课时：<span class="highlight-text" id="p2-val">${data.p2_w * userFreq} 节</span></div>
                     </div>
                     <div class="p-name">${data.p2_name}</div>
                     <div class="sales-points">
@@ -531,8 +529,8 @@
                     <div class="check-circle"></div>
                     <div class="p-step">● PHASE 03 / 阶段三</div>
                     <div class="p-cycle-highlight">
-                        <div class="cycle-row"><span class="icon">⏱</span> ${data.p3_time}</div>
-                        <div class="cycle-row"><span class="icon">🎯</span> 需配课时：<span class="highlight-text" id="p3-val">36 节</span></div>
+                        <div class="cycle-row"><span class="icon">⏱</span> 阶段耗时：<span class="highlight-text">${data.p3_w} 周</span></div>
+                        <div class="cycle-row"><span class="icon">🎯</span> 需配课时：<span class="highlight-text" id="p3-val">${data.p3_w * userFreq} 节</span></div>
                     </div>
                     <div class="p-name">${data.p3_name}</div>
                     <div class="sales-points">
@@ -595,12 +593,11 @@
             document.getElementById('detailModal').classList.remove('show');
         }
 
-        // 🚨 频率切换触发器
         function setFreq(f) {
             userFreq = f;
             document.querySelectorAll('.freq-btn').forEach(b => b.classList.remove('active'));
             document.querySelector(`.freq-btn[data-f="${f}"]`).classList.add('active');
-            updateCheckout(); // 重新核算
+            updateCheckout(); 
         }
 
         function chgVal(id, delta, e) {
@@ -648,7 +645,6 @@
             updateCheckout();
         }
 
-        // 🚨 极其严密的动态核算算法
         function updateCheckout() {
             let totalExactSessions = 0;
             let maxPhaseSelected = 0;
@@ -657,17 +653,15 @@
             let customBox = document.getElementById('phase-4-box');
             let isCustom = customBox && customBox.classList.contains('selected');
 
-            // 1. 先动态刷新面板上的文字
             document.getElementById('p1-val').innerText = `${userFreq * data.p1_w} 节`;
             document.getElementById('p2-val').innerText = `${userFreq * data.p2_w} 节`;
             document.getElementById('p3-val').innerText = `${userFreq * data.p3_w} 节`;
 
-            // 2. 核算选中内容
             if (isCustom) {
                 let r = parseInt(document.getElementById('cb-reg').value);
                 let f = parseInt(document.getElementById('cb-feat').value);
                 let m = parseInt(document.getElementById('cb-mon').value);
-                totalExactSessions = r + f + (m * 12); // 包月算12节兜底
+                totalExactSessions = r + f + (m * 12); 
                 maxPhaseSelected = 4;
             } else {
                 let totalWeeks = 0;
@@ -679,7 +673,7 @@
                 totalExactSessions = totalWeeks * userFreq;
             }
             
-            globalTotalExact = totalExactSessions; // 保存用于结账
+            globalTotalExact = totalExactSessions; 
             
             const btn = document.getElementById('btn-checkout');
             const valDisplay = document.getElementById('calc-val');
@@ -719,7 +713,7 @@
             }
         }
 
-        // 🚨 分发弹窗逻辑
+        // 🚨 智能报价分发与动态命名引擎
         function showUpsellModal() {
             if(globalTotalExact === 0) return;
             
@@ -728,10 +722,10 @@
             const data = planData[currentPlanKey];
 
             if (isCustom) {
-                // ====== 教练专属高定单 ======
                 document.getElementById('standard-upsell-content').style.display = 'none';
                 document.getElementById('custom-upsell-content').style.display = 'block';
-                
+                document.getElementById('up-sub-text').innerHTML = `系统已为您核算以下 <strong style="color:var(--primary)">高定私享组合</strong>，含专属破冰福利：`;
+
                 let r = parseInt(document.getElementById('cb-reg').value);
                 let f = parseInt(document.getElementById('cb-feat').value);
                 let m = parseInt(document.getElementById('cb-mon').value);
@@ -761,23 +755,28 @@
                 };
 
             } else {
-                // ====== 标准心理学三轨方案 (完美利用出勤率算出的准确值) ======
                 document.getElementById('standard-upsell-content').style.display = 'block';
                 document.getElementById('custom-upsell-content').style.display = 'none';
 
-                let exactSessions = globalTotalExact; // 比如 24
-                
-                // 方案二(主推) = 就是精确算出来的课时！
+                // 提取客户选中的阶段名字 (例如：阶段一、阶段二)
+                let phaseNames = [];
+                document.querySelectorAll('.phase-box.selected:not(.combo-box)').forEach(box => {
+                    let pStep = box.querySelector('.p-step').innerText; 
+                    let cleanName = pStep.split('/')[1].trim(); 
+                    phaseNames.push(cleanName);
+                });
+                let targetName = phaseNames.join(" + ");
+                if(!targetName) targetName = "目标";
+
+                document.getElementById('up-sub-text').innerHTML = `基于您选择的 <strong style="color:var(--primary)">【${targetName}】</strong>，为您匹配以下三轨方案：`;
+
+                let exactSessions = globalTotalExact; 
                 let pkgCore = exactSessions; 
-                
-                // 方案一(锚定) = 向上找一个更大的标准包
                 let pkgAnchor = standardPackages.find(p => p > pkgCore) || pkgCore + 24;
-                
-                // 方案三(兜底) = 向下找一个更小的标准包
                 let pkgEntry = [...standardPackages].reverse().find(p => p < pkgCore) || Math.max(12, pkgCore - 12);
 
                 let unitA = getUnitPrice(pkgAnchor, data.type);
-                let unitB = getUnitPrice(pkgCore, data.type); // 如果不在标准包内，按其所在区间计算
+                let unitB = getUnitPrice(pkgCore, data.type); 
                 let unitC = getUnitPrice(pkgEntry, data.type);
                 
                 let totalOriA = pkgAnchor * unitA;
@@ -789,21 +788,26 @@
                 let totalNewB = pkgCore * newbiePrice;
                 let totalNewC = pkgEntry * newbiePrice;
 
+                // 动态命名标题
+                document.getElementById('up-a-title').innerText = `方案一：【周期延伸】极致重塑包`;
+                document.getElementById('up-b-title').innerText = `方案二：【${targetName}】完美匹配包`;
+                document.getElementById('up-c-title').innerText = `方案三：【${phaseNames[0] || '起步'}】体验启动包`;
+
                 // 赋值 A
                 document.getElementById('up-a-unit-ori').innerText = `¥${unitA}/节`;
                 document.getElementById('up-a-unit-new').innerText = `¥${newbiePrice}/节`;
                 document.getElementById('up-a-sessions').innerHTML = `${pkgAnchor} <span>节</span>`;
                 document.getElementById('up-a-ori').innerText = `原总价 ¥${formatMoney(totalOriA)}`;
                 document.getElementById('up-a-new').innerText = formatMoney(totalNewA);
-                document.getElementById('btn-sign-a').onclick = function() { openSignature('极致重塑升级包', pkgAnchor + '节', '¥ ' + formatMoney(totalNewA)); };
+                document.getElementById('btn-sign-a').onclick = function() { openSignature('极致重塑包', pkgAnchor + '节', '¥ ' + formatMoney(totalNewA)); };
 
-                // 赋值 B (修改文案以体现“精准匹配”)
+                // 赋值 B 
                 document.getElementById('up-b-unit-ori').innerText = `¥${unitB}/节`;
                 document.getElementById('up-b-unit-new').innerText = `¥${newbiePrice}/节`;
                 document.getElementById('up-b-sessions').innerHTML = `${pkgCore} <span>节</span>`;
                 document.getElementById('up-b-ori').innerText = `原总价 ¥${formatMoney(totalOriB)}`;
                 document.getElementById('up-b-new').innerText = formatMoney(totalNewB);
-                document.getElementById('btn-sign-b').onclick = function() { openSignature('精准核算核心包', pkgCore + '节', '¥ ' + formatMoney(totalNewB)); };
+                document.getElementById('btn-sign-b').onclick = function() { openSignature(targetName + ' 完美匹配包', pkgCore + '节', '¥ ' + formatMoney(totalNewB)); };
 
                 // 赋值 C
                 document.getElementById('up-c-unit-ori').innerText = `¥${unitC}/节`;
@@ -811,7 +815,7 @@
                 document.getElementById('up-c-sessions').innerHTML = `${pkgEntry} <span>节</span>`;
                 document.getElementById('up-c-ori').innerText = `原总价 ¥${formatMoney(totalOriC)}`;
                 document.getElementById('up-c-new').innerText = formatMoney(totalNewC);
-                document.getElementById('btn-sign-c').onclick = function() { openSignature('低门槛启动包', pkgEntry + '节', '¥ ' + formatMoney(totalNewC)); };
+                document.getElementById('btn-sign-c').onclick = function() { openSignature('初阶体验启动包', pkgEntry + '节', '¥ ' + formatMoney(totalNewC)); };
             }
 
             document.getElementById('upsellOverlay').classList.add('show');
@@ -823,7 +827,7 @@
             document.getElementById('upsellModal').classList.remove('show');
         }
 
-        // 🚨 全屏电子签名画布系统
+        // 电子签名画布系统
         let sigCanvas, sigCtx, isSigning = false;
 
         function openSignature(pkgName, sessions, price) {
