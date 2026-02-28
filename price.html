@@ -33,10 +33,9 @@
         
         .m-card.selected { border-color: var(--primary); background: linear-gradient(145deg, #221A0F, #0A0A0C); box-shadow: 0 10px 30px rgba(232, 195, 124, 0.2), inset 0 0 15px rgba(232, 195, 124, 0.1); transform: translateY(-2px);}
         
-        /* 🚨 核心修复：将对号移至左上角，彻底解决重叠 */
+        /* ✓ 移至左上角防重叠 */
         .m-card.selected::before { content: '✓ 已优选'; position: absolute; top: -1px; left: -1px; color: #000; font-size: 10px; font-weight: bold; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); border-radius: 16px 0 16px 0; padding: 4px 10px; text-align: center; box-shadow: 2px 2px 10px rgba(232, 195, 124, 0.3); z-index: 20;}
 
-        /* 原本的 save-tag 保持在右上角不动 */
         .save-tag { position: absolute; top: 0; right: 0; background: linear-gradient(135deg, #FF4B40, #D91D12); color: #fff; font-size: 9px; font-weight: 900; padding: 4px 10px; border-radius: 0 0 0 12px; letter-spacing: 0.5px; box-shadow: -2px 2px 10px rgba(217, 29, 18, 0.3); z-index: 10;}
         .vip .save-tag { background: linear-gradient(135deg, var(--primary), #B58428); color: #000; box-shadow: -2px 2px 10px rgba(232, 195, 124, 0.4);}
 
@@ -109,50 +108,50 @@
                     <div class="save-tag">首购省 ¥1,080</div>
                     <div class="mc-top"><div class="mc-ses">12<span>节</span></div></div>
                     <div class="mc-mid">
-                        <div class="mc-ori">原阶梯总价 ¥5,280</div>
+                        <div class="mc-ori">散客原总价 ¥5,280</div>
                         <div class="mc-new"><span>¥</span>4,200</div>
                     </div>
                     <div class="mc-bot">
-                        <span class="mc-bot-ori">原 ¥440/节</span>
+                        <span class="mc-bot-ori">原散客 ¥440/节</span>
                         <span class="mc-bot-new">首购 ¥350/节</span>
                     </div>
                 </div>
 
                 <div class="m-card" onclick="selectCard(this, '常规减脂/塑形', '24节', '¥ 8,400')">
-                    <div class="save-tag">首购省 ¥1,680</div>
+                    <div class="save-tag">首购省 ¥2,160</div>
                     <div class="mc-top"><div class="mc-ses">24<span>节</span></div></div>
                     <div class="mc-mid">
-                        <div class="mc-ori">原阶梯总价 ¥10,080</div>
+                        <div class="mc-ori">散客原总价 ¥10,560</div>
                         <div class="mc-new"><span>¥</span>8,400</div>
                     </div>
                     <div class="mc-bot">
-                        <span class="mc-bot-ori">原 ¥420/节</span>
+                        <span class="mc-bot-ori">原散客 ¥440/节</span>
                         <span class="mc-bot-new">首购 ¥350/节</span>
                     </div>
                 </div>
 
                 <div class="m-card vip selected" onclick="selectCard(this, '常规减脂/塑形', '48节', '¥ 16,800')">
-                    <div class="save-tag">王牌主推 省 ¥2,400</div>
+                    <div class="save-tag">王牌主推 省 ¥4,320</div>
                     <div class="mc-top"><div class="mc-ses">48<span>节</span></div></div>
                     <div class="mc-mid">
-                        <div class="mc-ori">原阶梯总价 ¥19,200</div>
+                        <div class="mc-ori">散客原总价 ¥21,120</div>
                         <div class="mc-new"><span>¥</span>16,800</div>
                     </div>
                     <div class="mc-bot">
-                        <span class="mc-bot-ori">原 ¥400/节</span>
+                        <span class="mc-bot-ori">原散客 ¥440/节</span>
                         <span class="mc-bot-new">首购 ¥350/节</span>
                     </div>
                 </div>
 
                 <div class="m-card" onclick="selectCard(this, '常规减脂/塑形', '72节', '¥ 25,200')">
-                    <div class="save-tag">首购省 ¥2,160</div>
+                    <div class="save-tag">首购省 ¥6,480</div>
                     <div class="mc-top"><div class="mc-ses">72<span>节</span></div></div>
                     <div class="mc-mid">
-                        <div class="mc-ori">原阶梯总价 ¥27,360</div>
+                        <div class="mc-ori">散客原总价 ¥31,680</div>
                         <div class="mc-new"><span>¥</span>25,200</div>
                     </div>
                     <div class="mc-bot">
-                        <span class="mc-bot-ori">原 ¥380/节</span>
+                        <span class="mc-bot-ori">原散客 ¥440/节</span>
                         <span class="mc-bot-new">首购 ¥350/节</span>
                     </div>
                 </div>
@@ -176,50 +175,50 @@
                     <div class="save-tag">首购省 ¥960</div>
                     <div class="mc-top"><div class="mc-ses">12<span>节</span></div></div>
                     <div class="mc-mid">
-                        <div class="mc-ori">原阶梯总价 ¥5,520</div>
+                        <div class="mc-ori">散客原总价 ¥5,520</div>
                         <div class="mc-new"><span>¥</span>4,560</div>
                     </div>
                     <div class="mc-bot">
-                        <span class="mc-bot-ori">原 ¥460/节</span>
+                        <span class="mc-bot-ori">原散客 ¥460/节</span>
                         <span class="mc-bot-new">首购 ¥380/节</span>
                     </div>
                 </div>
 
                 <div class="m-card" onclick="selectCard(this, '康复/普拉提干预', '24节', '¥ 9,120')">
-                    <div class="save-tag">首购省 ¥1,440</div>
+                    <div class="save-tag">首购省 ¥1,920</div>
                     <div class="mc-top"><div class="mc-ses">24<span>节</span></div></div>
                     <div class="mc-mid">
-                        <div class="mc-ori">原阶梯总价 ¥10,560</div>
+                        <div class="mc-ori">散客原总价 ¥11,040</div>
                         <div class="mc-new"><span>¥</span>9,120</div>
                     </div>
                     <div class="mc-bot">
-                        <span class="mc-bot-ori">原 ¥440/节</span>
+                        <span class="mc-bot-ori">原散客 ¥460/节</span>
                         <span class="mc-bot-new">首购 ¥380/节</span>
                     </div>
                 </div>
 
                 <div class="m-card vip" onclick="selectCard(this, '康复/普拉提干预', '48节', '¥ 18,240')">
-                    <div class="save-tag">王牌主推 省 ¥1,920</div>
+                    <div class="save-tag">王牌主推 省 ¥3,840</div>
                     <div class="mc-top"><div class="mc-ses">48<span>节</span></div></div>
                     <div class="mc-mid">
-                        <div class="mc-ori">原阶梯总价 ¥20,160</div>
+                        <div class="mc-ori">散客原总价 ¥22,080</div>
                         <div class="mc-new"><span>¥</span>18,240</div>
                     </div>
                     <div class="mc-bot">
-                        <span class="mc-bot-ori">原 ¥420/节</span>
+                        <span class="mc-bot-ori">原散客 ¥460/节</span>
                         <span class="mc-bot-new">首购 ¥380/节</span>
                     </div>
                 </div>
 
                 <div class="m-card" onclick="selectCard(this, '康复/普拉提干预', '72节', '¥ 27,360')">
-                    <div class="save-tag">首购省 ¥1,440</div>
+                    <div class="save-tag">首购省 ¥5,760</div>
                     <div class="mc-top"><div class="mc-ses">72<span>节</span></div></div>
                     <div class="mc-mid">
-                        <div class="mc-ori">原阶梯总价 ¥28,800</div>
+                        <div class="mc-ori">散客原总价 ¥33,120</div>
                         <div class="mc-new"><span>¥</span>27,360</div>
                     </div>
                     <div class="mc-bot">
-                        <span class="mc-bot-ori">原 ¥400/节</span>
+                        <span class="mc-bot-ori">原散客 ¥460/节</span>
                         <span class="mc-bot-new">首购 ¥380/节</span>
                     </div>
                 </div>
@@ -243,7 +242,7 @@
                     <div class="save-tag" style="background:#444;">突击重塑</div>
                     <div class="mc-top"><div class="mc-ses">1<span>个月</span></div></div>
                     <div class="mc-mid">
-                        <div style="font-size: 11px; color: #888; margin-bottom: 2px;">含最高 16 节私教</div>
+                        <div style="font-size:11px; color:#888; margin-bottom: 2px;">含最高 16 节私教</div>
                         <div class="mc-new"><span>¥</span>3,888</div>
                     </div>
                     <div class="mc-bot">
@@ -256,7 +255,7 @@
                     <div class="save-tag" style="background:#555;">平台跨越</div>
                     <div class="mc-top"><div class="mc-ses">2<span>个月</span></div></div>
                     <div class="mc-mid">
-                        <div class="mc-ori">原核算 ¥7,776</div>
+                        <div class="mc-ori">散客原总价 ¥7,776</div>
                         <div class="mc-new"><span>¥</span>7,200</div>
                     </div>
                     <div class="mc-bot">
@@ -269,7 +268,7 @@
                     <div class="save-tag">极致性价比 季卡</div>
                     <div class="mc-top"><div class="mc-ses">3<span>个月</span></div></div>
                     <div class="mc-mid">
-                        <div class="mc-ori">原核算 ¥11,664</div>
+                        <div class="mc-ori">散客原总价 ¥11,664</div>
                         <div class="mc-new"><span>¥</span>9,600</div>
                     </div>
                     <div class="mc-bot">
@@ -282,7 +281,7 @@
                     <div class="save-tag">顶级逆龄 半年卡</div>
                     <div class="mc-top"><div class="mc-ses">6<span>个月</span></div></div>
                     <div class="mc-mid">
-                        <div class="mc-ori">原核算 ¥23,328</div>
+                        <div class="mc-ori">散客原总价 ¥23,328</div>
                         <div class="mc-new"><span>¥</span>18,000</div>
                     </div>
                     <div class="mc-bot">
@@ -315,10 +314,7 @@
             <button class="close-btn" onclick="closeSignature()" style="font-size: 28px; color: #888;">×</button>
         </div>
         <div class="sig-content">
-            
-            <div id="sig-pad-wrap" class="sig-pad-wrap">
-                </div>
-
+            <div id="sig-pad-wrap" class="sig-pad-wrap"></div>
         </div>
     </div>
 
@@ -370,6 +366,7 @@
             if(navigator.vibrate) navigator.vibrate(15);
         }
 
+        // ================= 签名与合同生成系统 =================
         let sigCanvas, sigCtx, isSigning = false;
 
         function triggerSignature() {
@@ -468,6 +465,7 @@
             if(ph) ph.style.display = 'block';
         }
 
+        // 合成并生成可保存的图片
         function generateContractImage() {
             if(!sigCtx) return;
 
