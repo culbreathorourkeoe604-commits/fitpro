@@ -86,14 +86,14 @@
         .sp-text strong { color: var(--primary); font-weight: bold; text-shadow: 0 0 8px rgba(212,175,55,0.3); }
 
         /* 🚨 教练配课滑动步进器 */
-        .custom-builder { margin-top: 15px; border-top: 1px dashed rgba(212,175,55,0.3); padding-top: 15px; display: flex; flex-direction: column; gap: 10px; }
-        .cb-item { display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.5); padding: 8px 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05);}
-        .cb-label { font-size: 13px; color: #fff; font-weight: bold; }
-        .cb-label span { font-size: 10px; color: #888; font-weight: normal; margin-left: 4px; }
+        .custom-builder { margin-top: 15px; border-top: 1px dashed rgba(212,175,55,0.3); padding-top: 15px; display: flex; flex-direction: column; gap: 12px; }
+        .cb-item { display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.5); padding: 10px 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05);}
+        .cb-label { font-size: 14px; color: #fff; font-weight: bold; display: flex; flex-direction: column; gap: 4px;}
+        .cb-label span { font-size: 11px; color: var(--primary); font-weight: normal; opacity: 0.8;}
         .cb-ctrl { display: flex; align-items: center; background: #111; border-radius: 8px; border: 1px solid rgba(212,175,55,0.3); overflow: hidden; }
-        .cb-btn { width: 32px; height: 32px; display: flex; justify-content: center; align-items: center; color: var(--primary); font-size: 18px; font-weight: bold; cursor: pointer; user-select: none; }
+        .cb-btn { width: 34px; height: 34px; display: flex; justify-content: center; align-items: center; color: var(--primary); font-size: 18px; font-weight: bold; cursor: pointer; user-select: none; }
         .cb-btn:active { background: rgba(212,175,55,0.2); }
-        .cb-input { width: 40px; text-align: center; background: #000; border: none; border-left: 1px solid #333; border-right: 1px solid #333; color: #fff; font-size: 15px; font-weight: 900; padding: 6px 0; outline: none; pointer-events: none;}
+        .cb-input { width: 40px; text-align: center; background: #000; border: none; border-left: 1px solid #333; border-right: 1px solid #333; color: #fff; font-size: 16px; font-weight: 900; padding: 6px 0; outline: none; pointer-events: none;}
 
         /* 可视化投射图 */
         .visual-feedback-section { margin-top: 30px; background: #0a0a0c; border: 1px solid rgba(212, 175, 55, 0.15); border-radius: 16px; padding: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
@@ -114,7 +114,7 @@
         .btn-checkout:active { transform: scale(0.96); }
         .btn-checkout.disabled { background: #333; color: #666; box-shadow: none; pointer-events: none; }
 
-        /* 三套心理学逼单弹窗 */
+        /* 🚨 弹窗样式 */
         .upsell-overlay { position: fixed; top:0; left:0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; opacity: 0; pointer-events: none; transition: 0.4s; backdrop-filter: blur(5px); }
         .upsell-overlay.show { opacity: 1; pointer-events: auto; }
         
@@ -129,8 +129,10 @@
         .up-card { background: #111; border-radius: 12px; padding: 15px; border: 1px solid #333; margin-bottom: 12px; position: relative; overflow: hidden; }
         .up-card:active { transform: scale(0.98); }
         .up-card.anchor { background: linear-gradient(145deg, #18181A, #0A0A0C); border-color: #444; }
+        
         .up-card.premium { border-color: rgba(212,175,55,0.8); background: linear-gradient(145deg, #241D10, #0A0A0C); box-shadow: 0 5px 20px rgba(212,175,55,0.15); margin-top: 12px; margin-bottom: 12px; transform: scale(1.02);}
         .up-card.premium::before { content: '★ 核心主推，最配目标'; position: absolute; top: 0; right: 0; background: linear-gradient(90deg, var(--accent), var(--primary)); color: #000; font-size: 10px; font-weight: bold; padding: 4px 12px; border-radius: 0 0 0 12px; }
+        
         .up-card.basic { background: #0A0A0C; border-style: dashed; border-color: #555; }
         
         .uc-title { font-size: 15px; font-weight: 900; color: #fff; margin-bottom: 6px; display: flex; align-items: center; gap: 6px;}
@@ -142,7 +144,6 @@
         .uc-sessions span { font-size: 12px; font-weight: normal; color: #888; }
         .uc-price { text-align: right; }
         
-        /* 首购破冰对比样式 */
         .uc-price-ori { font-size: 12px; color: #888; text-decoration: line-through; margin-bottom: 2px; }
         .uc-price-val { font-size: 22px; font-weight: 900; color: #fff; display: flex; align-items: baseline; justify-content: flex-end; gap: 4px;}
         .premium .uc-price-val { font-size: 26px; color: #fff; }
@@ -153,6 +154,12 @@
         .anchor .uc-btn { background: #333; color: #fff; }
         .premium .uc-btn { background: linear-gradient(135deg, var(--primary), #AA8A2A); color: #000; box-shadow: 0 4px 15px rgba(212,175,55,0.3);}
         .basic .uc-btn { background: transparent; color: #aaa; border: 1px solid #555; }
+        
+        /* 自定义核算专属样式 */
+        .custom-breakdown { background: rgba(255,255,255,0.03); padding: 12px; border-radius: 8px; margin-bottom: 15px; font-size: 13px; color: #ccc; line-height: 1.8; border: 1px solid rgba(212,175,55,0.2);}
+        .custom-breakdown .row { display: flex; justify-content: space-between; }
+        .custom-breakdown .hl { color: var(--primary); font-weight: bold; }
+        .custom-breakdown .sub { text-align: right; font-size: 11px; color: #888; margin-top: -2px; margin-bottom: 6px;}
     </style>
 </head>
 <body>
@@ -216,53 +223,76 @@
     <div class="upsell-modal" id="upsellModal">
         <div class="up-header">
             <div>
-                <div class="up-title">✦ 智能匹配三轨方案 ✦</div>
-                <div class="up-sub">系统已为您接入 <strong style="color:var(--primary)">【首次建档专享 ¥350/节】</strong> 破冰费率：</div>
+                <div class="up-title">✦ 智能匹配双轨方案 ✦</div>
+                <div class="up-sub">系统已为您接入 <strong style="color:var(--primary)">【首次建档专享 ¥350/节起】</strong> 破冰费率：</div>
             </div>
             <button class="up-close" onclick="closeUpsellModal()">×</button>
         </div>
         
-        <div class="up-card anchor">
-            <div class="uc-title">方案一：极致重塑包 (高阶锚定)</div>
-            <div style="font-size:11px; color:#888; margin-bottom: 10px;">覆盖超长周期，打造绝对巅峰体态</div>
-            <div class="uc-data">
-                <div class="uc-sessions" id="up-a-sessions">-- <span>节</span></div>
-                <div class="uc-price">
-                    <div class="uc-price-ori" id="up-a-ori">原价 ¥--</div>
-                    <div class="uc-price-val">¥ <span id="up-a-new">--</span></div>
-                    <div class="uc-price-unit"><span class="newbie-tag">首购福利</span> 折合单价 ¥350/节</div>
+        <div id="standard-upsell-content">
+            <div class="up-card anchor">
+                <div class="uc-title">方案一：极致重塑包 (高阶锚定)</div>
+                <div style="font-size:11px; color:#888; margin-bottom: 10px;">覆盖超长周期，打造绝对巅峰体态</div>
+                <div class="uc-data">
+                    <div class="uc-sessions" id="up-a-sessions">-- <span>节</span></div>
+                    <div class="uc-price">
+                        <div class="uc-price-ori" id="up-a-ori">原价 ¥--</div>
+                        <div class="uc-price-val">¥ <span id="up-a-new">--</span></div>
+                        <div class="uc-price-unit"><span class="newbie-tag">首购福利</span> 折合单价 ¥350/节</div>
+                    </div>
                 </div>
+                <button class="uc-btn" onclick="window.location.href='./price.html'">选择此方案 ➔</button>
             </div>
-            <button class="uc-btn" onclick="window.location.href='./price.html'">选择此方案 ➔</button>
+
+            <div class="up-card premium">
+                <div class="uc-title">方案二：黄金周期核心包</div>
+                <div style="font-size:12px; color:#aaa; margin-bottom: 10px;">完美契合您的重塑目标，当前最高性价比选择</div>
+                <div class="uc-data">
+                    <div class="uc-sessions" id="up-b-sessions">-- <span>节</span></div>
+                    <div class="uc-price">
+                        <div class="uc-price-ori" id="up-b-ori">原价 ¥--</div>
+                        <div class="uc-price-val">¥ <span id="up-b-new">--</span></div>
+                        <div class="uc-price-unit"><span class="newbie-tag">首购福利</span> 折合单价 ¥350/节</div>
+                    </div>
+                </div>
+                <button class="uc-btn" onclick="window.location.href='./price.html'">确认主推方案并签约 ➔</button>
+            </div>
+
+            <div class="up-card basic">
+                <div class="uc-title">方案三：低门槛启动包</div>
+                <div style="font-size:11px; color:#666; margin-bottom: 10px;">极低财务门槛破冰，随时可按此阶梯补差价升级</div>
+                <div class="uc-data">
+                    <div class="uc-sessions" id="up-c-sessions" style="font-size:18px;">-- <span>节</span></div>
+                    <div class="uc-price">
+                        <div class="uc-price-ori" id="up-c-ori" style="font-size:11px;">原价 ¥--</div>
+                        <div class="uc-price-val" style="font-size:18px;">¥ <span id="up-c-new">--</span></div>
+                        <div class="uc-price-unit" style="font-size:10px;"><span class="newbie-tag">首购福利</span> 折合单价 ¥350/节</div>
+                    </div>
+                </div>
+                <button class="uc-btn" onclick="window.location.href='./price.html'">先选此方案低风险启动 ➔</button>
+            </div>
         </div>
 
-        <div class="up-card premium">
-            <div class="uc-title">方案二：黄金周期核心包</div>
-            <div style="font-size:12px; color:#aaa; margin-bottom: 10px;">完美契合您的重塑目标，当前最高性价比选择</div>
-            <div class="uc-data">
-                <div class="uc-sessions" id="up-b-sessions">-- <span>节</span></div>
-                <div class="uc-price">
-                    <div class="uc-price-ori" id="up-b-ori">原价 ¥--</div>
-                    <div class="uc-price-val">¥ <span id="up-b-new">--</span></div>
-                    <div class="uc-price-unit"><span class="newbie-tag">首购福利</span> 折合单价 ¥350/节</div>
+        <div id="custom-upsell-content" style="display:none;">
+            <div class="up-card premium">
+                <div class="uc-title">您的专属：高定私享组合包</div>
+                <div style="font-size:12px; color:#aaa; margin-bottom: 12px;">教练为您量身调配的顶级复合训练计划</div>
+                
+                <div class="custom-breakdown" id="custom-breakdown-details">
+                    </div>
+
+                <div class="uc-data">
+                    <div class="uc-sessions" id="up-custom-sessions" style="font-size: 20px;">组合核算</div>
+                    <div class="uc-price">
+                        <div class="uc-price-ori" id="up-custom-ori">常规执行总价 ¥--</div>
+                        <div class="uc-price-val" style="font-size: 28px;">¥ <span id="up-custom-new">--</span></div>
+                        <div class="uc-price-unit"><span class="newbie-tag">新客破冰</span> 极度优惠组合</div>
+                    </div>
                 </div>
+                <button class="uc-btn" onclick="window.location.href='./price.html'">确认专属组合方案并签约 ➔</button>
             </div>
-            <button class="uc-btn" onclick="window.location.href='./price.html'">确认主推方案并签约 ➔</button>
         </div>
 
-        <div class="up-card basic">
-            <div class="uc-title">方案三：低门槛启动包</div>
-            <div style="font-size:11px; color:#666; margin-bottom: 10px;">极低财务门槛破冰，随时可按此阶梯补差价升级</div>
-            <div class="uc-data">
-                <div class="uc-sessions" id="up-c-sessions" style="font-size:18px;">-- <span>节</span></div>
-                <div class="uc-price">
-                    <div class="uc-price-ori" id="up-c-ori" style="font-size:11px;">原价 ¥--</div>
-                    <div class="uc-price-val" style="font-size:18px;">¥ <span id="up-c-new">--</span></div>
-                    <div class="uc-price-unit" style="font-size:10px;"><span class="newbie-tag">首购福利</span> 折合单价 ¥350/节</div>
-                </div>
-            </div>
-            <button class="uc-btn" onclick="window.location.href='./price.html'">先选此方案低风险启动 ➔</button>
-        </div>
     </div>
 
     <script>
@@ -273,6 +303,7 @@
         const standardPackages = [12, 24, 48, 72, 100, 150];
 
         function getUnitPrice(sessions, type) {
+            if(sessions <= 0) return 0;
             for (let tier of priceTiers[type]) {
                 if (sessions >= tier.t) return tier.p;
             }
@@ -280,6 +311,13 @@
         }
         function formatMoney(num) {
             return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+        function getMonthlyPrice(m) {
+            if(m === 1) return 3888;
+            if(m === 2) return 7200;
+            if(m === 3) return 9600;
+            if(m >= 6) return 18000;
+            return m * 3888; // 兜底
         }
 
         const planData = {
@@ -390,7 +428,7 @@
                 
                 <div class="phase-box selected" data-phase="1" data-min="${data.p1_min}" data-max="${data.p1_max}" onclick="togglePhase(this, event)">
                     <div class="check-circle"></div>
-                    <div class="p-step">● PHASE 01</div>
+                    <div class="p-step">● PHASE 01 / 阶段一</div>
                     <div class="p-cycle-highlight">
                         <div class="cycle-row"><span class="icon">⏱</span> 周期：<span class="highlight-text">${data.p1_time}</span></div>
                         <div class="cycle-row"><span class="icon">🎯</span> 课时：<span class="highlight-text">${data.p1_sessions}</span></div>
@@ -405,7 +443,7 @@
 
                 <div class="phase-box" data-phase="2" data-min="${data.p2_min}" data-max="${data.p2_max}" onclick="togglePhase(this, event)">
                     <div class="check-circle"></div>
-                    <div class="p-step">● PHASE 02</div>
+                    <div class="p-step">● PHASE 02 / 阶段二</div>
                     <div class="p-cycle-highlight">
                         <div class="cycle-row"><span class="icon">⏱</span> 周期：<span class="highlight-text">${data.p2_time}</span></div>
                         <div class="cycle-row"><span class="icon">🎯</span> 课时：<span class="highlight-text">${data.p2_sessions}</span></div>
@@ -420,7 +458,7 @@
 
                 <div class="phase-box" data-phase="3" data-min="${data.p3_min}" data-max="${data.p3_max}" onclick="togglePhase(this, event)">
                     <div class="check-circle"></div>
-                    <div class="p-step">● PHASE 03</div>
+                    <div class="p-step">● PHASE 03 / 阶段三</div>
                     <div class="p-cycle-highlight">
                         <div class="cycle-row"><span class="icon">⏱</span> 周期：<span class="highlight-text">${data.p3_time}</span></div>
                         <div class="cycle-row"><span class="icon">🎯</span> 课时：<span class="highlight-text">${data.p3_sessions}</span></div>
@@ -436,27 +474,27 @@
                 <div class="phase-box combo-box" id="phase-4-box" onclick="togglePhase(this, event)">
                     <div class="check-circle"></div>
                     <div class="p-step">★ 特殊通道 / 教练专属定制组合包</div>
-                    <div class="p-name" style="margin-bottom: 5px;">突破单一局限，全息方案托管</div>
+                    <div class="p-name" style="margin-bottom: 15px;">突破单一局限，全息方案托管</div>
                     
                     <div class="custom-builder">
                         <div class="cb-item">
-                            <div class="cb-label">常规训练课 <span>(燃脂/塑形)</span></div>
+                            <div class="cb-label">常规训练课 <span style="color:var(--primary);">(60分钟/节)</span></div>
                             <div class="cb-ctrl">
-                                <div class="cb-btn" onclick="chgVal('cb-reg', -2, event)">-</div>
+                                <div class="cb-btn" onclick="chgVal('cb-reg', -1, event)">-</div>
                                 <input id="cb-reg" class="cb-input" value="0" readonly>
-                                <div class="cb-btn" onclick="chgVal('cb-reg', 2, event)">+</div>
+                                <div class="cb-btn" onclick="chgVal('cb-reg', 1, event)">+</div>
                             </div>
                         </div>
                         <div class="cb-item">
-                            <div class="cb-label">特色干预课 <span>(康复/普拉提)</span></div>
+                            <div class="cb-label">特色干预课 <span style="color:var(--primary);">(45分钟/节)</span></div>
                             <div class="cb-ctrl">
-                                <div class="cb-btn" onclick="chgVal('cb-feat', -2, event)">-</div>
+                                <div class="cb-btn" onclick="chgVal('cb-feat', -1, event)">-</div>
                                 <input id="cb-feat" class="cb-input" value="0" readonly>
-                                <div class="cb-btn" onclick="chgVal('cb-feat', 2, event)">+</div>
+                                <div class="cb-btn" onclick="chgVal('cb-feat', 1, event)">+</div>
                             </div>
                         </div>
                         <div class="cb-item">
-                            <div class="cb-label">包月周期课 <span>(月度单位)</span></div>
+                            <div class="cb-label">包月周期课 <span style="color:var(--primary);">(45分钟/节，按月)</span></div>
                             <div class="cb-ctrl">
                                 <div class="cb-btn" onclick="chgVal('cb-mon', -1, event)">-</div>
                                 <input id="cb-mon" class="cb-input" value="0" readonly>
@@ -486,36 +524,47 @@
             document.getElementById('detailModal').classList.remove('show');
         }
 
-        // 步进器逻辑
+        // 🚨 步进器逻辑，步长改为 1，点击加号自动选定当前框，并取消前三个框
         function chgVal(id, delta, e) {
-            e.stopPropagation(); // 防止点击加减号时触发卡片的选中/取消
+            if(e) e.stopPropagation(); 
             let el = document.getElementById(id);
             let val = parseInt(el.value) + delta;
             if (val < 0) val = 0;
             el.value = val;
             
-            // 只要有数字，就自动选中第四个框
             let box = document.getElementById('phase-4-box');
             let totalCustom = parseInt(document.getElementById('cb-reg').value) + parseInt(document.getElementById('cb-feat').value) + parseInt(document.getElementById('cb-mon').value);
             
-            if (totalCustom > 0 && !box.classList.contains('selected')) {
+            if (totalCustom > 0) {
                 box.classList.add('selected');
-            } else if (totalCustom === 0 && box.classList.contains('selected')) {
+                // 互斥：排他取消前 3 个阶段
+                document.querySelectorAll('.phase-box:not(.combo-box)').forEach(b => b.classList.remove('selected'));
+            } else if (totalCustom === 0) {
                 box.classList.remove('selected');
             }
             
             updateCheckout();
         }
 
+        // 🚨 互斥点选逻辑
         function togglePhase(el, e) {
-            // 如果点击的是第四个框且没有任何数值，自动加一些基础值
-            if(el.id === 'phase-4-box' && !el.classList.contains('selected')) {
-                if(document.getElementById('cb-reg').value == 0 && document.getElementById('cb-feat').value == 0 && document.getElementById('cb-mon').value == 0){
-                    document.getElementById('cb-reg').value = 12;
-                    document.getElementById('cb-feat').value = 12;
+            if(e) e.stopPropagation();
+
+            if (el.id === 'phase-4-box') {
+                // 如果点的是组合包，取消前三个阶段
+                document.querySelectorAll('.phase-box:not(.combo-box)').forEach(b => b.classList.remove('selected'));
+                el.classList.toggle('selected');
+                
+                // 如果刚被选中且里面全是0，给点默认值以便展示
+                if (el.classList.contains('selected') && document.getElementById('cb-reg').value == 0 && document.getElementById('cb-feat').value == 0 && document.getElementById('cb-mon').value == 0) {
+                    document.getElementById('cb-reg').value = 1; 
                 }
+            } else {
+                // 如果点的是前三个阶段，取消组合包
+                let cb = document.getElementById('phase-4-box');
+                if(cb) cb.classList.remove('selected');
+                el.classList.toggle('selected');
             }
-            el.classList.toggle('selected');
             updateCheckout();
         }
 
@@ -524,24 +573,27 @@
             let totalMax = 0;
             let maxPhaseSelected = 0;
             
-            // 计算 1-3 阶段
-            document.querySelectorAll('.phase-box.selected:not(.combo-box)').forEach(box => {
-                totalMin += parseInt(box.getAttribute('data-min'));
-                totalMax += parseInt(box.getAttribute('data-max'));
-                let p = parseInt(box.getAttribute('data-phase'));
-                if(p > maxPhaseSelected) maxPhaseSelected = p;
-            });
-            
-            // 计算 第 4 阶段 (定制组合包)
+            // 检查组合包是否被选中
             let customBox = document.getElementById('phase-4-box');
-            if(customBox && customBox.classList.contains('selected')) {
+            let isCustom = customBox && customBox.classList.contains('selected');
+
+            if (isCustom) {
                 let r = parseInt(document.getElementById('cb-reg').value);
                 let f = parseInt(document.getElementById('cb-feat').value);
                 let m = parseInt(document.getElementById('cb-mon').value);
-                let customTotal = r + f + (m * 12); // 包月按约12节折算展示
-                totalMin += customTotal;
-                totalMax += customTotal;
-                maxPhaseSelected = 4; // 代表顶级 VIP 状态
+                // 仅用于底部统计显示，包月粗略算12节
+                let customTotal = r + f + (m * 12); 
+                totalMin = customTotal;
+                totalMax = customTotal;
+                maxPhaseSelected = 4; // VIP 状态
+            } else {
+                // 常规的 1、2、3 阶段
+                document.querySelectorAll('.phase-box.selected:not(.combo-box)').forEach(box => {
+                    totalMin += parseInt(box.getAttribute('data-min'));
+                    totalMax += parseInt(box.getAttribute('data-max'));
+                    let p = parseInt(box.getAttribute('data-phase'));
+                    if(p > maxPhaseSelected) maxPhaseSelected = p;
+                });
             }
             
             globalTotalMin = totalMin;
@@ -576,9 +628,8 @@
                     }
                 }
                 
-                // 如果定制数值完全确定，min=max
-                if(totalMin === totalMax) {
-                    valDisplay.innerHTML = `${totalMin} <span>节</span>`;
+                if(totalMin === totalMax && isCustom) {
+                    valDisplay.innerHTML = `${totalMin} <span>节 (包含包月折算)</span>`;
                 } else {
                     valDisplay.innerHTML = `${totalMin} - ${totalMax} <span>节</span>`;
                 }
@@ -588,66 +639,109 @@
             }
         }
 
-        // 🚨 AI 智能 3 轨逼单系统 (含首购 350 福利计算)
+        // 🚨 智能报价分发：普通 3 轨 VS 教练高定专属单
         function showUpsellModal() {
             if(globalTotalMax === 0) return;
             
+            let customBox = document.getElementById('phase-4-box');
+            let isCustom = customBox && customBox.classList.contains('selected');
+            
             const data = planData[currentPlanKey];
-            let pkgEntry = 12, pkgCore = 48, pkgAnchor = 72;
-            
-            // 匹配逻辑
-            for(let i=standardPackages.length-1; i>=0; i--) {
-                if(globalTotalMin >= standardPackages[i]) { pkgEntry = standardPackages[i]; break; }
-            }
-            for(let i=0; i<standardPackages.length; i++) {
-                if(globalTotalMax <= standardPackages[i]) { pkgCore = standardPackages[i]; break; }
-            }
-            if(globalTotalMax > standardPackages[standardPackages.length-1]) {
-                pkgCore = standardPackages[standardPackages.length-1];
-            }
-            
-            if(pkgCore <= pkgEntry) {
-                let idx = standardPackages.indexOf(pkgEntry);
-                pkgCore = standardPackages[Math.min(idx+1, standardPackages.length-1)];
-            }
-            
-            let coreIdx = standardPackages.indexOf(pkgCore);
-            pkgAnchor = standardPackages[Math.min(coreIdx+1, standardPackages.length-1)];
-            
-            if(pkgAnchor === pkgCore) {
-                if(coreIdx > 1) {
-                    pkgEntry = standardPackages[coreIdx-2];
-                    pkgCore = standardPackages[coreIdx-1];
+
+            if (isCustom) {
+                // ====== 渲染：教练专属高定单 ======
+                document.getElementById('standard-upsell-content').style.display = 'none';
+                document.getElementById('custom-upsell-content').style.display = 'block';
+                document.getElementById('up-sub-text').innerHTML = `系统已为您核算以下 <strong style="color:var(--primary)">高定私享组合</strong>，含专属破冰福利：`;
+
+                let r = parseInt(document.getElementById('cb-reg').value);
+                let f = parseInt(document.getElementById('cb-feat').value);
+                let m = parseInt(document.getElementById('cb-mon').value);
+
+                // 计算原价
+                let oriReg = r * getUnitPrice(r, 'regular');
+                let oriFeat = f * getUnitPrice(f, 'feature');
+                let oriMon = m > 0 ? getMonthlyPrice(m) : 0;
+                let totalOri = oriReg + oriFeat + oriMon;
+
+                // 计算新客破冰价 (常规350，特色380，包月原价)
+                let newReg = r * 350;
+                let newFeat = f * 380; 
+                let newMon = oriMon; 
+                let totalNew = newReg + newFeat + newMon;
+
+                // 拼装明细
+                let bHtml = '';
+                if(r > 0) bHtml += `<div class="row"><span>常规课 (60分钟)</span> <span class="hl">${r} 节</span></div>`;
+                if(f > 0) bHtml += `<div class="row"><span>特色课 (45分钟)</span> <span class="hl">${f} 节</span></div>`;
+                if(m > 0) {
+                    bHtml += `<div class="row" style="margin-top:8px;"><span>包月卡 (45分钟)</span> <span class="hl">${m} 个月</span></div>`;
+                    bHtml += `<div class="sub">含包月专项费用 ¥${formatMoney(newMon)}</div>`;
                 }
+
+                document.getElementById('custom-breakdown-details').innerHTML = bHtml;
+                document.getElementById('up-custom-ori').innerText = `常规执行总价 ¥${formatMoney(totalOri)}`;
+                document.getElementById('up-custom-new').innerText = formatMoney(totalNew);
+
+            } else {
+                // ====== 渲染：标准心理学三轨方案 ======
+                document.getElementById('standard-upsell-content').style.display = 'block';
+                document.getElementById('custom-upsell-content').style.display = 'none';
+                document.getElementById('up-sub-text').innerHTML = `系统已为您接入 <strong style="color:var(--primary)">【首次建档专享 ¥350/节起】</strong> 破冰费率：`;
+
+                let pkgEntry = 12, pkgCore = 48, pkgAnchor = 72;
+                
+                for(let i=standardPackages.length-1; i>=0; i--) {
+                    if(globalTotalMin >= standardPackages[i]) { pkgEntry = standardPackages[i]; break; }
+                }
+                for(let i=0; i<standardPackages.length; i++) {
+                    if(globalTotalMax <= standardPackages[i]) { pkgCore = standardPackages[i]; break; }
+                }
+                if(globalTotalMax > standardPackages[standardPackages.length-1]) pkgCore = standardPackages[standardPackages.length-1];
+                if(pkgCore <= pkgEntry) {
+                    let idx = standardPackages.indexOf(pkgEntry);
+                    pkgCore = standardPackages[Math.min(idx+1, standardPackages.length-1)];
+                }
+                
+                let coreIdx = standardPackages.indexOf(pkgCore);
+                pkgAnchor = standardPackages[Math.min(coreIdx+1, standardPackages.length-1)];
+                
+                if(pkgAnchor === pkgCore) {
+                    if(coreIdx > 1) {
+                        pkgEntry = standardPackages[coreIdx-2];
+                        pkgCore = standardPackages[coreIdx-1];
+                    }
+                }
+
+                let unitA = getUnitPrice(pkgAnchor, data.type);
+                let unitB = getUnitPrice(pkgCore, data.type);
+                let unitC = getUnitPrice(pkgEntry, data.type);
+                
+                let totalOriA = pkgAnchor * unitA;
+                let totalOriB = pkgCore * unitB;
+                let totalOriC = pkgEntry * unitC;
+
+                // 新客福利核算：常规统一350，特色统一380
+                let newbiePrice = (data.type === 'feature') ? 380 : 350;
+                let totalNewA = pkgAnchor * newbiePrice;
+                let totalNewB = pkgCore * newbiePrice;
+                let totalNewC = pkgEntry * newbiePrice;
+
+                document.getElementById('up-a-sessions').innerHTML = `${pkgAnchor} <span>课时</span>`;
+                document.getElementById('up-a-ori').innerText = `常规执行价 ¥${formatMoney(totalOriA)}`;
+                document.getElementById('up-a-new').innerText = formatMoney(totalNewA);
+                document.getElementById('up-a-unit').innerHTML = `<span class="newbie-tag">首购福利</span> 折合单价 ¥${newbiePrice}/节`;
+
+                document.getElementById('up-b-sessions').innerHTML = `${pkgCore} <span>课时</span>`;
+                document.getElementById('up-b-ori').innerText = `常规执行价 ¥${formatMoney(totalOriB)}`;
+                document.getElementById('up-b-new').innerText = formatMoney(totalNewB);
+                document.getElementById('up-b-unit').innerHTML = `<span class="newbie-tag">首购福利</span> 折合单价 ¥${newbiePrice}/节`;
+
+                document.getElementById('up-c-sessions').innerHTML = `${pkgEntry} <span>课时</span>`;
+                document.getElementById('up-c-ori').innerText = `常规执行价 ¥${formatMoney(totalOriC)}`;
+                document.getElementById('up-c-new').innerText = formatMoney(totalNewC);
+                document.getElementById('up-c-unit').innerHTML = `<span class="newbie-tag">首购福利</span> 折合单价 ¥${newbiePrice}/节`;
             }
-
-            // 计算原价 (基于门店真实价格梯队)
-            let unitA = getUnitPrice(pkgAnchor, data.type);
-            let unitB = getUnitPrice(pkgCore, data.type);
-            let unitC = getUnitPrice(pkgEntry, data.type);
-            
-            let totalOriA = pkgAnchor * unitA;
-            let totalOriB = pkgCore * unitB;
-            let totalOriC = pkgEntry * unitC;
-
-            // 计算首购特权价 (统统 350)
-            let newbiePrice = 350;
-            let totalNewA = pkgAnchor * newbiePrice;
-            let totalNewB = pkgCore * newbiePrice;
-            let totalNewC = pkgEntry * newbiePrice;
-
-            // 渲染数据
-            document.getElementById('up-a-sessions').innerHTML = `${pkgAnchor} <span>课时</span>`;
-            document.getElementById('up-a-ori').innerText = `常规执行价 ¥${formatMoney(totalOriA)}`;
-            document.getElementById('up-a-new').innerText = formatMoney(totalNewA);
-
-            document.getElementById('up-b-sessions').innerHTML = `${pkgCore} <span>课时</span>`;
-            document.getElementById('up-b-ori').innerText = `常规执行价 ¥${formatMoney(totalOriB)}`;
-            document.getElementById('up-b-new').innerText = formatMoney(totalNewB);
-
-            document.getElementById('up-c-sessions').innerHTML = `${pkgEntry} <span>课时</span>`;
-            document.getElementById('up-c-ori').innerText = `常规执行价 ¥${formatMoney(totalOriC)}`;
-            document.getElementById('up-c-new').innerText = formatMoney(totalNewC);
 
             document.getElementById('upsellOverlay').classList.add('show');
             document.getElementById('upsellModal').classList.add('show');
