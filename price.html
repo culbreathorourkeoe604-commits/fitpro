@@ -3,326 +3,312 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>R玥精致健身 | 全景报价矩阵</title>
+    <title>R玥精致健身 | 巅峰报价仪表盘</title>
     <style>
         /* 顶级香槟黑金配色 */
-        :root { --primary: #D4AF37; --accent: #C5A059; --bg: #050505; --surface: #121212; --text-main: #E2E8F0; --text-sub: #8A92A3; }
+        :root { --primary: #E8C37C; --primary-dark: #C69A45; --bg-deep: #050505; --card-light: #16161A; --card-dark: #0A0A0C; --text-main: #FFFFFF; --text-sub: #A0A0AB; --danger: #FF3B30;}
         
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; margin: 0; padding: 0; }
-        html, body { width: 100%; height: 100%; overflow: hidden; background: var(--bg); color: var(--text-main); font-family: "DIN Alternate", -apple-system, sans-serif; -webkit-font-smoothing: antialiased; display: flex; flex-direction: column; }
+        html, body { width: 100%; height: 100%; overflow: hidden; background: var(--bg-deep); color: var(--text-main); font-family: "DIN Alternate", -apple-system, sans-serif; -webkit-font-smoothing: antialiased; display: flex; flex-direction: column; }
         
-        /* 顶部标题栏 */
-        .header-brand { width: 100%; height: 60px; display: flex; align-items: center; justify-content: center; background: rgba(5, 5, 5, 0.95); position: relative; z-index: 50; border-bottom: 1px solid rgba(212, 175, 55, 0.15); flex-shrink: 0;}
-        .brand-text { font-size: 16px; font-weight: 900; color: var(--primary); letter-spacing: 2px; }
+        /* 顶部环境光晕 */
+        body::before { content: ''; position: absolute; top: -10vh; left: 50%; transform: translateX(-50%); width: 150vw; height: 30vh; background: radial-gradient(ellipse, rgba(232, 195, 124, 0.15) 0%, transparent 70%); z-index: 0; pointer-events: none; }
 
-        /* 顶部切换 Tab */
-        .seg-control { display: flex; background: #111; border-radius: 10px; padding: 5px; margin: 15px 15px 10px; border: 1px solid rgba(255,255,255,0.05); flex-shrink: 0; }
-        .seg-btn { flex: 1; text-align: center; padding: 10px 0; font-size: 13px; font-weight: bold; color: #666; border-radius: 6px; transition: 0.3s; cursor: pointer; }
-        .seg-btn.active { background: linear-gradient(135deg, var(--primary), #AA8A2A); color: #000; box-shadow: 0 4px 10px rgba(212, 175, 55, 0.3); }
+        /* 顶部标题栏 */
+        .header-brand { width: 100%; height: 60px; display: flex; align-items: center; justify-content: center; position: relative; z-index: 50; flex-shrink: 0;}
+        .brand-text { font-size: 16px; font-weight: 900; color: var(--primary); letter-spacing: 3px; }
+
+        /* 顶部切换 Tab (悬浮胶囊设计) */
+        .seg-control { display: flex; background: rgba(20,20,25,0.8); border-radius: 12px; padding: 5px; margin: 5px 20px 15px; border: 1px solid rgba(255,255,255,0.05); flex-shrink: 0; z-index: 10; backdrop-filter: blur(10px);}
+        .seg-btn { flex: 1; text-align: center; padding: 10px 0; font-size: 13px; font-weight: bold; color: #666; border-radius: 8px; transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); cursor: pointer; position: relative; z-index: 2;}
+        .seg-btn.active { color: #000; text-shadow: none; font-weight: 900;}
+        /* 动态背景滑块模拟 */
+        .seg-btn.active::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); border-radius: 8px; z-index: -1; box-shadow: 0 4px 12px rgba(232, 195, 124, 0.4); }
 
         /* 核心内容区 */
-        .matrix-container { flex: 1; width: 100%; padding: 5px 15px 90px; overflow-y: auto; -webkit-overflow-scrolling: touch; }
-        .price-section { display: none; flex-direction: column; gap: 12px; animation: fadeIn 0.4s ease; height: 100%; justify-content: flex-start;}
+        .matrix-container { flex: 1; width: 100%; padding: 0 20px 90px; overflow-y: auto; -webkit-overflow-scrolling: touch; z-index: 5; position: relative; }
+        .price-section { display: none; flex-direction: column; gap: 12px; animation: scaleUp 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); }
         .price-section.active { display: flex; }
-        @keyframes fadeIn { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
+        @keyframes scaleUp { from { opacity: 0; transform: translateY(10px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
 
-        /* 🚨 宫格矩阵排版 (2列) */
+        /* 🚨 极致宫格矩阵 (2x2) */
         .grid-2x2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
         
-        /* 卡片极简设计 */
-        .matrix-card { background: linear-gradient(145deg, #16161A, #0A0A0C); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 18px 15px; position: relative; cursor: pointer; transition: 0.2s; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 5px 15px rgba(0,0,0,0.5);}
-        .matrix-card:active { transform: scale(0.96); }
+        /* 超跑级卡片设计 */
+        .m-card { background: linear-gradient(145deg, var(--card-light), var(--card-dark)); border: 1px solid rgba(255,255,255,0.06); border-radius: 16px; padding: 18px 15px; position: relative; cursor: pointer; transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); display: flex; flex-direction: column; gap: 12px; overflow: hidden; box-shadow: 0 8px 20px rgba(0,0,0,0.6);}
+        .m-card:active { transform: scale(0.96); }
         
-        /* 选中状态 */
-        .matrix-card.selected { border-color: var(--primary); background: linear-gradient(145deg, #1C1810, #050505); box-shadow: inset 0 0 20px rgba(212,175,55,0.05), 0 8px 20px rgba(212,175,55,0.2); }
-        .matrix-card.selected::before { content: ''; position: absolute; top: -1px; left: -1px; right: -1px; bottom: -1px; border-radius: 12px; border: 2px solid var(--primary); pointer-events: none; z-index: 10;}
-        .matrix-card.selected::after { content: '✓'; position: absolute; top: 10px; right: 10px; color: var(--primary); font-size: 14px; font-weight: bold; background: rgba(212,175,55,0.1); border-radius: 50%; width: 20px; height: 20px; text-align: center; line-height: 20px;}
+        /* 全息高亮选中状态 */
+        .m-card.selected { border-color: var(--primary); background: linear-gradient(145deg, #221A0F, #0A0A0C); box-shadow: 0 10px 30px rgba(232, 195, 124, 0.2), inset 0 0 15px rgba(232, 195, 124, 0.1); transform: translateY(-2px);}
+        .m-card.selected::after { content: '✓'; position: absolute; bottom: 15px; right: 15px; color: #000; font-size: 12px; font-weight: bold; background: var(--primary); border-radius: 50%; width: 18px; height: 18px; text-align: center; line-height: 18px; box-shadow: 0 2px 8px rgba(232, 195, 124, 0.5);}
 
-        /* VIP 主推金卡 */
-        .matrix-card.vip { background: linear-gradient(145deg, #241D10, #0A0A0C); border-color: rgba(212,175,55,0.5); }
-        .vip-tag { position: absolute; top: 0; left: 0; background: linear-gradient(90deg, var(--accent), var(--primary)); color: #000; font-size: 9px; font-weight: 900; padding: 3px 8px; border-radius: 11px 0 8px 0; }
+        /* 🚨 致命诱惑：首购立省角标 */
+        .save-tag { position: absolute; top: 0; right: 0; background: linear-gradient(135deg, #FF4B40, #D91D12); color: #fff; font-size: 9px; font-weight: 900; padding: 4px 10px; border-radius: 0 0 0 12px; letter-spacing: 0.5px; box-shadow: -2px 2px 10px rgba(217, 29, 18, 0.3); z-index: 10;}
+        .vip .save-tag { background: linear-gradient(135deg, var(--primary), #B58428); color: #000; box-shadow: -2px 2px 10px rgba(232, 195, 124, 0.4);}
 
-        /* 横向满宽卡片 (大课包专用) */
-        .full-width-card { grid-column: span 2; display: flex; flex-direction: row; justify-content: space-between; align-items: center; padding: 15px 20px;}
+        /* 卡片顶栏：课时数 */
+        .mc-top { display: flex; justify-content: space-between; align-items: flex-end; }
+        .mc-ses { font-size: 24px; font-weight: 900; color: #fff; line-height: 1;}
+        .selected .mc-ses { color: var(--primary); }
+        .mc-ses span { font-size: 10px; color: #888; font-weight: normal; margin-left: 2px;}
         
-        /* 卡片内部数据呈现 */
-        .mc-top { margin-bottom: 12px; }
-        .mc-sessions { font-size: 26px; font-weight: 900; color: #fff; line-height: 1; }
-        .vip .mc-sessions { color: var(--primary); font-size: 30px; }
-        .mc-sessions span { font-size: 11px; color: #888; font-weight: normal; margin-left: 2px;}
-        .mc-title { font-size: 11px; color: #aaa; margin-top: 6px; letter-spacing: 1px;}
-        .vip .mc-title { color: #ccc; }
+        /* 🚨 卡片中栏：巨大的现价与被划掉的原价 */
+        .mc-mid { display: flex; flex-direction: column; gap: 2px; margin-top: 5px;}
+        .mc-ori { font-size: 11px; color: #666; text-decoration: line-through; }
+        .mc-new { font-size: 24px; font-weight: 900; color: #fff; display: flex; align-items: baseline; gap: 2px;}
+        .selected .mc-new { color: var(--primary); text-shadow: 0 0 15px rgba(232, 195, 124, 0.3); font-size: 26px;}
+        .mc-new span { font-size: 14px; }
 
-        .mc-bottom { border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 10px; display: flex; flex-direction: column; gap: 2px;}
-        .mc-total { font-size: 18px; font-weight: 900; color: #fff; display: flex; align-items: baseline; gap: 2px;}
-        .mc-total span { font-size: 12px; color: #888; font-weight: normal;}
-        .vip .mc-total { font-size: 22px; color: var(--primary); }
-        .mc-unit { font-size: 10px; color: #666; }
+        /* 卡片底栏：单价说明 */
+        .mc-bot { font-size: 10px; color: #888; border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 10px; margin-top: auto;}
+        .selected .mc-bot { color: #ccc; border-top-color: rgba(232, 195, 124, 0.2);}
+        .mc-bot strong { color: var(--primary); font-weight: bold;}
 
-        /* 大卡片横向布局修正 */
-        .fw-left { display: flex; flex-direction: column; }
-        .fw-right { text-align: right; }
-        .fw-right .mc-total { justify-content: flex-end; font-size: 20px;}
+        /* 横向满宽大课包 */
+        .full-card { grid-column: span 2; display: flex; justify-content: space-between; align-items: center; padding: 18px 20px; border-style: dashed;}
+        .fc-left .mc-ses { font-size: 20px; }
+        .fc-left .mc-bot { border: none; padding-top: 4px; font-size: 11px;}
+        .fc-right { text-align: right; }
+        .fc-right .mc-new { font-size: 22px; justify-content: flex-end; color: var(--primary);}
 
         /* 底部固定操作栏 */
-        .bottom-action { position: fixed; bottom: 0; left: 0; width: 100%; padding: 15px 20px 25px; background: rgba(5,5,5,0.95); border-top: 1px solid rgba(212,175,55,0.2); backdrop-filter: blur(15px); z-index: 100; display: flex; justify-content: space-between; align-items: center;}
-        
-        .ba-info { display: flex; flex-direction: column; }
-        .ba-lbl { font-size: 11px; color: #888; margin-bottom: 2px;}
-        .ba-val { font-size: 18px; font-weight: 900; color: #fff; }
-        .ba-val span { font-size: 12px; color: var(--primary); margin-left: 4px; }
-
-        .btn-generate { background: linear-gradient(135deg, var(--primary), #AA8A2A); color: #000; border: none; padding: 14px 24px; border-radius: 12px; font-size: 15px; font-weight: 900; box-shadow: 0 5px 20px rgba(212, 175, 55, 0.3); cursor: pointer; transition: 0.2s;}
-        .btn-generate:active { transform: scale(0.96); }
-        .btn-generate.disabled { background: #333; color: #666; box-shadow: none; pointer-events: none; }
+        .action-bar { position: fixed; bottom: 0; left: 0; width: 100%; padding: 15px 20px 25px; background: linear-gradient(to top, rgba(5,5,5,1) 60%, rgba(5,5,5,0)); z-index: 100; }
+        .btn-master { width: 100%; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: #000; border: none; padding: 16px; border-radius: 12px; font-size: 16px; font-weight: 900; box-shadow: 0 8px 25px rgba(232, 195, 124, 0.3); cursor: pointer; transition: 0.2s; display: flex; justify-content: center; align-items: center; gap: 8px;}
+        .btn-master:active { transform: scale(0.98); box-shadow: 0 4px 10px rgba(232, 195, 124, 0.2);}
     </style>
 </head>
 <body>
 
     <div class="header-brand">
-        <div class="brand-text">R玥精致健身 | 阶梯报价矩阵</div>
+        <div class="brand-text">R玥精致健身 | 首购特权库</div>
     </div>
 
     <div class="seg-control">
-        <div class="seg-btn active" onclick="switchView('regular', this)">常规特训</div>
-        <div class="seg-btn" onclick="switchView('feature', this)">高定干预</div>
+        <div class="seg-btn active" onclick="switchView('regular', this)">常规方案</div>
+        <div class="seg-btn" onclick="switchView('feature', this)">特色高定</div>
         <div class="seg-btn" onclick="switchView('monthly', this)">极速包月</div>
     </div>
 
     <div class="matrix-container">
         
         <div id="view-regular" class="price-section active">
-            
             <div class="grid-2x2">
-                <div class="matrix-card" onclick="selectCard(this, '常规入门激活', 12, '¥ 5,280')">
-                    <div class="mc-top">
-                        <div class="mc-sessions">12<span>节</span></div>
-                        <div class="mc-title">入门激活 (60min)</div>
+                <div class="m-card" onclick="selectCard(this, '常规特训', '12节')">
+                    <div class="save-tag">首购省 ¥1,080</div>
+                    <div class="mc-top"><div class="mc-ses">12<span>节</span></div></div>
+                    <div class="mc-mid">
+                        <div class="mc-ori">原阶梯价 ¥5,280</div>
+                        <div class="mc-new"><span>¥</span>4,200</div>
                     </div>
-                    <div class="mc-bottom">
-                        <div class="mc-total"><span>¥</span>5,280</div>
-                        <div class="mc-unit">阶梯核算 ¥440/节</div>
-                    </div>
+                    <div class="mc-bot">破冰底价 <strong>¥350/节</strong></div>
                 </div>
 
-                <div class="matrix-card" onclick="selectCard(this, '常规基础重塑', 24, '¥ 10,080')">
-                    <div class="mc-top">
-                        <div class="mc-sessions">24<span>节</span></div>
-                        <div class="mc-title">基础重塑 (60min)</div>
+                <div class="m-card" onclick="selectCard(this, '常规特训', '24节')">
+                    <div class="save-tag">首购省 ¥1,680</div>
+                    <div class="mc-top"><div class="mc-ses">24<span>节</span></div></div>
+                    <div class="mc-mid">
+                        <div class="mc-ori">原阶梯价 ¥10,080</div>
+                        <div class="mc-new"><span>¥</span>8,400</div>
                     </div>
-                    <div class="mc-bottom">
-                        <div class="mc-total"><span>¥</span>10,080</div>
-                        <div class="mc-unit">阶梯核算 ¥420/节</div>
-                    </div>
+                    <div class="mc-bot">破冰底价 <strong>¥350/节</strong></div>
                 </div>
 
-                <div class="matrix-card vip selected" onclick="selectCard(this, '常规进阶蜕变', 48, '¥ 19,200')">
-                    <div class="vip-tag">店长主推款</div>
-                    <div class="mc-top" style="margin-top:8px;">
-                        <div class="mc-sessions">48<span>节</span></div>
-                        <div class="mc-title">进阶蜕变 (60min)</div>
+                <div class="m-card vip selected" onclick="selectCard(this, '常规特训', '48节')">
+                    <div class="save-tag">王牌主推 省 ¥2,400</div>
+                    <div class="mc-top"><div class="mc-ses">48<span>节</span></div></div>
+                    <div class="mc-mid">
+                        <div class="mc-ori">原阶梯价 ¥19,200</div>
+                        <div class="mc-new"><span>¥</span>16,800</div>
                     </div>
-                    <div class="mc-bottom">
-                        <div class="mc-total"><span>¥</span>19,200</div>
-                        <div class="mc-unit" style="color:var(--primary)">阶梯特惠 ¥400/节</div>
-                    </div>
+                    <div class="mc-bot">破冰底价 <strong>¥350/节</strong></div>
                 </div>
 
-                <div class="matrix-card" onclick="selectCard(this, '常规高阶精雕', 72, '¥ 27,360')">
-                    <div class="mc-top">
-                        <div class="mc-sessions">72<span>节</span></div>
-                        <div class="mc-title">高阶精雕 (60min)</div>
+                <div class="m-card" onclick="selectCard(this, '常规特训', '72节')">
+                    <div class="save-tag">首购省 ¥2,160</div>
+                    <div class="mc-top"><div class="mc-ses">72<span>节</span></div></div>
+                    <div class="mc-mid">
+                        <div class="mc-ori">原阶梯价 ¥27,360</div>
+                        <div class="mc-new"><span>¥</span>25,200</div>
                     </div>
-                    <div class="mc-bottom">
-                        <div class="mc-total"><span>¥</span>27,360</div>
-                        <div class="mc-unit">阶梯极值 ¥380/节</div>
-                    </div>
+                    <div class="mc-bot">破冰底价 <strong>¥350/节</strong></div>
                 </div>
             </div>
             
-            <div class="matrix-card full-width-card" onclick="selectCard(this, '常规年度托管', '100/150节', '按需核算')">
-                <div class="fw-left">
-                    <div class="mc-sessions">100/150<span>节</span></div>
-                    <div class="mc-title">年度终身托管保障</div>
+            <div class="m-card full-card" onclick="selectCard(this, '年度常规托管', '100+节')">
+                <div class="fc-left">
+                    <div class="mc-ses">100+<span>节</span></div>
+                    <div class="mc-bot">年度终身身材托管</div>
                 </div>
-                <div class="fw-right">
-                    <div class="mc-total"><span>单价低至 ¥</span>330</div>
-                    <div class="mc-unit">100节 ¥350 | 150节 ¥330</div>
+                <div class="fc-right">
+                    <div class="mc-ori" style="margin-bottom:2px;">享门店最高优享排课权</div>
+                    <div class="mc-new" style="font-size:18px;"><span>低至 ¥</span>330<span>/节起</span></div>
                 </div>
             </div>
-
         </div>
 
         <div id="view-feature" class="price-section">
-            
             <div class="grid-2x2">
-                <div class="matrix-card" onclick="selectCard(this, '特色单项微调', 12, '¥ 5,520')">
-                    <div class="mc-top">
-                        <div class="mc-sessions">12<span>节</span></div>
-                        <div class="mc-title">单项微调 (45min)</div>
+                <div class="m-card" onclick="selectCard(this, '特色干预', '12节')">
+                    <div class="save-tag">首购省 ¥960</div>
+                    <div class="mc-top"><div class="mc-ses">12<span>节</span></div></div>
+                    <div class="mc-mid">
+                        <div class="mc-ori">原阶梯价 ¥5,520</div>
+                        <div class="mc-new"><span>¥</span>4,560</div>
                     </div>
-                    <div class="mc-bottom">
-                        <div class="mc-total"><span>¥</span>5,520</div>
-                        <div class="mc-unit">阶梯核算 ¥460/节</div>
-                    </div>
+                    <div class="mc-bot">破冰底价 <strong>¥380/节</strong></div>
                 </div>
 
-                <div class="matrix-card" onclick="selectCard(this, '特色专项干预', 24, '¥ 10,560')">
-                    <div class="mc-top">
-                        <div class="mc-sessions">24<span>节</span></div>
-                        <div class="mc-title">专项干预 (45min)</div>
+                <div class="m-card" onclick="selectCard(this, '特色干预', '24节')">
+                    <div class="save-tag">首购省 ¥1,440</div>
+                    <div class="mc-top"><div class="mc-ses">24<span>节</span></div></div>
+                    <div class="mc-mid">
+                        <div class="mc-ori">原阶梯价 ¥10,560</div>
+                        <div class="mc-new"><span>¥</span>9,120</div>
                     </div>
-                    <div class="mc-bottom">
-                        <div class="mc-total"><span>¥</span>10,560</div>
-                        <div class="mc-unit">阶梯核算 ¥440/节</div>
-                    </div>
+                    <div class="mc-bot">破冰底价 <strong>¥380/节</strong></div>
                 </div>
 
-                <div class="matrix-card vip selected" onclick="selectCard(this, '特色系统重塑', 48, '¥ 20,160')">
-                    <div class="vip-tag">系统全息重塑</div>
-                    <div class="mc-top" style="margin-top:8px;">
-                        <div class="mc-sessions">48<span>节</span></div>
-                        <div class="mc-title">康复/普拉提 (45min)</div>
+                <div class="m-card vip" onclick="selectCard(this, '特色干预', '48节')">
+                    <div class="save-tag">王牌主推 省 ¥1,920</div>
+                    <div class="mc-top"><div class="mc-ses">48<span>节</span></div></div>
+                    <div class="mc-mid">
+                        <div class="mc-ori">原阶梯价 ¥20,160</div>
+                        <div class="mc-new"><span>¥</span>18,240</div>
                     </div>
-                    <div class="mc-bottom">
-                        <div class="mc-total"><span>¥</span>20,160</div>
-                        <div class="mc-unit" style="color:var(--primary)">阶梯特惠 ¥420/节</div>
-                    </div>
+                    <div class="mc-bot">破冰底价 <strong>¥380/节</strong></div>
                 </div>
 
-                <div class="matrix-card" onclick="selectCard(this, '特色神经控制', 72, '¥ 28,800')">
-                    <div class="mc-top">
-                        <div class="mc-sessions">72<span>节</span></div>
-                        <div class="mc-title">神经控制 (45min)</div>
+                <div class="m-card" onclick="selectCard(this, '特色干预', '72节')">
+                    <div class="save-tag">首购省 ¥1,440</div>
+                    <div class="mc-top"><div class="mc-ses">72<span>节</span></div></div>
+                    <div class="mc-mid">
+                        <div class="mc-ori">原阶梯价 ¥28,800</div>
+                        <div class="mc-new"><span>¥</span>27,360</div>
                     </div>
-                    <div class="mc-bottom">
-                        <div class="mc-total"><span>¥</span>28,800</div>
-                        <div class="mc-unit">阶梯极值 ¥400/节</div>
-                    </div>
+                    <div class="mc-bot">破冰底价 <strong>¥380/节</strong></div>
                 </div>
             </div>
 
-            <div class="matrix-card full-width-card" onclick="selectCard(this, '特色顶级护航', '100/150节', '按需核算')">
-                <div class="fw-left">
-                    <div class="mc-sessions">100/150<span>节</span></div>
-                    <div class="mc-title">特色顶级护航计划</div>
+            <div class="m-card full-card" onclick="selectCard(this, '特色顶级护航', '100+节')">
+                <div class="fc-left">
+                    <div class="mc-ses">100+<span>节</span></div>
+                    <div class="mc-bot">全面覆盖康复与精细塑形</div>
                 </div>
-                <div class="fw-right">
-                    <div class="mc-total"><span>单价低至 ¥</span>350</div>
-                    <div class="mc-unit">100节 ¥380 | 150节 ¥350</div>
+                <div class="fc-right">
+                    <div class="mc-ori" style="margin-bottom:2px;">完美身体控制力护甲</div>
+                    <div class="mc-new" style="font-size:18px;"><span>低至 ¥</span>350<span>/节起</span></div>
                 </div>
             </div>
-
         </div>
 
         <div id="view-monthly" class="price-section">
-            
             <div class="grid-2x2">
-                <div class="matrix-card" onclick="selectCard(this, '单月突击卡', '1个月', '¥ 3,888')">
-                    <div class="mc-top">
-                        <div class="mc-sessions">1<span>个月</span></div>
-                        <div class="mc-title">突击重塑体验</div>
+                <div class="m-card" onclick="selectCard(this, '尊享包月', '1个月')">
+                    <div class="save-tag" style="background:#444;">突击重塑</div>
+                    <div class="mc-top"><div class="mc-ses">1<span>个月</span></div></div>
+                    <div class="mc-mid">
+                        <div class="mc-ori">最高可约 16 节私教</div>
+                        <div class="mc-new"><span>¥</span>3,888</div>
                     </div>
-                    <div class="mc-bottom">
-                        <div class="mc-total"><span>¥</span>3,888</div>
-                        <div class="mc-unit">最高可约 16 节</div>
-                    </div>
+                    <div class="mc-bot">30天沉浸式高频打卡</div>
                 </div>
 
-                <div class="matrix-card" onclick="selectCard(this, '双月平台卡', '2个月', '¥ 7,200')">
-                    <div class="mc-top">
-                        <div class="mc-sessions">2<span>个月</span></div>
-                        <div class="mc-title">跨越平台期</div>
+                <div class="m-card" onclick="selectCard(this, '尊享包月', '2个月')">
+                    <div class="save-tag" style="background:#555;">平台跨越</div>
+                    <div class="mc-top"><div class="mc-ses">2<span>个月</span></div></div>
+                    <div class="mc-mid">
+                        <div class="mc-ori">原总价 ¥7,776</div>
+                        <div class="mc-new"><span>¥</span>7,200</div>
                     </div>
-                    <div class="mc-bottom">
-                        <div class="mc-total"><span>¥</span>7,200</div>
-                        <div class="mc-unit">折合 ¥3600/月</div>
-                    </div>
+                    <div class="mc-bot">折合每月 <strong>¥3,600</strong></div>
                 </div>
 
-                <div class="matrix-card vip selected" onclick="selectCard(this, '季卡深度重塑', '3个月', '¥ 9,600')">
-                    <div class="vip-tag">最具性价比</div>
-                    <div class="mc-top" style="margin-top:8px;">
-                        <div class="mc-sessions">3<span>个月</span></div>
-                        <div class="mc-title">季卡深度重塑</div>
+                <div class="m-card vip" onclick="selectCard(this, '尊享包月', '3个月(季卡)')">
+                    <div class="save-tag">极致性价比 季卡</div>
+                    <div class="mc-top"><div class="mc-ses">3<span>个月</span></div></div>
+                    <div class="mc-mid">
+                        <div class="mc-ori">原总价 ¥11,664</div>
+                        <div class="mc-new"><span>¥</span>9,600</div>
                     </div>
-                    <div class="mc-bottom">
-                        <div class="mc-total"><span>¥</span>9,600</div>
-                        <div class="mc-unit" style="color:var(--primary)">折合仅 ¥3200/月</div>
-                    </div>
+                    <div class="mc-bot">折合每月 <strong>¥3,200</strong></div>
                 </div>
 
-                <div class="matrix-card" onclick="selectCard(this, '半年逆龄卡', '6个月', '¥ 18,000')">
-                    <div class="mc-top">
-                        <div class="mc-sessions">6<span>个月</span></div>
-                        <div class="mc-title">半年逆龄特权</div>
+                <div class="m-card" onclick="selectCard(this, '尊享包月', '6个月(半年)')">
+                    <div class="save-tag">顶级逆龄 半年卡</div>
+                    <div class="mc-top"><div class="mc-ses">6<span>个月</span></div></div>
+                    <div class="mc-mid">
+                        <div class="mc-ori">原总价 ¥23,328</div>
+                        <div class="mc-new"><span>¥</span>18,000</div>
                     </div>
-                    <div class="mc-bottom">
-                        <div class="mc-total"><span>¥</span>18,000</div>
-                        <div class="mc-unit">折合仅 ¥3000/月</div>
-                    </div>
+                    <div class="mc-bot">折合每月 <strong>¥3,000</strong></div>
                 </div>
             </div>
 
-            <div class="matrix-card full-width-card" style="border-style: dashed; opacity: 0.7;">
-                <div style="font-size: 11px; color: #888; line-height: 1.6;">
-                    * 尊享包月说明：<br>
+            <div class="m-card full-card" style="border-style: dashed; background: transparent; box-shadow: none;">
+                <div style="font-size: 11px; color: #666; line-height: 1.6; width: 100%;">
+                    <strong>* 包月规则说明：</strong><br>
                     1. 周期内至多可预约 16 节/月 专业私教指导。<br>
                     2. 营业时间内尊享门店场地无限制自由训练。
                 </div>
             </div>
-
         </div>
 
     </div>
 
-    <div class="bottom-action">
-        <div class="ba-info">
-            <div class="ba-lbl">当前选定方案</div>
-            <div class="ba-val" id="display-pkg">常规进阶蜕变 <span>(48节)</span></div>
-        </div>
-        <button class="btn-generate" onclick="alert('客户信息已锁定，准备签约转账！')">
-            立即签约 ➔
+    <div class="action-bar">
+        <button class="btn-master" id="btn-submit" onclick="alert('客户已被超高性价比折服，准备签约转账！')">
+            锁定 48节 首购特权 ➔
         </button>
     </div>
 
     <script>
-        // 初始化默认选中项
-        let currentPkgName = "常规进阶蜕变";
+        // 初始状态
+        let currentType = "常规特训";
         let currentSessions = "48节";
 
         function switchView(type, btn) {
-            // 切换按钮状态
             document.querySelectorAll('.seg-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
 
-            // 切换面板
-            document.querySelectorAll('.price-section').forEach(sec => sec.classList.remove('active'));
-            document.getElementById('view-' + type).classList.add('active');
+            currentType = btn.innerText;
 
-            // 自动选中该面板下的 VIP 项
-            let activePanel = document.getElementById('view-' + type);
-            let defaultVip = activePanel.querySelector('.matrix-card.vip');
-            if(defaultVip) {
-                defaultVip.click();
-            }
+            document.querySelectorAll('.price-section').forEach(sec => sec.classList.remove('active'));
+            
+            // 加入极简缩放动画
+            setTimeout(() => {
+                let activePanel = document.getElementById('view-' + type);
+                activePanel.classList.add('active');
+                
+                // 自动选中VIP款
+                let defaultVip = activePanel.querySelector('.m-card.vip');
+                if(defaultVip) {
+                    defaultVip.click();
+                } else {
+                    let firstCard = activePanel.querySelector('.m-card');
+                    if(firstCard) firstCard.click();
+                }
+            }, 10);
         }
 
-        function selectCard(card, name, sessions, price) {
-            // 清除当前面板下所有卡片的选中状态
+        function selectCard(card, typeName, sessions) {
             let parent = card.closest('.price-section');
-            parent.querySelectorAll('.matrix-card').forEach(c => c.classList.remove('selected'));
+            parent.querySelectorAll('.m-card').forEach(c => c.classList.remove('selected'));
             
-            // 选中当前卡片
             card.classList.add('selected');
-
-            // 更新底部栏数据
-            currentPkgName = name;
             currentSessions = sessions;
-            document.getElementById('display-pkg').innerHTML = `${currentPkgName} <span>(${currentSessions})</span>`;
             
-            // 触觉反馈
-            if(navigator.vibrate) navigator.vibrate(20);
+            // 动态更新底栏按钮文案，制造紧迫感
+            let btn = document.getElementById('btn-submit');
+            if (sessions.includes('+')) {
+                btn.innerHTML = `锁定 ${sessions} 终身特权 ➔`;
+            } else if (sessions.includes('个月')) {
+                btn.innerHTML = `锁定 ${sessions} 包月特权 ➔`;
+            } else {
+                btn.innerHTML = `锁定 ${sessions} 首购特权 ➔`;
+            }
+            
+            // 轻微触觉反馈
+            if(navigator.vibrate) navigator.vibrate(15);
         }
     </script>
 </body>
