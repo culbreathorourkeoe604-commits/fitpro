@@ -8,10 +8,11 @@
         /* 顶级香槟黑金配色 */
         :root { --primary: #D4AF37; --accent: #C5A059; --bg: #050505; --surface: #121212; --text-main: #E2E8F0; --text-sub: #8A92A3; }
         
-        /* 🚨 彻底锁死防漂移：强制消除所有的横向溢出 */
+        /* 彻底锁死防漂移 */
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; margin: 0; padding: 0; }
         html, body { width: 100%; max-width: 100vw; overflow-x: hidden; background: var(--bg); color: var(--text-main); font-family: "DIN Alternate", "Helvetica Neue", sans-serif; -webkit-font-smoothing: antialiased; }
         
+        /* 顶部标题栏 */
         .header-brand { width: 100%; height: 60px; display: flex; align-items: center; justify-content: center; background: rgba(5, 5, 5, 0.85); position: sticky; top: 0; z-index: 50; border-bottom: 1px solid rgba(212, 175, 55, 0.15); backdrop-filter: blur(15px);}
         .brand-text { font-size: 18px; font-weight: 900; color: var(--primary); letter-spacing: 2px; }
         
@@ -33,6 +34,7 @@
         .c-title { font-size: 15px; font-weight: 900; color: #fff; margin-bottom: 6px; letter-spacing: 1px;}
         .c-desc { font-size: 11px; color: #888; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 
+        /* 全屏详情模态框 */
         .detail-modal { position: fixed; top: 100vh; left: 0; width: 100%; height: 100vh; background: var(--bg); z-index: 999; transition: top 0.5s cubic-bezier(0.2, 0.8, 0.2, 1); display: flex; flex-direction: column; overflow-x: hidden; }
         .detail-modal.show { top: 0; }
 
@@ -48,6 +50,7 @@
         .m-hero-title { font-size: 22px; font-weight: 900; color: #fff; margin-bottom: 10px; letter-spacing: 1px; position: relative; z-index: 2;}
         .m-hero-desc { font-size: 13px; color: var(--text-sub); line-height: 1.6; position: relative; z-index: 2;}
         
+        /* 出勤频率配置面板 */
         .freq-panel { background: rgba(212,175,55,0.05); border: 1px solid rgba(212,175,55,0.3); border-radius: 12px; padding: 15px 10px; margin-bottom: 25px; box-shadow: inset 0 0 20px rgba(0,0,0,0.5); }
         .freq-title { font-size: 13px; color: var(--primary); font-weight: bold; margin-bottom: 12px; padding-left: 5px; display: flex; align-items: center; gap: 6px;}
         .freq-group { display: flex; gap: 6px; }
@@ -84,6 +87,7 @@
         .p-name { font-size: 18px; font-weight: 900; color: #888; margin-bottom: 15px; transition: 0.3s;}
         .phase-box.selected .p-name { color: #fff; }
         
+        /* 金色重点词加粗复原 */
         .sales-points { display: flex; flex-direction: column; gap: 12px; opacity: 0.5; transition: 0.3s; }
         .phase-box.selected .sales-points { opacity: 1; }
         .sp-row { display: flex; align-items: flex-start; gap: 10px; font-size: 13px; line-height: 1.6; }
@@ -94,7 +98,7 @@
         .sp-text { color: #ccc; }
         .sp-text strong { color: var(--primary); font-weight: bold; text-shadow: 0 0 8px rgba(212,175,55,0.3); }
 
-        /* 🚨 核心升级：允许直接输入的步进器 */
+        /* 教练配课滑动步进器 (支持直接输入) */
         .custom-builder { margin-top: 15px; border-top: 1px dashed rgba(212,175,55,0.3); padding-top: 15px; display: flex; flex-direction: column; gap: 12px; }
         .cb-item { display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.5); padding: 10px 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05);}
         .cb-label { font-size: 14px; color: #fff; font-weight: bold; display: flex; flex-direction: column; gap: 4px;}
@@ -102,13 +106,11 @@
         .cb-ctrl { display: flex; align-items: center; background: #111; border-radius: 8px; border: 1px solid rgba(212,175,55,0.3); overflow: hidden; flex-shrink: 0;}
         .cb-btn { width: 34px; height: 34px; display: flex; justify-content: center; align-items: center; color: var(--primary); font-size: 18px; font-weight: bold; cursor: pointer; user-select: none; }
         .cb-btn:active { background: rgba(212,175,55,0.2); }
-        
-        /* 取消了 readonly，恢复了原生输入事件 */
         .cb-input { width: 45px; text-align: center; background: #000; border: none; border-left: 1px solid #333; border-right: 1px solid #333; color: #fff; font-size: 16px; font-weight: 900; padding: 6px 0; outline: none; pointer-events: auto; touch-action: manipulation;}
-        /* 隐藏输入框上下箭头 */
         .cb-input::-webkit-outer-spin-button, .cb-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
         .cb-input[type=number] { -moz-appearance: textfield; }
 
+        /* 可视化投射图 */
         .visual-feedback-section { margin-top: 30px; background: #0a0a0c; border: 1px solid rgba(212, 175, 55, 0.15); border-radius: 16px; padding: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
         .fb-header { text-align: center; font-size: 15px; font-weight: 900; color: var(--primary); margin-bottom: 15px; letter-spacing: 2px; }
         .visual-card { width: 100%; height: 300px; border-radius: 12px; overflow: hidden; position: relative; border: 1px solid rgba(255,255,255,0.1); background: #111;}
@@ -117,6 +119,7 @@
         .visual-title { color: var(--primary); font-size: 20px; font-weight: 900; letter-spacing: 1px; margin-bottom: 6px; text-shadow: 0 2px 5px rgba(0,0,0,0.8);}
         .visual-desc { color: #ddd; font-size: 13px; line-height: 1.5; text-shadow: 0 1px 3px rgba(0,0,0,0.8); }
 
+        /* 购物车底栏 */
         .checkout-bar { position: fixed; bottom: 0; left: 0; width: 100%; padding: 15px 20px 25px; background: rgba(10, 10, 12, 0.98); border-top: 1px solid rgba(212,175,55,0.3); box-shadow: 0 -10px 30px rgba(0,0,0,0.8); z-index: 100; backdrop-filter: blur(15px); display: flex; justify-content: space-between; align-items: center; }
         .checkout-info { display: flex; flex-direction: column; gap: 4px; }
         .c-info-label { font-size: 11px; color: #888; font-weight: bold; letter-spacing: 1px; }
@@ -126,7 +129,7 @@
         .btn-checkout:active { transform: scale(0.96); }
         .btn-checkout.disabled { background: #333; color: #666; box-shadow: none; pointer-events: none; }
 
-        /* 弹窗样式防漂移 */
+        /* 双轨逼单弹窗 */
         .upsell-overlay { position: fixed; top:0; left:0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; opacity: 0; pointer-events: none; transition: 0.4s; backdrop-filter: blur(5px); }
         .upsell-overlay.show { opacity: 1; pointer-events: auto; }
         
@@ -178,7 +181,7 @@
         .vn-list li::before { content: '•'; position: absolute; left: 0; color: var(--primary); }
         .vn-list li span { color: #ccc; font-weight: bold;}
 
-        /* 全屏电子签名合同台防漂移 */
+        /* 全屏电子签名与图片生成台 */
         .sig-modal { position: fixed; top: 100vh; left: 0; width: 100%; height: 100vh; background: #08080A; z-index: 2000; transition: top 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); display: flex; flex-direction: column; overflow-x: hidden;}
         .sig-modal.show { top: 0; }
         .sig-header { height: 60px; display: flex; justify-content: space-between; align-items: center; padding: 0 20px; background: rgba(5,5,5,0.95); border-bottom: 1px solid rgba(212,175,55,0.3); flex-shrink:0;}
@@ -301,7 +304,7 @@
                 
                 <div class="sig-actions" id="sig-actions-box">
                     <button class="btn-clear" onclick="clearCanvas()">重新签名</button>
-                    <button class="btn-confirm-sig" onclick="submitSignature()">确认保存并生成合同</button>
+                    <button class="btn-confirm-sig" onclick="generateContractImage()">确认保存并生成合同</button>
                 </div>
                 
                 <div style="margin-top: 5px; font-size: 10px; color: #666; text-align: center;" id="sig-footer-note">
@@ -471,7 +474,7 @@
                 
                 <div class="phase-title-main">请点选您期望达成的重塑目标阶段：</div>
                 
-                <div class="phase-box selected" data-phase="1" data-weeks="${data.p1_w}" onclick="togglePhase(this, event)">
+                <div class="phase-box" data-phase="1" data-weeks="${data.p1_w}" onclick="togglePhase(this, event)">
                     <div class="check-circle"></div>
                     <div class="p-step">● PHASE 01 / 阶段一</div>
                     <div class="p-cycle-highlight">
@@ -580,8 +583,13 @@
             updateCheckout(); 
         }
 
+        // 🚨 强制重置系统，切断所有残留数据
         function closeDetail() {
             document.getElementById('detailModal').classList.remove('show');
+            globalTotalExact = 0;
+            currentPlanKey = '';
+            selectedUpsell = {};
+            document.getElementById('modalBody').innerHTML = ''; // 毁灭 DOM 痕迹
         }
 
         function setFreq(f) {
@@ -591,11 +599,10 @@
             updateCheckout(); 
         }
 
-        // 🚨 支持直接手动输入的逻辑
         function manualInput(el, event) {
             if(event) event.stopPropagation();
             let val = parseInt(el.value);
-            if(isNaN(val) || val < 0) return; // 允许正在打字时不强行归0
+            if(isNaN(val) || val < 0) return; 
             
             let box = document.getElementById('phase-5-box');
             let r = parseInt(document.getElementById('cb-reg').value) || 0;
@@ -690,6 +697,8 @@
                 vImg.style.filter = 'brightness(0.3) grayscale(1)';
                 vTitle.innerText = '请选择您的蜕变目标';
                 vDesc.innerText = '点选上方阶段，AI将为您投射对应形态';
+                
+                // 🚨 0状态强制置灰
                 valDisplay.innerHTML = '<span style="color:#666; font-size:12px;">待选择目标阶段</span>';
                 btn.classList.add('disabled');
             } else {
@@ -717,7 +726,7 @@
             }
         }
 
-        // 🚨 弹窗内卡片点选交互
+        // 弹窗内卡片点选交互
         function selectUpPlan(cardId, name, sessions, price) {
             document.querySelectorAll('.up-card').forEach(c => c.classList.remove('selected-card'));
             document.getElementById(cardId).classList.add('selected-card');
@@ -731,7 +740,7 @@
             openSignature(selectedUpsell.name, selectedUpsell.sessions, selectedUpsell.price);
         }
 
-        // 🚨 教练专属包双轨化 + 标准双轨
+        // 智能报价分发
         function showUpsellModal() {
             if(globalTotalExact === 0) return;
             
@@ -758,7 +767,7 @@
                 let newReg1 = r * 350; let newFeat1 = f * 380;
                 let totalNew1 = newReg1 + newFeat1 + oriMon1;
 
-                // 方案二：原价半程包 (包月不变)
+                // 方案二：原价半程包
                 let r2 = Math.ceil(r / 2);
                 let f2 = Math.ceil(f / 2);
                 let m2 = m;
@@ -823,7 +832,7 @@
                 selectUpPlan('card-scheme-1', '【专属高定】全息私享包', `${r+f}节+${m}个月`, `¥ ${formatMoney(totalNew1)}`);
 
             } else {
-                // ====== 标准双轨 (二选一) ======
+                // ====== 标准双轨 ======
                 let phaseNames = [];
                 document.querySelectorAll('.phase-box.selected:not(.combo-box)').forEach(box => {
                     let pStep = box.querySelector('.p-step').innerText; 
@@ -910,7 +919,6 @@
             document.getElementById('upsellModal').classList.remove('show');
         }
 
-        // 🚨 终极核武：全屏电子签名画布系统与图片生成
         let sigCanvas, sigCtx, isSigning = false;
 
         function openSignature(pkgName, sessions, price) {
@@ -967,11 +975,6 @@
             }, 400);
         }
 
-        function closeSignature() {
-            document.getElementById('signatureModal').classList.remove('show');
-            clearCanvas();
-        }
-
         function getSignPos(e) {
             let rect = sigCanvas.getBoundingClientRect();
             let x = e.clientX, y = e.clientY;
@@ -1012,26 +1015,22 @@
             if(ph) ph.style.display = 'block';
         }
 
-        // 🚨 核心：合成并生成可保存的图片
+        // 合成并生成可保存的图片
         function generateContractImage() {
             if(!sigCtx) return;
 
-            // 创建离线高清 Canvas
             const finalCanvas = document.createElement('canvas');
             finalCanvas.width = 800;
             finalCanvas.height = 1100;
             const ctx = finalCanvas.getContext('2d');
 
-            // 绘制背景
             ctx.fillStyle = '#0D0D11';
             ctx.fillRect(0, 0, finalCanvas.width, finalCanvas.height);
 
-            // 绘制金边
             ctx.strokeStyle = '#D4AF37';
             ctx.lineWidth = 6;
             ctx.strokeRect(30, 30, finalCanvas.width - 60, finalCanvas.height - 60);
 
-            // 绘制标题
             ctx.fillStyle = '#D4AF37';
             ctx.font = 'bold 50px sans-serif';
             ctx.textAlign = 'center';
@@ -1041,7 +1040,6 @@
             ctx.font = '24px sans-serif';
             ctx.fillText('EXCLUSIVE CUSTOMIZED CONTRACT', 400, 165);
 
-            // 绘制明细
             ctx.textAlign = 'left';
             ctx.fillStyle = '#FFFFFF';
             ctx.font = '32px sans-serif';
@@ -1059,18 +1057,15 @@
             ctx.font = 'bold 46px sans-serif';
             ctx.fillText('核算总价：' + pkgPrice, 80, 540);
 
-            // 绘制免责条款
             ctx.fillStyle = '#888888';
             ctx.font = '24px sans-serif';
             ctx.fillText('* 本合约包含门店常规课程有效期及场地使用权限', 80, 620);
             ctx.fillText('* 签字即代表认同《LUXIOU 门店会员健康管理规章》', 80, 660);
 
-            // 绘制签名区
             ctx.fillStyle = '#FFFFFF';
             ctx.font = 'bold 32px sans-serif';
             ctx.fillText('客户手写确认签名：', 80, 780);
 
-            // 将透明的手写板等比例缩放画上去
             const scW = sigCanvas.width;
             const scH = sigCanvas.height;
             const scale = Math.min(640 / scW, 250 / scH);
@@ -1079,7 +1074,6 @@
 
             ctx.drawImage(sigCanvas, 80, 810, dw, dh);
             
-            // 底部横线
             ctx.strokeStyle = '#333';
             ctx.lineWidth = 2;
             ctx.beginPath();
@@ -1087,10 +1081,8 @@
             ctx.lineTo(720, 810 + dh + 10);
             ctx.stroke();
 
-            // 导出 Base64
             const dataURL = finalCanvas.toDataURL('image/png');
 
-            // 替换 DOM 供客户长按保存
             document.getElementById('sig-pad-wrap').innerHTML = `
                 <div style="text-align:center; color:var(--primary); margin-bottom:15px; font-weight:bold; font-size:18px;">
                     ✦ 合同生成成功 ✦<br>
