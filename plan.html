@@ -7,10 +7,12 @@
     <style>
         /* 顶级香槟黑金配色 */
         :root { --primary: #D4AF37; --accent: #C5A059; --bg: #050505; --surface: #121212; --text-main: #E2E8F0; --text-sub: #8A92A3; }
+        
+        /* 🚨 彻底解决左右漂移问题 */
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; margin: 0; padding: 0; }
+        html, body { width: 100vw; max-width: 100%; overflow-x: hidden; background: var(--bg); color: var(--text-main); font-family: "DIN Alternate", "Helvetica Neue", sans-serif; -webkit-font-smoothing: antialiased; }
         
-        body { background: var(--bg); color: var(--text-main); font-family: "DIN Alternate", "Helvetica Neue", sans-serif; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
-        
+        /* 顶部标题栏 */
         .header-brand { width: 100%; height: 60px; display: flex; align-items: center; justify-content: center; background: rgba(5, 5, 5, 0.85); position: sticky; top: 0; z-index: 50; border-bottom: 1px solid rgba(212, 175, 55, 0.15); backdrop-filter: blur(15px);}
         .brand-text { font-size: 18px; font-weight: 900; color: var(--primary); letter-spacing: 2px; }
         
@@ -32,14 +34,15 @@
         .c-title { font-size: 15px; font-weight: 900; color: #fff; margin-bottom: 6px; letter-spacing: 1px;}
         .c-desc { font-size: 11px; color: #888; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 
-        .detail-modal { position: fixed; top: 100vh; left: 0; width: 100%; height: 100vh; background: var(--bg); z-index: 999; transition: top 0.5s cubic-bezier(0.2, 0.8, 0.2, 1); display: flex; flex-direction: column; }
+        /* 全屏详情模态框 */
+        .detail-modal { position: fixed; top: 100vh; left: 0; width: 100%; height: 100vh; background: var(--bg); z-index: 999; transition: top 0.5s cubic-bezier(0.2, 0.8, 0.2, 1); display: flex; flex-direction: column; overflow-x: hidden; }
         .detail-modal.show { top: 0; }
 
-        .modal-header { height: 60px; display: flex; justify-content: space-between; align-items: center; padding: 0 20px; background: rgba(5,5,5,0.95); border-bottom: 1px solid rgba(212,175,55,0.2); backdrop-filter: blur(10px); }
+        .modal-header { height: 60px; display: flex; justify-content: space-between; align-items: center; padding: 0 20px; background: rgba(5,5,5,0.95); border-bottom: 1px solid rgba(212,175,55,0.2); backdrop-filter: blur(10px); flex-shrink: 0;}
         .modal-title { font-size: 16px; font-weight: bold; color: var(--primary); }
         .close-btn { color: #fff; font-size: 24px; font-weight: bold; background: none; border: none; padding: 0 10px; }
 
-        .modal-body { flex: 1; overflow-y: auto; padding: 20px 20px 140px; -webkit-overflow-scrolling: touch; }
+        .modal-body { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 20px 20px 140px; -webkit-overflow-scrolling: touch; }
         
         .hero-banner { border: 1px solid rgba(212, 175, 55, 0.3); border-radius: 16px; padding: 25px 20px; margin-bottom: 20px; background: linear-gradient(145deg, #16161A, #050505); box-shadow: 0 10px 30px rgba(0,0,0,0.5); position: relative; overflow: hidden;}
         .hero-watermark { position: absolute; right: -30px; top: -30px; width: 150px; height: 150px; opacity: 0.03; pointer-events: none; }
@@ -84,7 +87,6 @@
         .p-name { font-size: 18px; font-weight: 900; color: #888; margin-bottom: 15px; transition: 0.3s;}
         .phase-box.selected .p-name { color: #fff; }
         
-        /* 金色重点词加粗复原 */
         .sales-points { display: flex; flex-direction: column; gap: 12px; opacity: 0.5; transition: 0.3s; }
         .phase-box.selected .sales-points { opacity: 1; }
         .sp-row { display: flex; align-items: flex-start; gap: 10px; font-size: 13px; line-height: 1.6; }
@@ -95,7 +97,6 @@
         .sp-text { color: #ccc; }
         .sp-text strong { color: var(--primary); font-weight: bold; text-shadow: 0 0 8px rgba(212,175,55,0.3); }
 
-        /* 教练配课滑动步进器 */
         .custom-builder { margin-top: 15px; border-top: 1px dashed rgba(212,175,55,0.3); padding-top: 15px; display: flex; flex-direction: column; gap: 12px; }
         .cb-item { display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.5); padding: 10px 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05);}
         .cb-label { font-size: 14px; color: #fff; font-weight: bold; display: flex; flex-direction: column; gap: 4px;}
@@ -105,8 +106,7 @@
         .cb-btn:active { background: rgba(212,175,55,0.2); }
         .cb-input { width: 40px; text-align: center; background: #000; border: none; border-left: 1px solid #333; border-right: 1px solid #333; color: #fff; font-size: 16px; font-weight: 900; padding: 6px 0; outline: none; pointer-events: none;}
 
-        /* 可视化投射图 */
-        .visual-feedback-section { margin-top: 30px; background: #0a0a0c; border: 1px solid rgba(212,175,55,0.15); border-radius: 16px; padding: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .visual-feedback-section { margin-top: 30px; background: #0a0a0c; border: 1px solid rgba(212, 175, 55, 0.15); border-radius: 16px; padding: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
         .fb-header { text-align: center; font-size: 15px; font-weight: 900; color: var(--primary); margin-bottom: 15px; letter-spacing: 2px; }
         .visual-card { width: 100%; height: 300px; border-radius: 12px; overflow: hidden; position: relative; border: 1px solid rgba(255,255,255,0.1); background: #111;}
         .visual-img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.7) contrast(1.1); transition: all 0.5s ease-in-out; }
@@ -114,7 +114,6 @@
         .visual-title { color: var(--primary); font-size: 20px; font-weight: 900; letter-spacing: 1px; margin-bottom: 6px; text-shadow: 0 2px 5px rgba(0,0,0,0.8);}
         .visual-desc { color: #ddd; font-size: 13px; line-height: 1.5; text-shadow: 0 1px 3px rgba(0,0,0,0.8); }
 
-        /* 购物车底栏 */
         .checkout-bar { position: fixed; bottom: 0; left: 0; width: 100%; padding: 15px 20px 25px; background: rgba(10, 10, 12, 0.98); border-top: 1px solid rgba(212,175,55,0.3); box-shadow: 0 -10px 30px rgba(0,0,0,0.8); z-index: 100; backdrop-filter: blur(15px); display: flex; justify-content: space-between; align-items: center; }
         .checkout-info { display: flex; flex-direction: column; gap: 4px; }
         .c-info-label { font-size: 11px; color: #888; font-weight: bold; letter-spacing: 1px; }
@@ -128,7 +127,7 @@
         .upsell-overlay { position: fixed; top:0; left:0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; opacity: 0; pointer-events: none; transition: 0.4s; backdrop-filter: blur(5px); }
         .upsell-overlay.show { opacity: 1; pointer-events: auto; }
         
-        .upsell-modal { position: fixed; bottom: -100%; left: 0; width: 100%; background: linear-gradient(180deg, #1A1A20, #0A0A0C); border-top: 1px solid var(--primary); border-radius: 24px 24px 0 0; z-index: 1001; padding: 25px 20px 40px; transition: 0.5s cubic-bezier(0.2, 0.8, 0.2, 1); box-shadow: 0 -10px 40px rgba(212,175,55,0.15); max-height: 90vh; overflow-y: auto; display: flex; flex-direction: column;}
+        .upsell-modal { position: fixed; bottom: -100%; left: 0; width: 100%; background: linear-gradient(180deg, #1A1A20, #0A0A0C); border-top: 1px solid var(--primary); border-radius: 24px 24px 0 0; z-index: 1001; padding: 25px 20px 30px; transition: 0.5s cubic-bezier(0.2, 0.8, 0.2, 1); box-shadow: 0 -10px 40px rgba(212,175,55,0.15); max-height: 90vh; overflow-y: hidden; display: flex; flex-direction: column;}
         .upsell-modal.show { bottom: 0; }
         
         .up-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px; flex-shrink: 0;}
@@ -136,22 +135,21 @@
         .up-sub { font-size: 11px; color: #aaa; margin-top: 6px; line-height: 1.5; }
         .up-close { color: #888; font-size: 28px; background: none; border: none; padding: 0; line-height: 1; cursor: pointer; }
 
-        /* 🚨 可点击的方案卡片 */
-        .upsell-cards-container { overflow-y: auto; padding-bottom: 20px; flex: 1; }
-        .up-card { background: #111; border-radius: 12px; padding: 15px; border: 2px solid #222; margin-bottom: 15px; position: relative; overflow: hidden; opacity: 0.6; transition: all 0.3s ease; cursor: pointer; }
+        .upsell-cards-container { overflow-y: auto; padding-bottom: 10px; flex: 1; -webkit-overflow-scrolling: touch;}
         
-        /* 选中状态 */
-        .up-card.selected-card { border-color: var(--primary); opacity: 1; transform: scale(1.02); box-shadow: 0 5px 25px rgba(212,175,55,0.2); background: linear-gradient(145deg, #1C1810, #0A0A0C); }
-        .up-card.selected-card::before { content: '✓ 已优选此方案'; position: absolute; top: 0; right: 0; background: linear-gradient(90deg, var(--accent), var(--primary)); color: #000; font-size: 10px; font-weight: bold; padding: 4px 12px; border-radius: 0 0 0 12px; z-index: 10;}
+        /* 🚨 修复标题重叠：增加 padding-top */
+        .up-card { background: #111; border-radius: 12px; padding: 24px 15px 15px; border: 2px solid #222; margin-bottom: 15px; position: relative; overflow: hidden; opacity: 0.5; transition: all 0.3s ease; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.5);}
+        .up-card.selected-card { border-color: var(--primary); opacity: 1; transform: scale(1.02); box-shadow: 0 5px 25px rgba(212,175,55,0.25); background: linear-gradient(145deg, #1C1810, #0A0A0C); }
+        .up-card.selected-card::before { content: '✓ 已优选此方案'; position: absolute; top: 0; right: 0; background: linear-gradient(90deg, var(--accent), var(--primary)); color: #000; font-size: 11px; font-weight: bold; padding: 4px 12px; border-radius: 0 0 0 12px; z-index: 10;}
         
-        .uc-title { font-size: 15px; font-weight: 900; color: #fff; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; transition: 0.3s;}
-        .selected-card .uc-title { color: var(--primary); font-size: 16px;}
+        .uc-title { font-size: 16px; font-weight: 900; color: #fff; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; transition: 0.3s;}
+        .selected-card .uc-title { color: var(--primary); }
         
         .uc-breakdown { background: rgba(0,0,0,0.4); border-radius: 8px; padding: 10px; margin-bottom: 12px; border: 1px solid rgba(255,255,255,0.05); }
         .uc-brk-row { display: flex; justify-content: space-between; font-size: 12px; color: #888; margin-bottom: 6px; }
         .uc-brk-row:last-child { margin-bottom: 0; }
         .uc-brk-row.hl { color: var(--primary); font-weight: bold; }
-        .uc-brk-row del { color: #666; }
+        .uc-brk-row del { color: #555; }
 
         .uc-footer { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 5px; border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 12px;}
         .uc-sessions { font-size: 22px; font-weight: 900; color: #fff; transition: 0.3s;}
@@ -163,23 +161,14 @@
         .uc-new-total { font-size: 22px; font-weight: 900; color: #fff; display: flex; align-items: baseline; justify-content: flex-end; gap: 4px; transition: 0.3s;}
         .selected-card .uc-new-total { font-size: 26px; color: #fff; text-shadow: 0 0 10px rgba(212,175,55,0.4);}
         .uc-price-unit { font-size: 11px; color: #888; margin-top: 4px; display: flex; align-items: center; justify-content: flex-end; gap: 4px;}
-        .newbie-tag { background: var(--primary); color: #000; padding: 2px 6px; border-radius: 4px; font-weight: bold; font-size: 10px; }
         
-        /* 锁价升级规则强提示 */
         .urgency-rule { background: rgba(212,175,55,0.08); border: 1px dashed rgba(212,175,55,0.4); border-radius: 6px; padding: 10px; margin-top: 15px; font-size: 10px; color: #aaa; line-height: 1.6; }
         .urgency-rule strong { color: var(--primary); }
 
-        .custom-breakdown { background: rgba(255,255,255,0.03); padding: 12px; border-radius: 8px; margin-bottom: 15px; font-size: 13px; color: #ccc; line-height: 1.8; border: 1px solid rgba(212,175,55,0.2);}
-        .custom-breakdown .row { display: flex; justify-content: space-between; }
-        .custom-breakdown .hl { color: var(--primary); font-weight: bold; }
-        .custom-breakdown .sub { text-align: right; font-size: 11px; color: #888; margin-top: -2px; margin-bottom: 6px;}
-
-        /* 🚨 全局底部确认签约按钮 */
-        .upsell-action-bar { position: sticky; bottom: 0; background: linear-gradient(to top, #0A0A0C 80%, transparent); padding: 15px 0 0 0; margin-top: 10px; flex-shrink: 0;}
+        .upsell-action-bar { position: sticky; bottom: 0; background: linear-gradient(to top, #0A0A0C 85%, transparent); padding: 15px 0 0 0; margin-top: 5px; flex-shrink: 0;}
         .btn-confirm-master { width: 100%; background: linear-gradient(135deg, var(--primary), #AA8A2A); color: #000; border: none; padding: 16px; border-radius: 12px; font-size: 16px; font-weight: 900; box-shadow: 0 8px 25px rgba(212, 175, 55, 0.3); cursor: pointer; transition: 0.3s; }
         .btn-confirm-master:active { transform: scale(0.98); }
 
-        /* 全局有效性规章底栏 */
         .validity-note { background: #0a0a0c; border: 1px solid #333; border-radius: 8px; padding: 12px; margin-top: 15px; }
         .vn-title { font-size: 12px; color: #aaa; font-weight: bold; margin-bottom: 8px; display: flex; align-items: center; gap: 4px;}
         .vn-list { list-style: none; padding: 0; margin: 0; font-size: 11px; color: #888; line-height: 1.6; }
@@ -188,11 +177,11 @@
         .vn-list li span { color: #ccc; font-weight: bold;}
 
         /* 全屏电子签名合同台 */
-        .sig-modal { position: fixed; top: 100vh; left: 0; width: 100%; height: 100vh; background: #08080A; z-index: 2000; transition: top 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); display: flex; flex-direction: column; }
+        .sig-modal { position: fixed; top: 100vh; left: 0; width: 100vw; height: 100vh; background: #08080A; z-index: 2000; transition: top 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); display: flex; flex-direction: column; overflow-x: hidden;}
         .sig-modal.show { top: 0; }
-        .sig-header { height: 60px; display: flex; justify-content: space-between; align-items: center; padding: 0 20px; background: rgba(5,5,5,0.95); border-bottom: 1px solid rgba(212,175,55,0.3); }
+        .sig-header { height: 60px; display: flex; justify-content: space-between; align-items: center; padding: 0 20px; background: rgba(5,5,5,0.95); border-bottom: 1px solid rgba(212,175,55,0.3); flex-shrink:0;}
         .sig-title { font-size: 16px; font-weight: bold; color: var(--primary); }
-        .sig-content { padding: 20px; flex: 1; display: flex; flex-direction: column; }
+        .sig-content { padding: 20px; flex: 1; display: flex; flex-direction: column; overflow-y: auto;}
         
         .sig-summary { background: linear-gradient(145deg, #18181A, #0A0A0C); padding: 20px; border-radius: 12px; margin-bottom: 20px; border: 1px solid rgba(212,175,55,0.3); box-shadow: 0 10px 30px rgba(0,0,0,0.5);}
         .sig-sum-title { color: #fff; font-size: 14px; margin-bottom: 10px; font-weight: bold;}
@@ -200,11 +189,11 @@
         .sig-sum-name { font-size: 16px; color: var(--primary); font-weight: 900;}
         .sig-sum-price { font-size: 24px; color: #fff; font-weight: 900;}
 
-        .sig-pad-container { flex: 1; border: 1px dashed #555; border-radius: 12px; background: #111; position: relative; overflow: hidden; box-shadow: inset 0 0 20px rgba(0,0,0,0.8);}
-        #sigCanvas { width: 100%; height: 100%; touch-action: none; cursor: crosshair;}
+        .sig-pad-container { flex: 1; border: 1px dashed #555; border-radius: 12px; background: #111; position: relative; overflow: hidden; box-shadow: inset 0 0 20px rgba(0,0,0,0.8); min-height: 250px;}
+        #sigCanvas { width: 100%; height: 100%; touch-action: none; cursor: crosshair; display: block;}
         .sig-placeholder { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #444; font-size: 24px; font-weight: bold; pointer-events: none; letter-spacing: 2px;}
         
-        .sig-actions { display: flex; gap: 15px; margin-top: 20px; margin-bottom: 30px; }
+        .sig-actions { display: flex; gap: 15px; margin-top: 20px; margin-bottom: 30px; flex-shrink:0;}
         .btn-clear { flex: 1; background: #222; color: #fff; padding: 16px; border-radius: 12px; text-align: center; border: 1px solid #444; font-weight: bold; font-size: 15px;}
         .btn-confirm-sig { flex: 2; background: linear-gradient(135deg, var(--primary), #AA8A2A); color: #000; padding: 16px; border-radius: 12px; text-align: center; border: none; font-weight: 900; font-size: 16px; box-shadow: 0 5px 20px rgba(212,175,55,0.3);}
     </style>
@@ -277,69 +266,7 @@
         </div>
         
         <div class="upsell-cards-container" id="upsell-cards-container">
-            <div id="standard-upsell-content">
-                <div class="up-card selected-card" id="card-scheme-1" onclick="selectUpPlan('card-scheme-1')">
-                    <div class="uc-title" id="up-b-title">方案一：【目标直达】专属精准包</div>
-                    <div style="font-size:11px; color:#aaa; margin-bottom: 10px;">完全契合您选择的周期与频次，效果最大化</div>
-                    <div class="uc-breakdown">
-                        <div class="uc-brk-row"><span>常规阶梯单价:</span> <span><del id="up-b-unit-ori">¥420/节</del></span></div>
-                        <div class="uc-brk-row hl"><span>首购特权底价:</span> <span id="up-b-unit-new">¥350/节</span></div>
-                    </div>
-                    <div class="uc-footer">
-                        <div class="uc-sessions" id="up-b-sessions">-- <span>节</span></div>
-                        <div class="uc-price-box">
-                            <div class="uc-ori-total" id="up-b-ori">原总价 ¥--</div>
-                            <div class="uc-new-total">¥ <span id="up-b-new">--</span></div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="up-card" id="card-scheme-2" onclick="selectUpPlan('card-scheme-2')">
-                    <div class="uc-title" id="up-c-title">方案二：【原价启动】半程保留包</div>
-                    <div style="font-size:11px; color:#888; margin-bottom: 10px;">先以原价启动半程，2周内补全差价即可追溯【首购特权价】</div>
-                    <div class="uc-breakdown">
-                        <div class="uc-brk-row"><span>常规阶梯执行单价:</span> <span class="hl" id="up-c-unit-ori">¥440/节</span></div>
-                        <div class="uc-brk-row" style="color:#666;"><span>首购特权底价:</span> <span>暂不享受延期释放</span></div>
-                    </div>
-                    <div class="uc-footer">
-                        <div class="uc-sessions" id="up-c-sessions">-- <span>节</span></div>
-                        <div class="uc-price-box">
-                            <div class="uc-new-total" style="font-size: 22px;">¥ <span id="up-c-new">--</span></div>
-                        </div>
-                    </div>
-                    
-                    <div class="urgency-rule">
-                        <strong>⚠️ 锁价升级法则：</strong> 本方案按原价结算。在 <strong>2周内</strong> 补齐尾款，即可将全部课程追溯升级为【方案一】的首购特权底价。
-                    </div>
-                </div>
             </div>
-
-            <div id="custom-upsell-content" style="display:none;">
-                <div class="up-card selected-card" id="card-scheme-custom" style="margin-top:0;" onclick="selectUpPlan('card-scheme-custom')">
-                    <div class="uc-title">您的专属：高定私享组合包</div>
-                    <div style="font-size:12px; color:#aaa; margin-bottom: 15px;">教练为您量身调配的顶级复合训练计划</div>
-                    
-                    <div class="uc-breakdown" id="custom-breakdown-details" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(212,175,55,0.3);">
-                        </div>
-
-                    <div class="uc-footer">
-                        <div class="uc-sessions" style="font-size:20px; line-height: 1.2;">新客破冰<br><span style="color:var(--primary)">极致核算</span></div>
-                        <div class="uc-price-box">
-                            <div class="uc-ori-total" id="up-custom-ori" style="font-size:13px;">常规执行总价 ¥--</div>
-                            <div class="uc-new-total" style="font-size:30px;">¥ <span id="up-custom-new">--</span></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="validity-note">
-                <div class="vn-title">✦ 课程有效期与门店使用规范</div>
-                <ul class="vn-list">
-                    <li><span>常规训练课 / 特色干预课：</span>有效期按【5天/节】自动顺延计算。</li>
-                    <li><span>包月周期课：</span>按自然时效计算。时效内至多可预约私教课 16 节，其余营业时间尊享场地无限制自由训练。</li>
-                </ul>
-            </div>
-        </div>
         
         <div class="upsell-action-bar">
             <button class="btn-confirm-master" onclick="confirmUpsellSelection()">确认所选方案并签署合同 ➔</button>
@@ -356,8 +283,8 @@
                 <div class="sig-sum-title">即将为您锁定以下专属重塑方案：</div>
                 <div style="font-size:12px; color:#888;">所属体系: <span id="sig-sys-name" style="color:#ccc;"></span></div>
                 <div class="sig-sum-data">
-                    <div class="sig-sum-name" id="sig-pkg-name">黄金周期核心包 <span style="font-size:12px; color:#fff;">(48节)</span></div>
-                    <div class="sig-sum-price" id="sig-pkg-price">¥ 16,800</div>
+                    <div class="sig-sum-name" id="sig-pkg-name">-- <span style="font-size:12px; color:#fff;">(--节)</span></div>
+                    <div class="sig-sum-price" id="sig-pkg-price">¥ --</div>
                 </div>
             </div>
             
@@ -396,7 +323,6 @@
             return m * 3888;
         }
 
-        // 🚨 底层周数与加粗语料
         const planData = {
             'posture': {
                 type: 'feature', icon: '<svg viewBox="0 0 24 24"><path d="M12 5v14"/><path d="M8 9l4-4 4 4"/><path d="M8 19l4 4 4-4"/></svg>',
@@ -505,9 +431,7 @@
         let currentPlanKey = '';
         let globalTotalExact = 0; 
         let userFreq = 3; 
-
-        // 全局选中记录 (供底部大按钮调用)
-        let selectedUpsell = {};
+        let selectedUpsell = {}; // 记录点选方案
 
         function openDetail(key) {
             currentPlanKey = key;
@@ -677,7 +601,6 @@
 
         function togglePhase(el, e) {
             if(e) e.stopPropagation();
-
             if (el.id === 'phase-5-box') {
                 document.querySelectorAll('.phase-box:not(.combo-box)').forEach(b => b.classList.remove('selected'));
                 el.classList.toggle('selected');
@@ -787,7 +710,7 @@
             openSignature(selectedUpsell.name, selectedUpsell.sessions, selectedUpsell.price);
         }
 
-        // 🚨 生成双轨/定制方案
+        // 🚨 动态构建双轨弹窗内容
         function showUpsellModal() {
             if(globalTotalExact === 0) return;
             
@@ -795,42 +718,94 @@
             let isCustom = customBox && customBox.classList.contains('selected');
             const data = planData[currentPlanKey];
 
+            let container = document.getElementById('upsell-cards-container');
+            container.innerHTML = ''; // 清空之前的内容
+
             if (isCustom) {
-                document.getElementById('standard-upsell-content').style.display = 'none';
-                document.getElementById('custom-upsell-content').style.display = 'block';
                 document.getElementById('up-sub-text').innerHTML = `系统已为您核算以下 <strong style="color:var(--primary)">高定私享组合</strong>，含专属破冰福利：`;
 
                 let r = parseInt(document.getElementById('cb-reg').value);
                 let f = parseInt(document.getElementById('cb-feat').value);
                 let m = parseInt(document.getElementById('cb-mon').value);
 
-                let oriReg = r * getUnitPrice(r, 'regular');
-                let oriFeat = f * getUnitPrice(f, 'feature');
-                let oriMon = m > 0 ? getMonthlyPrice(m) : 0;
-                let totalOri = oriReg + oriFeat + oriMon;
+                let r2 = Math.ceil(r / 2);
+                let f2 = Math.ceil(f / 2);
+                let m2 = m; // 包月不变
 
-                let newReg = r * 350; let newFeat = f * 380; let newMon = oriMon; 
-                let totalNew = newReg + newFeat + newMon;
+                // 方案一：新客特权满配包
+                let oriReg1 = r * getUnitPrice(r, 'regular');
+                let oriFeat1 = f * getUnitPrice(f, 'feature');
+                let oriMon1 = m > 0 ? getMonthlyPrice(m) : 0;
+                let totalOri1 = oriReg1 + oriFeat1 + oriMon1;
 
-                let bHtml = '';
-                if(r > 0) bHtml += `<div class="uc-brk-row"><span>常规课 (60分钟/节)</span> <span class="hl">${r} 节</span></div>`;
-                if(f > 0) bHtml += `<div class="uc-brk-row"><span>特色课 (45分钟/节)</span> <span class="hl">${f} 节</span></div>`;
-                if(m > 0) {
-                    bHtml += `<div class="uc-brk-row" style="margin-top:4px;"><span>包月卡 (45分钟/节)</span> <span class="hl">${m} 个月</span></div>`;
-                    bHtml += `<div style="text-align:right; font-size:10px; color:#888; margin-top:-4px;">(含包月费用 ¥${formatMoney(newMon)})</div>`;
-                }
+                let newReg1 = r * 350; let newFeat1 = f * 380;
+                let totalNew1 = newReg1 + newFeat1 + oriMon1;
 
-                document.getElementById('custom-breakdown-details').innerHTML = bHtml;
-                document.getElementById('up-custom-ori').innerText = `常规执行总价 ¥${formatMoney(totalOri)}`;
-                document.getElementById('up-custom-new').innerText = formatMoney(totalNew);
-                
-                // 默认选中
-                selectUpPlan('card-scheme-custom', '高定私享组合包', (r+f) + '节 + ' + m + '个月', '¥ ' + formatMoney(totalNew));
+                // 方案二：原价半程包
+                let oriReg2 = r2 * getUnitPrice(r2, 'regular');
+                let oriFeat2 = f2 * getUnitPrice(f2, 'feature');
+                let oriMon2 = m2 > 0 ? getMonthlyPrice(m2) : 0;
+                let totalNew2 = oriReg2 + oriFeat2 + oriMon2; 
+
+                // 组装方案一
+                let bHtml1 = '';
+                if(r > 0) bHtml1 += `<div class="uc-brk-row"><span>常规课(${r}节)原阶梯<del>¥${getUnitPrice(r,'regular')}</del>:</span> <span class="hl">¥350/节</span></div>`;
+                if(f > 0) bHtml1 += `<div class="uc-brk-row"><span>特色课(${f}节)原阶梯<del>¥${getUnitPrice(f,'feature')}</del>:</span> <span class="hl">¥380/节</span></div>`;
+                if(m > 0) bHtml1 += `<div class="uc-brk-row"><span>包月卡(${m}个月):</span> <span class="hl">¥${formatMoney(getMonthlyPrice(m))}</span></div>`;
+
+                let card1 = `
+                    <div class="up-card premium" id="card-scheme-1" onclick="selectUpPlan('card-scheme-1', '【专属高定】全息私享包', '${r+f}节+${m}个月', '¥ ${formatMoney(totalNew1)}')">
+                        <div class="uc-title">方案一：【专属高定】全息私享包</div>
+                        <div style="font-size:11px; color:#aaa; margin-bottom: 10px;">锁定新客底价，覆盖完整高定计划</div>
+                        <div class="uc-breakdown">${bHtml1}</div>
+                        <div class="uc-footer">
+                            <div class="uc-sessions">${r+f} <span>节 (+包月)</span></div>
+                            <div class="uc-price-box">
+                                <div class="uc-ori-total">原总价 ¥${formatMoney(totalOri1)}</div>
+                                <div class="uc-new-total">¥ <span>${formatMoney(totalNew1)}</span></div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                // 组装方案二
+                let bHtml2 = '';
+                if(r2 > 0) bHtml2 += `<div class="uc-brk-row"><span>常规课(${r2}节)执行原价:</span> <span class="hl">¥${getUnitPrice(r2,'regular')}/节</span></div>`;
+                if(f2 > 0) bHtml2 += `<div class="uc-brk-row"><span>特色课(${f2}节)执行原价:</span> <span class="hl">¥${getUnitPrice(f2,'feature')}/节</span></div>`;
+                if(m2 > 0) bHtml2 += `<div class="uc-brk-row"><span>包月卡(${m2}个月):</span> <span class="hl">¥${formatMoney(getMonthlyPrice(m2))}</span></div>`;
+
+                let card2 = `
+                    <div class="up-card basic" id="card-scheme-2" onclick="selectUpPlan('card-scheme-2', '【原价启动】半程保留包', '${r2+f2}节+${m2}个月', '¥ ${formatMoney(totalNew2)}')">
+                        <div class="uc-title">方案二：【原价启动】半程保留包</div>
+                        <div style="font-size:11px; color:#888; margin-bottom: 10px;">先以原价启动半程，2周内补全差价即可追溯特权价</div>
+                        <div class="uc-breakdown">${bHtml2}</div>
+                        <div class="uc-footer">
+                            <div class="uc-sessions">${r2+f2} <span>节 (+包月)</span></div>
+                            <div class="uc-price-box">
+                                <div class="uc-new-total" style="font-size:22px;">¥ <span>${formatMoney(totalNew2)}</span></div>
+                            </div>
+                        </div>
+                        <div class="urgency-rule">
+                            <strong>⚠️ 锁价升级法则：</strong> 本方案按原阶梯价结算。在 <strong>2周内</strong> 补齐尾款，即可将全部课程追溯升级为【方案一】的首购特权底价。
+                        </div>
+                    </div>
+                `;
+
+                container.innerHTML = card1 + card2 + `
+                    <div class="validity-note">
+                        <div class="vn-title">✦ 课程有效期与门店使用规范</div>
+                        <ul class="vn-list">
+                            <li><span>常规训练课 / 特色干预课：</span>有效期按【5天/节】自动顺延计算。</li>
+                            <li><span>包月周期课：</span>按自然时效计算。时效内至多可预约私教课 16 节，其余时间尊享场地无限制自由训练。</li>
+                        </ul>
+                    </div>
+                `;
+
+                // 默认选中方案一
+                selectUpPlan('card-scheme-1', '【专属高定】全息私享包', `${r+f}节+${m}个月`, `¥ ${formatMoney(totalNew1)}`);
 
             } else {
-                document.getElementById('standard-upsell-content').style.display = 'block';
-                document.getElementById('custom-upsell-content').style.display = 'none';
-
+                // ====== 标准双轨 (二选一) ======
                 let phaseNames = [];
                 document.querySelectorAll('.phase-box.selected:not(.combo-box)').forEach(box => {
                     let pStep = box.querySelector('.p-step').innerText; 
@@ -845,40 +820,69 @@
                 let exactSessions = globalTotalExact; 
                 let pkgCore = exactSessions; 
                 
-                // 方案二：原价购买一半
+                // 方案二：严格减半 (原价)
                 let pkgEntry = Math.ceil(pkgCore / 2);
                 if (pkgEntry < 1) pkgEntry = 1;
 
                 let unitB = getUnitPrice(pkgCore, data.type); 
-                let unitC = getUnitPrice(pkgEntry, data.type);
+                let unitC = getUnitPrice(pkgEntry, data.type); // 原价阶梯
                 
                 let totalOriB = pkgCore * unitB;
                 
                 let newbiePrice = (data.type === 'feature') ? 380 : 350;
-                let totalNewB = pkgCore * newbiePrice;
+                let totalNewB = pkgCore * newbiePrice; // 方案一总价
                 
-                // 兜底包原价买一半！
-                let totalNewC = pkgEntry * unitC;
+                let totalNewC = pkgEntry * unitC; // 方案二按原价总价
 
-                document.getElementById('up-b-title').innerText = `方案一：【${targetName}】专属精准包`;
-                
-                document.getElementById('up-b-unit-ori').innerText = `¥${unitB}/节`;
-                document.getElementById('up-b-unit-new').innerText = `¥${newbiePrice}/节`;
-                document.getElementById('up-b-sessions').innerHTML = `${pkgCore} <span>节</span>`;
-                document.getElementById('up-b-ori').innerText = `原总价 ¥${formatMoney(totalOriB)}`;
-                document.getElementById('up-b-new').innerText = formatMoney(totalNewB);
-                
-                // 给卡片绑定选中数据
-                document.getElementById('card-scheme-1').setAttribute('onclick', `selectUpPlan('card-scheme-1', '${targetName} 专属精准包', '${pkgCore}节', '¥ ${formatMoney(totalNewB)}')`);
+                let card1 = `
+                    <div class="up-card premium selected-card" id="card-scheme-1" onclick="selectUpPlan('card-scheme-1', '${targetName} 专属精准包', '${pkgCore}节', '¥ ${formatMoney(totalNewB)}')">
+                        <div class="uc-title">方案一：【${targetName}】专属精准包</div>
+                        <div style="font-size:11px; color:#aaa; margin-bottom: 10px;">完全契合您选择的周期与频次，效果最大化</div>
+                        <div class="uc-breakdown">
+                            <div class="uc-brk-row"><span>常规阶梯单价:</span> <span><del>¥${unitB}/节</del></span></div>
+                            <div class="uc-brk-row hl"><span>首购特权底价:</span> <span>¥${newbiePrice}/节</span></div>
+                        </div>
+                        <div class="uc-footer">
+                            <div class="uc-sessions">${pkgCore} <span>节</span></div>
+                            <div class="uc-price-box">
+                                <div class="uc-ori-total">原总价 ¥${formatMoney(totalOriB)}</div>
+                                <div class="uc-new-total">¥ <span>${formatMoney(totalNewB)}</span></div>
+                            </div>
+                        </div>
+                    </div>
+                `;
 
-                document.getElementById('up-c-title').innerText = `方案二：【原价启动】半程保留包`;
-                document.getElementById('up-c-unit-ori').innerText = `¥${unitC}/节`;
-                document.getElementById('up-c-sessions').innerHTML = `${pkgEntry} <span>节</span>`;
-                document.getElementById('up-c-new').innerText = formatMoney(totalNewC);
-                
-                document.getElementById('card-scheme-2').setAttribute('onclick', `selectUpPlan('card-scheme-2', '【半程保留包】(随时可原价升级补齐)', '${pkgEntry}节', '¥ ${formatMoney(totalNewC)}')`);
-                
-                // 弹窗出现时默认选中方案一
+                let card2 = `
+                    <div class="up-card basic" id="card-scheme-2" onclick="selectUpPlan('card-scheme-2', '【原价启动】半程保留包', '${pkgEntry}节', '¥ ${formatMoney(totalNewC)}')">
+                        <div class="uc-title">方案二：【原价启动】半程保留包</div>
+                        <div style="font-size:11px; color:#888; margin-bottom: 10px;">先以原价启动半程，2周内补全差价即可追溯特权价</div>
+                        <div class="uc-breakdown">
+                            <div class="uc-brk-row"><span>常规阶梯执行单价:</span> <span class="hl">¥${unitC}/节</span></div>
+                            <div class="uc-brk-row" style="color:#666;"><span>首购特权底价:</span> <span>暂不享受延期</span></div>
+                        </div>
+                        <div class="uc-footer">
+                            <div class="uc-sessions">${pkgEntry} <span>节</span></div>
+                            <div class="uc-price-box">
+                                <div class="uc-new-total" style="font-size:22px;">¥ <span>${formatMoney(totalNewC)}</span></div>
+                            </div>
+                        </div>
+                        <div class="urgency-rule">
+                            <strong>⚠️ 锁价升级法则：</strong> 本方案按原阶梯价结算。在 <strong>2周内</strong> 补齐尾款，即可将全部课程追溯升级为【方案一】的首购特权底价。
+                        </div>
+                    </div>
+                `;
+
+                container.innerHTML = card1 + card2 + `
+                    <div class="validity-note">
+                        <div class="vn-title">✦ 课程有效期与门店使用规范</div>
+                        <ul class="vn-list">
+                            <li><span>常规训练课 / 特色干预课：</span>有效期按【5天/节】自动顺延计算。</li>
+                            <li><span>包月周期课：</span>按自然时效计算。时效内至多可预约私教课 16 节，其余时间尊享场地无限制自由训练。</li>
+                        </ul>
+                    </div>
+                `;
+
+                // 默认选中方案一
                 selectUpPlan('card-scheme-1', `${targetName} 专属精准包`, `${pkgCore}节`, `¥ ${formatMoney(totalNewB)}`);
             }
 
@@ -891,6 +895,7 @@
             document.getElementById('upsellModal').classList.remove('show');
         }
 
+        // 电子签名画布系统
         let sigCanvas, sigCtx, isSigning = false;
 
         function openSignature(pkgName, sessions, price) {
