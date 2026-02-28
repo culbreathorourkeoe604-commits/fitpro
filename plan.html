@@ -49,11 +49,9 @@
         
         .phase-title-main { font-size: 14px; color: #888; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; border-top: 1px solid #222; padding-top: 25px; letter-spacing: 1px;}
         
-        /* 购物式点选框 */
         .phase-box { border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 20px; position: relative; margin-bottom: 20px; background: #0a0a0c; cursor: pointer; transition: 0.3s; box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
         .phase-box.selected { border-color: rgba(212,175,55,0.6); background: linear-gradient(145deg, rgba(212,175,55,0.08), #050505); box-shadow: 0 10px 25px rgba(212,175,55,0.15); }
         
-        /* 🚨 教练专属高定组合包特殊样式 */
         .combo-box { border: 1px dashed rgba(212,175,55,0.4); background: linear-gradient(145deg, #18150D, #0A0A0C); margin-top: 30px; }
         .combo-box.selected { border: 1px solid var(--primary); background: linear-gradient(145deg, #2A2210, #0A0A0C); box-shadow: 0 10px 25px rgba(212,175,55,0.25); }
 
@@ -65,7 +63,6 @@
         .p-step { font-size: 11px; color: #888; font-weight: bold; letter-spacing: 2px; margin-bottom: 12px;}
         .phase-box.selected .p-step { color: var(--primary); }
         
-        /* 🚨 周期与课时双行展示 */
         .p-cycle-highlight { display: flex; flex-direction: column; gap: 6px; background: linear-gradient(90deg, rgba(212, 175, 55, 0.1), transparent); border-left: 3px solid #444; padding: 10px 12px; margin-bottom: 18px; border-radius: 0 8px 8px 0; transition: 0.3s; }
         .phase-box.selected .p-cycle-highlight { border-left-color: var(--primary); background: linear-gradient(90deg, rgba(212, 175, 55, 0.2), transparent); }
         .cycle-row { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 900; color: #888; letter-spacing: 1px; transition: 0.3s;}
@@ -78,7 +75,6 @@
         .p-name { font-size: 18px; font-weight: 900; color: #888; margin-bottom: 15px; transition: 0.3s;}
         .phase-box.selected .p-name { color: #fff; }
         
-        /* 🚨 恢复的金色重点词加粗 */
         .sales-points { display: flex; flex-direction: column; gap: 12px; opacity: 0.5; transition: 0.3s; }
         .phase-box.selected .sales-points { opacity: 1; }
         .sp-row { display: flex; align-items: flex-start; gap: 10px; font-size: 13px; line-height: 1.6; }
@@ -88,6 +84,16 @@
         .tag-feel { color: #000; border-color: var(--primary); background: var(--primary); }
         .sp-text { color: #ccc; }
         .sp-text strong { color: var(--primary); font-weight: bold; text-shadow: 0 0 8px rgba(212,175,55,0.3); }
+
+        /* 🚨 教练配课滑动步进器 */
+        .custom-builder { margin-top: 15px; border-top: 1px dashed rgba(212,175,55,0.3); padding-top: 15px; display: flex; flex-direction: column; gap: 10px; }
+        .cb-item { display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.5); padding: 8px 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05);}
+        .cb-label { font-size: 13px; color: #fff; font-weight: bold; }
+        .cb-label span { font-size: 10px; color: #888; font-weight: normal; margin-left: 4px; }
+        .cb-ctrl { display: flex; align-items: center; background: #111; border-radius: 8px; border: 1px solid rgba(212,175,55,0.3); overflow: hidden; }
+        .cb-btn { width: 32px; height: 32px; display: flex; justify-content: center; align-items: center; color: var(--primary); font-size: 18px; font-weight: bold; cursor: pointer; user-select: none; }
+        .cb-btn:active { background: rgba(212,175,55,0.2); }
+        .cb-input { width: 40px; text-align: center; background: #000; border: none; border-left: 1px solid #333; border-right: 1px solid #333; color: #fff; font-size: 15px; font-weight: 900; padding: 6px 0; outline: none; pointer-events: none;}
 
         /* 可视化投射图 */
         .visual-feedback-section { margin-top: 30px; background: #0a0a0c; border: 1px solid rgba(212, 175, 55, 0.15); border-radius: 16px; padding: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
@@ -108,36 +114,40 @@
         .btn-checkout:active { transform: scale(0.96); }
         .btn-checkout.disabled { background: #333; color: #666; box-shadow: none; pointer-events: none; }
 
-        /* 三套心理学梯队逼单弹窗 */
+        /* 三套心理学逼单弹窗 */
         .upsell-overlay { position: fixed; top:0; left:0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; opacity: 0; pointer-events: none; transition: 0.4s; backdrop-filter: blur(5px); }
         .upsell-overlay.show { opacity: 1; pointer-events: auto; }
         
-        .upsell-modal { position: fixed; bottom: -100%; left: 0; width: 100%; background: linear-gradient(180deg, #1A1A20, #0A0A0C); border-top: 1px solid var(--primary); border-radius: 24px 24px 0 0; z-index: 1001; padding: 30px 20px 40px; transition: 0.5s cubic-bezier(0.2, 0.8, 0.2, 1); box-shadow: 0 -10px 40px rgba(212,175,55,0.15); max-height: 90vh; overflow-y: auto;}
+        .upsell-modal { position: fixed; bottom: -100%; left: 0; width: 100%; background: linear-gradient(180deg, #1A1A20, #0A0A0C); border-top: 1px solid var(--primary); border-radius: 24px 24px 0 0; z-index: 1001; padding: 25px 20px 40px; transition: 0.5s cubic-bezier(0.2, 0.8, 0.2, 1); box-shadow: 0 -10px 40px rgba(212,175,55,0.15); max-height: 90vh; overflow-y: auto;}
         .upsell-modal.show { bottom: 0; }
         
-        .up-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; }
+        .up-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px; }
         .up-title { font-size: 18px; font-weight: 900; color: #fff; letter-spacing: 1px; }
         .up-sub { font-size: 11px; color: #aaa; margin-top: 6px; line-height: 1.5; }
         .up-close { color: #888; font-size: 28px; background: none; border: none; padding: 0; line-height: 1; cursor: pointer; }
 
-        .up-card { background: #111; border-radius: 12px; padding: 18px; border: 1px solid #333; margin-bottom: 12px; position: relative; overflow: hidden; }
+        .up-card { background: #111; border-radius: 12px; padding: 15px; border: 1px solid #333; margin-bottom: 12px; position: relative; overflow: hidden; }
         .up-card:active { transform: scale(0.98); }
         .up-card.anchor { background: linear-gradient(145deg, #18181A, #0A0A0C); border-color: #444; }
-        .up-card.premium { border-color: rgba(212,175,55,0.8); background: linear-gradient(145deg, #241D10, #0A0A0C); box-shadow: 0 5px 20px rgba(212,175,55,0.15); margin-top: 15px; margin-bottom: 15px; transform: scale(1.02);}
+        .up-card.premium { border-color: rgba(212,175,55,0.8); background: linear-gradient(145deg, #241D10, #0A0A0C); box-shadow: 0 5px 20px rgba(212,175,55,0.15); margin-top: 12px; margin-bottom: 12px; transform: scale(1.02);}
         .up-card.premium::before { content: '★ 核心主推，最配目标'; position: absolute; top: 0; right: 0; background: linear-gradient(90deg, var(--accent), var(--primary)); color: #000; font-size: 10px; font-weight: bold; padding: 4px 12px; border-radius: 0 0 0 12px; }
         .up-card.basic { background: #0A0A0C; border-style: dashed; border-color: #555; }
         
         .uc-title { font-size: 15px; font-weight: 900; color: #fff; margin-bottom: 6px; display: flex; align-items: center; gap: 6px;}
-        .premium .uc-title { color: var(--primary); font-size: 17px;}
+        .premium .uc-title { color: var(--primary); font-size: 16px;}
         
         .uc-data { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.05); }
         .uc-sessions { font-size: 22px; font-weight: 900; color: #fff; }
-        .premium .uc-sessions { font-size: 26px; color: var(--primary); }
+        .premium .uc-sessions { font-size: 24px; color: var(--primary); }
         .uc-sessions span { font-size: 12px; font-weight: normal; color: #888; }
         .uc-price { text-align: right; }
-        .uc-price-val { font-size: 20px; font-weight: 900; color: #fff; }
-        .premium .uc-price-val { font-size: 24px; color: #fff; }
-        .uc-price-unit { font-size: 11px; color: #888; }
+        
+        /* 首购破冰对比样式 */
+        .uc-price-ori { font-size: 12px; color: #888; text-decoration: line-through; margin-bottom: 2px; }
+        .uc-price-val { font-size: 22px; font-weight: 900; color: #fff; display: flex; align-items: baseline; justify-content: flex-end; gap: 4px;}
+        .premium .uc-price-val { font-size: 26px; color: #fff; }
+        .uc-price-unit { font-size: 11px; color: #888; margin-top: 4px; display: flex; align-items: center; justify-content: flex-end; gap: 4px;}
+        .newbie-tag { background: var(--primary); color: #000; padding: 2px 6px; border-radius: 4px; font-weight: bold; font-size: 10px; }
 
         .uc-btn { width: 100%; padding: 12px; border-radius: 8px; font-size: 14px; font-weight: bold; border: none; cursor: pointer; position: relative; z-index: 10;}
         .anchor .uc-btn { background: #333; color: #fff; }
@@ -197,7 +207,7 @@
                 <div class="c-info-val" id="calc-val">-- <span>节</span></div>
             </div>
             <button class="btn-checkout disabled" id="btn-checkout" onclick="showUpsellModal()">
-                获取智能报价方案 ➔
+                获取新客智能报价 ➔
             </button>
         </div>
     </div>
@@ -207,19 +217,20 @@
         <div class="up-header">
             <div>
                 <div class="up-title">✦ 智能匹配三轨方案 ✦</div>
-                <div class="up-sub">基于您的选择，系统自动推演出以下三种财务执行路径：</div>
+                <div class="up-sub">系统已为您接入 <strong style="color:var(--primary)">【首次建档专享 ¥350/节】</strong> 破冰费率：</div>
             </div>
             <button class="up-close" onclick="closeUpsellModal()">×</button>
         </div>
         
         <div class="up-card anchor">
             <div class="uc-title">方案一：极致重塑包 (高阶锚定)</div>
-            <div style="font-size:11px; color:#888; margin-bottom: 10px;">覆盖超长周期，锁定门店绝对最低单价</div>
+            <div style="font-size:11px; color:#888; margin-bottom: 10px;">覆盖超长周期，打造绝对巅峰体态</div>
             <div class="uc-data">
                 <div class="uc-sessions" id="up-a-sessions">-- <span>节</span></div>
                 <div class="uc-price">
-                    <div class="uc-price-val" id="up-a-total">¥ --</div>
-                    <div class="uc-price-unit" id="up-a-unit">折合单价 ¥--/节</div>
+                    <div class="uc-price-ori" id="up-a-ori">原价 ¥--</div>
+                    <div class="uc-price-val">¥ <span id="up-a-new">--</span></div>
+                    <div class="uc-price-unit"><span class="newbie-tag">首购福利</span> 折合单价 ¥350/节</div>
                 </div>
             </div>
             <button class="uc-btn" onclick="window.location.href='./price.html'">选择此方案 ➔</button>
@@ -231,8 +242,9 @@
             <div class="uc-data">
                 <div class="uc-sessions" id="up-b-sessions">-- <span>节</span></div>
                 <div class="uc-price">
-                    <div class="uc-price-val" id="up-b-total">¥ --</div>
-                    <div class="uc-price-unit" id="up-b-unit">折合单价 ¥--/节</div>
+                    <div class="uc-price-ori" id="up-b-ori">原价 ¥--</div>
+                    <div class="uc-price-val">¥ <span id="up-b-new">--</span></div>
+                    <div class="uc-price-unit"><span class="newbie-tag">首购福利</span> 折合单价 ¥350/节</div>
                 </div>
             </div>
             <button class="uc-btn" onclick="window.location.href='./price.html'">确认主推方案并签约 ➔</button>
@@ -244,8 +256,9 @@
             <div class="uc-data">
                 <div class="uc-sessions" id="up-c-sessions" style="font-size:18px;">-- <span>节</span></div>
                 <div class="uc-price">
-                    <div class="uc-price-val" id="up-c-total" style="font-size:16px;">¥ --</div>
-                    <div class="uc-price-unit" id="up-c-unit">折合单价 ¥--/节</div>
+                    <div class="uc-price-ori" id="up-c-ori" style="font-size:11px;">原价 ¥--</div>
+                    <div class="uc-price-val" style="font-size:18px;">¥ <span id="up-c-new">--</span></div>
+                    <div class="uc-price-unit" style="font-size:10px;"><span class="newbie-tag">首购福利</span> 折合单价 ¥350/节</div>
                 </div>
             </div>
             <button class="uc-btn" onclick="window.location.href='./price.html'">先选此方案低风险启动 ➔</button>
@@ -269,7 +282,6 @@
             return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         }
 
-        // 🚨 核心注入：4阶段自由组合 + 金色强调词 + 女模大片
         const planData = {
             'posture': {
                 type: 'feature', icon: '<svg viewBox="0 0 24 24"><path d="M12 5v14"/><path d="M8 9l4-4 4 4"/><path d="M8 19l4 4 4-4"/></svg>',
@@ -280,8 +292,6 @@
                 p2_goal: '<strong>激活休眠的肌肉</strong>，建立天然肌肉内衣。', p2_tech: '普拉提孤立性募集腹横肌。', p2_feel: '核心产生<strong>强烈的支撑感</strong>。',
                 p3_name: '动作模式固化定型', p3_time: '半年固化 (第 4-6 个月)', p3_sessions: '48 - 72 节', p3_min: 48, p3_max: 72,
                 p3_goal: '将正确排列<strong>刻入神经潜意识</strong>。', p3_tech: '复合抗阻结合生活轨迹二次重塑。', p3_feel: '不自觉地<strong>保持挺拔高姿态</strong>。',
-                p4_name: '高定自由组合包', p4_time: '依体测动态规划', p4_sessions: '24 节起配', p4_min: 24, p4_max: 48,
-                p4_goal: '<strong>突破单一训练局限</strong>，常规与特色干预双管齐下。', p4_tech: '根据实时反馈，<strong>动态穿插排课</strong>（普拉提/力量等）。', p4_feel: '不再受限于固定流程，<strong>享受最顶级的私教VIP托管</strong>。',
                 img1: 'https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=600&q=80', 
                 img2: 'https://images.unsplash.com/photo-1599901860904-17e6ed7083a0?auto=format&fit=crop&w=600&q=80', 
                 img3: 'https://images.unsplash.com/photo-1552196563-55cd4e45efb3?auto=format&fit=crop&w=600&q=80', 
@@ -296,8 +306,6 @@
                 p2_goal: '靶向清理内脏脂肪，<strong>强力突破平台期</strong>。', p2_tech: 'HIIT激发强烈运动后燃效应。', p2_feel: '<strong>腰腹围度明显缩小</strong>，穿衣宽松。',
                 p3_name: '易瘦体质终极定型', p3_time: '年度固化 (第 4-12 个月)', p3_sessions: '48 - 100 节', p3_min: 48, p3_max: 100,
                 p3_goal: '让身体在<strong>睡眠中持续燃烧热量</strong>。', p3_tech: '肌肥大训练提升整体肌肉储备。', p3_feel: '<strong>偶尔放纵吃喝不再反弹</strong>。',
-                p4_name: '高定自由组合包', p4_time: '依体测动态规划', p4_sessions: '24 节起配', p4_min: 24, p4_max: 48,
-                p4_goal: '<strong>突破单一训练局限</strong>，常规与特色干预双管齐下。', p4_tech: '根据实时反馈，<strong>动态穿插排课</strong>（普拉提/力量等）。', p4_feel: '不再受限于固定流程，<strong>享受最顶级的私教VIP托管</strong>。',
                 img1: 'https://images.unsplash.com/photo-1584735175315-9d5df23860e6?auto=format&fit=crop&w=600&q=80', 
                 img2: 'https://images.unsplash.com/photo-1608228079968-c7681eaef81e?auto=format&fit=crop&w=600&q=80', 
                 img3: 'https://images.unsplash.com/photo-1508215885820-4585e5610ea0?auto=format&fit=crop&w=600&q=80', 
@@ -312,8 +320,6 @@
                 p2_goal: '迫使肌纤维超量恢复，实现<strong>局部的饱满填充</strong>。', p2_tech: '渐进式超负荷，运用慢速离心控制。', p2_feel: '<strong>蜜桃臀逐渐饱满上翘</strong>，肩线平直。',
                 p3_name: '视觉比例拉扯精雕', p3_time: '年度固化 (第 4-12 个月)', p3_sessions: '48 - 100 节', p3_min: 48, p3_max: 100,
                 p3_goal: '强行呈现出<strong>极致的漏斗形曲线</strong>。', p3_tech: '强化背部阔度，极致压缩腰围数据。', p3_feel: 'S曲线完全固化，<strong>拍照自带高级感</strong>。',
-                p4_name: '高定自由组合包', p4_time: '依体测动态规划', p4_sessions: '24 节起配', p4_min: 24, p4_max: 48,
-                p4_goal: '<strong>突破单一训练局限</strong>，常规与特色干预双管齐下。', p4_tech: '根据实时反馈，<strong>动态穿插排课</strong>（普拉提/力量等）。', p4_feel: '不再受限于固定流程，<strong>享受最顶级的私教VIP托管</strong>。',
                 img1: 'https://images.unsplash.com/photo-1574680096145-d05b474e2155?auto=format&fit=crop&w=600&q=80', 
                 img2: 'https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?auto=format&fit=crop&w=600&q=80', 
                 img3: 'https://images.unsplash.com/photo-1605296867304-46d5465a13f1?auto=format&fit=crop&w=600&q=80', 
@@ -328,8 +334,6 @@
                 p2_goal: '安全缝合腹部裂隙，改善<strong>骨盆过度前倾</strong>。', p2_tech: '抗旋转与抗伸展训练，强化深层核心。', p2_feel: '腹直肌间距肉眼收窄，<strong>腰背酸痛大幅缓解</strong>。',
                 p3_name: '温和减脂与皮肤收紧', p3_time: '半年巩固 (第 4-6 个月)', p3_sessions: '40 - 60 节', p3_min: 40, p3_max: 60,
                 p3_goal: '在安全前提下，<strong>剥离孕期囤积脂肪</strong>。', p3_tech: '无跳跃温和抗阻代谢组。', p3_feel: '逐步<strong>穿回孕前尺码衣服</strong>，皮肤恢复紧致。',
-                p4_name: '高定自由组合包', p4_time: '依体测动态规划', p4_sessions: '24 节起配', p4_min: 24, p4_max: 48,
-                p4_goal: '<strong>突破单一训练局限</strong>，常规与特色干预双管齐下。', p4_tech: '根据实时反馈，<strong>动态穿插排课</strong>（普拉提/力量等）。', p4_feel: '不再受限于固定流程，<strong>享受最顶级的私教VIP托管</strong>。',
                 img1: 'https://images.unsplash.com/photo-1609899536866-99396547465a?auto=format&fit=crop&w=600&q=80', 
                 img2: 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=600&q=80', 
                 img3: 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=600&q=80', 
@@ -344,8 +348,6 @@
                 p2_goal: '增强韧带强度，打造<strong>生物学护膝护腰</strong>。', p2_tech: '无痛角度内等长收缩强化深层小肌群。', p2_feel: '关节产生<strong>极强包裹感</strong>，发力不发虚。',
                 p3_name: '动态脱敏与赛场重返', p3_time: '半年重返 (第 4-6 个月)', p3_sessions: '40 - 60 节', p3_min: 40, p3_max: 60,
                 p3_goal: '重建本体感觉，<strong>适应复杂运动轨迹</strong>。', p3_tech: '闭链与不平衡介质高阶神经调控。', p3_feel: '能<strong>极其自信地完成复杂动作</strong>，无惧损伤。',
-                p4_name: '高定自由组合包', p4_time: '依体测动态规划', p4_sessions: '24 节起配', p4_min: 24, p4_max: 48,
-                p4_goal: '<strong>突破单一训练局限</strong>，常规与特色干预双管齐下。', p4_tech: '根据实时反馈，<strong>动态穿插排课</strong>（普拉提/力量等）。', p4_feel: '不再受限于固定流程，<strong>享受最顶级的私教VIP托管</strong>。',
                 img1: 'https://images.unsplash.com/photo-1609899517237-77d357b03007?auto=format&fit=crop&w=600&q=80', 
                 img2: 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?auto=format&fit=crop&w=600&q=80', 
                 img3: 'https://images.unsplash.com/photo-1552674605-db6ffd4facb5?auto=format&fit=crop&w=600&q=80', 
@@ -360,8 +362,6 @@
                 p2_goal: '刺激成骨细胞活跃，<strong>暴力对抗肌肉萎缩</strong>。', p2_tech: '重物抗阻配合慢速离心收缩技术。', p2_feel: '拎重物不吃力，<strong>下楼梯膝盖绝不发软</strong>。',
                 p3_name: '引擎重置与荷尔蒙唤醒', p3_time: '年度冻龄 (4-12月)', p3_sessions: '72 - 150 节', p3_min: 72, p3_max: 150,
                 p3_goal: '提升最大摄氧量，由内而外焕发<strong>极致年轻态</strong>。', p3_tech: '稳态有氧配合心率变异率科学监控。', p3_feel: '爬楼梯不喘，<strong>气色红润，精力爆表</strong>。',
-                p4_name: '高定自由组合包', p4_time: '依体测动态规划', p4_sessions: '24 节起配', p4_min: 24, p4_max: 48,
-                p4_goal: '<strong>突破单一训练局限</strong>，常规与特色干预双管齐下。', p4_tech: '根据实时反馈，<strong>动态穿插排课</strong>（普拉提/力量等）。', p4_feel: '不再受限于固定流程，<strong>享受最顶级的私教VIP托管</strong>。',
                 img1: 'https://images.unsplash.com/photo-1576678927484-cc907957088c?auto=format&fit=crop&w=600&q=80', 
                 img2: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=600&q=80', 
                 img3: 'https://images.unsplash.com/photo-1553532070-539150b2077d?auto=format&fit=crop&w=600&q=80', 
@@ -388,63 +388,81 @@
                 
                 <div class="phase-title-main">请点选您期望达成的重塑目标阶段：</div>
                 
-                <div class="phase-box selected" data-phase="1" data-min="${data.p1_min}" data-max="${data.p1_max}" onclick="togglePhase(this)">
+                <div class="phase-box selected" data-phase="1" data-min="${data.p1_min}" data-max="${data.p1_max}" onclick="togglePhase(this, event)">
                     <div class="check-circle"></div>
-                    <div class="p-step">● PHASE 01 / 阶段一</div>
+                    <div class="p-step">● PHASE 01</div>
                     <div class="p-cycle-highlight">
                         <div class="cycle-row"><span class="icon">⏱</span> 周期：<span class="highlight-text">${data.p1_time}</span></div>
                         <div class="cycle-row"><span class="icon">🎯</span> 课时：<span class="highlight-text">${data.p1_sessions}</span></div>
                     </div>
                     <div class="p-name">${data.p1_name}</div>
                     <div class="sales-points">
-                        <div class="sp-row"><div class="sp-tag tag-goal">核心目标</div><div class="sp-text">${data.p1_goal}</div></div>
-                        <div class="sp-row"><div class="sp-tag tag-tech">干预技术</div><div class="sp-text">${data.p1_tech}</div></div>
-                        <div class="sp-row"><div class="sp-tag tag-feel">客户体感</div><div class="sp-text">${data.p1_feel}</div></div>
+                        <div class="sp-row"><div class="sp-tag tag-goal">目标</div><div class="sp-text">${data.p1_goal}</div></div>
+                        <div class="sp-row"><div class="sp-tag tag-tech">技术</div><div class="sp-text">${data.p1_tech}</div></div>
+                        <div class="sp-row"><div class="sp-tag tag-feel">体感</div><div class="sp-text">${data.p1_feel}</div></div>
                     </div>
                 </div>
 
-                <div class="phase-box" data-phase="2" data-min="${data.p2_min}" data-max="${data.p2_max}" onclick="togglePhase(this)">
+                <div class="phase-box" data-phase="2" data-min="${data.p2_min}" data-max="${data.p2_max}" onclick="togglePhase(this, event)">
                     <div class="check-circle"></div>
-                    <div class="p-step">● PHASE 02 / 阶段二</div>
+                    <div class="p-step">● PHASE 02</div>
                     <div class="p-cycle-highlight">
                         <div class="cycle-row"><span class="icon">⏱</span> 周期：<span class="highlight-text">${data.p2_time}</span></div>
                         <div class="cycle-row"><span class="icon">🎯</span> 课时：<span class="highlight-text">${data.p2_sessions}</span></div>
                     </div>
                     <div class="p-name">${data.p2_name}</div>
                     <div class="sales-points">
-                        <div class="sp-row"><div class="sp-tag tag-goal">核心目标</div><div class="sp-text">${data.p2_goal}</div></div>
-                        <div class="sp-row"><div class="sp-tag tag-tech">干预技术</div><div class="sp-text">${data.p2_tech}</div></div>
-                        <div class="sp-row"><div class="sp-tag tag-feel">客户体感</div><div class="sp-text">${data.p2_feel}</div></div>
+                        <div class="sp-row"><div class="sp-tag tag-goal">目标</div><div class="sp-text">${data.p2_goal}</div></div>
+                        <div class="sp-row"><div class="sp-tag tag-tech">技术</div><div class="sp-text">${data.p2_tech}</div></div>
+                        <div class="sp-row"><div class="sp-tag tag-feel">体感</div><div class="sp-text">${data.p2_feel}</div></div>
                     </div>
                 </div>
 
-                <div class="phase-box" data-phase="3" data-min="${data.p3_min}" data-max="${data.p3_max}" onclick="togglePhase(this)">
+                <div class="phase-box" data-phase="3" data-min="${data.p3_min}" data-max="${data.p3_max}" onclick="togglePhase(this, event)">
                     <div class="check-circle"></div>
-                    <div class="p-step">● PHASE 03 / 阶段三</div>
+                    <div class="p-step">● PHASE 03</div>
                     <div class="p-cycle-highlight">
                         <div class="cycle-row"><span class="icon">⏱</span> 周期：<span class="highlight-text">${data.p3_time}</span></div>
                         <div class="cycle-row"><span class="icon">🎯</span> 课时：<span class="highlight-text">${data.p3_sessions}</span></div>
                     </div>
                     <div class="p-name">${data.p3_name}</div>
                     <div class="sales-points">
-                        <div class="sp-row"><div class="sp-tag tag-goal">核心目标</div><div class="sp-text">${data.p3_goal}</div></div>
-                        <div class="sp-row"><div class="sp-tag tag-tech">干预技术</div><div class="sp-text">${data.p3_tech}</div></div>
-                        <div class="sp-row"><div class="sp-tag tag-feel">客户体感</div><div class="sp-text">${data.p3_feel}</div></div>
+                        <div class="sp-row"><div class="sp-tag tag-goal">目标</div><div class="sp-text">${data.p3_goal}</div></div>
+                        <div class="sp-row"><div class="sp-tag tag-tech">技术</div><div class="sp-text">${data.p3_tech}</div></div>
+                        <div class="sp-row"><div class="sp-tag tag-feel">体感</div><div class="sp-text">${data.p3_feel}</div></div>
                     </div>
                 </div>
 
-                <div class="phase-box combo-box" data-phase="4" data-min="${data.p4_min}" data-max="${data.p4_max}" onclick="togglePhase(this)">
+                <div class="phase-box combo-box" id="phase-4-box" onclick="togglePhase(this, event)">
                     <div class="check-circle"></div>
-                    <div class="p-step">★ 特殊通道 / 教练专属定制</div>
-                    <div class="p-cycle-highlight">
-                        <div class="cycle-row"><span class="icon">⏱</span> 周期：<span class="highlight-text">${data.p4_time}</span></div>
-                        <div class="cycle-row"><span class="icon">🎯</span> 课时：<span class="highlight-text">${data.p4_sessions}</span></div>
-                    </div>
-                    <div class="p-name">${data.p4_name}</div>
-                    <div class="sales-points">
-                        <div class="sp-row"><div class="sp-tag tag-goal">核心目标</div><div class="sp-text">${data.p4_goal}</div></div>
-                        <div class="sp-row"><div class="sp-tag tag-tech">干预技术</div><div class="sp-text">${data.p4_tech}</div></div>
-                        <div class="sp-row"><div class="sp-tag tag-feel">客户体感</div><div class="sp-text">${data.p4_feel}</div></div>
+                    <div class="p-step">★ 特殊通道 / 教练专属定制组合包</div>
+                    <div class="p-name" style="margin-bottom: 5px;">突破单一局限，全息方案托管</div>
+                    
+                    <div class="custom-builder">
+                        <div class="cb-item">
+                            <div class="cb-label">常规训练课 <span>(燃脂/塑形)</span></div>
+                            <div class="cb-ctrl">
+                                <div class="cb-btn" onclick="chgVal('cb-reg', -2, event)">-</div>
+                                <input id="cb-reg" class="cb-input" value="0" readonly>
+                                <div class="cb-btn" onclick="chgVal('cb-reg', 2, event)">+</div>
+                            </div>
+                        </div>
+                        <div class="cb-item">
+                            <div class="cb-label">特色干预课 <span>(康复/普拉提)</span></div>
+                            <div class="cb-ctrl">
+                                <div class="cb-btn" onclick="chgVal('cb-feat', -2, event)">-</div>
+                                <input id="cb-feat" class="cb-input" value="0" readonly>
+                                <div class="cb-btn" onclick="chgVal('cb-feat', 2, event)">+</div>
+                            </div>
+                        </div>
+                        <div class="cb-item">
+                            <div class="cb-label">包月周期课 <span>(月度单位)</span></div>
+                            <div class="cb-ctrl">
+                                <div class="cb-btn" onclick="chgVal('cb-mon', -1, event)">-</div>
+                                <input id="cb-mon" class="cb-input" value="0" readonly>
+                                <div class="cb-btn" onclick="chgVal('cb-mon', 1, event)">+</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -468,7 +486,35 @@
             document.getElementById('detailModal').classList.remove('show');
         }
 
-        function togglePhase(el) {
+        // 步进器逻辑
+        function chgVal(id, delta, e) {
+            e.stopPropagation(); // 防止点击加减号时触发卡片的选中/取消
+            let el = document.getElementById(id);
+            let val = parseInt(el.value) + delta;
+            if (val < 0) val = 0;
+            el.value = val;
+            
+            // 只要有数字，就自动选中第四个框
+            let box = document.getElementById('phase-4-box');
+            let totalCustom = parseInt(document.getElementById('cb-reg').value) + parseInt(document.getElementById('cb-feat').value) + parseInt(document.getElementById('cb-mon').value);
+            
+            if (totalCustom > 0 && !box.classList.contains('selected')) {
+                box.classList.add('selected');
+            } else if (totalCustom === 0 && box.classList.contains('selected')) {
+                box.classList.remove('selected');
+            }
+            
+            updateCheckout();
+        }
+
+        function togglePhase(el, e) {
+            // 如果点击的是第四个框且没有任何数值，自动加一些基础值
+            if(el.id === 'phase-4-box' && !el.classList.contains('selected')) {
+                if(document.getElementById('cb-reg').value == 0 && document.getElementById('cb-feat').value == 0 && document.getElementById('cb-mon').value == 0){
+                    document.getElementById('cb-reg').value = 12;
+                    document.getElementById('cb-feat').value = 12;
+                }
+            }
             el.classList.toggle('selected');
             updateCheckout();
         }
@@ -478,12 +524,25 @@
             let totalMax = 0;
             let maxPhaseSelected = 0;
             
-            document.querySelectorAll('.phase-box.selected').forEach(box => {
+            // 计算 1-3 阶段
+            document.querySelectorAll('.phase-box.selected:not(.combo-box)').forEach(box => {
                 totalMin += parseInt(box.getAttribute('data-min'));
                 totalMax += parseInt(box.getAttribute('data-max'));
                 let p = parseInt(box.getAttribute('data-phase'));
                 if(p > maxPhaseSelected) maxPhaseSelected = p;
             });
+            
+            // 计算 第 4 阶段 (定制组合包)
+            let customBox = document.getElementById('phase-4-box');
+            if(customBox && customBox.classList.contains('selected')) {
+                let r = parseInt(document.getElementById('cb-reg').value);
+                let f = parseInt(document.getElementById('cb-feat').value);
+                let m = parseInt(document.getElementById('cb-mon').value);
+                let customTotal = r + f + (m * 12); // 包月按约12节折算展示
+                totalMin += customTotal;
+                totalMax += customTotal;
+                maxPhaseSelected = 4; // 代表顶级 VIP 状态
+            }
             
             globalTotalMin = totalMin;
             globalTotalMax = totalMax;
@@ -517,20 +576,26 @@
                     }
                 }
                 
-                valDisplay.innerHTML = `${totalMin} - ${totalMax} <span>节</span>`;
+                // 如果定制数值完全确定，min=max
+                if(totalMin === totalMax) {
+                    valDisplay.innerHTML = `${totalMin} <span>节</span>`;
+                } else {
+                    valDisplay.innerHTML = `${totalMin} - ${totalMax} <span>节</span>`;
+                }
+                
                 btn.classList.remove('disabled');
                 if(navigator.vibrate) navigator.vibrate(50);
             }
         }
 
-        // 🚨 心理学三轨逼单弹窗逻辑 (诱饵效应)
+        // 🚨 AI 智能 3 轨逼单系统 (含首购 350 福利计算)
         function showUpsellModal() {
             if(globalTotalMax === 0) return;
             
             const data = planData[currentPlanKey];
             let pkgEntry = 12, pkgCore = 48, pkgAnchor = 72;
             
-            // 计算逻辑保证三挡绝对成立
+            // 匹配逻辑
             for(let i=standardPackages.length-1; i>=0; i--) {
                 if(globalTotalMin >= standardPackages[i]) { pkgEntry = standardPackages[i]; break; }
             }
@@ -556,28 +621,33 @@
                 }
             }
 
+            // 计算原价 (基于门店真实价格梯队)
             let unitA = getUnitPrice(pkgAnchor, data.type);
             let unitB = getUnitPrice(pkgCore, data.type);
             let unitC = getUnitPrice(pkgEntry, data.type);
             
-            let totalA = pkgAnchor * unitA;
-            let totalB = pkgCore * unitB;
-            let totalC = pkgEntry * unitC;
+            let totalOriA = pkgAnchor * unitA;
+            let totalOriB = pkgCore * unitB;
+            let totalOriC = pkgEntry * unitC;
 
-            // 高价锚定
+            // 计算首购特权价 (统统 350)
+            let newbiePrice = 350;
+            let totalNewA = pkgAnchor * newbiePrice;
+            let totalNewB = pkgCore * newbiePrice;
+            let totalNewC = pkgEntry * newbiePrice;
+
+            // 渲染数据
             document.getElementById('up-a-sessions').innerHTML = `${pkgAnchor} <span>课时</span>`;
-            document.getElementById('up-a-total').innerText = `¥ ${formatMoney(totalA)}`;
-            document.getElementById('up-a-unit').innerText = `单价极值 ¥${unitA}/节`;
+            document.getElementById('up-a-ori').innerText = `常规执行价 ¥${formatMoney(totalOriA)}`;
+            document.getElementById('up-a-new').innerText = formatMoney(totalNewA);
 
-            // 核心主推
             document.getElementById('up-b-sessions').innerHTML = `${pkgCore} <span>课时</span>`;
-            document.getElementById('up-b-total').innerText = `¥ ${formatMoney(totalB)}`;
-            document.getElementById('up-b-unit').innerText = `高性价比 ¥${unitB}/节`;
+            document.getElementById('up-b-ori').innerText = `常规执行价 ¥${formatMoney(totalOriB)}`;
+            document.getElementById('up-b-new').innerText = formatMoney(totalNewB);
 
-            // 低门槛兜底
             document.getElementById('up-c-sessions').innerHTML = `${pkgEntry} <span>课时</span>`;
-            document.getElementById('up-c-total').innerText = `¥ ${formatMoney(totalC)}`;
-            document.getElementById('up-c-unit').innerText = `基础单价 ¥${unitC}/节`;
+            document.getElementById('up-c-ori').innerText = `常规执行价 ¥${formatMoney(totalOriC)}`;
+            document.getElementById('up-c-new').innerText = formatMoney(totalNewC);
 
             document.getElementById('upsellOverlay').classList.add('show');
             document.getElementById('upsellModal').classList.add('show');
