@@ -25,17 +25,23 @@
         .sol-card { position: relative; height: 180px; border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; justify-content: flex-end; cursor: pointer; border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 10px 30px rgba(0,0,0,0.6); transition: 0.3s; }
         .sol-card:active { transform: scale(0.96); border-color: var(--primary); box-shadow: 0 5px 15px rgba(212,175,55,0.3); }
         
-        /* 🚨 核心升级：带有质感暗黑遮罩的真实健身图背景 */
-        .bg-1 { background: linear-gradient(180deg, rgba(5,5,5,0.2) 0%, rgba(5,5,5,0.95) 80%), url('https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&q=80&w=600') center/cover no-repeat; } 
-        .bg-2 { background: linear-gradient(180deg, rgba(5,5,5,0.2) 0%, rgba(5,5,5,0.95) 80%), url('https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&q=80&w=600') center/cover no-repeat; } 
-        .bg-3 { background: linear-gradient(180deg, rgba(5,5,5,0.2) 0%, rgba(5,5,5,0.95) 80%), url('https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?auto=format&fit=crop&q=80&w=600') center/cover no-repeat; } 
-        .bg-4 { background: linear-gradient(180deg, rgba(5,5,5,0.2) 0%, rgba(5,5,5,0.95) 80%), url('https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&q=80&w=600') center/cover no-repeat; } 
-        .bg-5 { background: linear-gradient(180deg, rgba(5,5,5,0.2) 0%, rgba(5,5,5,0.95) 80%), url('https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?auto=format&fit=crop&q=80&w=600') center/cover no-repeat; } 
-        .bg-6 { background: linear-gradient(180deg, rgba(5,5,5,0.2) 0%, rgba(5,5,5,0.95) 80%), url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&q=80&w=600') center/cover no-repeat; } 
+        /* 🚨 核心升级：精选女性健身大片背景 + 质感暗黑遮罩 */
+        /* 体态矫正 - 优雅拉伸 */
+        .bg-1 { background: linear-gradient(180deg, rgba(5,5,5,0.3) 0%, rgba(5,5,5,0.9) 80%), url('https://images.unsplash.com/photo-1552196563-55cd4e45efb3?auto=format&fit=crop&q=80&w=600') center/cover no-repeat; } 
+        /* 高效燃脂 - 战绳爆发 */
+        .bg-2 { background: linear-gradient(180deg, rgba(5,5,5,0.3) 0%, rgba(5,5,5,0.9) 80%), url('https://images.unsplash.com/photo-1599058945522-28d584b6f0ff?auto=format&fit=crop&q=80&w=600') center/cover no-repeat; } 
+        /* S型曲线 - 臀腿塑形 */
+        .bg-3 { background: linear-gradient(180deg, rgba(5,5,5,0.3) 0%, rgba(5,5,5,0.9) 80%), url('https://images.unsplash.com/photo-1579758629938-03607ccdbaba?auto=format&fit=crop&q=80&w=600') center/cover no-repeat; } 
+        /* 产后恢复 - 温和核心 */
+        .bg-4 { background: linear-gradient(180deg, rgba(5,5,5,0.3) 0%, rgba(5,5,5,0.9) 80%), url('https://images.unsplash.com/photo-1609899536866-99396547465a?auto=format&fit=crop&q=80&w=600') center/cover no-repeat; } 
+        /* 运动功能 - 专业康复 */
+        .bg-5 { background: linear-gradient(180deg, rgba(5,5,5,0.3) 0%, rgba(5,5,5,0.9) 80%), url('https://images.unsplash.com/photo-1599447292180-45fd84092bb0?auto=format&fit=crop&q=80&w=600') center/cover no-repeat; } 
+        /* 活力焕新 - 户外自信 */
+        .bg-6 { background: linear-gradient(180deg, rgba(5,5,5,0.3) 0%, rgba(5,5,5,0.9) 80%), url('https://images.unsplash.com/photo-1553532070-539150b2077d?auto=format&fit=crop&q=80&w=600') center/cover no-repeat; } 
 
         .card-content { padding: 15px; position: relative; z-index: 2; }
         
-        /* 🚨 核心升级：精绘金丝图标样式 */
+        /* 精绘金丝图标样式 */
         .c-icon { margin-bottom: 8px; display: flex; align-items: center; }
         .c-icon svg { width: 28px; height: 28px; stroke: var(--primary); filter: drop-shadow(0 0 6px rgba(212,175,55,0.6)); }
 
@@ -291,6 +297,7 @@
             cancelAnimationFrame(animReq);
         }
 
+        // 锁死 CSS 物理尺寸，防止 Retina 屏幕缩放暴走
         function drawRadar(config) {
             const canvas = document.getElementById('detailRadar');
             if(!canvas) return;
