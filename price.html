@@ -32,12 +32,15 @@
         .m-card:active { transform: scale(0.96); }
         
         .m-card.selected { border-color: var(--primary); background: linear-gradient(145deg, #221A0F, #0A0A0C); box-shadow: 0 10px 30px rgba(232, 195, 124, 0.2), inset 0 0 15px rgba(232, 195, 124, 0.1); transform: translateY(-2px);}
-        .m-card.selected::after { content: '✓'; position: absolute; bottom: 15px; right: 15px; color: #000; font-size: 12px; font-weight: bold; background: var(--primary); border-radius: 50%; width: 18px; height: 18px; text-align: center; line-height: 18px; box-shadow: 0 2px 8px rgba(232, 195, 124, 0.5);}
+        
+        /* 🚨 核心修复：将对号移至左上角，彻底解决重叠 */
+        .m-card.selected::before { content: '✓ 已优选'; position: absolute; top: -1px; left: -1px; color: #000; font-size: 10px; font-weight: bold; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); border-radius: 16px 0 16px 0; padding: 4px 10px; text-align: center; box-shadow: 2px 2px 10px rgba(232, 195, 124, 0.3); z-index: 20;}
 
+        /* 原本的 save-tag 保持在右上角不动 */
         .save-tag { position: absolute; top: 0; right: 0; background: linear-gradient(135deg, #FF4B40, #D91D12); color: #fff; font-size: 9px; font-weight: 900; padding: 4px 10px; border-radius: 0 0 0 12px; letter-spacing: 0.5px; box-shadow: -2px 2px 10px rgba(217, 29, 18, 0.3); z-index: 10;}
         .vip .save-tag { background: linear-gradient(135deg, var(--primary), #B58428); color: #000; box-shadow: -2px 2px 10px rgba(232, 195, 124, 0.4);}
 
-        .mc-top { display: flex; justify-content: space-between; align-items: flex-end; }
+        .mc-top { display: flex; justify-content: space-between; align-items: flex-end; margin-top: 5px; }
         .mc-ses { font-size: 24px; font-weight: 900; color: #fff; line-height: 1;}
         .selected .mc-ses { color: var(--primary); }
         .mc-ses span { font-size: 10px; color: #888; font-weight: normal; margin-left: 2px;}
@@ -48,7 +51,6 @@
         .selected .mc-new { color: var(--primary); text-shadow: 0 0 15px rgba(232, 195, 124, 0.3); font-size: 26px;}
         .mc-new span { font-size: 14px; }
 
-        /* 🚨 强化单价对比栏 */
         .mc-bot { font-size: 10px; color: #888; border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 8px; margin-top: auto; display: flex; justify-content: space-between; align-items: center;}
         .selected .mc-bot { color: #ccc; border-top-color: rgba(232, 195, 124, 0.2);}
         .mc-bot-ori { color: #666; text-decoration: line-through; }
@@ -64,7 +66,6 @@
         .btn-master { width: 100%; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: #000; border: none; padding: 16px; border-radius: 12px; font-size: 16px; font-weight: 900; box-shadow: 0 8px 25px rgba(232, 195, 124, 0.3); cursor: pointer; transition: 0.2s; display: flex; justify-content: center; align-items: center; gap: 8px;}
         .btn-master:active { transform: scale(0.98); box-shadow: 0 4px 10px rgba(232, 195, 124, 0.2);}
 
-        /* 🚨 全屏电子签名合同台防漂移 */
         .sig-modal { position: fixed; top: 100vh; left: 0; width: 100%; height: 100vh; background: #08080A; z-index: 2000; transition: top 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); display: flex; flex-direction: column; overflow-x: hidden;}
         .sig-modal.show { top: 0; }
         .sig-header { height: 60px; display: flex; justify-content: space-between; align-items: center; padding: 0 20px; background: rgba(5,5,5,0.95); border-bottom: 1px solid rgba(212,175,55,0.3); flex-shrink:0;}
@@ -163,7 +164,7 @@
                     <div class="mc-bot">年度终身身材托管</div>
                 </div>
                 <div class="fc-right">
-                    <div class="mc-ori" style="margin-bottom:2px;">享门店最高优享排课权</div>
+                    <div class="mc-ori" style="margin-bottom:2px; text-decoration:none;">享门店最高优享排课权</div>
                     <div class="mc-new" style="font-size:18px;"><span>低至 ¥</span>330<span>/节起</span></div>
                 </div>
             </div>
@@ -230,7 +231,7 @@
                     <div class="mc-bot">全面覆盖康复与精细塑形</div>
                 </div>
                 <div class="fc-right">
-                    <div class="mc-ori" style="margin-bottom:2px;">完美身体控制力护甲</div>
+                    <div class="mc-ori" style="margin-bottom:2px; text-decoration:none;">完美身体控制力护甲</div>
                     <div class="mc-new" style="font-size:18px;"><span>低至 ¥</span>350<span>/节起</span></div>
                 </div>
             </div>
@@ -242,7 +243,7 @@
                     <div class="save-tag" style="background:#444;">突击重塑</div>
                     <div class="mc-top"><div class="mc-ses">1<span>个月</span></div></div>
                     <div class="mc-mid">
-                        <div style="font-size:11px; color:#888;">最高可约 16 节私教</div>
+                        <div style="font-size: 11px; color: #888; margin-bottom: 2px;">含最高 16 节私教</div>
                         <div class="mc-new"><span>¥</span>3,888</div>
                     </div>
                     <div class="mc-bot">
@@ -304,7 +305,7 @@
 
     <div class="action-bar">
         <button class="btn-master" id="btn-submit" onclick="triggerSignature()">
-            锁定 48节 首购特权 ➔
+            锁定 48节 首购福利 ➔
         </button>
     </div>
 
@@ -322,7 +323,6 @@
     </div>
 
     <script>
-        // 初始状态
         let currentType = "常规特训";
         let currentSessions = "48节";
         let currentPrice = "¥ 16,800";
@@ -370,7 +370,6 @@
             if(navigator.vibrate) navigator.vibrate(15);
         }
 
-        // ================= 签名与合同生成系统 =================
         let sigCanvas, sigCtx, isSigning = false;
 
         function triggerSignature() {
@@ -380,7 +379,6 @@
         function openSignature(pkgName, sessions, price) {
             document.getElementById('signatureModal').classList.add('show');
             
-            // 恢复默认画板结构
             document.getElementById('sig-pad-wrap').innerHTML = `
                 <div class="sig-summary" id="sig-summary-box">
                     <div class="sig-sum-title">即将为您锁定以下首购特权方案：</div>
@@ -470,7 +468,6 @@
             if(ph) ph.style.display = 'block';
         }
 
-        // 合成并生成可保存的图片
         function generateContractImage() {
             if(!sigCtx) return;
 
