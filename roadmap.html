@@ -3,228 +3,323 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>LUXIOU | 90天高定推演路线图</title>
+    <title>LUXIOU | 六大尊享方案库</title>
     <style>
-        /* 顶级哑光奢华配色 */
         :root { --primary: #D4AF37; --accent: #C5A059; --bg: #050505; --surface: #121212; --text-main: #E2E8F0; --text-sub: #8A92A3; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; margin: 0; padding: 0; }
+        body { background: var(--bg); color: var(--text-main); font-family: "DIN Alternate", "Helvetica Neue", sans-serif; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
         
-        body { background: var(--bg); color: var(--text-main); font-family: "DIN Alternate", "Helvetica Neue", sans-serif; overflow-y: auto; -webkit-font-smoothing: antialiased; }
-        
-        .header-brand { width: 100%; height: 60px; display: flex; align-items: center; justify-content: center; background: rgba(5, 5, 5, 0.95); border-bottom: 1px solid rgba(212, 175, 55, 0.15); position: sticky; top: 0; z-index: 50; backdrop-filter: blur(10px); }
+        .header-brand { width: 100%; height: 60px; display: flex; align-items: center; justify-content: center; background: rgba(5, 5, 5, 0.95); position: sticky; top: 0; z-index: 50; border-bottom: 1px solid rgba(212, 175, 55, 0.15); backdrop-filter: blur(10px);}
         .brand-text { font-size: 18px; font-weight: 900; color: var(--primary); letter-spacing: 2px; }
-        .step-badge { position: absolute; right: 15px; background: rgba(212, 175, 55, 0.05); border: 1px solid var(--primary); color: var(--primary); font-size: 10px; padding: 4px 8px; border-radius: 12px; font-weight: bold; }
-
-        /* 顶部处理动画区 */
-        .processing-header { padding: 25px 20px 15px 20px; background: radial-gradient(circle at top, rgba(20, 20, 24, 0.8) 0%, var(--bg) 100%); border-bottom: 1px solid rgba(255,255,255,0.03); }
-        .sys-status { font-size: 11px; color: var(--primary); letter-spacing: 2px; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; text-transform: uppercase;}
-        .sys-status::before { content: ''; display: inline-block; width: 6px; height: 6px; background: var(--primary); border-radius: 50%; box-shadow: 0 0 8px var(--primary); animation: blink 1s infinite; }
-        .main-title { font-size: 26px; font-weight: 900; margin-bottom: 5px; color: #fff; letter-spacing: 1px; }
+        
+        .intro-sec { padding: 25px 20px 15px; text-align: center; }
+        .main-title { font-size: 22px; font-weight: 900; color: #fff; margin-bottom: 8px; letter-spacing: 1px;}
         .sub-title { font-size: 12px; color: var(--text-sub); line-height: 1.5; }
 
-        @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
-
-        /* 时间轴主区域 */
-        .timeline-container { padding: 25px 20px 120px 20px; position: relative; }
+        .gallery-container { padding: 10px 15px 40px; display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .sol-card { position: relative; height: 180px; border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; justify-content: flex-end; cursor: pointer; border: 1px solid rgba(255,255,255,0.05); box-shadow: 0 10px 20px rgba(0,0,0,0.5); transition: 0.3s; }
+        .sol-card:active { transform: scale(0.96); border-color: var(--primary); }
         
-        /* 贯穿的拉丝金主轴线 */
-        .timeline-line { position: absolute; left: 35px; top: 30px; bottom: 120px; width: 2px; background: rgba(255,255,255,0.05); }
-        .timeline-progress { position: absolute; top: 0; left: 0; width: 100%; background: linear-gradient(to bottom, var(--primary), var(--accent)); transition: height 0.5s ease-out; }
+        .bg-1 { background: linear-gradient(180deg, rgba(20,25,35,0.8), #050505); } 
+        .bg-2 { background: linear-gradient(180deg, rgba(35,15,15,0.8), #050505); } 
+        .bg-3 { background: linear-gradient(180deg, rgba(25,15,35,0.8), #050505); } 
+        .bg-4 { background: linear-gradient(180deg, rgba(35,25,15,0.8), #050505); } 
+        .bg-5 { background: linear-gradient(180deg, rgba(15,30,30,0.8), #050505); } 
+        .bg-6 { background: linear-gradient(180deg, rgba(30,25,10,0.8), #050505); } 
 
-        /* 阶段卡片 */
-        .phase-block { display: flex; margin-bottom: 40px; position: relative; opacity: 0.3; transform: translateY(20px); transition: all 0.6s cubic-bezier(0.2, 0.8, 0.2, 1); }
-        .phase-block.active { opacity: 1; transform: translateY(0); }
+        .card-content { padding: 15px; position: relative; z-index: 2; background: linear-gradient(to top, rgba(0,0,0,0.95), transparent); }
+        .c-icon { font-size: 24px; margin-bottom: 10px; }
+        .c-title { font-size: 15px; font-weight: 900; color: #fff; margin-bottom: 4px; }
+        .c-desc { font-size: 10px; color: var(--text-sub); line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;}
+
+        .detail-modal { position: fixed; top: 100vh; left: 0; width: 100%; height: 100vh; background: var(--bg); z-index: 999; transition: top 0.5s cubic-bezier(0.2, 0.8, 0.2, 1); display: flex; flex-direction: column; }
+        .detail-modal.show { top: 0; }
+
+        .modal-header { height: 60px; display: flex; justify-content: space-between; align-items: center; padding: 0 20px; background: rgba(5,5,5,0.95); border-bottom: 1px solid rgba(212,175,55,0.2); backdrop-filter: blur(10px); }
+        .modal-title { font-size: 16px; font-weight: bold; color: var(--primary); }
+        .close-btn { color: #fff; font-size: 24px; font-weight: bold; background: none; border: none; padding: 0 10px; }
+
+        .modal-body { flex: 1; overflow-y: auto; padding: 20px 20px 120px; -webkit-overflow-scrolling: touch; }
         
-        /* 左侧时间节点 */
-        .phase-left { width: 30px; flex-shrink: 0; display: flex; justify-content: center; position: relative; z-index: 2; }
-        .phase-dot { width: 14px; height: 14px; background: var(--bg); border: 2px solid #444; border-radius: 50%; margin-top: 5px; transition: all 0.4s; }
-        .phase-block.active .phase-dot { border-color: var(--primary); background: var(--primary); box-shadow: 0 0 15px rgba(212, 175, 55, 0.4); }
-
-        /* 右侧内容面板 */
-        .phase-right { flex: 1; padding-left: 20px; }
-        .day-label { font-size: 11px; color: var(--primary); font-weight: 900; letter-spacing: 1px; margin-bottom: 4px; text-transform: uppercase; }
-        .phase-card { background: var(--surface); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 18px; margin-top: 8px; position: relative; overflow: hidden; }
-        .phase-block.active .phase-card { border-color: rgba(212, 175, 55, 0.3); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .hero-banner { border: 1px solid rgba(212, 175, 55, 0.3); border-radius: 16px; padding: 25px 20px; margin-bottom: 25px; background: linear-gradient(145deg, #16161A, #050505); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .m-hero-title { font-size: 22px; font-weight: 900; color: #fff; margin-bottom: 10px; }
+        .m-hero-desc { font-size: 13px; color: var(--text-sub); line-height: 1.6; }
         
-        /* 装饰背景光 */
-        .phase-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 2px; background: linear-gradient(90deg, transparent, var(--primary), transparent); opacity: 0; transition: 0.5s; }
-        .phase-block.active .phase-card::before { opacity: 1; }
+        .phase-title-main { font-size: 16px; font-weight: 900; color: var(--primary); margin-bottom: 15px; display: flex; align-items: center; gap: 8px; border-top: 1px solid #222; padding-top: 20px;}
+        .phase-box { border-left: 2px solid rgba(212,175,55,0.2); padding-left: 20px; margin-left: 10px; position: relative; margin-bottom: 25px; }
+        .phase-box::before { content: ''; position: absolute; left: -6px; top: 0; width: 10px; height: 10px; border-radius: 50%; background: var(--primary); box-shadow: 0 0 10px rgba(212,175,55,0.8); }
+        .p-step { font-size: 11px; color: var(--primary); font-weight: bold; margin-bottom: 5px; letter-spacing: 1px; }
+        .p-name { font-size: 16px; font-weight: 900; color: #fff; margin-bottom: 8px; }
+        .p-detail { font-size: 13px; color: var(--text-sub); line-height: 1.5; }
 
-        .phase-title { font-size: 18px; font-weight: 900; color: #fff; margin-bottom: 10px; }
-        .phase-desc { font-size: 13px; color: var(--text-sub); line-height: 1.6; margin-bottom: 15px; }
-        
-        .tag-row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 15px; }
-        .tech-tag { font-size: 11px; font-weight: bold; background: rgba(255,255,255,0.03); color: #ccc; padding: 4px 8px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.05); }
-        .phase-block.active .tech-tag { background: rgba(212, 175, 55, 0.08); border-color: rgba(212, 175, 55, 0.2); color: var(--primary); }
+        .feedback-section { margin-top: 20px; background: #0a0a0c; border: 1px solid rgba(212, 175, 55, 0.15); border-radius: 16px; padding: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .fb-header { text-align: center; font-size: 15px; font-weight: 900; color: var(--primary); margin-bottom: 20px; letter-spacing: 2px; }
+        .radar-container { width: 100%; height: 220px; position: relative; display: flex; justify-content: center; align-items: center; }
+        canvas { position: absolute; z-index: 1; }
 
-        /* 数据指标横条 */
-        .data-bar-group { margin-top: 10px; }
-        .data-item { margin-bottom: 8px; }
-        .data-label { display: flex; justify-content: space-between; font-size: 11px; color: #888; font-weight: bold; margin-bottom: 4px; }
-        .bar-bg { width: 100%; height: 4px; background: #222; border-radius: 2px; overflow: hidden; }
-        .bar-fill { height: 100%; background: var(--primary); width: 0%; transition: width 1s ease-out 0.3s; }
+        .fb-bar-group { margin-top: 20px; margin-bottom: 15px; }
+        .fb-bar-label { display: flex; justify-content: space-between; font-size: 12px; font-weight: bold; color: #fff; margin-bottom: 5px; }
+        .fb-bar-bg { width: 100%; height: 6px; background: #222; border-radius: 3px; overflow: hidden; }
+        .fb-bar-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--primary)); width: 0%; transition: width 1.5s cubic-bezier(0.2, 0.8, 0.2, 1); }
 
-        /* 底部成单按钮 */
-        .bottom-action { position: fixed; bottom: 0; left: 0; width: 100%; padding: 15px 20px 25px 20px; background: linear-gradient(to top, rgba(5,5,5,1) 70%, rgba(5,5,5,0)); z-index: 10; }
-        .btn-generate { width: 100%; background: linear-gradient(135deg, #D4AF37, #AA8A2A); color: #000; border: none; padding: 16px; border-radius: 12px; font-size: 16px; font-weight: 900; display: flex; justify-content: center; align-items: center; gap: 8px; box-shadow: 0 4px 20px rgba(212, 175, 55, 0.25); cursor: pointer;}
-        .btn-generate:active { transform: scale(0.98); }
+        .bottom-action { position: fixed; bottom: 0; left: 0; width: 100%; padding: 15px 20px 25px; background: linear-gradient(to top, rgba(5,5,5,1) 60%, rgba(5,5,5,0)); z-index: 100; }
+        .btn-generate { width: 100%; background: linear-gradient(135deg, var(--primary), #AA8A2A); color: #000; border: none; padding: 16px; border-radius: 12px; font-size: 16px; font-weight: 900; box-shadow: 0 8px 25px rgba(212, 175, 55, 0.3); cursor: pointer;}
     </style>
 </head>
 <body>
 
     <div class="header-brand">
-        <div class="brand-text">LUXIOU 定制推演</div>
-        <div class="step-badge">推演阶段</div>
+        <div class="brand-text">LUXIOU 高定方案陈列舱</div>
     </div>
 
-    <div class="processing-header">
-        <div class="sys-status">System Analyzing ... 100%</div>
-        <div class="main-title">90天全息蜕变路线图</div>
-        <div class="sub-title">基于您的骨骼数据与医学排查结果，AI 系统已为您生成以下三阶段科学重塑方案。</div>
+    <div class="intro-sec">
+        <div class="main-title">六大尊享重塑矩阵</div>
+        <div class="sub-title">系统已根据您的医学排查与体态评估，开放以下靶向重塑方案。请选择契合您的目标类别。</div>
     </div>
 
-    <div class="timeline-container" id="timelineBox">
-        <div class="timeline-line">
-            <div class="timeline-progress" id="timeProgress"></div>
-        </div>
-
-        <div class="phase-block" data-progress="25" data-fill1="85" data-fill2="100">
-            <div class="phase-left"><div class="phase-dot"></div></div>
-            <div class="phase-right">
-                <div class="day-label">Phase 01 / Day 1 - 30</div>
-                <div class="phase-card">
-                    <div class="phase-title">结构重建与机能唤醒</div>
-                    <div class="phase-desc">停止错误发力！首月核心目标是解除疼痛代偿，回正骨盆与脊柱力学，彻底打开限制您代谢的枷锁。</div>
-                    <div class="tag-row">
-                        <div class="tech-tag">筋膜彻底松解</div>
-                        <div class="tech-tag">骨骼排列回正</div>
-                        <div class="tech-tag">深层核心激活</div>
-                    </div>
-                    <div class="data-bar-group">
-                        <div class="data-item">
-                            <div class="data-label"><span>疼痛代偿消除率</span><span>85%</span></div>
-                            <div class="bar-bg"><div class="bar-fill fill-target-1"></div></div>
-                        </div>
-                        <div class="data-item">
-                            <div class="data-label"><span>关节活动度恢复</span><span>100%</span></div>
-                            <div class="bar-bg"><div class="bar-fill fill-target-2"></div></div>
-                        </div>
-                    </div>
-                </div>
+    <div class="gallery-container">
+        <div class="sol-card bg-1" onclick="openDetail('posture')">
+            <div class="card-content">
+                <div class="c-icon">📐</div>
+                <div class="c-title">骨骼与体态重塑</div>
+                <div class="c-desc">纠正圆肩驼背/骨盆前倾，重建脊柱中立位，消除疼痛代偿。</div>
             </div>
         </div>
-
-        <div class="phase-block" data-progress="65" data-fill1="90" data-fill2="75">
-            <div class="phase-left"><div class="phase-dot"></div></div>
-            <div class="phase-right">
-                <div class="day-label">Phase 02 / Day 31 - 60</div>
-                <div class="phase-card">
-                    <div class="phase-title">极速燃脂与代谢重置</div>
-                    <div class="phase-desc">在健康骨架的基础上，引入复合力量与高阶心肺训练。将身体打造成“24小时持续燃脂的火炉”。</div>
-                    <div class="tag-row">
-                        <div class="tech-tag">EPOC 后燃效应</div>
-                        <div class="tech-tag">大肌群复合做功</div>
-                        <div class="tech-tag">糖脂代谢跃迁</div>
-                    </div>
-                    <div class="data-bar-group">
-                        <div class="data-item">
-                            <div class="data-label"><span>基础代谢提升率</span><span>+ 15%</span></div>
-                            <div class="bar-bg"><div class="bar-fill fill-target-1"></div></div>
-                        </div>
-                        <div class="data-item">
-                            <div class="data-label"><span>内脏脂肪剥离进度</span><span>75%</span></div>
-                            <div class="bar-bg"><div class="bar-fill fill-target-2"></div></div>
-                        </div>
-                    </div>
-                </div>
+        <div class="sol-card bg-2" onclick="openDetail('fatloss')">
+            <div class="card-content">
+                <div class="c-icon">🔥</div>
+                <div class="c-title">极速代谢跃迁</div>
+                <div class="c-desc">突破顽固平台期，剥离内脏脂肪，将身体重塑为24H燃脂火炉。</div>
             </div>
         </div>
-
-        <div class="phase-block" data-progress="100" data-fill1="95" data-fill2="100">
-            <div class="phase-left"><div class="phase-dot"></div></div>
-            <div class="phase-right">
-                <div class="day-label">Phase 03 / Day 61 - 90</div>
-                <div class="phase-card">
-                    <div class="phase-title">线条精雕与抗复发固化</div>
-                    <div class="phase-desc">最后的冲刺！针对目标部位（直角肩、马甲线、蜜桃臀）进行肌纤维肥大训练，并将健康体态永久固化。</div>
-                    <div class="tag-row">
-                        <div class="tech-tag">局部神经募集</div>
-                        <div class="tech-tag">肌张力重新分配</div>
-                        <div class="tech-tag">机能永久固化</div>
-                    </div>
-                    <div class="data-bar-group">
-                        <div class="data-item">
-                            <div class="data-label"><span>线条清晰度显现</span><span>95%</span></div>
-                            <div class="bar-bg"><div class="bar-fill fill-target-1"></div></div>
-                        </div>
-                        <div class="data-item">
-                            <div class="data-label"><span>体态抗反弹固化率</span><span>100%</span></div>
-                            <div class="bar-bg"><div class="bar-fill fill-target-2"></div></div>
-                        </div>
-                    </div>
-                </div>
+        <div class="sol-card bg-3" onclick="openDetail('shape')">
+            <div class="card-content">
+                <div class="c-icon">👗</div>
+                <div class="c-title">维密骨相精雕</div>
+                <div class="c-desc">专攻蜜桃臀、马甲线、直角肩，打造极具视觉冲击力的S型比例。</div>
             </div>
         </div>
-
+        <div class="sol-card bg-4" onclick="openDetail('postpartum')">
+            <div class="card-content">
+                <div class="c-icon">🤱</div>
+                <div class="c-title">赫本级产后归位</div>
+                <div class="c-desc">内源性修复腹直肌分离与盆底肌松弛，安全重返少女体态。</div>
+            </div>
+        </div>
+        <div class="sol-card bg-5" onclick="openDetail('rehab')">
+            <div class="card-content">
+                <div class="c-icon">🩹</div>
+                <div class="c-title">无痛机能康复</div>
+                <div class="c-desc">针对关节弹响与陈旧劳损，切断代偿，重建关节无痛护甲。</div>
+            </div>
+        </div>
+        <div class="sol-card bg-6" onclick="openDetail('antiaging')">
+            <div class="card-content">
+                <div class="c-icon">🧬</div>
+                <div class="c-title">铂金逆龄抗衰</div>
+                <div class="c-desc">提升骨密度与心肺机能，对抗肌肉流失，打造冻龄肉体盔甲。</div>
+            </div>
+        </div>
     </div>
 
-    <div class="bottom-action">
-        <button class="btn-generate" onclick="goToPrice()">
-            <span style="font-size: 20px;">💎</span> 获取您的专属黑金报价
-        </button>
+    <div class="detail-modal" id="detailModal">
+        <div class="modal-header">
+            <div class="modal-title" id="m-header-title">方案推演</div>
+            <button class="close-btn" onclick="closeDetail()">×</button>
+        </div>
+        
+        <div class="modal-body" id="modalBody"></div>
+
+        <div class="bottom-action">
+            <button class="btn-generate" onclick="window.location.href='./价格.html'">
+                ✦ 立即查看方案匹配报价 ✦
+            </button>
+        </div>
     </div>
 
     <script>
-        // 🚀 页面滚动监听引擎：控制主轴生长与卡片点亮
-        const timelineBox = document.getElementById('timelineBox');
-        const timeProgress = document.getElementById('timeProgress');
-        const blocks = document.querySelectorAll('.phase-block');
-
-        function checkScroll() {
-            let triggerBottom = window.innerHeight * 0.8; // 屏幕 80% 位置为触发线
-            let currentProgress = 0;
-
-            blocks.forEach((block, index) => {
-                const blockTop = block.getBoundingClientRect().top;
-                
-                if (blockTop < triggerBottom) {
-                    block.classList.add('active');
-                    currentProgress = block.getAttribute('data-progress');
-                    
-                    // 触发卡片内部的数据条动画
-                    let fill1 = block.getAttribute('data-fill1');
-                    let fill2 = block.getAttribute('data-fill2');
-                    block.querySelector('.fill-target-1').style.width = fill1 + '%';
-                    block.querySelector('.fill-target-2').style.width = fill2 + '%';
-                } else {
-                    block.classList.remove('active');
-                    block.querySelector('.fill-target-1').style.width = '0%';
-                    block.querySelector('.fill-target-2').style.width = '0%';
-                }
-            });
-
-            // 更新左侧主光柱的高度
-            timeProgress.style.height = currentProgress + '%';
-        }
-
-        // 绑定滚动事件
-        window.addEventListener('scroll', checkScroll);
-        
-        // 页面加载完成后延迟 300ms 触发第一次动画，拉满科技感
-        window.onload = () => {
-            setTimeout(checkScroll, 300);
+        const planData = {
+            'posture': {
+                title: '骨骼与体态重塑方案',
+                desc: '长期的伏案与不良习惯，让您的脊柱与骨盆严重偏离中立位。本方案将解绑受限筋膜，唤醒深层稳定肌，赋予您极其挺拔的气质与无痛的机能。',
+                p1: '筋膜解绑与结构回正', d1: '松解胸小肌与髂腰肌等过度紧张肌群，利用手法与呼吸配合，物理层面上纠正骨盆倾角与颈椎前引。',
+                p2: '核心唤醒与张力重构', d2: '在回正的骨架上，重新建立神经对深层背部肌与腹横肌的募集能力，形成“天然肌肉塑身衣”。',
+                p3: '运动轨迹固化', d3: '引入动态复合动作，将正确的发力模式刻入潜意识，确保日常生活中体态永不反弹。',
+                radar: { labels: ['脊柱曲度', '骨盆中立', '颈椎健康', '核心力量', '体态气质'], start: [30, 20, 30, 40, 40], end: [95, 100, 95, 85, 100] },
+                barText: '疼痛代偿消除率', barVal: '100%'
+            },
+            'fatloss': {
+                title: '极速代谢跃迁方案',
+                desc: '不再是痛苦的节食！基于EPOC（运动后过量氧耗）原理，全面清空多余皮下及内脏游离脂肪，重写您的易瘦代谢基因。',
+                p1: '糖原排空与代谢唤醒', d1: '通过大肌群主导的抗阻力训练，消耗体内储备糖原，强制身体进入初步的脂肪氧化通道。',
+                p2: '高容量燃脂与内脏清理', d2: '引入高阶间歇性代谢训练(HIIT)，产生强烈后燃效应，靶向剥离极其顽固的深层内脏脂肪。',
+                p3: '激素平衡与基因重写', d3: '配合定制营养框架，稳定胰岛素分泌，提升基础代谢基数，让身体在睡眠中持续消耗热量。',
+                radar: { labels: ['体脂下降', '基础代谢', '内脏脂肪安全', '心肺体能', '线条初显'], start: [20, 30, 40, 30, 20], end: [100, 95, 100, 90, 85] },
+                barText: '顽固脂肪剥离度', barVal: '95%'
+            },
+            'shape': {
+                title: '维密级骨相精雕方案',
+                desc: '拒绝干瘪瘦弱！基于高级解剖学，对目标肌群进行“剥离与填充”。专攻马甲线、蜜桃臀与直角肩，打造极具视觉杀伤力的S型比例。',
+                p1: '弱点靶向激活', d1: '针对臀大肌上侧、三角肌中束等视觉核心点进行孤立唤醒，建立极强的“念动一致”神经连结。',
+                p2: '肌纤维肥大与填充', d2: '利用渐进式超负荷与离心收缩技术，迫使目标区域肌纤维撕裂与超量恢复，实现饱满的3D填充感。',
+                p3: '视觉比例拉扯精雕', d3: '通过收紧腰腹核心与强化背部外沿宽度，在视觉上拉大肩臀比，呈现漏斗形的极致身材。',
+                radar: { labels: ['臀部饱满度', '肩背宽阔度', '腰腹紧致', '四肢比例', '肌肉质感'], start: [30, 40, 30, 50, 40], end: [100, 95, 90, 100, 95] },
+                barText: '视觉比例改善度', barVal: '100%'
+            },
+            'postpartum': {
+                title: '赫本级产后归位方案',
+                desc: '避开所有高危运动误区！采用医疗级保守康复手段，无痛、安全地缝合腹直肌裂隙，恢复盆底肌弹性，将松弛的躯干重新收紧。',
+                p1: '盆底肌与内源缝合', d1: '绝对禁止传统卷腹！通过特定的横向呼吸法与普拉提控制，优先重建盆底功能，安全闭合腹直肌。',
+                p2: '骨盆稳定与腰痛消除', d2: '强化臀中肌与核心带，改善因孕晚期造成的骨盆过度前倾，彻底拔除产后腰背酸痛的根源。',
+                p3: '温和减脂与皮肤紧致', d3: '在核心完全稳定的前提下，引入无跳跃抗阻代谢组，剥离孕期顽固囤积，收紧松弛肌肤。',
+                radar: { labels: ['腹直肌愈合', '盆底肌功能', '骨盆复位', '核心收紧', '产后减脂'], start: [15, 20, 30, 20, 40], end: [100, 95, 100, 90, 85] },
+                barText: '产前机能恢复率', barVal: '95%'
+            },
+            'rehab': {
+                title: '无痛机能康复方案',
+                desc: '打破“疼就必须绝对静养”的恶性循环。通过精准的神经肌肉调控，重建受损关节的力学稳定性，帮您安全、自信地重返运动赛场。',
+                p1: '炎症抑制与代偿切断', d1: '利用特定手法释放受限关节周围软组织的张力，找出引起疼痛的错误发力源头并强行切断。',
+                p2: '等长收缩与护甲构建', d2: '在无痛的角度范围内，增强受损关节周边的肌腱韧带强度，打造坚固的“生物肌肉护膝/护腰”。',
+                p3: '动态平衡与重返赛场', d3: '引入闭链运动与不平衡介质训练，重建关节本体感觉，逐步完成复杂运动轨迹的脱敏与适应。',
+                radar: { labels: ['关节无痛度', '活动度恢复', '抗炎消肿', '周围肌力', '运动信心'], start: [20, 30, 20, 40, 15], end: [100, 95, 100, 90, 100] },
+                barText: '无痛活动度重塑', barVal: '100%'
+            },
+            'antiaging': {
+                title: '铂金逆龄抗衰方案',
+                desc: '抗衰老不仅仅是护肤！系统性提升骨密度、增加肌肉储备量、焕活心肺引擎，用顶级的物理训练对抗岁月，打造不老的肉体盔甲。',
+                p1: '关节润滑与系统预热', d1: '通过多维度的灵活性训练，促进关节滑液分泌，恢复身体各部位生锈、卡顿的原始机能。',
+                p2: '阻力骨密与抗流失', d2: '引入安全的重物抗阻训练，刺激成骨细胞活跃，大幅提升骨密度，同时对抗自然年龄的肌肉萎缩。',
+                p3: '内分泌唤醒与心肺定型', d3: '配合周期性有氧刺激，提升最大摄氧量(VO2 Max)，促进生长激素分泌，由内而外焕发极致年轻态。',
+                radar: { labels: ['骨密度提升', '肌肉保有率', '心肺肺活量', '关节灵活', '精神活力'], start: [40, 30, 40, 30, 30], end: [95, 90, 100, 95, 100] },
+                barText: '逆龄机能综合指标', barVal: '95%'
+            }
         };
 
-        // 跳转至最终报价页面
-        function goToPrice() {
-            // 给按钮加点反馈动画
-            let btn = document.querySelector('.btn-generate');
-            btn.innerHTML = "⏳ 正在生成核算...";
-            btn.style.opacity = "0.8";
+        let animReq;
+
+        function openDetail(key) {
+            const data = planData[key];
+            const modal = document.getElementById('detailModal');
+            const body = document.getElementById('modalBody');
             
+            body.innerHTML = `
+                <div class="hero-banner">
+                    <div class="m-hero-title">${data.title}</div>
+                    <div class="m-hero-desc">${data.desc}</div>
+                </div>
+                <div class="phase-title-main">重塑路径推演</div>
+                <div class="phase-box">
+                    <div class="p-step">PHASE 01 / 首阶</div>
+                    <div class="p-name">${data.p1}</div>
+                    <div class="p-detail">${data.d1}</div>
+                </div>
+                <div class="phase-box">
+                    <div class="p-step">PHASE 02 / 进阶</div>
+                    <div class="p-name">${data.p2}</div>
+                    <div class="p-detail">${data.d2}</div>
+                </div>
+                <div class="phase-box">
+                    <div class="p-step">PHASE 03 / 终局</div>
+                    <div class="p-name">${data.p3}</div>
+                    <div class="p-detail">${data.d3}</div>
+                </div>
+                <div class="feedback-section">
+                    <div class="fb-header">✦ AI 目标收益预估 ✦</div>
+                    <div class="fb-bar-group">
+                        <div class="fb-bar-label"><span>${data.barText}</span><span style="color:var(--primary)">${data.barVal}</span></div>
+                        <div class="fb-bar-bg"><div class="fb-bar-fill" id="dynamicBar"></div></div>
+                    </div>
+                    <div class="radar-container">
+                        <canvas id="detailRadar" width="300" height="220"></canvas>
+                    </div>
+                </div>
+            `;
+            
+            modal.classList.add('show');
             setTimeout(() => {
-                window.location.href = 'price.html';
-            }, 600);
+                document.getElementById('dynamicBar').style.width = parseInt(data.barVal) + '%';
+                drawRadar(data.radar);
+            }, 300);
+        }
+
+        function closeDetail() {
+            document.getElementById('detailModal').classList.remove('show');
+            cancelAnimationFrame(animReq);
+        }
+
+        function drawRadar(config) {
+            const canvas = document.getElementById('detailRadar');
+            if(!canvas) return;
+            const ctx = canvas.getContext('2d');
+            const dpr = window.devicePixelRatio || 1;
+            
+            const w = 300; const h = 220;
+            canvas.width = w * dpr; canvas.height = h * dpr;
+            ctx.scale(dpr, dpr);
+            
+            const centerX = w / 2; const centerY = h / 2;
+            const radius = 75; const sides = 5;
+            let progress = 0;
+
+            function renderFrame() {
+                ctx.clearRect(0, 0, w, h);
+                
+                ctx.lineWidth = 1;
+                for (let level = 1; level <= 4; level++) {
+                    ctx.beginPath();
+                    for (let i = 0; i < sides; i++) {
+                        let angle = (Math.PI * 2 * i) / sides - Math.PI / 2;
+                        let x = centerX + radius * (level / 4) * Math.cos(angle);
+                        let y = centerY + radius * (level / 4) * Math.sin(angle);
+                        if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+                    }
+                    ctx.closePath();
+                    ctx.strokeStyle = `rgba(212, 175, 55, ${0.1 * level})`; ctx.stroke();
+                }
+
+                ctx.fillStyle = "#888"; ctx.font = "bold 11px sans-serif"; ctx.textAlign = "center"; ctx.textBaseline = "middle";
+                for (let i = 0; i < sides; i++) {
+                    let angle = (Math.PI * 2 * i) / sides - Math.PI / 2;
+                    let x = centerX + radius * Math.cos(angle); let y = centerY + radius * Math.sin(angle);
+                    ctx.beginPath(); ctx.moveTo(centerX, centerY); ctx.lineTo(x, y);
+                    ctx.strokeStyle = "rgba(255,255,255,0.05)"; ctx.stroke();
+                    let labelX = centerX + (radius + 28) * Math.cos(angle); let labelY = centerY + (radius + 15) * Math.sin(angle);
+                    ctx.fillText(config.labels[i], labelX, labelY);
+                }
+
+                ctx.beginPath();
+                for (let i = 0; i < sides; i++) {
+                    let angle = (Math.PI * 2 * i) / sides - Math.PI / 2;
+                    let x = centerX + radius * (config.start[i] / 100) * Math.cos(angle); 
+                    let y = centerY + radius * (config.start[i] / 100) * Math.sin(angle);
+                    if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+                }
+                ctx.closePath();
+                ctx.fillStyle = "rgba(178, 34, 34, 0.3)"; ctx.fill();
+
+                progress += 0.025; 
+                if(progress > 1) progress = 1;
+                let ease = 1 - Math.pow(1 - progress, 3);
+
+                ctx.beginPath();
+                for (let i = 0; i < sides; i++) {
+                    let angle = (Math.PI * 2 * i) / sides - Math.PI / 2;
+                    let curVal = config.start[i] + (config.end[i] - config.start[i]) * ease;
+                    let x = centerX + radius * (curVal / 100) * Math.cos(angle); 
+                    let y = centerY + radius * (curVal / 100) * Math.sin(angle);
+                    if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+                }
+                ctx.closePath();
+                
+                ctx.lineWidth = 2;
+                ctx.fillStyle = `rgba(212, 175, 55, ${0.2 + 0.3 * ease})`; 
+                ctx.strokeStyle = `rgba(212, 175, 55, ${0.5 + 0.5 * ease})`;
+                ctx.shadowBlur = 15 * ease; ctx.shadowColor = "rgba(212, 175, 55, 0.6)";
+                ctx.fill(); ctx.stroke(); ctx.shadowBlur = 0;
+
+                if(progress < 1) animReq = requestAnimationFrame(renderFrame);
+            }
+            renderFrame();
         }
     </script>
 </body>
