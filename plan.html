@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>LUXIOU | 六大尊享方案库</title>
+    <title>私人定制高端课程</title>
     <style>
         /* 铂金高定配色 */
         :root { --primary: #D4AF37; --accent: #C5A059; --bg: #050505; --surface: #121212; --text-main: #E2E8F0; --text-sub: #8A92A3; }
@@ -12,31 +12,35 @@
         body { background: var(--bg); color: var(--text-main); font-family: "DIN Alternate", "Helvetica Neue", sans-serif; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
         
         /* 顶部标题栏 */
-        .header-brand { width: 100%; height: 60px; display: flex; align-items: center; justify-content: center; background: rgba(5, 5, 5, 0.95); position: sticky; top: 0; z-index: 50; border-bottom: 1px solid rgba(212, 175, 55, 0.15); backdrop-filter: blur(10px);}
+        .header-brand { width: 100%; height: 60px; display: flex; align-items: center; justify-content: center; background: rgba(5, 5, 5, 0.85); position: sticky; top: 0; z-index: 50; border-bottom: 1px solid rgba(212, 175, 55, 0.15); backdrop-filter: blur(15px);}
         .brand-text { font-size: 18px; font-weight: 900; color: var(--primary); letter-spacing: 2px; }
         
         .intro-sec { padding: 25px 20px 15px; text-align: center; }
         .main-title { font-size: 22px; font-weight: 900; color: #fff; margin-bottom: 8px; letter-spacing: 1px;}
         .sub-title { font-size: 12px; color: var(--text-sub); line-height: 1.5; }
 
-        /* 🚀 方案陈列室 (修复底部遮挡，增加 padding-bottom) */
+        /* 🚀 方案陈列室 */
         .gallery-container { padding: 10px 15px 100px; display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
         
-        .sol-card { position: relative; height: 180px; border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; justify-content: flex-end; cursor: pointer; border: 1px solid rgba(255,255,255,0.05); box-shadow: 0 10px 20px rgba(0,0,0,0.5); transition: 0.3s; }
-        .sol-card:active { transform: scale(0.96); border-color: var(--primary); }
+        .sol-card { position: relative; height: 180px; border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; justify-content: flex-end; cursor: pointer; border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 10px 30px rgba(0,0,0,0.6); transition: 0.3s; }
+        .sol-card:active { transform: scale(0.96); border-color: var(--primary); box-shadow: 0 5px 15px rgba(212,175,55,0.3); }
         
-        /* 6个类目的高级渐变背景 */
-        .bg-1 { background: linear-gradient(180deg, rgba(20,25,35,0.8), #050505); } 
-        .bg-2 { background: linear-gradient(180deg, rgba(35,15,15,0.8), #050505); } 
-        .bg-3 { background: linear-gradient(180deg, rgba(25,15,35,0.8), #050505); } 
-        .bg-4 { background: linear-gradient(180deg, rgba(35,25,15,0.8), #050505); } 
-        .bg-5 { background: linear-gradient(180deg, rgba(15,30,30,0.8), #050505); } 
-        .bg-6 { background: linear-gradient(180deg, rgba(30,25,10,0.8), #050505); } 
+        /* 🚨 核心升级：带有质感暗黑遮罩的真实健身图背景 */
+        .bg-1 { background: linear-gradient(180deg, rgba(5,5,5,0.2) 0%, rgba(5,5,5,0.95) 80%), url('https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&q=80&w=600') center/cover no-repeat; } 
+        .bg-2 { background: linear-gradient(180deg, rgba(5,5,5,0.2) 0%, rgba(5,5,5,0.95) 80%), url('https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&q=80&w=600') center/cover no-repeat; } 
+        .bg-3 { background: linear-gradient(180deg, rgba(5,5,5,0.2) 0%, rgba(5,5,5,0.95) 80%), url('https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?auto=format&fit=crop&q=80&w=600') center/cover no-repeat; } 
+        .bg-4 { background: linear-gradient(180deg, rgba(5,5,5,0.2) 0%, rgba(5,5,5,0.95) 80%), url('https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&q=80&w=600') center/cover no-repeat; } 
+        .bg-5 { background: linear-gradient(180deg, rgba(5,5,5,0.2) 0%, rgba(5,5,5,0.95) 80%), url('https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?auto=format&fit=crop&q=80&w=600') center/cover no-repeat; } 
+        .bg-6 { background: linear-gradient(180deg, rgba(5,5,5,0.2) 0%, rgba(5,5,5,0.95) 80%), url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&q=80&w=600') center/cover no-repeat; } 
 
-        .card-content { padding: 15px; position: relative; z-index: 2; background: linear-gradient(to top, rgba(0,0,0,0.95), transparent); }
-        .c-icon { font-size: 24px; margin-bottom: 10px; }
-        .c-title { font-size: 15px; font-weight: 900; color: #fff; margin-bottom: 4px; }
-        .c-desc { font-size: 10px; color: var(--text-sub); line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;}
+        .card-content { padding: 15px; position: relative; z-index: 2; }
+        
+        /* 🚨 核心升级：精绘金丝图标样式 */
+        .c-icon { margin-bottom: 8px; display: flex; align-items: center; }
+        .c-icon svg { width: 28px; height: 28px; stroke: var(--primary); filter: drop-shadow(0 0 6px rgba(212,175,55,0.6)); }
+
+        .c-title { font-size: 15px; font-weight: 900; color: #fff; margin-bottom: 4px; text-shadow: 0 2px 4px rgba(0,0,0,0.8);}
+        .c-desc { font-size: 10px; color: #bbb; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; text-shadow: 0 1px 2px rgba(0,0,0,0.8);}
 
         /* 全屏详情模态框 */
         .detail-modal { position: fixed; top: 100vh; left: 0; width: 100%; height: 100vh; background: var(--bg); z-index: 999; transition: top 0.5s cubic-bezier(0.2, 0.8, 0.2, 1); display: flex; flex-direction: column; }
@@ -52,7 +56,6 @@
         .m-hero-title { font-size: 22px; font-weight: 900; color: #fff; margin-bottom: 10px; }
         .m-hero-desc { font-size: 13px; color: var(--text-sub); line-height: 1.6; }
         
-        /* 时间轴 */
         .phase-title-main { font-size: 16px; font-weight: 900; color: var(--primary); margin-bottom: 15px; display: flex; align-items: center; gap: 8px; border-top: 1px solid #222; padding-top: 20px;}
         .phase-box { border-left: 2px solid rgba(212,175,55,0.2); padding-left: 20px; margin-left: 10px; position: relative; margin-bottom: 25px; }
         .phase-box::before { content: ''; position: absolute; left: -6px; top: 0; width: 10px; height: 10px; border-radius: 50%; background: var(--primary); box-shadow: 0 0 10px rgba(212,175,55,0.8); }
@@ -60,11 +63,9 @@
         .p-name { font-size: 16px; font-weight: 900; color: #fff; margin-bottom: 8px; }
         .p-detail { font-size: 13px; color: var(--text-sub); line-height: 1.5; }
 
-        /* 雷达与正反馈区 */
         .feedback-section { margin-top: 20px; background: #0a0a0c; border: 1px solid rgba(212, 175, 55, 0.15); border-radius: 16px; padding: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
         .fb-header { text-align: center; font-size: 15px; font-weight: 900; color: var(--primary); margin-bottom: 20px; letter-spacing: 2px; }
         
-        /* 锁死雷达容器大小 */
         .radar-container { width: 100%; height: 220px; position: relative; display: flex; justify-content: center; align-items: center; overflow: hidden; }
         canvas { position: absolute; z-index: 1; }
 
@@ -73,7 +74,6 @@
         .fb-bar-bg { width: 100%; height: 6px; background: #222; border-radius: 3px; overflow: hidden; }
         .fb-bar-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--primary)); width: 0%; transition: width 1.5s cubic-bezier(0.2, 0.8, 0.2, 1); }
 
-        /* 底部行动按钮 (在详情页和主页都显示) */
         .bottom-action-fixed { position: fixed; bottom: 0; left: 0; width: 100%; padding: 15px 20px 25px; background: linear-gradient(to top, rgba(5,5,5,1) 60%, rgba(5,5,5,0)); z-index: 100; }
         .btn-generate { width: 100%; background: linear-gradient(135deg, var(--primary), #AA8A2A); color: #000; border: none; padding: 16px; border-radius: 12px; font-size: 16px; font-weight: 900; box-shadow: 0 8px 25px rgba(212, 175, 55, 0.3); cursor: pointer;}
     </style>
@@ -81,7 +81,7 @@
 <body>
 
     <div class="header-brand">
-        <div class="brand-text">LUXIOU 高定方案陈列舱</div>
+        <div class="brand-text">私人定制高端课程</div>
     </div>
 
     <div class="intro-sec">
@@ -93,7 +93,11 @@
         
         <div class="sol-card bg-1" onclick="openDetail('posture')">
             <div class="card-content">
-                <div class="c-icon">📐</div>
+                <div class="c-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 5v14"/><path d="M8 9l4-4 4 4"/><path d="M8 19l4 4 4-4"/>
+                    </svg>
+                </div>
                 <div class="c-title">体态矫正与结构优化</div>
                 <div class="c-desc">针对圆肩驼背/骨盆前倾，通过专业训练改善身体姿态，提升气质。</div>
             </div>
@@ -101,7 +105,11 @@
 
         <div class="sol-card bg-2" onclick="openDetail('fatloss')">
             <div class="card-content">
-                <div class="c-icon">🔥</div>
+                <div class="c-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/>
+                    </svg>
+                </div>
                 <div class="c-title">高效燃脂与代谢激活</div>
                 <div class="c-desc">突破平台期，科学降低体脂率，打造全天候高效能代谢身体。</div>
             </div>
@@ -109,7 +117,11 @@
 
         <div class="sol-card bg-3" onclick="openDetail('shape')">
             <div class="card-content">
-                <div class="c-icon">👗</div>
+                <div class="c-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M5 22h14"/><path d="M5 2h14"/><path d="M17 22v-4.172a2 2 0 0 0-.586-1.414L12 12l-4.414 4.414A2 2 0 0 0 7 17.828V22"/><path d="M7 2v4.172a2 2 0 0 0 .586 1.414L12 12l4.414-4.414A2 2 0 0 0 17 6.172V2"/>
+                    </svg>
+                </div>
                 <div class="c-title">S型曲线精雕训练</div>
                 <div class="c-desc">专注打造蜜桃臀、马甲线与肩背线条，塑造极具美感的身体比例。</div>
             </div>
@@ -117,7 +129,11 @@
 
         <div class="sol-card bg-4" onclick="openDetail('postpartum')">
             <div class="card-content">
-                <div class="c-icon">🤱</div>
+                <div class="c-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                    </svg>
+                </div>
                 <div class="c-title">产后核心与体形恢复</div>
                 <div class="c-desc">针对产后腹部松弛与核心无力，安全有效地帮助身体机能回归。</div>
             </div>
@@ -125,7 +141,11 @@
 
         <div class="sol-card bg-5" onclick="openDetail('rehab')">
             <div class="card-content">
-                <div class="c-icon">🩹</div>
+                <div class="c-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                    </svg>
+                </div>
                 <div class="c-title">运动功能提升与防护</div>
                 <div class="c-desc">针对运动受限与不适，优化关节灵活性与稳定性，预防运动损伤。</div>
             </div>
@@ -133,7 +153,11 @@
 
         <div class="sol-card bg-6" onclick="openDetail('antiaging')">
             <div class="card-content">
-                <div class="c-icon">🧬</div>
+                <div class="c-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+                    </svg>
+                </div>
                 <div class="c-title">活力体能与状态焕新</div>
                 <div class="c-desc">通过科学训练提升肌肉质量与心肺功能，保持充沛精力与年轻体态。</div>
             </div>
@@ -149,7 +173,7 @@
 
     <div class="detail-modal" id="detailModal">
         <div class="modal-header">
-            <div class="modal-title" id="m-header-title">方案推演</div>
+            <div class="modal-title" id="m-header-title">定制路径推演</div>
             <button class="close-btn" onclick="closeDetail()">×</button>
         </div>
         
@@ -157,7 +181,6 @@
     </div>
 
     <script>
-        // 数据内容已同步合规化更新
         const planData = {
             'posture': {
                 title: '体态矫正与结构优化方案',
@@ -253,7 +276,8 @@
                         <canvas id="detailRadar"></canvas>
                     </div>
                 </div>
-                <div style="height: 80px;"></div> `;
+                <div style="height: 80px;"></div>
+            `;
             
             modal.classList.add('show');
             setTimeout(() => {
@@ -267,7 +291,6 @@
             cancelAnimationFrame(animReq);
         }
 
-        // 锁死 CSS 物理尺寸，防止 Retina 屏幕缩放暴走
         function drawRadar(config) {
             const canvas = document.getElementById('detailRadar');
             if(!canvas) return;
