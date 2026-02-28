@@ -11,7 +11,6 @@
         
         body { background: var(--bg); color: var(--text-main); font-family: "DIN Alternate", "Helvetica Neue", sans-serif; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
         
-        /* 顶部标题栏 */
         .header-brand { width: 100%; height: 60px; display: flex; align-items: center; justify-content: center; background: rgba(5, 5, 5, 0.85); position: sticky; top: 0; z-index: 50; border-bottom: 1px solid rgba(212, 175, 55, 0.15); backdrop-filter: blur(15px);}
         .brand-text { font-size: 18px; font-weight: 900; color: var(--primary); letter-spacing: 2px; }
         
@@ -33,7 +32,6 @@
         .c-title { font-size: 15px; font-weight: 900; color: #fff; margin-bottom: 6px; letter-spacing: 1px;}
         .c-desc { font-size: 11px; color: #888; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 
-        /* 全屏详情模态框 */
         .detail-modal { position: fixed; top: 100vh; left: 0; width: 100%; height: 100vh; background: var(--bg); z-index: 999; transition: top 0.5s cubic-bezier(0.2, 0.8, 0.2, 1); display: flex; flex-direction: column; }
         .detail-modal.show { top: 0; }
 
@@ -87,7 +85,7 @@
         .sp-text { color: #ccc; }
         .sp-text strong { color: var(--primary); font-weight: bold; text-shadow: 0 0 8px rgba(212,175,55,0.3); }
 
-        /* 🚨 教练配课滑动步进器优化 */
+        /* 教练配课滑动步进器 */
         .custom-builder { margin-top: 15px; border-top: 1px dashed rgba(212,175,55,0.3); padding-top: 15px; display: flex; flex-direction: column; gap: 12px; }
         .cb-item { display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.5); padding: 10px 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05);}
         .cb-label { font-size: 14px; color: #fff; font-weight: bold; display: flex; flex-direction: column; gap: 4px;}
@@ -97,7 +95,7 @@
         .cb-btn:active { background: rgba(212,175,55,0.2); }
         .cb-input { width: 40px; text-align: center; background: #000; border: none; border-left: 1px solid #333; border-right: 1px solid #333; color: #fff; font-size: 16px; font-weight: 900; padding: 6px 0; outline: none; pointer-events: none;}
 
-        /* 可视化投射图 */
+        /* 视觉投射区 */
         .visual-feedback-section { margin-top: 30px; background: #0a0a0c; border: 1px solid rgba(212, 175, 55, 0.15); border-radius: 16px; padding: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
         .fb-header { text-align: center; font-size: 15px; font-weight: 900; color: var(--primary); margin-bottom: 15px; letter-spacing: 2px; }
         .visual-card { width: 100%; height: 300px; border-radius: 12px; overflow: hidden; position: relative; border: 1px solid rgba(255,255,255,0.1); background: #111;}
@@ -116,7 +114,7 @@
         .btn-checkout:active { transform: scale(0.96); }
         .btn-checkout.disabled { background: #333; color: #666; box-shadow: none; pointer-events: none; }
 
-        /* 三套心理学逼单弹窗 */
+        /* 🚨 逼单弹窗样式 */
         .upsell-overlay { position: fixed; top:0; left:0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; opacity: 0; pointer-events: none; transition: 0.4s; backdrop-filter: blur(5px); }
         .upsell-overlay.show { opacity: 1; pointer-events: auto; }
         
@@ -128,41 +126,58 @@
         .up-sub { font-size: 11px; color: #aaa; margin-top: 6px; line-height: 1.5; }
         .up-close { color: #888; font-size: 28px; background: none; border: none; padding: 0; line-height: 1; cursor: pointer; }
 
+        /* 卡片明细重构：原价 vs 特权价对比 */
         .up-card { background: #111; border-radius: 12px; padding: 15px; border: 1px solid #333; margin-bottom: 12px; position: relative; overflow: hidden; }
-        .up-card:active { transform: scale(0.98); }
         .up-card.anchor { background: linear-gradient(145deg, #18181A, #0A0A0C); border-color: #444; }
-        
         .up-card.premium { border-color: rgba(212,175,55,0.8); background: linear-gradient(145deg, #241D10, #0A0A0C); box-shadow: 0 5px 20px rgba(212,175,55,0.15); margin-top: 12px; margin-bottom: 12px; transform: scale(1.02);}
         .up-card.premium::before { content: '★ 核心主推，最配目标'; position: absolute; top: 0; right: 0; background: linear-gradient(90deg, var(--accent), var(--primary)); color: #000; font-size: 10px; font-weight: bold; padding: 4px 12px; border-radius: 0 0 0 12px; }
-        
         .up-card.basic { background: #0A0A0C; border-style: dashed; border-color: #555; }
         
-        .uc-title { font-size: 15px; font-weight: 900; color: #fff; margin-bottom: 6px; display: flex; align-items: center; gap: 6px;}
+        .uc-title { font-size: 15px; font-weight: 900; color: #fff; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;}
         .premium .uc-title { color: var(--primary); font-size: 16px;}
         
-        .uc-data { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        /* 透明对比清单 */
+        .uc-breakdown { background: rgba(0,0,0,0.4); border-radius: 8px; padding: 10px; margin-bottom: 12px; border: 1px solid rgba(255,255,255,0.05); }
+        .uc-brk-row { display: flex; justify-content: space-between; font-size: 12px; color: #888; margin-bottom: 6px; }
+        .uc-brk-row:last-child { margin-bottom: 0; }
+        .uc-brk-row.hl { color: var(--primary); font-weight: bold; }
+        .uc-brk-row del { color: #666; }
+
+        .uc-footer { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 12px; border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 12px;}
         .uc-sessions { font-size: 22px; font-weight: 900; color: #fff; }
         .premium .uc-sessions { font-size: 24px; color: var(--primary); }
         .uc-sessions span { font-size: 12px; font-weight: normal; color: #888; }
-        .uc-price { text-align: right; }
         
-        /* 首购破冰对比样式 */
-        .uc-price-ori { font-size: 12px; color: #888; text-decoration: line-through; margin-bottom: 2px; }
-        .uc-price-val { font-size: 22px; font-weight: 900; color: #fff; display: flex; align-items: baseline; justify-content: flex-end; gap: 4px;}
-        .premium .uc-price-val { font-size: 26px; color: #fff; }
-        .uc-price-unit { font-size: 11px; color: #888; margin-top: 4px; display: flex; align-items: center; justify-content: flex-end; gap: 4px;}
-        .newbie-tag { background: var(--primary); color: #000; padding: 2px 6px; border-radius: 4px; font-weight: bold; font-size: 10px; }
+        .uc-price-box { text-align: right; }
+        .uc-ori-total { font-size: 11px; color: #888; text-decoration: line-through; margin-bottom: 2px; }
+        .uc-new-total { font-size: 22px; font-weight: 900; color: #fff; }
+        .premium .uc-new-total { font-size: 26px; color: #fff; text-shadow: 0 0 10px rgba(212,175,55,0.4);}
 
         .uc-btn { width: 100%; padding: 12px; border-radius: 8px; font-size: 14px; font-weight: bold; border: none; cursor: pointer; position: relative; z-index: 10;}
         .anchor .uc-btn { background: #333; color: #fff; }
         .premium .uc-btn { background: linear-gradient(135deg, var(--primary), #AA8A2A); color: #000; box-shadow: 0 4px 15px rgba(212,175,55,0.3);}
         .basic .uc-btn { background: transparent; color: #aaa; border: 1px solid #555; }
         
-        /* 自定义核算专属样式 */
-        .custom-breakdown { background: rgba(255,255,255,0.03); padding: 12px; border-radius: 8px; margin-bottom: 15px; font-size: 13px; color: #ccc; line-height: 1.8; border: 1px solid rgba(212,175,55,0.2);}
-        .custom-breakdown .row { display: flex; justify-content: space-between; }
-        .custom-breakdown .hl { color: var(--primary); font-weight: bold; }
-        .custom-breakdown .sub { text-align: right; font-size: 11px; color: #888; margin-top: -2px; margin-bottom: 6px;}
+        /* 🚨 终极核武：全屏电子签名合同台 */
+        .sig-modal { position: fixed; top: 100vh; left: 0; width: 100%; height: 100vh; background: #08080A; z-index: 2000; transition: top 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); display: flex; flex-direction: column; }
+        .sig-modal.show { top: 0; }
+        .sig-header { height: 60px; display: flex; justify-content: space-between; align-items: center; padding: 0 20px; background: rgba(5,5,5,0.95); border-bottom: 1px solid rgba(212,175,55,0.3); }
+        .sig-title { font-size: 16px; font-weight: bold; color: var(--primary); }
+        .sig-content { padding: 20px; flex: 1; display: flex; flex-direction: column; }
+        
+        .sig-summary { background: linear-gradient(145deg, #18181A, #0A0A0C); padding: 20px; border-radius: 12px; margin-bottom: 20px; border: 1px solid rgba(212,175,55,0.3); box-shadow: 0 10px 30px rgba(0,0,0,0.5);}
+        .sig-sum-title { color: #fff; font-size: 14px; margin-bottom: 10px; font-weight: bold;}
+        .sig-sum-data { display: flex; justify-content: space-between; align-items: flex-end; border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 15px; margin-top: 10px;}
+        .sig-sum-name { font-size: 16px; color: var(--primary); font-weight: 900;}
+        .sig-sum-price { font-size: 24px; color: #fff; font-weight: 900;}
+
+        .sig-pad-container { flex: 1; border: 1px dashed #555; border-radius: 12px; background: #111; position: relative; overflow: hidden; box-shadow: inset 0 0 20px rgba(0,0,0,0.8);}
+        #sigCanvas { width: 100%; height: 100%; touch-action: none; cursor: crosshair;}
+        .sig-placeholder { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #444; font-size: 24px; font-weight: bold; pointer-events: none; letter-spacing: 2px;}
+        
+        .sig-actions { display: flex; gap: 15px; margin-top: 20px; margin-bottom: 30px; }
+        .btn-clear { flex: 1; background: #222; color: #fff; padding: 16px; border-radius: 12px; text-align: center; border: 1px solid #444; font-weight: bold; font-size: 15px;}
+        .btn-confirm-sig { flex: 2; background: linear-gradient(135deg, var(--primary), #AA8A2A); color: #000; padding: 16px; border-radius: 12px; text-align: center; border: none; font-weight: 900; font-size: 16px; box-shadow: 0 5px 20px rgba(212,175,55,0.3);}
     </style>
 </head>
 <body>
@@ -226,7 +241,7 @@
     <div class="upsell-modal" id="upsellModal">
         <div class="up-header">
             <div>
-                <div class="up-title">✦ 智能匹配双轨方案 ✦</div>
+                <div class="up-title">✦ 智能匹配分轨方案 ✦</div>
                 <div class="up-sub" id="up-sub-text">系统已为您接入 <strong style="color:var(--primary)">【首次建档专享 ¥350/节起】</strong> 破冰费率：</div>
             </div>
             <button class="up-close" onclick="closeUpsellModal()">×</button>
@@ -235,67 +250,98 @@
         <div id="standard-upsell-content">
             <div class="up-card anchor">
                 <div class="uc-title">方案一：极致重塑包 (高阶锚定)</div>
-                <div style="font-size:11px; color:#888; margin-bottom: 10px;">覆盖超长周期，打造绝对巅峰体态</div>
-                <div class="uc-data">
+                <div class="uc-breakdown">
+                    <div class="uc-brk-row"><span>常规阶梯单价:</span> <span><del id="up-a-unit-ori">¥400/节</del></span></div>
+                    <div class="uc-brk-row hl"><span>首购破冰单价:</span> <span id="up-a-unit-new">¥350/节</span></div>
+                </div>
+                <div class="uc-footer">
                     <div class="uc-sessions" id="up-a-sessions">-- <span>节</span></div>
-                    <div class="uc-price">
-                        <div class="uc-price-ori" id="up-a-ori">原价 ¥--</div>
-                        <div class="uc-price-val">¥ <span id="up-a-new">--</span></div>
-                        <div class="uc-price-unit"><span class="newbie-tag">首购福利</span> 折合单价 ¥350/节</div>
+                    <div class="uc-price-box">
+                        <div class="uc-ori-total" id="up-a-ori">原总价 ¥--</div>
+                        <div class="uc-new-total">¥ <span id="up-a-new">--</span></div>
                     </div>
                 </div>
-                <button class="uc-btn" onclick="window.location.href='./price.html'">选择此方案 ➔</button>
+                <button class="uc-btn" id="btn-sign-a">选择此方案签单 ➔</button>
             </div>
 
             <div class="up-card premium">
                 <div class="uc-title">方案二：黄金周期核心包</div>
-                <div style="font-size:12px; color:#aaa; margin-bottom: 10px;">完美契合您的重塑目标，当前最高性价比选择</div>
-                <div class="uc-data">
+                <div class="uc-breakdown">
+                    <div class="uc-brk-row"><span>常规阶梯单价:</span> <span><del id="up-b-unit-ori">¥420/节</del></span></div>
+                    <div class="uc-brk-row hl"><span>首购破冰单价:</span> <span id="up-b-unit-new">¥350/节</span></div>
+                </div>
+                <div class="uc-footer">
                     <div class="uc-sessions" id="up-b-sessions">-- <span>节</span></div>
-                    <div class="uc-price">
-                        <div class="uc-price-ori" id="up-b-ori">原价 ¥--</div>
-                        <div class="uc-price-val">¥ <span id="up-b-new">--</span></div>
-                        <div class="uc-price-unit"><span class="newbie-tag">首购福利</span> 折合单价 ¥350/节</div>
+                    <div class="uc-price-box">
+                        <div class="uc-ori-total" id="up-b-ori">原总价 ¥--</div>
+                        <div class="uc-new-total">¥ <span id="up-b-new">--</span></div>
                     </div>
                 </div>
-                <button class="uc-btn" onclick="window.location.href='./price.html'">确认主推方案并签约 ➔</button>
+                <button class="uc-btn" id="btn-sign-b">确认主推方案并签约 ➔</button>
             </div>
 
             <div class="up-card basic">
                 <div class="uc-title">方案三：低门槛启动包</div>
-                <div style="font-size:11px; color:#666; margin-bottom: 10px;">极低财务门槛破冰，随时可按此阶梯补差价升级</div>
-                <div class="uc-data">
-                    <div class="uc-sessions" id="up-c-sessions" style="font-size:18px;">-- <span>节</span></div>
-                    <div class="uc-price">
-                        <div class="uc-price-ori" id="up-c-ori" style="font-size:11px;">原价 ¥--</div>
-                        <div class="uc-price-val" style="font-size:18px;">¥ <span id="up-c-new">--</span></div>
-                        <div class="uc-price-unit" style="font-size:10px;"><span class="newbie-tag">首购福利</span> 折合单价 ¥350/节</div>
+                <div class="uc-breakdown">
+                    <div class="uc-brk-row"><span>常规阶梯单价:</span> <span><del id="up-c-unit-ori">¥440/节</del></span></div>
+                    <div class="uc-brk-row hl"><span>首购破冰单价:</span> <span id="up-c-unit-new">¥350/节</span></div>
+                </div>
+                <div class="uc-footer">
+                    <div class="uc-sessions" id="up-c-sessions">-- <span>节</span></div>
+                    <div class="uc-price-box">
+                        <div class="uc-ori-total" id="up-c-ori">原价 ¥--</div>
+                        <div class="uc-new-total">¥ <span id="up-c-new">--</span></div>
                     </div>
                 </div>
-                <button class="uc-btn" onclick="window.location.href='./price.html'">先选此方案低风险启动 ➔</button>
+                <button class="uc-btn" id="btn-sign-c">先选此方案低风险启动 ➔</button>
             </div>
         </div>
 
         <div id="custom-upsell-content" style="display:none;">
-            <div class="up-card premium">
+            <div class="up-card premium" style="margin-top:0;">
                 <div class="uc-title">您的专属：高定私享组合包</div>
-                <div style="font-size:12px; color:#aaa; margin-bottom: 12px;">教练为您量身调配的顶级复合训练计划</div>
+                <div style="font-size:12px; color:#aaa; margin-bottom: 15px;">教练为您量身调配的顶级复合训练计划</div>
                 
-                <div class="custom-breakdown" id="custom-breakdown-details">
+                <div class="uc-breakdown" id="custom-breakdown-details" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(212,175,55,0.3);">
                     </div>
 
-                <div class="uc-data">
-                    <div class="uc-sessions" id="up-custom-sessions" style="font-size: 20px;">组合核算</div>
-                    <div class="uc-price">
-                        <div class="uc-price-ori" id="up-custom-ori">常规执行总价 ¥--</div>
-                        <div class="uc-price-val" style="font-size: 28px;">¥ <span id="up-custom-new">--</span></div>
-                        <div class="uc-price-unit"><span class="newbie-tag">新客破冰</span> 极度优惠组合</div>
+                <div class="uc-footer">
+                    <div class="uc-sessions" style="font-size:20px; line-height: 1.2;">新客破冰<br><span style="color:var(--primary)">极致核算</span></div>
+                    <div class="uc-price-box">
+                        <div class="uc-ori-total" id="up-custom-ori" style="font-size:13px;">常规执行总价 ¥--</div>
+                        <div class="uc-new-total" style="font-size:30px;">¥ <span id="up-custom-new">--</span></div>
                     </div>
                 </div>
-                <button class="uc-btn" onclick="window.location.href='./price.html'">确认专属组合方案并签约 ➔</button>
+                <button class="uc-btn" id="btn-sign-custom">确认专属组合方案并签约 ➔</button>
             </div>
         </div>
+    </div>
 
+    <div class="sig-modal" id="signatureModal">
+        <div class="sig-header">
+            <div class="sig-title">✦ 电子合同签署中心 ✦</div>
+            <button class="close-btn" onclick="closeSignature()" style="font-size: 28px; color: #888;">×</button>
+        </div>
+        <div class="sig-content">
+            <div class="sig-summary">
+                <div class="sig-sum-title">即将为您锁定以下专属重塑方案：</div>
+                <div style="font-size:12px; color:#888;">所属体系: <span id="sig-sys-name" style="color:#ccc;"></span></div>
+                <div class="sig-sum-data">
+                    <div class="sig-sum-name" id="sig-pkg-name">黄金周期核心包 <span style="font-size:12px; color:#fff;">(48节)</span></div>
+                    <div class="sig-sum-price" id="sig-pkg-price">¥ 16,800</div>
+                </div>
+            </div>
+            
+            <div class="sig-pad-container">
+                <div class="sig-placeholder">请在此处手写签名</div>
+                <canvas id="sigCanvas"></canvas>
+            </div>
+            
+            <div class="sig-actions">
+                <button class="btn-clear" onclick="clearCanvas()">重新签名</button>
+                <button class="btn-confirm-sig" onclick="submitSignature()">确认保存并生成合同</button>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -320,9 +366,10 @@
             if(m === 2) return 7200;
             if(m === 3) return 9600;
             if(m >= 6) return 18000;
-            return m * 3888; // 兜底
+            return m * 3888;
         }
 
+        // 完美复原带加粗的语料和女模图片
         const planData = {
             'posture': {
                 type: 'feature', icon: '<svg viewBox="0 0 24 24"><path d="M12 5v14"/><path d="M8 9l4-4 4 4"/><path d="M8 19l4 4 4-4"/></svg>',
@@ -489,7 +536,7 @@
                             </div>
                         </div>
                         <div class="cb-item">
-                            <div class="cb-label">特色干预课 <span>(拉伸/普拉提/康复等 <strong style="color:var(--primary);">45分钟/节</strong>)</span></div>
+                            <div class="cb-label">特色干预课 <span>(拉伸/普拉提/拳击等 <strong style="color:var(--primary);">45分钟/节</strong>)</span></div>
                             <div class="cb-ctrl">
                                 <div class="cb-btn" onclick="chgVal('cb-feat', -1, event)">-</div>
                                 <input id="cb-feat" class="cb-input" value="0" readonly>
@@ -527,7 +574,7 @@
             document.getElementById('detailModal').classList.remove('show');
         }
 
-        // 🚨 步进器逻辑，步长为 1，防点错，自动互斥
+        // 步数调整逻辑 (步长为1)
         function chgVal(id, delta, e) {
             if(e) e.stopPropagation(); 
             let el = document.getElementById(id);
@@ -540,7 +587,6 @@
             
             if (totalCustom > 0) {
                 box.classList.add('selected');
-                // 互斥：排他取消前 3 个阶段
                 document.querySelectorAll('.phase-box:not(.combo-box)').forEach(b => b.classList.remove('selected'));
             } else if (totalCustom === 0) {
                 box.classList.remove('selected');
@@ -549,26 +595,20 @@
             updateCheckout();
         }
 
-        // 🚨 互斥点选逻辑
         function togglePhase(el, e) {
             if(e) e.stopPropagation();
 
             if (el.id === 'phase-4-box') {
-                // 如果点的是组合包，取消前三个阶段
                 document.querySelectorAll('.phase-box:not(.combo-box)').forEach(b => b.classList.remove('selected'));
                 el.classList.toggle('selected');
-                
-                // 如果刚被选中且里面全是0，给点默认值以便展示
                 if (el.classList.contains('selected') && document.getElementById('cb-reg').value == 0 && document.getElementById('cb-feat').value == 0 && document.getElementById('cb-mon').value == 0) {
                     document.getElementById('cb-reg').value = 1; 
                 } else if (!el.classList.contains('selected')) {
-                    // 如果取消选中，把数字清零
                     document.getElementById('cb-reg').value = 0;
                     document.getElementById('cb-feat').value = 0;
                     document.getElementById('cb-mon').value = 0;
                 }
             } else {
-                // 如果点的是前三个阶段，取消组合包
                 let cb = document.getElementById('phase-4-box');
                 if(cb) {
                     cb.classList.remove('selected');
@@ -586,7 +626,6 @@
             let totalMax = 0;
             let maxPhaseSelected = 0;
             
-            // 检查组合包是否被选中
             let customBox = document.getElementById('phase-4-box');
             let isCustom = customBox && customBox.classList.contains('selected');
 
@@ -594,13 +633,11 @@
                 let r = parseInt(document.getElementById('cb-reg').value);
                 let f = parseInt(document.getElementById('cb-feat').value);
                 let m = parseInt(document.getElementById('cb-mon').value);
-                // 仅用于底部统计显示，包月粗略算12节
                 let customTotal = r + f + (m * 12); 
                 totalMin = customTotal;
                 totalMax = customTotal;
-                maxPhaseSelected = 4; // VIP 状态
+                maxPhaseSelected = 4;
             } else {
-                // 常规的 1、2、3 阶段
                 document.querySelectorAll('.phase-box.selected:not(.combo-box)').forEach(box => {
                     totalMin += parseInt(box.getAttribute('data-min'));
                     totalMax += parseInt(box.getAttribute('data-max'));
@@ -652,17 +689,16 @@
             }
         }
 
-        // 🚨 智能报价分发：普通 3 轨 VS 教练高定专属单
+        // 🚨 弹窗逻辑 (修复与重构)
         function showUpsellModal() {
             if(globalTotalMax === 0) return;
             
             let customBox = document.getElementById('phase-4-box');
             let isCustom = customBox && customBox.classList.contains('selected');
-            
             const data = planData[currentPlanKey];
 
             if (isCustom) {
-                // ====== 渲染：教练专属高定单 ======
+                // ====== 教练专属高定单 ======
                 document.getElementById('standard-upsell-content').style.display = 'none';
                 document.getElementById('custom-upsell-content').style.display = 'block';
                 document.getElementById('up-sub-text').innerHTML = `系统已为您核算以下 <strong style="color:var(--primary)">高定私享组合</strong>，含专属破冰福利：`;
@@ -671,36 +707,38 @@
                 let f = parseInt(document.getElementById('cb-feat').value);
                 let m = parseInt(document.getElementById('cb-mon').value);
 
-                // 计算原价
                 let oriReg = r * getUnitPrice(r, 'regular');
                 let oriFeat = f * getUnitPrice(f, 'feature');
                 let oriMon = m > 0 ? getMonthlyPrice(m) : 0;
                 let totalOri = oriReg + oriFeat + oriMon;
 
-                // 计算新客破冰价 (常规350，特色380，包月原价)
                 let newReg = r * 350;
                 let newFeat = f * 380; 
                 let newMon = oriMon; 
                 let totalNew = newReg + newFeat + newMon;
 
-                // 拼装明细 (带有具体时长标识)
                 let bHtml = '';
-                if(r > 0) bHtml += `<div class="row"><span>常规课 (60分钟/节)</span> <span class="hl">${r} 节</span></div>`;
-                if(f > 0) bHtml += `<div class="row"><span>特色课 (45分钟/节)</span> <span class="hl">${f} 节</span></div>`;
+                if(r > 0) bHtml += `<div class="uc-brk-row"><span>常规课 (60分钟/节)</span> <span class="hl">${r} 节</span></div>`;
+                if(f > 0) bHtml += `<div class="uc-brk-row"><span>特色课 (45分钟/节)</span> <span class="hl">${f} 节</span></div>`;
                 if(m > 0) {
-                    bHtml += `<div class="row" style="margin-top:8px;"><span>包月卡 (45分钟/节)</span> <span class="hl">${m} 个月</span></div>`;
-                    bHtml += `<div class="sub">含包月专属费用 ¥${formatMoney(newMon)}</div>`;
+                    bHtml += `<div class="uc-brk-row" style="margin-top:4px;"><span>包月卡 (45分钟/节)</span> <span class="hl">${m} 个月</span></div>`;
+                    bHtml += `<div style="text-align:right; font-size:10px; color:#888; margin-top:-4px;">(含包月费用 ¥${formatMoney(newMon)})</div>`;
                 }
 
                 document.getElementById('custom-breakdown-details').innerHTML = bHtml;
                 document.getElementById('up-custom-ori').innerText = `常规执行总价 ¥${formatMoney(totalOri)}`;
                 document.getElementById('up-custom-new').innerText = formatMoney(totalNew);
+                
+                // 绑定签名页事件
+                document.getElementById('btn-sign-custom').onclick = function() {
+                    openSignature('高定私享组合包', (r+f) + '节 + ' + m + '个月', '¥ ' + formatMoney(totalNew));
+                };
 
             } else {
-                // ====== 渲染：标准心理学三轨方案 ======
+                // ====== 标准心理学三轨方案 ======
                 document.getElementById('standard-upsell-content').style.display = 'block';
                 document.getElementById('custom-upsell-content').style.display = 'none';
-                document.getElementById('up-sub-text').innerHTML = `系统已为您接入 <strong style="color:var(--primary)">【首次建档专享 ¥350/节起】</strong> 破冰费率：`;
+                document.getElementById('up-sub-text').innerHTML = `系统已为您接入 <strong style="color:var(--primary)">【首次建档专享】</strong> 破冰费率：`;
 
                 let pkgEntry = 12, pkgCore = 48, pkgAnchor = 72;
                 
@@ -715,10 +753,8 @@
                     let idx = standardPackages.indexOf(pkgEntry);
                     pkgCore = standardPackages[Math.min(idx+1, standardPackages.length-1)];
                 }
-                
                 let coreIdx = standardPackages.indexOf(pkgCore);
                 pkgAnchor = standardPackages[Math.min(coreIdx+1, standardPackages.length-1)];
-                
                 if(pkgAnchor === pkgCore) {
                     if(coreIdx > 1) {
                         pkgEntry = standardPackages[coreIdx-2];
@@ -734,26 +770,34 @@
                 let totalOriB = pkgCore * unitB;
                 let totalOriC = pkgEntry * unitC;
 
-                // 新客福利核算：常规统一350，特色统一380
                 let newbiePrice = (data.type === 'feature') ? 380 : 350;
                 let totalNewA = pkgAnchor * newbiePrice;
                 let totalNewB = pkgCore * newbiePrice;
                 let totalNewC = pkgEntry * newbiePrice;
 
-                document.getElementById('up-a-sessions').innerHTML = `${pkgAnchor} <span>课时</span>`;
-                document.getElementById('up-a-ori').innerText = `常规执行价 ¥${formatMoney(totalOriA)}`;
+                // 赋值 A
+                document.getElementById('up-a-unit-ori').innerText = `¥${unitA}/节`;
+                document.getElementById('up-a-unit-new').innerText = `¥${newbiePrice}/节`;
+                document.getElementById('up-a-sessions').innerHTML = `${pkgAnchor} <span>节</span>`;
+                document.getElementById('up-a-ori').innerText = `原总价 ¥${formatMoney(totalOriA)}`;
                 document.getElementById('up-a-new').innerText = formatMoney(totalNewA);
-                document.getElementById('up-a-unit').innerHTML = `<span class="newbie-tag">首购福利</span> 折合单价 ¥${newbiePrice}/节`;
+                document.getElementById('btn-sign-a').onclick = function() { openSignature('极致重塑包', pkgAnchor + '节', '¥ ' + formatMoney(totalNewA)); };
 
-                document.getElementById('up-b-sessions').innerHTML = `${pkgCore} <span>课时</span>`;
-                document.getElementById('up-b-ori').innerText = `常规执行价 ¥${formatMoney(totalOriB)}`;
+                // 赋值 B
+                document.getElementById('up-b-unit-ori').innerText = `¥${unitB}/节`;
+                document.getElementById('up-b-unit-new').innerText = `¥${newbiePrice}/节`;
+                document.getElementById('up-b-sessions').innerHTML = `${pkgCore} <span>节</span>`;
+                document.getElementById('up-b-ori').innerText = `原总价 ¥${formatMoney(totalOriB)}`;
                 document.getElementById('up-b-new').innerText = formatMoney(totalNewB);
-                document.getElementById('up-b-unit').innerHTML = `<span class="newbie-tag">首购福利</span> 折合单价 ¥${newbiePrice}/节`;
+                document.getElementById('btn-sign-b').onclick = function() { openSignature('黄金周期核心包', pkgCore + '节', '¥ ' + formatMoney(totalNewB)); };
 
-                document.getElementById('up-c-sessions').innerHTML = `${pkgEntry} <span>课时</span>`;
-                document.getElementById('up-c-ori').innerText = `常规执行价 ¥${formatMoney(totalOriC)}`;
+                // 赋值 C
+                document.getElementById('up-c-unit-ori').innerText = `¥${unitC}/节`;
+                document.getElementById('up-c-unit-new').innerText = `¥${newbiePrice}/节`;
+                document.getElementById('up-c-sessions').innerHTML = `${pkgEntry} <span>节</span>`;
+                document.getElementById('up-c-ori').innerText = `原总价 ¥${formatMoney(totalOriC)}`;
                 document.getElementById('up-c-new').innerText = formatMoney(totalNewC);
-                document.getElementById('up-c-unit').innerHTML = `<span class="newbie-tag">首购福利</span> 折合单价 ¥${newbiePrice}/节`;
+                document.getElementById('btn-sign-c').onclick = function() { openSignature('低门槛启动包', pkgEntry + '节', '¥ ' + formatMoney(totalNewC)); };
             }
 
             document.getElementById('upsellOverlay').classList.add('show');
@@ -763,6 +807,95 @@
         function closeUpsellModal() {
             document.getElementById('upsellOverlay').classList.remove('show');
             document.getElementById('upsellModal').classList.remove('show');
+        }
+
+        // 🚨 终极核武：全屏电子签名画布系统
+        let sigCanvas, sigCtx, isSigning = false;
+
+        function openSignature(pkgName, sessions, price) {
+            // 关闭上一个弹窗
+            closeUpsellModal();
+            
+            // 写入明细数据
+            document.getElementById('sig-sys-name').innerText = planData[currentPlanKey].title;
+            document.getElementById('sig-pkg-name').innerHTML = `${pkgName} <span style="font-size:14px; color:#aaa; font-weight:normal;">(${sessions})</span>`;
+            document.getElementById('sig-pkg-price').innerText = price;
+            
+            // 弹出画板
+            document.getElementById('signatureModal').classList.add('show');
+            
+            // 初始化画布 (必须等动画结束后获取尺寸)
+            setTimeout(() => {
+                sigCanvas = document.getElementById('sigCanvas');
+                sigCtx = sigCanvas.getContext('2d');
+                let rect = sigCanvas.parentElement.getBoundingClientRect();
+                sigCanvas.width = rect.width;
+                sigCanvas.height = rect.height;
+                
+                sigCtx.strokeStyle = '#D4AF37'; // 尊贵金墨水
+                sigCtx.lineWidth = 4;
+                sigCtx.lineCap = 'round';
+                sigCtx.lineJoin = 'round';
+                
+                // 绑定事件 (防页面滚动)
+                sigCanvas.addEventListener('touchstart', startSign, {passive: false});
+                sigCanvas.addEventListener('touchmove', drawSign, {passive: false});
+                sigCanvas.addEventListener('touchend', endSign);
+                sigCanvas.addEventListener('mousedown', startSign);
+                sigCanvas.addEventListener('mousemove', drawSign);
+                sigCanvas.addEventListener('mouseup', endSign);
+                sigCanvas.addEventListener('mouseout', endSign);
+            }, 400);
+        }
+
+        function closeSignature() {
+            document.getElementById('signatureModal').classList.remove('show');
+            clearCanvas();
+        }
+
+        function getSignPos(e) {
+            let rect = sigCanvas.getBoundingClientRect();
+            let x = e.clientX, y = e.clientY;
+            if(e.touches && e.touches.length > 0) {
+                x = e.touches[0].clientX;
+                y = e.touches[0].clientY;
+            }
+            return { x: x - rect.left, y: y - rect.top };
+        }
+
+        function startSign(e) {
+            e.preventDefault();
+            isSigning = true;
+            let pos = getSignPos(e);
+            sigCtx.beginPath();
+            sigCtx.moveTo(pos.x, pos.y);
+            document.querySelector('.sig-placeholder').style.display = 'none'; // 隐藏提示字
+        }
+
+        function drawSign(e) {
+            if(!isSigning) return;
+            e.preventDefault();
+            let pos = getSignPos(e);
+            sigCtx.lineTo(pos.x, pos.y);
+            sigCtx.stroke();
+        }
+
+        function endSign() {
+            isSigning = false;
+            sigCtx.closePath();
+        }
+
+        function clearCanvas() {
+            if(!sigCtx) return;
+            sigCtx.clearRect(0, 0, sigCanvas.width, sigCanvas.height);
+            document.querySelector('.sig-placeholder').style.display = 'block';
+        }
+
+        function submitSignature() {
+            // 这里可以加入将 Canvas 转化为图片的逻辑: sigCanvas.toDataURL("image/png")
+            alert('恭喜！合同已生成并附带您的专属签名，系统将自动录入客户档案库。');
+            closeSignature();
+            closeDetail(); // 签完回到主界面
         }
     </script>
 </body>
