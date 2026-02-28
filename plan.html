@@ -12,7 +12,6 @@
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; margin: 0; padding: 0; }
         html, body { width: 100%; max-width: 100vw; overflow-x: hidden; background: var(--bg); color: var(--text-main); font-family: "DIN Alternate", "Helvetica Neue", sans-serif; -webkit-font-smoothing: antialiased; }
         
-        /* 顶部标题栏 */
         .header-brand { width: 100%; height: 60px; display: flex; align-items: center; justify-content: center; background: rgba(5, 5, 5, 0.85); position: sticky; top: 0; z-index: 50; border-bottom: 1px solid rgba(212, 175, 55, 0.15); backdrop-filter: blur(15px);}
         .brand-text { font-size: 18px; font-weight: 900; color: var(--primary); letter-spacing: 2px; }
         
@@ -25,18 +24,17 @@
         .sol-card { position: relative; height: 180px; border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; justify-content: flex-end; cursor: pointer; border: 1px solid rgba(255,255,255,0.08); box-shadow: inset 0 0 30px rgba(0,0,0,0.8), 0 10px 20px rgba(0,0,0,0.5); transition: 0.3s; background: linear-gradient(145deg, #18181C, #050505); }
         .sol-card:active { transform: scale(0.96); border-color: var(--primary); box-shadow: 0 5px 15px rgba(212,175,55,0.2); }
         
-        /* 🚨 替换为全新的彩色图片水印样式 */
-        .watermark { position: absolute; right: -15px; bottom: -15px; width: 130px; height: 130px; opacity: 0.15; z-index: 1; pointer-events: none; transition: 0.5s ease; }
-        .watermark img { width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 0 10px rgba(255,255,255,0.1)); }
-        .sol-card:hover .watermark { opacity: 0.3; transform: scale(1.05) translate(-5px, -5px); }
+        /* 🚨 核心升级：彩色透明全息水印样式 */
+        .watermark { position: absolute; right: -15px; bottom: -15px; width: 140px; height: 140px; opacity: 0.25; z-index: 1; pointer-events: none; transition: transform 0.5s ease, opacity 0.5s ease; filter: drop-shadow(0 0 8px rgba(212,175,55,0.2)); }
+        .watermark img { width: 100%; height: 100%; object-fit: contain; }
+        .sol-card:active .watermark { opacity: 0.4; transform: scale(1.1) translate(-5px, -5px); }
 
         .card-content { padding: 15px; position: relative; z-index: 2; }
         .c-icon { margin-bottom: 10px; display: flex; align-items: center; }
         .c-icon svg { width: 28px; height: 28px; stroke: var(--primary); filter: drop-shadow(0 0 6px rgba(212,175,55,0.8)); }
         .c-title { font-size: 15px; font-weight: 900; color: #fff; margin-bottom: 6px; letter-spacing: 1px;}
-        .c-desc { font-size: 11px; color: #888; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .c-desc { font-size: 11px; color: #aaa; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 
-        /* 全屏详情模态框 */
         .detail-modal { position: fixed; top: 100vh; left: 0; width: 100%; height: 100vh; background: var(--bg); z-index: 999; transition: top 0.5s cubic-bezier(0.2, 0.8, 0.2, 1); display: flex; flex-direction: column; overflow-x: hidden; }
         .detail-modal.show { top: 0; }
 
@@ -48,14 +46,13 @@
         
         .hero-banner { border: 1px solid rgba(212, 175, 55, 0.3); border-radius: 16px; padding: 25px 20px; margin-bottom: 20px; background: linear-gradient(145deg, #16161A, #050505); box-shadow: 0 10px 30px rgba(0,0,0,0.5); position: relative; overflow: hidden;}
         
-        /* 模态框顶部的图片背景也调用这些高清图标 */
-        .hero-watermark { position: absolute; right: -20px; top: -20px; width: 140px; height: 140px; opacity: 0.1; pointer-events: none; }
+        /* 模态框顶部的大图也同步直连 */
+        .hero-watermark { position: absolute; right: -20px; top: -20px; width: 140px; height: 140px; opacity: 0.15; pointer-events: none; filter: drop-shadow(0 0 15px rgba(255,255,255,0.1)); }
         .hero-watermark img { width: 100%; height: 100%; object-fit: contain; }
-        
+
         .m-hero-title { font-size: 22px; font-weight: 900; color: #fff; margin-bottom: 10px; letter-spacing: 1px; position: relative; z-index: 2;}
         .m-hero-desc { font-size: 13px; color: var(--text-sub); line-height: 1.6; position: relative; z-index: 2;}
         
-        /* 1-5次出勤频率 */
         .freq-panel { background: rgba(212,175,55,0.05); border: 1px solid rgba(212,175,55,0.3); border-radius: 12px; padding: 15px 10px; margin-bottom: 25px; box-shadow: inset 0 0 20px rgba(0,0,0,0.5); }
         .freq-title { font-size: 13px; color: var(--primary); font-weight: bold; margin-bottom: 12px; padding-left: 5px; display: flex; align-items: center; gap: 6px;}
         .freq-group { display: flex; gap: 6px; }
@@ -102,7 +99,6 @@
         .sp-text { color: #ccc; }
         .sp-text strong { color: var(--primary); font-weight: bold; text-shadow: 0 0 8px rgba(212,175,55,0.3); }
 
-        /* 教练配课滑动步进器 */
         .custom-builder { margin-top: 15px; border-top: 1px dashed rgba(212,175,55,0.3); padding-top: 15px; display: flex; flex-direction: column; gap: 12px; }
         .cb-item { display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.5); padding: 10px 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05);}
         .cb-label { font-size: 14px; color: #fff; font-weight: bold; display: flex; flex-direction: column; gap: 4px;}
@@ -114,7 +110,6 @@
         .cb-input::-webkit-outer-spin-button, .cb-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
         .cb-input[type=number] { -moz-appearance: textfield; }
 
-        /* 可视化投射图 */
         .visual-feedback-section { margin-top: 30px; background: #0a0a0c; border: 1px solid rgba(212, 175, 55, 0.15); border-radius: 16px; padding: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
         .fb-header { text-align: center; font-size: 15px; font-weight: 900; color: var(--primary); margin-bottom: 15px; letter-spacing: 2px; }
         .visual-card { width: 100%; height: 300px; border-radius: 12px; overflow: hidden; position: relative; border: 1px solid rgba(255,255,255,0.1); background: #111;}
@@ -123,7 +118,6 @@
         .visual-title { color: var(--primary); font-size: 20px; font-weight: 900; letter-spacing: 1px; margin-bottom: 6px; text-shadow: 0 2px 5px rgba(0,0,0,0.8);}
         .visual-desc { color: #ddd; font-size: 13px; line-height: 1.5; text-shadow: 0 1px 3px rgba(0,0,0,0.8); }
 
-        /* 购物车底栏 */
         .checkout-bar { position: fixed; bottom: 0; left: 0; width: 100%; padding: 15px 20px 25px; background: rgba(10, 10, 12, 0.98); border-top: 1px solid rgba(212,175,55,0.3); box-shadow: 0 -10px 30px rgba(0,0,0,0.8); z-index: 100; backdrop-filter: blur(15px); display: flex; justify-content: space-between; align-items: center; }
         .checkout-info { display: flex; flex-direction: column; gap: 4px; }
         .c-info-label { font-size: 11px; color: #888; font-weight: bold; letter-spacing: 1px; }
@@ -133,7 +127,7 @@
         .btn-checkout:active { transform: scale(0.96); }
         .btn-checkout.disabled { background: #333; color: #666; box-shadow: none; pointer-events: none; }
 
-        /* 双轨逼单弹窗 */
+        /* 逼单弹窗样式 */
         .upsell-overlay { position: fixed; top:0; left:0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; opacity: 0; pointer-events: none; transition: 0.4s; backdrop-filter: blur(5px); }
         .upsell-overlay.show { opacity: 1; pointer-events: auto; }
         
@@ -222,27 +216,27 @@
 
     <div class="gallery-container">
         <div class="sol-card" onclick="openDetail('posture')">
-            <div class="watermark"><img src="strength_16292717.png" alt="Posture"></div>
+            <div class="watermark"><img src="https://cdn-icons-png.flaticon.com/512/16292/16292717.png" alt="bg"></div>
             <div class="card-content"><div class="c-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M8 9l4-4 4 4"/><path d="M8 19l4 4 4-4"/></svg></div><div class="c-title">体态矫正与结构优化</div><div class="c-desc">松解受限筋膜，重建脊柱中立位，彻底拔除肩颈腰背疼痛根源。</div></div>
         </div>
         <div class="sol-card" onclick="openDetail('fatloss')">
-            <div class="watermark"><img src="treadmill_12805546.png" alt="Fatloss"></div>
+            <div class="watermark"><img src="https://cdn-icons-png.flaticon.com/512/12805/12805546.png" alt="bg"></div>
             <div class="card-content"><div class="c-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg></div><div class="c-title">高效燃脂与代谢激活</div><div class="c-desc">突破顽固平台期，科学剥离内脏脂肪，打造全天候高代谢体质。</div></div>
         </div>
         <div class="sol-card" onclick="openDetail('shape')">
-            <div class="watermark"><img src="barbell_3340004.png" alt="Shape"></div>
+            <div class="watermark"><img src="https://cdn-icons-png.flaticon.com/512/3340/3340004.png" alt="bg"></div>
             <div class="card-content"><div class="c-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 22h14"/><path d="M5 2h14"/><path d="M17 22v-4.172a2 2 0 0 0-.586-1.414L12 12l-4.414 4.414A2 2 0 0 0 7 17.828V22"/><path d="M7 2v4.172a2 2 0 0 0 .586 1.414L12 12l4.414-4.414A2 2 0 0 0 17 6.172V2"/></svg></div><div class="c-title">S型曲线精雕训练</div><div class="c-desc">专攻蜜桃臀、马甲线与直角肩，通过肌肥大填充塑造极致比例。</div></div>
         </div>
         <div class="sol-card" onclick="openDetail('postpartum')">
-            <div class="watermark"><img src="exercise_779980.png" alt="Postpartum"></div>
+            <div class="watermark"><img src="https://cdn-icons-png.flaticon.com/512/779/779980.png" alt="bg"></div>
             <div class="card-content"><div class="c-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></div><div class="c-title">产后核心与体形恢复</div><div class="c-desc">避开高危卷腹，内源性闭合腹直肌，安全有效地恢复盆底肌机能。</div></div>
         </div>
         <div class="sol-card" onclick="openDetail('rehab')">
-            <div class="watermark"><img src="speech-bubble_2906460.png" alt="Rehab"></div>
+            <div class="watermark"><img src="https://cdn-icons-png.flaticon.com/512/2906/2906460.png" alt="bg"></div>
             <div class="card-content"><div class="c-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><div class="c-title">运动功能提升与防护</div><div class="c-desc">消除关节弹响与运动刺痛，强化深层小肌群，重建关节力学护甲。</div></div>
         </div>
         <div class="sol-card" onclick="openDetail('antiaging')">
-            <div class="watermark"><img src="gym_8407060.png" alt="Antiaging"></div>
+            <div class="watermark"><img src="https://cdn-icons-png.flaticon.com/512/8407/8407060.png" alt="bg"></div>
             <div class="card-content"><div class="c-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div><div class="c-title">活力体能与状态焕新</div><div class="c-desc">通过抗阻力刺激成骨细胞，提升骨密度与心肺引擎，对抗机能衰老。</div></div>
         </div>
     </div>
@@ -317,10 +311,10 @@
             return m * 3888;
         }
 
-        // 🚨 包含顶部大图也使用对应的彩色图片
+        // 🚨 详情页内同步调用云端彩色图片水印
         const planData = {
             'posture': {
-                type: 'feature', icon: '<img src="strength_16292717.png">',
+                type: 'feature', icon: '<img src="https://cdn-icons-png.flaticon.com/512/16292/16292717.png">',
                 title: '体态矫正与结构优化', desc: '物理层面的结构重组，彻底切断疼痛代偿。',
                 p1_name: '筋膜解绑与痛点清零', p1_w: 4,
                 p1_goal: '<strong>打破骨骼错误排列</strong>，恢复关节活动度。', p1_tech: '深层剥离胸小肌与髂腰肌。', p1_feel: '练完感觉<strong>肩颈彻底放松</strong>。',
@@ -337,7 +331,7 @@
                 txt1: '初期改善：异常张力释放，肩颈舒展', txt2: '进阶蜕变：核心建立，气质初显', txt3: '深度定型：脊柱完美中立，绝美背影', txt4: '年度维稳：从骨骼到气质的终极升华'
             },
             'fatloss': {
-                type: 'regular', icon: '<img src="treadmill_12805546.png">',
+                type: 'regular', icon: '<img src="https://cdn-icons-png.flaticon.com/512/12805/12805546.png">',
                 title: '高效燃脂与代谢激活', desc: '重写身体基因，打造“24小时持续燃脂的火炉”。',
                 p1_name: '糖原排空与代谢唤醒', p1_w: 4,
                 p1_goal: '<strong>强行切入脂肪氧化通道</strong>。', p1_tech: '循环抗阻配合低GI饮食干预。', p1_feel: '迅速<strong>排干体内顽固水肿</strong>，体重掉秤快。',
@@ -354,7 +348,7 @@
                 txt1: '初期效果：水肿排空，体能极速唤醒', txt2: '进阶效果：围度缩小，内脏脂肪大量剥离', txt3: '深度定型：体脂降至黄金点，马甲线显现', txt4: '年度维稳：常态化极低体脂，身材自由'
             },
             'shape': {
-                type: 'regular', icon: '<img src="barbell_3340004.png">',
+                type: 'regular', icon: '<img src="https://cdn-icons-png.flaticon.com/512/3340/3340004.png">',
                 title: 'S型曲线精雕训练', desc: '物理剥离与3D填充，打造极具视觉杀伤力的身材比例。',
                 p1_name: '目标靶向极速激活', p1_w: 4,
                 p1_goal: '纠正错误发力，避免<strong>“练臀先粗腿”</strong>。', p1_tech: '孤立唤醒臀大肌上部与三角肌中束。', p1_feel: '体会到目标肌肉的<strong>深层酸胀泵感</strong>。',
@@ -371,7 +365,7 @@
                 txt1: '初期唤醒：臀部肌肉苏醒，发力感建立', txt2: '进阶填充：局部饱满度提升，臀线拉高', txt3: '深度定型：绝美腰臀比，极具视觉杀伤力', txt4: '年度维稳：超模级曲线锁死，肌肉质感极致'
             },
             'postpartum': {
-                type: 'feature', icon: '<img src="exercise_779980.png">',
+                type: 'feature', icon: '<img src="https://cdn-icons-png.flaticon.com/512/779/779980.png">',
                 title: '产后核心与体形恢复', desc: '无痛安全缝合腹直肌裂隙，助您重返少女级健康体态。',
                 p1_name: '盆底肌与内源安全修复', p1_w: 4,
                 p1_goal: '重建盆底功能，<strong>绝对禁止传统卷腹</strong>。', p1_tech: '横向呼吸法温和唤醒腹横肌。', p1_feel: '<strong>漏尿改善</strong>，核心脏器有明显归位感。',
@@ -388,7 +382,7 @@
                 txt1: '初期恢复：盆底激活，内源性功能重建', txt2: '进阶缝合：腹直肌闭合，核心力量回归', txt3: '深度定型：重返少女时代紧致身型', txt4: '年度维稳：机能全面超越孕前，顶级辣妈'
             },
             'rehab': {
-                type: 'feature', icon: '<img src="speech-bubble_2906460.png">',
+                type: 'feature', icon: '<img src="https://cdn-icons-png.flaticon.com/512/2906/2906460.png">',
                 title: '运动功能提升与防护', desc: '精准神经肌肉调控，重建受损关节力学稳定性。',
                 p1_name: '炎症消除与代偿切断', p1_w: 4,
                 p1_goal: '找出引起疼痛的<strong>错误发力源</strong>。', p1_tech: '激痛点按压技术释放代偿关节。', p1_feel: '<strong>弹响明显减少</strong>，尖锐刺痛感消失。',
@@ -405,7 +399,7 @@
                 txt1: '初期镇痛：软组织压力释放，疼痛消失', txt2: '进阶护甲：关节周围力量增强，建立保护', txt3: '满血重返：无惧任何发力，重返高强度', txt4: '年度维稳：绝对护甲锁定，巅峰运动表现'
             },
             'antiaging': {
-                type: 'regular', icon: '<img src="gym_8407060.png">',
+                type: 'regular', icon: '<img src="https://cdn-icons-png.flaticon.com/512/8407/8407060.png">',
                 title: '活力体能与状态焕新', desc: '提升骨密度与肌肉储备，为您打造不老的肉体盔甲。',
                 p1_name: '机能唤醒与润滑系统', p1_w: 4,
                 p1_goal: '促进滑液分泌，<strong>全面恢复生锈卡顿的机能</strong>。', p1_tech: '关节活动度打磨与全身筋膜链拉伸。', p1_feel: '<strong>晨起僵硬感消失，深度睡眠延长</strong>。',
@@ -646,8 +640,9 @@
             let totalExactSessions = 0;
             let maxPhaseSelected = 0;
             const data = planData[currentPlanKey];
-            if(!data) return;
             
+            if(!data) return;
+
             let customBox = document.getElementById('phase-5-box');
             let isCustom = customBox && customBox.classList.contains('selected');
 
@@ -711,10 +706,10 @@
             }
         }
 
-        // 弹窗内卡片点选交互
         function selectUpPlan(cardId, name, sessions, price) {
             document.querySelectorAll('.up-card').forEach(c => c.classList.remove('selected-card'));
             document.getElementById(cardId).classList.add('selected-card');
+            
             selectedUpsell = { name: name, sessions: sessions, price: price };
             if(navigator.vibrate) navigator.vibrate(20);
         }
@@ -724,7 +719,6 @@
             openSignature(selectedUpsell.name, selectedUpsell.sessions, selectedUpsell.price);
         }
 
-        // 智能报价分发
         function showUpsellModal() {
             if(globalTotalExact === 0) return;
             
@@ -807,7 +801,7 @@
                         <div class="vn-title">✦ 课程有效期与门店使用规范</div>
                         <ul class="vn-list">
                             <li><span>常规/特色课：</span>有效期按【5天/节】自动顺延计算。</li>
-                            <li><span>包月周期课：</span>按自然时效计算。时效内至多可预约私教课 16 节，其余时间尊享场地无限制。</li>
+                            <li><span>包月周期课：</span>按自然时效计算。时效内至多可预约私教课 16 节，其余时间尊享场地自由训练。</li>
                         </ul>
                     </div>
                 `;
