@@ -24,7 +24,6 @@
         .sol-card { position: relative; height: 180px; border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; justify-content: flex-end; cursor: pointer; border: 1px solid rgba(255,255,255,0.08); box-shadow: inset 0 0 30px rgba(0,0,0,0.8), 0 10px 20px rgba(0,0,0,0.5); transition: 0.3s; background: linear-gradient(145deg, #18181C, #050505); }
         .sol-card:active { transform: scale(0.96); border-color: var(--primary); box-shadow: 0 5px 15px rgba(212,175,55,0.2); }
         
-        /* 🚨 核心升级：彩色透明全息水印样式 */
         .watermark { position: absolute; right: -15px; bottom: -15px; width: 140px; height: 140px; opacity: 0.25; z-index: 1; pointer-events: none; transition: transform 0.5s ease, opacity 0.5s ease; filter: drop-shadow(0 0 8px rgba(212,175,55,0.2)); }
         .watermark img { width: 100%; height: 100%; object-fit: contain; }
         .sol-card:active .watermark { opacity: 0.4; transform: scale(1.1) translate(-5px, -5px); }
@@ -45,11 +44,8 @@
         .modal-body { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 20px 20px 140px; -webkit-overflow-scrolling: touch; }
         
         .hero-banner { border: 1px solid rgba(212, 175, 55, 0.3); border-radius: 16px; padding: 25px 20px; margin-bottom: 20px; background: linear-gradient(145deg, #16161A, #050505); box-shadow: 0 10px 30px rgba(0,0,0,0.5); position: relative; overflow: hidden;}
-        
-        /* 模态框顶部的大图也同步直连 */
         .hero-watermark { position: absolute; right: -20px; top: -20px; width: 140px; height: 140px; opacity: 0.15; pointer-events: none; filter: drop-shadow(0 0 15px rgba(255,255,255,0.1)); }
         .hero-watermark img { width: 100%; height: 100%; object-fit: contain; }
-
         .m-hero-title { font-size: 22px; font-weight: 900; color: #fff; margin-bottom: 10px; letter-spacing: 1px; position: relative; z-index: 2;}
         .m-hero-desc { font-size: 13px; color: var(--text-sub); line-height: 1.6; position: relative; z-index: 2;}
         
@@ -69,7 +65,7 @@
         .combo-box { border: 1px dashed rgba(212,175,55,0.4); background: linear-gradient(145deg, #18150D, #0A0A0C); margin-top: 30px; }
         .combo-box.selected { border: 1px solid var(--primary); background: linear-gradient(145deg, #2A2210, #0A0A0C); box-shadow: 0 10px 25px rgba(212,175,55,0.25); }
 
-        .check-circle { position: absolute; top: 20px; right: 20px; width: 22px; height: 22px; border-radius: 50%; border: 2px solid #444; display: flex; align-items: center; justify-content: center; transition: 0.3s; }
+        .check-circle { position: absolute; top: 20px; right: 20px; width: 22px; height: 22px; border-radius: 50%; border: 2px solid #444; display: flex; align-items: center; justify-content: center; transition: 0.3s; pointer-events: none;}
         .phase-box.selected .check-circle { border-color: var(--primary); background: var(--primary); }
         .check-circle::after { content: '✓'; color: #000; font-size: 14px; font-weight: 900; opacity: 0; transition: 0.3s; margin-top: 2px;}
         .phase-box.selected .check-circle::after { opacity: 1; }
@@ -89,14 +85,17 @@
         .p-name { font-size: 18px; font-weight: 900; color: #888; margin-bottom: 15px; transition: 0.3s;}
         .phase-box.selected .p-name { color: #fff; }
         
+        /* 🚨 活体编辑引擎样式 */
         .sales-points { display: flex; flex-direction: column; gap: 12px; opacity: 0.5; transition: 0.3s; }
         .phase-box.selected .sales-points { opacity: 1; }
         .sp-row { display: flex; align-items: flex-start; gap: 10px; font-size: 13px; line-height: 1.6; }
-        .sp-tag { flex-shrink: 0; font-size: 11px; font-weight: bold; padding: 3px 8px; border-radius: 4px; border: 1px solid; }
+        .sp-tag { flex-shrink: 0; font-size: 11px; font-weight: bold; padding: 3px 8px; border-radius: 4px; border: 1px solid; margin-top: 2px;}
         .tag-goal { color: #aaa; border-color: #555; background: rgba(255,255,255,0.05); }
         .tag-tech { color: #C5A059; border-color: rgba(212,175,55,0.4); background: rgba(212,175,55,0.05); }
         .tag-feel { color: #000; border-color: var(--primary); background: var(--primary); }
-        .sp-text { color: #ccc; }
+        
+        .sp-text { color: #ccc; flex: 1; border-bottom: 1px dashed rgba(212,175,55,0.2); padding-bottom: 3px; outline: none; transition: 0.3s; cursor: text; min-height: 22px;}
+        .sp-text:focus { border-bottom: 1px solid var(--primary); background: rgba(255,255,255,0.05); padding: 4px 6px; border-radius: 4px; color: #fff;}
         .sp-text strong { color: var(--primary); font-weight: bold; text-shadow: 0 0 8px rgba(212,175,55,0.3); }
 
         .custom-builder { margin-top: 15px; border-top: 1px dashed rgba(212,175,55,0.3); padding-top: 15px; display: flex; flex-direction: column; gap: 12px; }
@@ -127,7 +126,6 @@
         .btn-checkout:active { transform: scale(0.96); }
         .btn-checkout.disabled { background: #333; color: #666; box-shadow: none; pointer-events: none; }
 
-        /* 逼单弹窗样式 */
         .upsell-overlay { position: fixed; top:0; left:0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; opacity: 0; pointer-events: none; transition: 0.4s; backdrop-filter: blur(5px); }
         .upsell-overlay.show { opacity: 1; pointer-events: auto; }
         
@@ -311,7 +309,6 @@
             return m * 3888;
         }
 
-        // 🚨 详情页内同步调用云端彩色图片水印
         const planData = {
             'posture': {
                 type: 'feature', icon: '<img src="https://cdn-icons-png.flaticon.com/512/16292/16292717.png">',
@@ -458,9 +455,9 @@
                     </div>
                     <div class="p-name">${data.p1_name}</div>
                     <div class="sales-points">
-                        <div class="sp-row"><div class="sp-tag tag-goal">目标</div><div class="sp-text">${data.p1_goal}</div></div>
-                        <div class="sp-row"><div class="sp-tag tag-tech">技术</div><div class="sp-text">${data.p1_tech}</div></div>
-                        <div class="sp-row"><div class="sp-tag tag-feel">体感</div><div class="sp-text">${data.p1_feel}</div></div>
+                        <div class="sp-row"><div class="sp-tag tag-goal">目标</div><div class="sp-text editable-text" contenteditable="true" spellcheck="false" onclick="event.stopPropagation();">${data.p1_goal}</div></div>
+                        <div class="sp-row"><div class="sp-tag tag-tech">技术</div><div class="sp-text editable-text" contenteditable="true" spellcheck="false" onclick="event.stopPropagation();">${data.p1_tech}</div></div>
+                        <div class="sp-row"><div class="sp-tag tag-feel">体感</div><div class="sp-text editable-text" contenteditable="true" spellcheck="false" onclick="event.stopPropagation();">${data.p1_feel}</div></div>
                     </div>
                 </div>
 
@@ -473,9 +470,9 @@
                     </div>
                     <div class="p-name">${data.p2_name}</div>
                     <div class="sales-points">
-                        <div class="sp-row"><div class="sp-tag tag-goal">目标</div><div class="sp-text">${data.p2_goal}</div></div>
-                        <div class="sp-row"><div class="sp-tag tag-tech">技术</div><div class="sp-text">${data.p2_tech}</div></div>
-                        <div class="sp-row"><div class="sp-tag tag-feel">体感</div><div class="sp-text">${data.p2_feel}</div></div>
+                        <div class="sp-row"><div class="sp-tag tag-goal">目标</div><div class="sp-text editable-text" contenteditable="true" spellcheck="false" onclick="event.stopPropagation();">${data.p2_goal}</div></div>
+                        <div class="sp-row"><div class="sp-tag tag-tech">技术</div><div class="sp-text editable-text" contenteditable="true" spellcheck="false" onclick="event.stopPropagation();">${data.p2_tech}</div></div>
+                        <div class="sp-row"><div class="sp-tag tag-feel">体感</div><div class="sp-text editable-text" contenteditable="true" spellcheck="false" onclick="event.stopPropagation();">${data.p2_feel}</div></div>
                     </div>
                 </div>
 
@@ -488,9 +485,9 @@
                     </div>
                     <div class="p-name">${data.p3_name}</div>
                     <div class="sales-points">
-                        <div class="sp-row"><div class="sp-tag tag-goal">目标</div><div class="sp-text">${data.p3_goal}</div></div>
-                        <div class="sp-row"><div class="sp-tag tag-tech">技术</div><div class="sp-text">${data.p3_tech}</div></div>
-                        <div class="sp-row"><div class="sp-tag tag-feel">体感</div><div class="sp-text">${data.p3_feel}</div></div>
+                        <div class="sp-row"><div class="sp-tag tag-goal">目标</div><div class="sp-text editable-text" contenteditable="true" spellcheck="false" onclick="event.stopPropagation();">${data.p3_goal}</div></div>
+                        <div class="sp-row"><div class="sp-tag tag-tech">技术</div><div class="sp-text editable-text" contenteditable="true" spellcheck="false" onclick="event.stopPropagation();">${data.p3_tech}</div></div>
+                        <div class="sp-row"><div class="sp-tag tag-feel">体感</div><div class="sp-text editable-text" contenteditable="true" spellcheck="false" onclick="event.stopPropagation();">${data.p3_feel}</div></div>
                     </div>
                 </div>
 
@@ -503,9 +500,9 @@
                     </div>
                     <div class="p-name">${data.p4_name}</div>
                     <div class="sales-points">
-                        <div class="sp-row"><div class="sp-tag tag-goal">目标</div><div class="sp-text">${data.p4_goal}</div></div>
-                        <div class="sp-row"><div class="sp-tag tag-tech">技术</div><div class="sp-text">${data.p4_tech}</div></div>
-                        <div class="sp-row"><div class="sp-tag tag-feel">体感</div><div class="sp-text">${data.p4_feel}</div></div>
+                        <div class="sp-row"><div class="sp-tag tag-goal">目标</div><div class="sp-text editable-text" contenteditable="true" spellcheck="false" onclick="event.stopPropagation();">${data.p4_goal}</div></div>
+                        <div class="sp-row"><div class="sp-tag tag-tech">技术</div><div class="sp-text editable-text" contenteditable="true" spellcheck="false" onclick="event.stopPropagation();">${data.p4_tech}</div></div>
+                        <div class="sp-row"><div class="sp-tag tag-feel">体感</div><div class="sp-text editable-text" contenteditable="true" spellcheck="false" onclick="event.stopPropagation();">${data.p4_feel}</div></div>
                     </div>
                 </div>
 
@@ -558,7 +555,6 @@
             updateCheckout(); 
         }
 
-        // 🚨 终极返回与记忆清除函数
         function finishAndReturn() {
             document.getElementById('signatureModal').classList.remove('show');
             document.getElementById('detailModal').classList.remove('show');
@@ -709,7 +705,6 @@
         function selectUpPlan(cardId, name, sessions, price) {
             document.querySelectorAll('.up-card').forEach(c => c.classList.remove('selected-card'));
             document.getElementById(cardId).classList.add('selected-card');
-            
             selectedUpsell = { name: name, sessions: sessions, price: price };
             if(navigator.vibrate) navigator.vibrate(20);
         }
@@ -736,7 +731,6 @@
                 let f = parseInt(document.getElementById('cb-feat').value) || 0;
                 let m = parseInt(document.getElementById('cb-mon').value) || 0;
 
-                // 方案一：满配
                 let oriReg1 = r * getUnitPrice(r, 'regular');
                 let oriFeat1 = f * getUnitPrice(f, 'feature');
                 let oriMon1 = m > 0 ? getMonthlyPrice(m) : 0;
@@ -745,7 +739,6 @@
                 let newReg1 = r * 350; let newFeat1 = f * 380;
                 let totalNew1 = newReg1 + newFeat1 + oriMon1;
 
-                // 方案二：原价半程包
                 let r2 = Math.ceil(r / 2);
                 let f2 = Math.ceil(f / 2);
                 let m2 = m;
@@ -801,7 +794,7 @@
                         <div class="vn-title">✦ 课程有效期与门店使用规范</div>
                         <ul class="vn-list">
                             <li><span>常规/特色课：</span>有效期按【5天/节】自动顺延计算。</li>
-                            <li><span>包月周期课：</span>按自然时效计算。时效内至多可预约私教课 16 节，其余时间尊享场地自由训练。</li>
+                            <li><span>包月周期课：</span>按自然时效计算。时效内至多可预约私教课 16 节，其余时间尊享场地无限制。</li>
                         </ul>
                     </div>
                 `;
@@ -809,7 +802,6 @@
                 selectUpPlan('card-scheme-1', '【专属高定】全息私享包', `${r+f}节+${m}个月`, `¥ ${formatMoney(totalNew1)}`);
 
             } else {
-                // ====== 标准双轨 ======
                 let phaseNames = [];
                 document.querySelectorAll('.phase-box.selected:not(.combo-box)').forEach(box => {
                     let pStep = box.querySelector('.p-step').innerText; 
@@ -903,7 +895,6 @@
             
             document.getElementById('signatureModal').classList.add('show');
             
-            // 恢复默认画板结构
             document.getElementById('sig-pad-wrap').innerHTML = `
                 <div class="sig-summary" id="sig-summary-box">
                     <div class="sig-sum-title">即将为您锁定以下专属重塑方案：</div>
@@ -993,7 +984,6 @@
             if(ph) ph.style.display = 'block';
         }
 
-        // 合成并生成可保存的图片
         function generateContractImage() {
             if(!sigCtx) return;
 
