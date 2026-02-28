@@ -3,174 +3,151 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>R玥精致健身 | 私教报价系统</title>
+    <title>R玥精致健身 | 全景报价矩阵</title>
     <style>
         /* 顶级香槟黑金配色 */
-        :root { --primary: #E8C37C; --primary-dark: #C69A45; --bg-deep: #08080A; --card-light: #16161A; --card-dark: #0D0D0F; --text-main: #FFFFFF; --text-sub: #A0A0AB; }
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; margin: 0; padding: 0; }
-        body { background: var(--bg-deep); background-image: radial-gradient(circle at 50% 0%, rgba(232, 195, 124, 0.08) 0%, transparent 60%); color: var(--text-main); font-family: "DIN Alternate", -apple-system, sans-serif; overflow-x: hidden; display: flex; flex-direction: column; min-height: 100vh; }
+        :root { --primary: #D4AF37; --accent: #C5A059; --bg: #050505; --surface: #121212; --text-main: #E2E8F0; --text-sub: #8A92A3; }
         
-        .header-brand { width: 100%; height: 60px; display: flex; align-items: center; justify-content: center; background: rgba(8, 8, 10, 0.85); position: sticky; top: 0; z-index: 50; border-bottom: 1px solid rgba(232, 195, 124, 0.15); backdrop-filter: blur(15px);}
-        .brand-text { font-size: 17px; font-weight: 900; color: var(--primary); letter-spacing: 2px; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; margin: 0; padding: 0; }
+        html, body { width: 100%; height: 100%; overflow: hidden; background: var(--bg); color: var(--text-main); font-family: "DIN Alternate", -apple-system, sans-serif; -webkit-font-smoothing: antialiased; display: flex; flex-direction: column; }
+        
+        /* 顶部标题栏 */
+        .header-brand { width: 100%; height: 60px; display: flex; align-items: center; justify-content: center; background: rgba(5, 5, 5, 0.95); position: relative; z-index: 50; border-bottom: 1px solid rgba(212, 175, 55, 0.15); flex-shrink: 0;}
+        .brand-text { font-size: 16px; font-weight: 900; color: var(--primary); letter-spacing: 2px; }
 
         /* 顶部切换 Tab */
-        .seg-control { display: flex; background: #121215; border-radius: 12px; padding: 6px; margin: 25px 20px 20px; border: 1px solid rgba(255,255,255,0.05); position: sticky; top: 75px; z-index: 40; box-shadow: 0 10px 20px rgba(0,0,0,0.8); }
-        .seg-btn { flex: 1; text-align: center; padding: 12px 0; font-size: 14px; font-weight: bold; color: #666; border-radius: 8px; transition: 0.3s; cursor: pointer; }
-        .seg-btn.active { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: #000; box-shadow: 0 4px 10px rgba(232, 195, 124, 0.3); }
+        .seg-control { display: flex; background: #111; border-radius: 10px; padding: 5px; margin: 15px 15px 10px; border: 1px solid rgba(255,255,255,0.05); flex-shrink: 0; }
+        .seg-btn { flex: 1; text-align: center; padding: 10px 0; font-size: 13px; font-weight: bold; color: #666; border-radius: 6px; transition: 0.3s; cursor: pointer; }
+        .seg-btn.active { background: linear-gradient(135deg, var(--primary), #AA8A2A); color: #000; box-shadow: 0 4px 10px rgba(212, 175, 55, 0.3); }
 
-        .swiper-container { width: 100%; padding: 0 20px 100px; display: flex; flex-direction: column; }
-        .price-section { display: none; flex-direction: column; gap: 15px; animation: fadeIn 0.4s ease; }
+        /* 核心内容区 */
+        .matrix-container { flex: 1; width: 100%; padding: 5px 15px 90px; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+        .price-section { display: none; flex-direction: column; gap: 12px; animation: fadeIn 0.4s ease; height: 100%; justify-content: flex-start;}
         .price-section.active { display: flex; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
 
-        /* 🚨 全新直给式阶梯卡片设计 */
-        .price-card { background: linear-gradient(145deg, var(--card-light), var(--card-dark)); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 22px 20px; position: relative; overflow: hidden; display: flex; flex-direction: column; gap: 16px; box-shadow: 0 8px 25px rgba(0,0,0,0.5); transition: transform 0.2s ease;}
-        .price-card:active { transform: scale(0.98); }
+        /* 🚨 宫格矩阵排版 (2列) */
+        .grid-2x2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
         
-        /* VIP 主推款样式 */
-        .price-card.vip { border-color: rgba(232, 195, 124, 0.6); background: linear-gradient(145deg, #1F1910, #0A0A0C); box-shadow: 0 10px 30px rgba(232, 195, 124, 0.15); margin-top: 10px; margin-bottom: 10px; transform: scale(1.02);}
-        .price-card.vip:active { transform: scale(1); }
-        .vip-badge { position: absolute; top: 0; right: 0; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: #000; font-size: 10px; font-weight: 900; padding: 5px 12px; border-radius: 0 0 0 12px; letter-spacing: 1px;}
+        /* 卡片极简设计 */
+        .matrix-card { background: linear-gradient(145deg, #16161A, #0A0A0C); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 18px 15px; position: relative; cursor: pointer; transition: 0.2s; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 5px 15px rgba(0,0,0,0.5);}
+        .matrix-card:active { transform: scale(0.96); }
+        
+        /* 选中状态 */
+        .matrix-card.selected { border-color: var(--primary); background: linear-gradient(145deg, #1C1810, #050505); box-shadow: inset 0 0 20px rgba(212,175,55,0.05), 0 8px 20px rgba(212,175,55,0.2); }
+        .matrix-card.selected::before { content: ''; position: absolute; top: -1px; left: -1px; right: -1px; bottom: -1px; border-radius: 12px; border: 2px solid var(--primary); pointer-events: none; z-index: 10;}
+        .matrix-card.selected::after { content: '✓'; position: absolute; top: 10px; right: 10px; color: var(--primary); font-size: 14px; font-weight: bold; background: rgba(212,175,55,0.1); border-radius: 50%; width: 20px; height: 20px; text-align: center; line-height: 20px;}
 
-        /* 卡片上部：课时与价格对冲 */
-        .pc-top { display: flex; justify-content: space-between; align-items: flex-start; }
-        .pc-title { display: flex; flex-direction: column; gap: 2px; }
-        .pc-count { font-size: 26px; font-weight: 900; color: #fff; line-height: 1.1; }
-        .vip .pc-count { color: var(--primary); font-size: 30px;}
-        .pc-count span { font-size: 12px; color: var(--text-sub); font-weight: normal; margin-left: 2px;}
-        .pc-desc { font-size: 11px; color: #888; margin-top: 4px; }
-        .time-badge { background: rgba(255,255,255,0.1); padding: 2px 6px; border-radius: 4px; color: #ccc; font-size: 9px; margin-left: 4px;}
+        /* VIP 主推金卡 */
+        .matrix-card.vip { background: linear-gradient(145deg, #241D10, #0A0A0C); border-color: rgba(212,175,55,0.5); }
+        .vip-tag { position: absolute; top: 0; left: 0; background: linear-gradient(90deg, var(--accent), var(--primary)); color: #000; font-size: 9px; font-weight: 900; padding: 3px 8px; border-radius: 11px 0 8px 0; }
 
-        .pc-price { text-align: right; display: flex; flex-direction: column; gap: 2px; }
-        .pc-total { font-size: 20px; font-weight: 900; color: #fff; line-height: 1.1; display: flex; align-items: baseline; justify-content: flex-end; gap: 2px;}
-        .pc-total span { font-size: 13px; color: #888;}
-        .vip .pc-total { font-size: 26px; color: #fff; }
-        .vip .pc-total span { color: var(--primary); }
-        .pc-unit { font-size: 11px; color: #888; margin-top: 4px;}
-        .vip .pc-unit { color: var(--primary); font-weight: bold;}
+        /* 横向满宽卡片 (大课包专用) */
+        .full-width-card { grid-column: span 2; display: flex; flex-direction: row; justify-content: space-between; align-items: center; padding: 15px 20px;}
+        
+        /* 卡片内部数据呈现 */
+        .mc-top { margin-bottom: 12px; }
+        .mc-sessions { font-size: 26px; font-weight: 900; color: #fff; line-height: 1; }
+        .vip .mc-sessions { color: var(--primary); font-size: 30px; }
+        .mc-sessions span { font-size: 11px; color: #888; font-weight: normal; margin-left: 2px;}
+        .mc-title { font-size: 11px; color: #aaa; margin-top: 6px; letter-spacing: 1px;}
+        .vip .mc-title { color: #ccc; }
 
-        /* 分割线 */
-        .pc-divider { width: 100%; height: 1px; background: rgba(255,255,255,0.05); }
-        .vip .pc-divider { background: rgba(232, 195, 124, 0.2); }
+        .mc-bottom { border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 10px; display: flex; flex-direction: column; gap: 2px;}
+        .mc-total { font-size: 18px; font-weight: 900; color: #fff; display: flex; align-items: baseline; gap: 2px;}
+        .mc-total span { font-size: 12px; color: #888; font-weight: normal;}
+        .vip .mc-total { font-size: 22px; color: var(--primary); }
+        .mc-unit { font-size: 10px; color: #666; }
 
-        /* 卡片下部：核心权益直展 */
-        .pc-benefits { display: flex; flex-direction: column; gap: 8px; }
-        .pb-item { font-size: 12px; color: #aaa; display: flex; align-items: flex-start; gap: 8px; line-height: 1.5;}
-        .vip .pb-item { color: #ddd; }
-        .pb-item::before { content: '✦'; color: #555; font-size: 10px; margin-top: 2px;}
-        .vip .pb-item::before { color: var(--primary); }
+        /* 大卡片横向布局修正 */
+        .fw-left { display: flex; flex-direction: column; }
+        .fw-right { text-align: right; }
+        .fw-right .mc-total { justify-content: flex-end; font-size: 20px;}
 
-        /* 底部操作栏 */
-        .bottom-action { position: fixed; bottom: 0; left: 0; width: 100%; padding: 15px 20px 25px; background: linear-gradient(to top, rgba(8,8,10,1) 70%, rgba(8,8,10,0)); z-index: 100; }
-        .btn-generate { width: 100%; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: #000; border: none; padding: 16px; border-radius: 12px; font-size: 16px; font-weight: 900; box-shadow: 0 8px 25px rgba(232, 195, 124, 0.3); cursor: pointer; transition: 0.2s;}
-        .btn-generate:active { transform: scale(0.98); }
+        /* 底部固定操作栏 */
+        .bottom-action { position: fixed; bottom: 0; left: 0; width: 100%; padding: 15px 20px 25px; background: rgba(5,5,5,0.95); border-top: 1px solid rgba(212,175,55,0.2); backdrop-filter: blur(15px); z-index: 100; display: flex; justify-content: space-between; align-items: center;}
+        
+        .ba-info { display: flex; flex-direction: column; }
+        .ba-lbl { font-size: 11px; color: #888; margin-bottom: 2px;}
+        .ba-val { font-size: 18px; font-weight: 900; color: #fff; }
+        .ba-val span { font-size: 12px; color: var(--primary); margin-left: 4px; }
+
+        .btn-generate { background: linear-gradient(135deg, var(--primary), #AA8A2A); color: #000; border: none; padding: 14px 24px; border-radius: 12px; font-size: 15px; font-weight: 900; box-shadow: 0 5px 20px rgba(212, 175, 55, 0.3); cursor: pointer; transition: 0.2s;}
+        .btn-generate:active { transform: scale(0.96); }
+        .btn-generate.disabled { background: #333; color: #666; box-shadow: none; pointer-events: none; }
     </style>
 </head>
 <body>
 
     <div class="header-brand">
-        <div class="brand-text">R玥精致健身私教馆价格表</div>
+        <div class="brand-text">R玥精致健身 | 阶梯报价矩阵</div>
     </div>
 
     <div class="seg-control">
-        <div class="seg-btn active" onclick="switchView('regular', this)">常规方案</div>
-        <div class="seg-btn" onclick="switchView('feature', this)">特色高定</div>
-        <div class="seg-btn" onclick="switchView('monthly', this)">尊享包月</div>
+        <div class="seg-btn active" onclick="switchView('regular', this)">常规特训</div>
+        <div class="seg-btn" onclick="switchView('feature', this)">高定干预</div>
+        <div class="seg-btn" onclick="switchView('monthly', this)">极速包月</div>
     </div>
 
-    <div class="swiper-container">
+    <div class="matrix-container">
         
         <div id="view-regular" class="price-section active">
             
-            <div class="price-card">
-                <div class="pc-top">
-                    <div class="pc-title">
-                        <div class="pc-count">12<span>课时</span></div>
-                        <div class="pc-desc">常规课 (减脂/增肌/塑形) <span class="time-badge">60min</span></div>
+            <div class="grid-2x2">
+                <div class="matrix-card" onclick="selectCard(this, '常规入门激活', 12, '¥ 5,280')">
+                    <div class="mc-top">
+                        <div class="mc-sessions">12<span>节</span></div>
+                        <div class="mc-title">入门激活 (60min)</div>
                     </div>
-                    <div class="pc-price">
-                        <div class="pc-total"><span>¥</span> 5,280</div>
-                        <div class="pc-unit">阶梯核算 ¥440/节</div>
+                    <div class="mc-bottom">
+                        <div class="mc-total"><span>¥</span>5,280</div>
+                        <div class="mc-unit">阶梯核算 ¥440/节</div>
                     </div>
                 </div>
-                <div class="pc-divider"></div>
-                <div class="pc-benefits">
-                    <div class="pb-item">建立肌肉发力基础与神经募集感</div>
-                    <div class="pb-item">12次 完整60分钟一对一专业训练</div>
-                </div>
-            </div>
 
-            <div class="price-card">
-                <div class="pc-top">
-                    <div class="pc-title">
-                        <div class="pc-count">24<span>课时</span></div>
-                        <div class="pc-desc">常规课 (减脂/增肌/塑形) <span class="time-badge">60min</span></div>
+                <div class="matrix-card" onclick="selectCard(this, '常规基础重塑', 24, '¥ 10,080')">
+                    <div class="mc-top">
+                        <div class="mc-sessions">24<span>节</span></div>
+                        <div class="mc-title">基础重塑 (60min)</div>
                     </div>
-                    <div class="pc-price">
-                        <div class="pc-total"><span>¥</span> 10,080</div>
-                        <div class="pc-unit">阶梯核算 ¥420/节</div>
+                    <div class="mc-bottom">
+                        <div class="mc-total"><span>¥</span>10,080</div>
+                        <div class="mc-unit">阶梯核算 ¥420/节</div>
                     </div>
                 </div>
-                <div class="pc-divider"></div>
-                <div class="pc-benefits">
-                    <div class="pb-item">初始阶段全息体态扫描评估</div>
-                    <div class="pb-item">基础饮食结构与代谢框架搭建</div>
-                </div>
-            </div>
 
-            <div class="price-card vip">
-                <div class="vip-badge">店长主推 / MOST POPULAR</div>
-                <div class="pc-top">
-                    <div class="pc-title">
-                        <div class="pc-count">48<span>课时</span></div>
-                        <div class="pc-desc">常规课 (减脂/增肌/塑形) <span class="time-badge">60min</span></div>
+                <div class="matrix-card vip selected" onclick="selectCard(this, '常规进阶蜕变', 48, '¥ 19,200')">
+                    <div class="vip-tag">店长主推款</div>
+                    <div class="mc-top" style="margin-top:8px;">
+                        <div class="mc-sessions">48<span>节</span></div>
+                        <div class="mc-title">进阶蜕变 (60min)</div>
                     </div>
-                    <div class="pc-price">
-                        <div class="pc-total"><span>¥</span> 19,200</div>
-                        <div class="pc-unit">阶梯特惠 ¥400/节</div>
+                    <div class="mc-bottom">
+                        <div class="mc-total"><span>¥</span>19,200</div>
+                        <div class="mc-unit" style="color:var(--primary)">阶梯特惠 ¥400/节</div>
                     </div>
                 </div>
-                <div class="pc-divider"></div>
-                <div class="pc-benefits">
-                    <div class="pb-item">完成体型视觉层面的明显跨越与蜕变</div>
-                    <div class="pb-item">赠送阶段性体态全息精准复测 (2次)</div>
-                    <div class="pb-item">每日餐食精细化打卡与教练严格监督</div>
-                </div>
-            </div>
 
-            <div class="price-card">
-                <div class="pc-top">
-                    <div class="pc-title">
-                        <div class="pc-count">72<span>课时</span></div>
-                        <div class="pc-desc">常规课 (减脂/增肌/塑形) <span class="time-badge">60min</span></div>
+                <div class="matrix-card" onclick="selectCard(this, '常规高阶精雕', 72, '¥ 27,360')">
+                    <div class="mc-top">
+                        <div class="mc-sessions">72<span>节</span></div>
+                        <div class="mc-title">高阶精雕 (60min)</div>
                     </div>
-                    <div class="pc-price">
-                        <div class="pc-total"><span>¥</span> 27,360</div>
-                        <div class="pc-unit">阶梯极值 ¥380/节</div>
+                    <div class="mc-bottom">
+                        <div class="mc-total"><span>¥</span>27,360</div>
+                        <div class="mc-unit">阶梯极值 ¥380/节</div>
                     </div>
-                </div>
-                <div class="pc-divider"></div>
-                <div class="pc-benefits">
-                    <div class="pb-item">深层脂肪剥离，打造高级肌肉线条</div>
-                    <div class="pb-item">每月度体态雷达诊断与方案动态微调</div>
                 </div>
             </div>
             
-            <div class="price-card" style="opacity: 0.8;">
-                <div class="pc-top">
-                    <div class="pc-title">
-                        <div class="pc-count">100/150<span>课时</span></div>
-                        <div class="pc-desc">年度常规身材托管 <span class="time-badge">60min</span></div>
-                    </div>
-                    <div class="pc-price">
-                        <div class="pc-total"><span>单价低至</span> ¥ 330</div>
-                        <div class="pc-unit">100节 ¥350 | 150节 ¥330</div>
-                    </div>
+            <div class="matrix-card full-width-card" onclick="selectCard(this, '常规年度托管', '100/150节', '按需核算')">
+                <div class="fw-left">
+                    <div class="mc-sessions">100/150<span>节</span></div>
+                    <div class="mc-title">年度终身托管保障</div>
                 </div>
-                <div class="pc-divider"></div>
-                <div class="pc-benefits">
-                    <div class="pb-item">享受门店最高优享排课权</div>
-                    <div class="pb-item">抗衰老机能永久固化与终身身材保障</div>
+                <div class="fw-right">
+                    <div class="mc-total"><span>单价低至 ¥</span>330</div>
+                    <div class="mc-unit">100节 ¥350 | 150节 ¥330</div>
                 </div>
             </div>
 
@@ -178,77 +155,61 @@
 
         <div id="view-feature" class="price-section">
             
-            <div class="price-card">
-                <div class="pc-top">
-                    <div class="pc-title">
-                        <div class="pc-count">24<span>课时</span></div>
-                        <div class="pc-desc">拉伸/康复/普拉提等 <span class="time-badge">45min</span></div>
+            <div class="grid-2x2">
+                <div class="matrix-card" onclick="selectCard(this, '特色单项微调', 12, '¥ 5,520')">
+                    <div class="mc-top">
+                        <div class="mc-sessions">12<span>节</span></div>
+                        <div class="mc-title">单项微调 (45min)</div>
                     </div>
-                    <div class="pc-price">
-                        <div class="pc-total"><span>¥</span> 10,560</div>
-                        <div class="pc-unit">阶梯核算 ¥440/节</div>
+                    <div class="mc-bottom">
+                        <div class="mc-total"><span>¥</span>5,520</div>
+                        <div class="mc-unit">阶梯核算 ¥460/节</div>
                     </div>
                 </div>
-                <div class="pc-divider"></div>
-                <div class="pc-benefits">
-                    <div class="pb-item">专项结构力学评估，找出代偿痛点</div>
-                    <div class="pb-item">针对性解决轻度运动损伤、僵硬与不对称</div>
+
+                <div class="matrix-card" onclick="selectCard(this, '特色专项干预', 24, '¥ 10,560')">
+                    <div class="mc-top">
+                        <div class="mc-sessions">24<span>节</span></div>
+                        <div class="mc-title">专项干预 (45min)</div>
+                    </div>
+                    <div class="mc-bottom">
+                        <div class="mc-total"><span>¥</span>10,560</div>
+                        <div class="mc-unit">阶梯核算 ¥440/节</div>
+                    </div>
+                </div>
+
+                <div class="matrix-card vip selected" onclick="selectCard(this, '特色系统重塑', 48, '¥ 20,160')">
+                    <div class="vip-tag">系统全息重塑</div>
+                    <div class="mc-top" style="margin-top:8px;">
+                        <div class="mc-sessions">48<span>节</span></div>
+                        <div class="mc-title">康复/普拉提 (45min)</div>
+                    </div>
+                    <div class="mc-bottom">
+                        <div class="mc-total"><span>¥</span>20,160</div>
+                        <div class="mc-unit" style="color:var(--primary)">阶梯特惠 ¥420/节</div>
+                    </div>
+                </div>
+
+                <div class="matrix-card" onclick="selectCard(this, '特色神经控制', 72, '¥ 28,800')">
+                    <div class="mc-top">
+                        <div class="mc-sessions">72<span>节</span></div>
+                        <div class="mc-title">神经控制 (45min)</div>
+                    </div>
+                    <div class="mc-bottom">
+                        <div class="mc-total"><span>¥</span>28,800</div>
+                        <div class="mc-unit">阶梯极值 ¥400/节</div>
+                    </div>
                 </div>
             </div>
 
-            <div class="price-card vip">
-                <div class="vip-badge">系统重塑 / MOST POPULAR</div>
-                <div class="pc-top">
-                    <div class="pc-title">
-                        <div class="pc-count">48<span>课时</span></div>
-                        <div class="pc-desc">拉伸/康复/普拉提等 <span class="time-badge">45min</span></div>
-                    </div>
-                    <div class="pc-price">
-                        <div class="pc-total"><span>¥</span> 20,160</div>
-                        <div class="pc-unit">阶梯特惠 ¥420/节</div>
-                    </div>
+            <div class="matrix-card full-width-card" onclick="selectCard(this, '特色顶级护航', '100/150节', '按需核算')">
+                <div class="fw-left">
+                    <div class="mc-sessions">100/150<span>节</span></div>
+                    <div class="mc-title">特色顶级护航计划</div>
                 </div>
-                <div class="pc-divider"></div>
-                <div class="pc-benefits">
-                    <div class="pb-item">系统性疼痛剥离与深层筋膜重塑</div>
-                    <div class="pb-item">可根据进度自由组合各项特色干预课程</div>
-                    <div class="pb-item">彻底改善骨盆前倾、圆肩驼背等顽固不良体态</div>
-                </div>
-            </div>
-
-            <div class="price-card">
-                <div class="pc-top">
-                    <div class="pc-title">
-                        <div class="pc-count">72<span>课时</span></div>
-                        <div class="pc-desc">拉伸/康复/普拉提等 <span class="time-badge">45min</span></div>
-                    </div>
-                    <div class="pc-price">
-                        <div class="pc-total"><span>¥</span> 28,800</div>
-                        <div class="pc-unit">阶梯极值 ¥400/节</div>
-                    </div>
-                </div>
-                <div class="pc-divider"></div>
-                <div class="pc-benefits">
-                    <div class="pb-item">高阶核心控制与全身神经张力重新分配</div>
-                    <div class="pb-item">高阶特色设备与康复器械无限制使用权</div>
-                </div>
-            </div>
-
-            <div class="price-card" style="opacity: 0.8;">
-                <div class="pc-top">
-                    <div class="pc-title">
-                        <div class="pc-count">100/150<span>课时</span></div>
-                        <div class="pc-desc">年度极致特色定制 <span class="time-badge">45min</span></div>
-                    </div>
-                    <div class="pc-price">
-                        <div class="pc-total"><span>单价低至</span> ¥ 350</div>
-                        <div class="pc-unit">100节 ¥380 | 150节 ¥350</div>
-                    </div>
-                </div>
-                <div class="pc-divider"></div>
-                <div class="pc-benefits">
-                    <div class="pb-item">全面覆盖所有顶级康复与精细塑形需求</div>
-                    <div class="pb-item">建立完美的身体控制力与柔韧度护甲</div>
+                <div class="fw-right">
+                    <div class="mc-total"><span>单价低至 ¥</span>350</div>
+                    <div class="mc-unit">100节 ¥380 | 150节 ¥350</div>
                 </div>
             </div>
 
@@ -256,78 +217,58 @@
 
         <div id="view-monthly" class="price-section">
             
-            <div class="price-card">
-                <div class="pc-top">
-                    <div class="pc-title">
-                        <div class="pc-count">1<span>个月</span></div>
-                        <div class="pc-desc">单人包月课程 <span class="time-badge">45min</span></div>
+            <div class="grid-2x2">
+                <div class="matrix-card" onclick="selectCard(this, '单月突击卡', '1个月', '¥ 3,888')">
+                    <div class="mc-top">
+                        <div class="mc-sessions">1<span>个月</span></div>
+                        <div class="mc-title">突击重塑体验</div>
                     </div>
-                    <div class="pc-price">
-                        <div class="pc-total"><span>¥</span> 3,888</div>
-                        <div class="pc-unit">突击重塑体验</div>
+                    <div class="mc-bottom">
+                        <div class="mc-total"><span>¥</span>3,888</div>
+                        <div class="mc-unit">最高可约 16 节</div>
                     </div>
                 </div>
-                <div class="pc-divider"></div>
-                <div class="pc-benefits">
-                    <div class="pb-item">时效内最高可约16节私教，高频次打卡</div>
-                    <div class="pb-item">30天沉浸式减脂，养成极度自律习惯</div>
+
+                <div class="matrix-card" onclick="selectCard(this, '双月平台卡', '2个月', '¥ 7,200')">
+                    <div class="mc-top">
+                        <div class="mc-sessions">2<span>个月</span></div>
+                        <div class="mc-title">跨越平台期</div>
+                    </div>
+                    <div class="mc-bottom">
+                        <div class="mc-total"><span>¥</span>7,200</div>
+                        <div class="mc-unit">折合 ¥3600/月</div>
+                    </div>
+                </div>
+
+                <div class="matrix-card vip selected" onclick="selectCard(this, '季卡深度重塑', '3个月', '¥ 9,600')">
+                    <div class="vip-tag">最具性价比</div>
+                    <div class="mc-top" style="margin-top:8px;">
+                        <div class="mc-sessions">3<span>个月</span></div>
+                        <div class="mc-title">季卡深度重塑</div>
+                    </div>
+                    <div class="mc-bottom">
+                        <div class="mc-total"><span>¥</span>9,600</div>
+                        <div class="mc-unit" style="color:var(--primary)">折合仅 ¥3200/月</div>
+                    </div>
+                </div>
+
+                <div class="matrix-card" onclick="selectCard(this, '半年逆龄卡', '6个月', '¥ 18,000')">
+                    <div class="mc-top">
+                        <div class="mc-sessions">6<span>个月</span></div>
+                        <div class="mc-title">半年逆龄特权</div>
+                    </div>
+                    <div class="mc-bottom">
+                        <div class="mc-total"><span>¥</span>18,000</div>
+                        <div class="mc-unit">折合仅 ¥3000/月</div>
+                    </div>
                 </div>
             </div>
 
-            <div class="price-card">
-                <div class="pc-top">
-                    <div class="pc-title">
-                        <div class="pc-count">2<span>个月</span></div>
-                        <div class="pc-desc">单人包月课程 <span class="time-badge">45min</span></div>
-                    </div>
-                    <div class="pc-price">
-                        <div class="pc-total"><span>¥</span> 7,200</div>
-                        <div class="pc-unit">折合每月仅 ¥3,600</div>
-                    </div>
-                </div>
-                <div class="pc-divider"></div>
-                <div class="pc-benefits">
-                    <div class="pb-item">60天稳步跨越平台期，巩固代谢成果</div>
-                    <div class="pb-item">全天候饮食监控与指导调整</div>
-                </div>
-            </div>
-
-            <div class="price-card vip">
-                <div class="vip-badge">极致性价比 / BEST VALUE</div>
-                <div class="pc-top">
-                    <div class="pc-title">
-                        <div class="pc-count">3<span>个月 (季卡)</span></div>
-                        <div class="pc-desc">单人包月课程 <span class="time-badge">45min</span></div>
-                    </div>
-                    <div class="pc-price">
-                        <div class="pc-total"><span>¥</span> 9,600</div>
-                        <div class="pc-unit">折合每月仅 ¥3,200</div>
-                    </div>
-                </div>
-                <div class="pc-divider"></div>
-                <div class="pc-benefits">
-                    <div class="pb-item">90天系统重塑，彻底解决痛点实现形体大改</div>
-                    <div class="pb-item">对比单月卡，本方案每月立省近 700 元！</div>
-                    <div class="pb-item">优先保障高峰期黄金排课位与专属指导</div>
-                </div>
-            </div>
-
-            <div class="price-card">
-                <div class="pc-top">
-                    <div class="pc-title">
-                        <div class="pc-count">6<span>个月 (半年卡)</span></div>
-                        <div class="pc-desc">单人包月课程 <span class="time-badge">45min</span></div>
-                    </div>
-                    <div class="pc-price">
-                        <div class="pc-total"><span>¥</span> 18,000</div>
-                        <div class="pc-unit">折合每月仅 ¥3,000</div>
-                    </div>
-                </div>
-                <div class="pc-divider"></div>
-                <div class="pc-benefits">
-                    <div class="pb-item">彻底锁定极低月均价与顶尖教练时间资源</div>
-                    <div class="pb-item">180天逆龄生长，包揽半年健康干预</div>
-                    <div class="pb-item">打造顶配抗衰肉体与雷打不动的易瘦体质</div>
+            <div class="matrix-card full-width-card" style="border-style: dashed; opacity: 0.7;">
+                <div style="font-size: 11px; color: #888; line-height: 1.6;">
+                    * 尊享包月说明：<br>
+                    1. 周期内至多可预约 16 节/月 专业私教指导。<br>
+                    2. 营业时间内尊享门店场地无限制自由训练。
                 </div>
             </div>
 
@@ -336,23 +277,52 @@
     </div>
 
     <div class="bottom-action">
-        <button class="btn-generate" onclick="alert('恭喜老板，在您专业的解答下，客户已锁定此方案并准备转账！')">
-            确认锁定名额并生成合同
+        <div class="ba-info">
+            <div class="ba-lbl">当前选定方案</div>
+            <div class="ba-val" id="display-pkg">常规进阶蜕变 <span>(48节)</span></div>
+        </div>
+        <button class="btn-generate" onclick="alert('客户信息已锁定，准备签约转账！')">
+            立即签约 ➔
         </button>
     </div>
 
     <script>
-        // 栏目切换交互
+        // 初始化默认选中项
+        let currentPkgName = "常规进阶蜕变";
+        let currentSessions = "48节";
+
         function switchView(type, btn) {
+            // 切换按钮状态
             document.querySelectorAll('.seg-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
 
+            // 切换面板
             document.querySelectorAll('.price-section').forEach(sec => sec.classList.remove('active'));
+            document.getElementById('view-' + type).classList.add('active');
+
+            // 自动选中该面板下的 VIP 项
+            let activePanel = document.getElementById('view-' + type);
+            let defaultVip = activePanel.querySelector('.matrix-card.vip');
+            if(defaultVip) {
+                defaultVip.click();
+            }
+        }
+
+        function selectCard(card, name, sessions, price) {
+            // 清除当前面板下所有卡片的选中状态
+            let parent = card.closest('.price-section');
+            parent.querySelectorAll('.matrix-card').forEach(c => c.classList.remove('selected'));
             
-            // 加入极短延迟重置动画，让切换显得流畅生动
-            setTimeout(() => {
-                document.getElementById('view-' + type).classList.add('active');
-            }, 10);
+            // 选中当前卡片
+            card.classList.add('selected');
+
+            // 更新底部栏数据
+            currentPkgName = name;
+            currentSessions = sessions;
+            document.getElementById('display-pkg').innerHTML = `${currentPkgName} <span>(${currentSessions})</span>`;
+            
+            // 触觉反馈
+            if(navigator.vibrate) navigator.vibrate(20);
         }
     </script>
 </body>
