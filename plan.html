@@ -12,7 +12,6 @@
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; margin: 0; padding: 0; }
         html, body { width: 100%; max-width: 100vw; overflow-x: hidden; background: var(--bg); color: var(--text-main); font-family: "DIN Alternate", "Helvetica Neue", sans-serif; -webkit-font-smoothing: antialiased; }
         
-        /* 顶部标题栏 */
         .header-brand { width: 100%; height: 60px; display: flex; align-items: center; justify-content: center; background: rgba(5, 5, 5, 0.85); position: sticky; top: 0; z-index: 50; border-bottom: 1px solid rgba(212, 175, 55, 0.15); backdrop-filter: blur(15px);}
         .brand-text { font-size: 18px; font-weight: 900; color: var(--primary); letter-spacing: 2px; }
         
@@ -34,7 +33,6 @@
         .c-title { font-size: 15px; font-weight: 900; color: #fff; margin-bottom: 6px; letter-spacing: 1px;}
         .c-desc { font-size: 11px; color: #888; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 
-        /* 全屏详情模态框 */
         .detail-modal { position: fixed; top: 100vh; left: 0; width: 100%; height: 100vh; background: var(--bg); z-index: 999; transition: top 0.5s cubic-bezier(0.2, 0.8, 0.2, 1); display: flex; flex-direction: column; overflow-x: hidden; }
         .detail-modal.show { top: 0; }
 
@@ -87,7 +85,6 @@
         .p-name { font-size: 18px; font-weight: 900; color: #888; margin-bottom: 15px; transition: 0.3s;}
         .phase-box.selected .p-name { color: #fff; }
         
-        /* 金色重点词加粗复原 */
         .sales-points { display: flex; flex-direction: column; gap: 12px; opacity: 0.5; transition: 0.3s; }
         .phase-box.selected .sales-points { opacity: 1; }
         .sp-row { display: flex; align-items: flex-start; gap: 10px; font-size: 13px; line-height: 1.6; }
@@ -98,7 +95,7 @@
         .sp-text { color: #ccc; }
         .sp-text strong { color: var(--primary); font-weight: bold; text-shadow: 0 0 8px rgba(212,175,55,0.3); }
 
-        /* 教练配课滑动步进器 (支持直接输入) */
+        /* 教练配课输入框 */
         .custom-builder { margin-top: 15px; border-top: 1px dashed rgba(212,175,55,0.3); padding-top: 15px; display: flex; flex-direction: column; gap: 12px; }
         .cb-item { display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.5); padding: 10px 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05);}
         .cb-label { font-size: 14px; color: #fff; font-weight: bold; display: flex; flex-direction: column; gap: 4px;}
@@ -110,7 +107,6 @@
         .cb-input::-webkit-outer-spin-button, .cb-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
         .cb-input[type=number] { -moz-appearance: textfield; }
 
-        /* 可视化投射图 */
         .visual-feedback-section { margin-top: 30px; background: #0a0a0c; border: 1px solid rgba(212, 175, 55, 0.15); border-radius: 16px; padding: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
         .fb-header { text-align: center; font-size: 15px; font-weight: 900; color: var(--primary); margin-bottom: 15px; letter-spacing: 2px; }
         .visual-card { width: 100%; height: 300px; border-radius: 12px; overflow: hidden; position: relative; border: 1px solid rgba(255,255,255,0.1); background: #111;}
@@ -119,7 +115,6 @@
         .visual-title { color: var(--primary); font-size: 20px; font-weight: 900; letter-spacing: 1px; margin-bottom: 6px; text-shadow: 0 2px 5px rgba(0,0,0,0.8);}
         .visual-desc { color: #ddd; font-size: 13px; line-height: 1.5; text-shadow: 0 1px 3px rgba(0,0,0,0.8); }
 
-        /* 购物车底栏 */
         .checkout-bar { position: fixed; bottom: 0; left: 0; width: 100%; padding: 15px 20px 25px; background: rgba(10, 10, 12, 0.98); border-top: 1px solid rgba(212,175,55,0.3); box-shadow: 0 -10px 30px rgba(0,0,0,0.8); z-index: 100; backdrop-filter: blur(15px); display: flex; justify-content: space-between; align-items: center; }
         .checkout-info { display: flex; flex-direction: column; gap: 4px; }
         .c-info-label { font-size: 11px; color: #888; font-weight: bold; letter-spacing: 1px; }
@@ -181,7 +176,7 @@
         .vn-list li::before { content: '•'; position: absolute; left: 0; color: var(--primary); }
         .vn-list li span { color: #ccc; font-weight: bold;}
 
-        /* 全屏电子签名与图片生成台 */
+        /* 全屏电子签名合同台 */
         .sig-modal { position: fixed; top: 100vh; left: 0; width: 100%; height: 100vh; background: #08080A; z-index: 2000; transition: top 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); display: flex; flex-direction: column; overflow-x: hidden;}
         .sig-modal.show { top: 0; }
         .sig-header { height: 60px; display: flex; justify-content: space-between; align-items: center; padding: 0 20px; background: rgba(5,5,5,0.95); border-bottom: 1px solid rgba(212,175,55,0.3); flex-shrink:0;}
@@ -288,35 +283,12 @@
         <div class="sig-content">
             
             <div id="sig-pad-wrap" class="sig-pad-wrap">
-                <div class="sig-summary" id="sig-summary-box">
-                    <div class="sig-sum-title">即将为您锁定以下专属重塑方案：</div>
-                    <div style="font-size:12px; color:#888;">所属体系: <span id="sig-sys-name" style="color:#ccc;"></span></div>
-                    <div class="sig-sum-data">
-                        <div class="sig-sum-name" id="sig-pkg-name">-- <span style="font-size:12px; color:#fff;">(--节)</span></div>
-                        <div class="sig-sum-price" id="sig-pkg-price">¥ --</div>
-                    </div>
                 </div>
-                
-                <div class="sig-pad-container">
-                    <div class="sig-placeholder">请在此处手写签名</div>
-                    <canvas id="sigCanvas"></canvas>
-                </div>
-                
-                <div class="sig-actions" id="sig-actions-box">
-                    <button class="btn-clear" onclick="clearCanvas()">重新签名</button>
-                    <button class="btn-confirm-sig" onclick="generateContractImage()">确认保存并生成合同</button>
-                </div>
-                
-                <div style="margin-top: 5px; font-size: 10px; color: #666; text-align: center;" id="sig-footer-note">
-                    * 签署即代表您同意本门店之《课程有效期及场地使用规范》。
-                </div>
-            </div>
 
         </div>
     </div>
 
     <script>
-        // 阶梯价格算法
         const priceTiers = {
             'regular': [ { t: 100, p: 350 }, { t: 72, p: 380 }, { t: 48, p: 400 }, { t: 24, p: 420 }, { t: 0, p: 440 } ],
             'feature': [ { t: 100, p: 380 }, { t: 72, p: 400 }, { t: 48, p: 420 }, { t: 24, p: 440 }, { t: 0, p: 460 } ]
@@ -336,7 +308,6 @@
             return m * 3888;
         }
 
-        // 🚨 4+1阶段数据
         const planData = {
             'posture': {
                 type: 'feature', icon: '<svg viewBox="0 0 24 24"><path d="M12 5v14"/><path d="M8 9l4-4 4 4"/><path d="M8 19l4 4 4-4"/></svg>',
@@ -570,26 +541,33 @@
                 <div class="visual-feedback-section">
                     <div class="fb-header">✦ AI 目标形态视觉投射 ✦</div>
                     <div class="visual-card">
-                        <img id="visual-img" class="visual-img" src="${data.img1}" alt="形态演变">
+                        <img id="visual-img" class="visual-img" src="${data.img1}" alt="形态演变" style="filter: brightness(0.3) grayscale(1);">
                         <div class="visual-overlay">
-                            <div class="visual-title" id="visual-title">PHASE 01: 基础重塑</div>
-                            <div class="visual-desc" id="visual-desc">${data.txt1}</div>
+                            <div class="visual-title" id="visual-title">请选择您的蜕变目标</div>
+                            <div class="visual-desc" id="visual-desc">点选上方阶段，AI将为您投射对应形态</div>
                         </div>
                     </div>
                 </div>
             `;
             
             modal.classList.add('show');
-            updateCheckout(); 
+            updateCheckout(); // 初始化为 0
         }
 
-        // 🚨 强制重置系统，切断所有残留数据
-        function closeDetail() {
+        // 🚨 终极返回与记忆清除函数
+        function finishAndReturn() {
+            document.getElementById('signatureModal').classList.remove('show');
             document.getElementById('detailModal').classList.remove('show');
+            
+            // 数据全面粉碎清零
             globalTotalExact = 0;
             currentPlanKey = '';
             selectedUpsell = {};
-            document.getElementById('modalBody').innerHTML = ''; // 毁灭 DOM 痕迹
+            document.getElementById('modalBody').innerHTML = ''; 
+        }
+
+        function closeDetail() {
+            finishAndReturn();
         }
 
         function setFreq(f) {
@@ -661,6 +639,8 @@
             let maxPhaseSelected = 0;
             const data = planData[currentPlanKey];
             
+            if(!data) return;
+
             let customBox = document.getElementById('phase-5-box');
             let isCustom = customBox && customBox.classList.contains('selected');
 
@@ -673,7 +653,8 @@
                 let r = parseInt(document.getElementById('cb-reg').value) || 0;
                 let f = parseInt(document.getElementById('cb-feat').value) || 0;
                 let m = parseInt(document.getElementById('cb-mon').value) || 0;
-                totalExactSessions = r + f + (m * 12); 
+                // 🚨 包月准确折算为 16 节
+                totalExactSessions = r + f + (m * 16); 
                 maxPhaseSelected = 5; 
             } else {
                 let totalWeeks = 0;
@@ -697,8 +678,6 @@
                 vImg.style.filter = 'brightness(0.3) grayscale(1)';
                 vTitle.innerText = '请选择您的蜕变目标';
                 vDesc.innerText = '点选上方阶段，AI将为您投射对应形态';
-                
-                // 🚨 0状态强制置灰
                 valDisplay.innerHTML = '<span style="color:#666; font-size:12px;">待选择目标阶段</span>';
                 btn.classList.add('disabled');
             } else {
@@ -924,13 +903,9 @@
         function openSignature(pkgName, sessions, price) {
             closeUpsellModal();
             
-            document.getElementById('sig-sys-name').innerText = planData[currentPlanKey].title;
-            document.getElementById('sig-pkg-name').innerHTML = `${pkgName} <span style="font-size:14px; color:#aaa; font-weight:normal;">(${sessions})</span>`;
-            document.getElementById('sig-pkg-price').innerText = price;
-            
             document.getElementById('signatureModal').classList.add('show');
             
-            // 恢复默认画板结构 (防重复生成图片叠加)
+            // 恢复默认画板结构
             document.getElementById('sig-pad-wrap').innerHTML = `
                 <div class="sig-summary" id="sig-summary-box">
                     <div class="sig-sum-title">即将为您锁定以下专属重塑方案：</div>
@@ -1083,6 +1058,7 @@
 
             const dataURL = finalCanvas.toDataURL('image/png');
 
+            // 🚨 注意这里的完成按钮绑定了 finishAndReturn 彻底清零系统
             document.getElementById('sig-pad-wrap').innerHTML = `
                 <div style="text-align:center; color:var(--primary); margin-bottom:15px; font-weight:bold; font-size:18px;">
                     ✦ 合同生成成功 ✦<br>
@@ -1092,7 +1068,7 @@
                     <img src="${dataURL}" style="width:100%; display:block;">
                 </div>
                 <div class="sig-actions" style="margin-top:20px;">
-                    <button class="btn-confirm-master" onclick="closeSignature(); closeDetail();">完成签约，返回首页 ➔</button>
+                    <button class="btn-confirm-master" onclick="finishAndReturn()">完成签约，返回首页 ➔</button>
                 </div>
             `;
         }
