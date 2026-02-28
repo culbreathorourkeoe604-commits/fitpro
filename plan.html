@@ -5,10 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>LUXIOU | 六大尊享方案库</title>
     <style>
+        /* 铂金高定配色 */
         :root { --primary: #D4AF37; --accent: #C5A059; --bg: #050505; --surface: #121212; --text-main: #E2E8F0; --text-sub: #8A92A3; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; margin: 0; padding: 0; }
+        
         body { background: var(--bg); color: var(--text-main); font-family: "DIN Alternate", "Helvetica Neue", sans-serif; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
         
+        /* 顶部标题栏 */
         .header-brand { width: 100%; height: 60px; display: flex; align-items: center; justify-content: center; background: rgba(5, 5, 5, 0.95); position: sticky; top: 0; z-index: 50; border-bottom: 1px solid rgba(212, 175, 55, 0.15); backdrop-filter: blur(10px);}
         .brand-text { font-size: 18px; font-weight: 900; color: var(--primary); letter-spacing: 2px; }
         
@@ -16,7 +19,9 @@
         .main-title { font-size: 22px; font-weight: 900; color: #fff; margin-bottom: 8px; letter-spacing: 1px;}
         .sub-title { font-size: 12px; color: var(--text-sub); line-height: 1.5; }
 
+        /* 🚀 方案陈列室 */
         .gallery-container { padding: 10px 15px 40px; display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        
         .sol-card { position: relative; height: 180px; border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; justify-content: flex-end; cursor: pointer; border: 1px solid rgba(255,255,255,0.05); box-shadow: 0 10px 20px rgba(0,0,0,0.5); transition: 0.3s; }
         .sol-card:active { transform: scale(0.96); border-color: var(--primary); }
         
@@ -32,6 +37,7 @@
         .c-title { font-size: 15px; font-weight: 900; color: #fff; margin-bottom: 4px; }
         .c-desc { font-size: 10px; color: var(--text-sub); line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;}
 
+        /* 全屏详情模态框 */
         .detail-modal { position: fixed; top: 100vh; left: 0; width: 100%; height: 100vh; background: var(--bg); z-index: 999; transition: top 0.5s cubic-bezier(0.2, 0.8, 0.2, 1); display: flex; flex-direction: column; }
         .detail-modal.show { top: 0; }
 
@@ -45,6 +51,7 @@
         .m-hero-title { font-size: 22px; font-weight: 900; color: #fff; margin-bottom: 10px; }
         .m-hero-desc { font-size: 13px; color: var(--text-sub); line-height: 1.6; }
         
+        /* 时间轴 */
         .phase-title-main { font-size: 16px; font-weight: 900; color: var(--primary); margin-bottom: 15px; display: flex; align-items: center; gap: 8px; border-top: 1px solid #222; padding-top: 20px;}
         .phase-box { border-left: 2px solid rgba(212,175,55,0.2); padding-left: 20px; margin-left: 10px; position: relative; margin-bottom: 25px; }
         .phase-box::before { content: ''; position: absolute; left: -6px; top: 0; width: 10px; height: 10px; border-radius: 50%; background: var(--primary); box-shadow: 0 0 10px rgba(212,175,55,0.8); }
@@ -52,9 +59,12 @@
         .p-name { font-size: 16px; font-weight: 900; color: #fff; margin-bottom: 8px; }
         .p-detail { font-size: 13px; color: var(--text-sub); line-height: 1.5; }
 
+        /* 雷达与正反馈区 */
         .feedback-section { margin-top: 20px; background: #0a0a0c; border: 1px solid rgba(212, 175, 55, 0.15); border-radius: 16px; padding: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
         .fb-header { text-align: center; font-size: 15px; font-weight: 900; color: var(--primary); margin-bottom: 20px; letter-spacing: 2px; }
-        .radar-container { width: 100%; height: 220px; position: relative; display: flex; justify-content: center; align-items: center; }
+        
+        /* 🚨 核心修复：锁死雷达容器大小，防止溢出 */
+        .radar-container { width: 100%; height: 220px; position: relative; display: flex; justify-content: center; align-items: center; overflow: hidden; }
         canvas { position: absolute; z-index: 1; }
 
         .fb-bar-group { margin-top: 20px; margin-bottom: 15px; }
@@ -131,7 +141,7 @@
         <div class="modal-body" id="modalBody"></div>
 
         <div class="bottom-action">
-            <button class="btn-generate" onclick="window.location.href='./价格.html'">
+            <button class="btn-generate" onclick="window.location.href='./price.html'">
                 ✦ 立即查看方案匹配报价 ✦
             </button>
         </div>
@@ -163,7 +173,7 @@
                 p1: '弱点靶向激活', d1: '针对臀大肌上侧、三角肌中束等视觉核心点进行孤立唤醒，建立极强的“念动一致”神经连结。',
                 p2: '肌纤维肥大与填充', d2: '利用渐进式超负荷与离心收缩技术，迫使目标区域肌纤维撕裂与超量恢复，实现饱满的3D填充感。',
                 p3: '视觉比例拉扯精雕', d3: '通过收紧腰腹核心与强化背部外沿宽度，在视觉上拉大肩臀比，呈现漏斗形的极致身材。',
-                radar: { labels: ['臀部饱满度', '肩背宽阔度', '腰腹紧致', '四肢比例', '肌肉质感'], start: [30, 40, 30, 50, 40], end: [100, 95, 90, 100, 95] },
+                radar: { labels: ['臀部饱满度', '肩背宽度', '腰腹紧致', '四肢比例', '肌肉质感'], start: [30, 40, 30, 50, 40], end: [100, 95, 90, 100, 95] },
                 barText: '视觉比例改善度', barVal: '100%'
             },
             'postpartum': {
@@ -230,7 +240,7 @@
                         <div class="fb-bar-bg"><div class="fb-bar-fill" id="dynamicBar"></div></div>
                     </div>
                     <div class="radar-container">
-                        <canvas id="detailRadar" width="300" height="220"></canvas>
+                        <canvas id="detailRadar"></canvas>
                     </div>
                 </div>
             `;
@@ -247,23 +257,39 @@
             cancelAnimationFrame(animReq);
         }
 
+        // 🚨 核心修复：锁死 CSS 物理尺寸，防止 Retina 屏幕缩放暴走
         function drawRadar(config) {
             const canvas = document.getElementById('detailRadar');
             if(!canvas) return;
             const ctx = canvas.getContext('2d');
+            
+            // 获取设备的像素比 (苹果手机通常是 2 或 3)
             const dpr = window.devicePixelRatio || 1;
             
+            // 定义逻辑尺寸
             const w = 300; const h = 220;
-            canvas.width = w * dpr; canvas.height = h * dpr;
+            
+            // 🚨 这一步极其重要：用 CSS 死死锁住画布在屏幕上的物理大小 🚨
+            canvas.style.width = w + "px";
+            canvas.style.height = h + "px";
+            
+            // 放大内部渲染画布以保持高清不发虚
+            canvas.width = w * dpr; 
+            canvas.height = h * dpr;
             ctx.scale(dpr, dpr);
             
-            const centerX = w / 2; const centerY = h / 2;
-            const radius = 75; const sides = 5;
+            // 雷达图中心点稍微往下移一点，给上面的文字留空间
+            const centerX = w / 2; const centerY = h / 2 + 10;
+            
+            // 半径缩小，给周围的文字留出充足的排版呼吸空间
+            const radius = 60; 
+            const sides = 5;
             let progress = 0;
 
             function renderFrame() {
                 ctx.clearRect(0, 0, w, h);
                 
+                // 画雷达底层网格
                 ctx.lineWidth = 1;
                 for (let level = 1; level <= 4; level++) {
                     ctx.beginPath();
@@ -277,16 +303,28 @@
                     ctx.strokeStyle = `rgba(212, 175, 55, ${0.1 * level})`; ctx.stroke();
                 }
 
-                ctx.fillStyle = "#888"; ctx.font = "bold 11px sans-serif"; ctx.textAlign = "center"; ctx.textBaseline = "middle";
+                // 绘制外圈文字标签
+                ctx.fillStyle = "#A0A0AB"; // 字体颜色更柔和高级
+                ctx.font = "bold 11px sans-serif"; 
+                ctx.textAlign = "center"; 
+                ctx.textBaseline = "middle";
                 for (let i = 0; i < sides; i++) {
                     let angle = (Math.PI * 2 * i) / sides - Math.PI / 2;
-                    let x = centerX + radius * Math.cos(angle); let y = centerY + radius * Math.sin(angle);
+                    let x = centerX + radius * Math.cos(angle); 
+                    let y = centerY + radius * Math.sin(angle);
+                    
+                    // 画连接小线条
                     ctx.beginPath(); ctx.moveTo(centerX, centerY); ctx.lineTo(x, y);
                     ctx.strokeStyle = "rgba(255,255,255,0.05)"; ctx.stroke();
-                    let labelX = centerX + (radius + 28) * Math.cos(angle); let labelY = centerY + (radius + 15) * Math.sin(angle);
+                    
+                    // 计算文字坐标 (向外扩张 22 像素，绝不重叠)
+                    let textOffset = 22;
+                    let labelX = centerX + (radius + textOffset) * Math.cos(angle); 
+                    let labelY = centerY + (radius + textOffset) * Math.sin(angle);
                     ctx.fillText(config.labels[i], labelX, labelY);
                 }
 
+                // 绘制底层阴影 (糟糕的现状)
                 ctx.beginPath();
                 for (let i = 0; i < sides; i++) {
                     let angle = (Math.PI * 2 * i) / sides - Math.PI / 2;
@@ -297,9 +335,10 @@
                 ctx.closePath();
                 ctx.fillStyle = "rgba(178, 34, 34, 0.3)"; ctx.fill();
 
+                // 绘制正在膨胀的金色前景 (目标预期)
                 progress += 0.025; 
                 if(progress > 1) progress = 1;
-                let ease = 1 - Math.pow(1 - progress, 3);
+                let ease = 1 - Math.pow(1 - progress, 3); // 平滑减速动画
 
                 ctx.beginPath();
                 for (let i = 0; i < sides; i++) {
@@ -314,9 +353,10 @@
                 ctx.lineWidth = 2;
                 ctx.fillStyle = `rgba(212, 175, 55, ${0.2 + 0.3 * ease})`; 
                 ctx.strokeStyle = `rgba(212, 175, 55, ${0.5 + 0.5 * ease})`;
-                ctx.shadowBlur = 15 * ease; ctx.shadowColor = "rgba(212, 175, 55, 0.6)";
+                ctx.shadowBlur = 10 * ease; ctx.shadowColor = "rgba(212, 175, 55, 0.6)";
                 ctx.fill(); ctx.stroke(); ctx.shadowBlur = 0;
 
+                // 循环渲染下一帧直到动画结束
                 if(progress < 1) animReq = requestAnimationFrame(renderFrame);
             }
             renderFrame();
