@@ -4,21 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>SHANGHAI LUXIOU | 数字化谈单中枢</title>
-    
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="LUXIOU谈单">
-    
-    <link rel="preconnect" href="https://cdn.staticfile.net">
-    <link rel="preload" href="case_1_before.jpg" as="image">
-    <link rel="preload" href="prod_reg_1.jpg" as="image">
-
     <style>
         :root { --primary: #00f2fe; --secondary: #7000ff; --bg: #000; --card-bg: rgba(255, 255, 255, 0.03); --text: #fff; --grad: radial-gradient(circle at top right, #1a2a6c, #000 70%); }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
         body { background: var(--bg); background-image: var(--grad); color: var(--text); font-family: -apple-system, sans-serif; margin: 0; padding: 20px; min-height: 100vh; transition: all 0.5s ease; display: flex; flex-direction: column; }
         
-        /* 风格切换菜单 */
         #style-trigger { position: fixed; top: 15px; right: 15px; z-index: 2000; background: rgba(255,255,255,0.1); padding: 8px 15px; border-radius: 50px; font-size: 11px; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2); color: #fff; }
         #style-panel { display: none; position: fixed; top: 60px; right: 15px; z-index: 2001; background: #111; border: 1px solid #333; border-radius: 15px; padding: 10px; width: 140px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
         .style-option { padding: 12px; font-size: 13px; color: #aaa; text-align: center; border-bottom: 1px solid #222; }
@@ -26,7 +16,6 @@
         .brand-card { background: var(--card-bg); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; padding: 25px 20px; text-align: center; margin-bottom: 25px; margin-top: 10px; }
         .brand-card h1 { margin: 0; font-size: 24px; letter-spacing: 4px; color: var(--primary); text-shadow: 0 0 15px var(--primary); }
         
-        /* 入口按钮组 */
         .btn-group { width: 100%; display: flex; flex-direction: column; gap: 12px; margin-bottom: 30px; }
         .radar-btn { display: flex; align-items: center; justify-content: center; width: 100%; padding: 16px; border-radius: 12px; font-weight: bold; font-size: 15px; text-decoration: none; color: #fff; transition: transform 0.2s, filter 0.2s; letter-spacing: 1px;}
         .radar-btn:active { transform: scale(0.98); filter: brightness(1.1); }
@@ -65,25 +54,22 @@
     <div class="btn-group">
         <a href="./step1.html" class="radar-btn btn-a">A 点击进入：智能筛查矩阵</a>
         <a href="./parq.html" class="radar-btn btn-b">B 点击进入：ACE 风险筛查评估</a>
-        <a href="./case_detail.html" class="radar-btn btn-c">C 点击进入：VIP 全息体测系统</a>
+        <a href="./案例详情.html" class="radar-btn btn-c">C 点击进入：VIP 全息体测系统</a>
     </div>
 
     <div class="grid">
-        <div class="card" style="border-color:#a855f7" onclick="window.location.href='./case_detail.html'">
+        <div class="card" style="border-color:#a855f7" onclick="window.location.href='./案例详情.html'">
             <img src="case.jpg" loading="lazy">
             <div class="card-info">【档案库】</div>
         </div>
-        
-        <div class="card" style="border-color:#eab308" onclick="window.location.href='./solution.html'">
-            <img src="plan.jpg" loading="lazy"><div class="card-info">【方案库】</div>
+        <div class="card" style="border-color:#eab308" onclick="window.location.href='./路线图.html'">
+            <img src="plan.jpg" loading="lazy"><div class="card-info">【高定方案库】</div>
         </div>
-        
         <div class="card" style="border-color:#22d3ee" onclick="showModule('背书库','资质证书','cert_1.jpg','荣誉奖项','cert_2.jpg')">
             <img src="cert.jpg" loading="lazy"><div class="card-info">【背书库】</div>
         </div>
-        
-        <div class="card" style="border-color:#f472b6" onclick="window.location.href='./price.html'">
-            <img src="product.jpg" loading="lazy"><div class="card-info">【产品库】</div>
+        <div class="card" style="border-color:#f472b6" onclick="window.location.href='./价格.html'">
+            <img src="product.jpg" loading="lazy"><div class="card-info">【黑金报价库】</div>
         </div>
     </div>
 
