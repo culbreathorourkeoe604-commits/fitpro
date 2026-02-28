@@ -5,62 +5,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>R玥精致健身 | 私教报价系统</title>
     <style>
-        /* 顶级香槟黑金配色 */
-        :root { 
-            --primary: #E8C37C; /* 香槟鎏金 */
-            --primary-dark: #C69A45; 
-            --bg-deep: #08080A; /* 曜石极暗蓝黑 */
-            --card-light: #16161A; 
-            --card-dark: #0D0D0F;
-            --text-main: #FFFFFF; 
-            --text-sub: #A0A0AB; 
-        }
-        
+        :root { --primary: #E8C37C; --primary-dark: #C69A45; --bg-deep: #08080A; --card-light: #16161A; --card-dark: #0D0D0F; --text-main: #FFFFFF; --text-sub: #A0A0AB; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; margin: 0; padding: 0; }
+        body { background: var(--bg-deep); background-image: radial-gradient(circle at 50% 0%, rgba(232, 195, 124, 0.08) 0%, transparent 60%); color: var(--text-main); font-family: "DIN Alternate", -apple-system, sans-serif; overflow-x: hidden; display: flex; flex-direction: column; min-height: 100vh; }
         
-        body { 
-            background: var(--bg-deep); 
-            background-image: radial-gradient(circle at 50% 0%, rgba(232, 195, 124, 0.08) 0%, transparent 60%);
-            color: var(--text-main); 
-            font-family: "DIN Alternate", -apple-system, sans-serif; 
-            overflow-x: hidden; 
-            display: flex; 
-            flex-direction: column; 
-            min-height: 100vh; 
-        }
-        
-        /* 顶部导航 */
         .header-brand { width: 100%; height: 60px; display: flex; align-items: center; justify-content: center; background: rgba(8, 8, 10, 0.85); position: sticky; top: 0; z-index: 50; border-bottom: 1px solid rgba(232, 195, 124, 0.15); backdrop-filter: blur(15px);}
         .brand-text { font-size: 17px; font-weight: 900; color: var(--primary); letter-spacing: 2px; }
 
-        /* 顶部三段式切换器 */
         .seg-control { display: flex; background: #121215; border-radius: 12px; padding: 6px; margin: 25px 20px 20px; border: 1px solid rgba(255,255,255,0.05); position: sticky; top: 75px; z-index: 40; box-shadow: 0 10px 20px rgba(0,0,0,0.8); }
         .seg-btn { flex: 1; text-align: center; padding: 12px 0; font-size: 14px; font-weight: bold; color: #666; border-radius: 8px; transition: 0.3s; cursor: pointer; }
         .seg-btn.active { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: #000; box-shadow: 0 4px 10px rgba(232, 195, 124, 0.3); }
 
-        /* 列表容器 */
         .swiper-container { width: 100%; padding: 0 20px 100px; display: flex; flex-direction: column; }
         .price-section { display: none; flex-direction: column; gap: 20px; animation: fadeIn 0.4s ease; }
         .price-section.active { display: flex; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* 🚀 极度清晰的 3D 卡片设计 */
         .card-wrapper { perspective: 1500px; width: 100%; height: 210px; cursor: pointer; }
         .card-inner { width: 100%; height: 100%; position: relative; transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275); transform-style: preserve-3d; }
         .card-wrapper.is-flipped .card-inner { transform: rotateY(180deg); }
         
         .card-face { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; -webkit-backface-visibility: hidden; border-radius: 16px; padding: 25px; display: flex; flex-direction: column; }
         
-        /* 正面样式：普通卡 vs VIP主推卡 vs 引流卡 */
         .card-front { background: linear-gradient(145deg, var(--card-light), var(--card-dark)); border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
         .card-front.vip { background: linear-gradient(145deg, #241D11, #0A0805); border: 1px solid rgba(232, 195, 124, 0.5); box-shadow: 0 15px 35px rgba(232, 195, 124, 0.15); }
         .card-front.hook { background: linear-gradient(145deg, #1A1224, #05050A); border: 1px dashed rgba(178, 138, 255, 0.6); box-shadow: 0 10px 30px rgba(127, 0, 255, 0.15); }
         
-        /* 背面样式：统一鎏金黑字 (引流卡背面用暗紫色) */
         .card-back { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); transform: rotateY(180deg); color: #000; border: 1px solid rgba(255,255,255,0.5); box-shadow: 0 15px 35px rgba(232, 195, 124, 0.3); }
         .hook .card-back { background: linear-gradient(135deg, #9D64FF, #5C24B3); color: #fff; }
 
-        /* ========= 正面排版 (极致清晰) ========= */
         .c-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
         .c-tag { font-size: 11px; padding: 4px 10px; border-radius: 6px; background: rgba(255,255,255,0.1); color: #ccc; font-weight: bold; letter-spacing: 1px;}
         .vip .c-tag { background: var(--primary); color: #000; }
@@ -72,7 +45,6 @@
         .hook .c-count { color: #E0C8FF; }
         .c-count span { font-size: 14px; font-weight: normal; color: var(--text-sub); padding-bottom: 5px; }
         
-        /* 时长强调标签 */
         .c-type { font-size: 13px; color: #888; margin-top: 4px; display: flex; align-items: center; gap: 6px; }
         .time-badge { font-size: 10px; background: rgba(255,255,255,0.1); padding: 2px 6px; border-radius: 4px; color: #ddd; }
 
@@ -95,7 +67,6 @@
         .vip .flip-hint { color: var(--primary); opacity: 0.8; }
         .hook .flip-hint { color: #D5B8FF; }
 
-        /* ========= 背面排版 (打钩清单化) ========= */
         .b-title { font-size: 18px; font-weight: 900; border-bottom: 1px solid rgba(0,0,0,0.15); padding-bottom: 12px; margin-bottom: 15px; }
         .hook .b-title { border-bottom-color: rgba(255,255,255,0.2); }
         
@@ -106,7 +77,6 @@
         
         @keyframes pulse { 0% { opacity: 0.5; transform: scale(1); } 50% { opacity: 1; transform: scale(1.05); } 100% { opacity: 0.5; transform: scale(1); } }
 
-        /* 底部成单按钮 */
         .bottom-action { position: fixed; bottom: 0; left: 0; width: 100%; padding: 15px 20px 25px; background: linear-gradient(to top, rgba(8,8,10,1) 60%, rgba(8,8,10,0)); z-index: 100; }
         .btn-generate { width: 100%; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: #000; border: none; padding: 16px; border-radius: 12px; font-size: 16px; font-weight: 900; box-shadow: 0 8px 25px rgba(232, 195, 124, 0.3); cursor: pointer; transition: 0.2s;}
         .btn-generate:active { transform: scale(0.98); }
@@ -158,7 +128,7 @@
                         <div class="c-header"><div class="c-tag" style="background:transparent; border:1px solid #444;">入门激活</div><div class="flip-hint">权益 ➔</div></div>
                         <div class="c-course-info">
                             <div class="c-count">12 <span>课时</span></div>
-                            <div class="c-type">常规课 (减脂 / 增肌 / 塑形) <span class="time-badge">60分钟/节</span></div>
+                            <div class="c-type">常规课 (减脂/增肌/塑形) <span class="time-badge">60分钟/节</span></div>
                         </div>
                         <div class="c-price-box">
                             <div class="p-unit"><span class="p-sym">¥</span><span class="p-val">440</span><span class="p-txt">/节</span></div>
@@ -181,7 +151,7 @@
                         <div class="c-header"><div class="c-tag">基础重塑</div><div class="flip-hint">权益 ➔</div></div>
                         <div class="c-course-info">
                             <div class="c-count">24 <span>课时</span></div>
-                            <div class="c-type">常规课 (减脂 / 增肌 / 塑形) <span class="time-badge">60分钟/节</span></div>
+                            <div class="c-type">常规课 (减脂/增肌/塑形) <span class="time-badge">60分钟/节</span></div>
                         </div>
                         <div class="c-price-box">
                             <div class="p-unit"><span class="p-sym">¥</span><span class="p-val">420</span><span class="p-txt">/节</span></div>
@@ -205,7 +175,7 @@
                         <div class="c-header"><div class="c-tag">最高人气 MOST POPULAR</div><div class="flip-hint">权益 ➔</div></div>
                         <div class="c-course-info">
                             <div class="c-count">48 <span>课时</span></div>
-                            <div class="c-type">常规课 (减脂 / 增肌 / 塑形) <span class="time-badge">60分钟/节</span></div>
+                            <div class="c-type">常规课 (减脂/增肌/塑形) <span class="time-badge">60分钟/节</span></div>
                         </div>
                         <div class="c-price-box">
                             <div class="p-unit"><span class="p-sym" style="color:#fff">¥</span><span class="p-val">400</span><span class="p-txt">/节</span></div>
@@ -229,7 +199,7 @@
                         <div class="c-header"><div class="c-tag" style="background:transparent; border:1px solid #444;">高阶精雕</div><div class="flip-hint">权益 ➔</div></div>
                         <div class="c-course-info">
                             <div class="c-count">72 <span>课时</span></div>
-                            <div class="c-type">常规课 (减脂 / 增肌 / 塑形) <span class="time-badge">60分钟/节</span></div>
+                            <div class="c-type">常规课 (减脂/增肌/塑形) <span class="time-badge">60分钟/节</span></div>
                         </div>
                         <div class="c-price-box">
                             <div class="p-unit"><span class="p-sym">¥</span><span class="p-val">380</span><span class="p-txt">/节</span></div>
@@ -251,7 +221,7 @@
                     <div class="card-face card-front">
                         <div class="c-header"><div class="c-tag">顶级性价比</div><div class="flip-hint">权益 ➔</div></div>
                         <div class="c-course-info">
-                            <div class="c-count">100 / 150 <span>课时</span></div>
+                            <div class="c-count">100/150 <span>课时</span></div>
                             <div class="c-type">常规年度托管 <span class="time-badge">60分钟/节</span></div>
                         </div>
                         <div class="c-price-box">
@@ -280,7 +250,7 @@
                         <div class="c-header"><div class="c-tag">特色干预</div><div class="flip-hint">权益 ➔</div></div>
                         <div class="c-course-info">
                             <div class="c-count">24 <span>课时</span></div>
-                            <div class="c-type">拉伸 / 康复 / 普拉提 等 <span class="time-badge">45分钟/节</span></div>
+                            <div class="c-type">拉伸/康复/普拉提等 <span class="time-badge">45分钟/节</span></div>
                         </div>
                         <div class="c-price-box">
                             <div class="p-unit"><span class="p-sym">¥</span><span class="p-val">440</span><span class="p-txt">/节</span></div>
@@ -304,7 +274,7 @@
                         <div class="c-header"><div class="c-tag">系统重塑 POPULAR</div><div class="flip-hint">权益 ➔</div></div>
                         <div class="c-course-info">
                             <div class="c-count">48 <span>课时</span></div>
-                            <div class="c-type">拉伸 / 康复 / 普拉提 等 <span class="time-badge">45分钟/节</span></div>
+                            <div class="c-type">拉伸/康复/普拉提等 <span class="time-badge">45分钟/节</span></div>
                         </div>
                         <div class="c-price-box">
                             <div class="p-unit"><span class="p-sym" style="color:#fff">¥</span><span class="p-val">420</span><span class="p-txt">/节</span></div>
@@ -327,7 +297,7 @@
                         <div class="c-header"><div class="c-tag" style="background:transparent; border:1px solid #444;">神经募集</div><div class="flip-hint">权益 ➔</div></div>
                         <div class="c-course-info">
                             <div class="c-count">72 <span>课时</span></div>
-                            <div class="c-type">拉伸 / 康复 / 普拉提 等 <span class="time-badge">45分钟/节</span></div>
+                            <div class="c-type">拉伸/康复/普拉提等 <span class="time-badge">45分钟/节</span></div>
                         </div>
                         <div class="c-price-box">
                             <div class="p-unit"><span class="p-sym">¥</span><span class="p-val">400</span><span class="p-txt">/节</span></div>
@@ -349,7 +319,7 @@
                     <div class="card-face card-front">
                         <div class="c-header"><div class="c-tag">顶级护航</div><div class="flip-hint">权益 ➔</div></div>
                         <div class="c-course-info">
-                            <div class="c-count">100 / 150 <span>课时</span></div>
+                            <div class="c-count">100/150 <span>课时</span></div>
                             <div class="c-type">极致特色定制 <span class="time-badge">45分钟/节</span></div>
                         </div>
                         <div class="c-price-box">
