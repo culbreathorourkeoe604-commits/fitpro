@@ -11,7 +11,6 @@
         
         body { background: var(--bg); color: var(--text-main); font-family: "DIN Alternate", "Helvetica Neue", sans-serif; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
         
-        /* 顶部标题栏 */
         .header-brand { width: 100%; height: 60px; display: flex; align-items: center; justify-content: center; background: rgba(5, 5, 5, 0.85); position: sticky; top: 0; z-index: 50; border-bottom: 1px solid rgba(212, 175, 55, 0.15); backdrop-filter: blur(15px);}
         .brand-text { font-size: 18px; font-weight: 900; color: var(--primary); letter-spacing: 2px; }
         
@@ -49,7 +48,7 @@
         .m-hero-title { font-size: 22px; font-weight: 900; color: #fff; margin-bottom: 10px; letter-spacing: 1px; position: relative; z-index: 2;}
         .m-hero-desc { font-size: 13px; color: var(--text-sub); line-height: 1.6; position: relative; z-index: 2;}
         
-        /* 出勤频率配置面板 */
+        /* 1-5次出勤频率 */
         .freq-panel { background: rgba(212,175,55,0.05); border: 1px solid rgba(212,175,55,0.3); border-radius: 12px; padding: 15px 10px; margin-bottom: 25px; box-shadow: inset 0 0 20px rgba(0,0,0,0.5); }
         .freq-title { font-size: 13px; color: var(--primary); font-weight: bold; margin-bottom: 12px; padding-left: 5px; display: flex; align-items: center; gap: 6px;}
         .freq-group { display: flex; gap: 6px; }
@@ -126,7 +125,7 @@
         .btn-checkout:active { transform: scale(0.96); }
         .btn-checkout.disabled { background: #333; color: #666; box-shadow: none; pointer-events: none; }
 
-        /* 🚨 双轨精准逼单弹窗样式 */
+        /* 双轨精准逼单弹窗 */
         .upsell-overlay { position: fixed; top:0; left:0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; opacity: 0; pointer-events: none; transition: 0.4s; backdrop-filter: blur(5px); }
         .upsell-overlay.show { opacity: 1; pointer-events: auto; }
         
@@ -141,13 +140,17 @@
         .up-card { background: #111; border-radius: 12px; padding: 15px; border: 1px solid #333; margin-bottom: 12px; position: relative; overflow: hidden; }
         .up-card:active { transform: scale(0.98); }
         
-        /* 卡片一：主推完美匹配包 (金框) */
+        /* 卡片一：主推完美匹配包 */
         .up-card.premium { border-color: rgba(212,175,55,0.8); background: linear-gradient(145deg, #241D10, #0A0A0C); box-shadow: 0 5px 20px rgba(212,175,55,0.15); margin-top: 12px; margin-bottom: 12px; transform: scale(1.02);}
         .up-card.premium::before { content: '★ 精准达成，完美匹配'; position: absolute; top: 0; right: 0; background: linear-gradient(90deg, var(--accent), var(--primary)); color: #000; font-size: 10px; font-weight: bold; padding: 4px 12px; border-radius: 0 0 0 12px; }
         
-        /* 卡片二：兜底破冰启动包 (虚线) */
+        /* 卡片二：兜底体验包 */
         .up-card.basic { background: #0A0A0C; border-style: dashed; border-color: #555; }
         
+        /* 🚨 锁价升级规则强提示 */
+        .urgency-rule { background: rgba(212,175,55,0.08); border: 1px dashed rgba(212,175,55,0.4); border-radius: 6px; padding: 10px; margin-top: 12px; font-size: 10px; color: #aaa; line-height: 1.6; }
+        .urgency-rule strong { color: var(--primary); }
+
         .uc-title { font-size: 15px; font-weight: 900; color: #fff; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;}
         .premium .uc-title { color: var(--primary); font-size: 16px;}
         
@@ -177,6 +180,14 @@
         .custom-breakdown .row { display: flex; justify-content: space-between; }
         .custom-breakdown .hl { color: var(--primary); font-weight: bold; }
         .custom-breakdown .sub { text-align: right; font-size: 11px; color: #888; margin-top: -2px; margin-bottom: 6px;}
+
+        /* 🚨 统一规范说明框 */
+        .validity-note { background: #0a0a0c; border: 1px solid #333; border-radius: 8px; padding: 12px; margin-top: 15px; }
+        .vn-title { font-size: 12px; color: #aaa; font-weight: bold; margin-bottom: 8px; display: flex; align-items: center; gap: 4px;}
+        .vn-list { list-style: none; padding: 0; margin: 0; font-size: 11px; color: #888; line-height: 1.6; }
+        .vn-list li { position: relative; padding-left: 12px; margin-bottom: 6px; }
+        .vn-list li::before { content: '•'; position: absolute; left: 0; color: var(--primary); }
+        .vn-list li span { color: #ccc; font-weight: bold;}
 
         /* 全屏电子签名合同台 */
         .sig-modal { position: fixed; top: 100vh; left: 0; width: 100%; height: 100vh; background: #08080A; z-index: 2000; transition: top 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); display: flex; flex-direction: column; }
@@ -261,8 +272,8 @@
     <div class="upsell-modal" id="upsellModal">
         <div class="up-header">
             <div>
-                <div class="up-title">✦ 智能匹配分轨方案 ✦</div>
-                <div class="up-sub" id="up-sub-text">系统已为您接入 <strong style="color:var(--primary)">【首次建档专享】</strong> 破冰费率：</div>
+                <div class="up-title" id="up-main-title">✦ 智能匹配双轨方案 ✦</div>
+                <div class="up-sub" id="up-sub-text">基于您选择的阶段与出勤频率，为您精准匹配以下方案：</div>
             </div>
             <button class="up-close" onclick="closeUpsellModal()">×</button>
         </div>
@@ -287,7 +298,7 @@
 
             <div class="up-card basic">
                 <div class="uc-title" id="up-c-title">方案二：【低门槛】体验启动包</div>
-                <div style="font-size:11px; color:#666; margin-bottom: 10px;">退而求其次，以极低门槛启动破冰，随时可升级</div>
+                <div style="font-size:11px; color:#666; margin-bottom: 10px;">退而求其次，以极低门槛启动破冰</div>
                 <div class="uc-breakdown">
                     <div class="uc-brk-row"><span>常规阶梯单价:</span> <span><del id="up-c-unit-ori">¥440/节</del></span></div>
                     <div class="uc-brk-row hl"><span>首购破冰单价:</span> <span id="up-c-unit-new">¥350/节</span></div>
@@ -299,7 +310,10 @@
                         <div class="uc-new-total">¥ <span id="up-c-new">--</span></div>
                     </div>
                 </div>
-                <button class="uc-btn" id="btn-sign-c">先选此方案低压启动 ➔</button>
+                <div class="urgency-rule">
+                    <strong>⚠️ 保价升级提醒：</strong> 如需长期保留【首购福利单价】，请务必在 <strong>2周内</strong> 补足差价升级为主推方案。逾期后购买新课将自动恢复门店常规阶梯单价。
+                </div>
+                <button class="uc-btn" id="btn-sign-c" style="margin-top:12px;">先选此方案低风险启动 ➔</button>
             </div>
         </div>
 
@@ -320,6 +334,14 @@
                 </div>
                 <button class="uc-btn" id="btn-sign-custom">确认专属组合方案并签约 ➔</button>
             </div>
+        </div>
+        
+        <div class="validity-note">
+            <div class="vn-title">✦ 课程有效期与门店使用规范</div>
+            <ul class="vn-list">
+                <li><span>常规训练课 / 特色干预课：</span>有效期按【5天/节】自动顺延计算。</li>
+                <li><span>包月周期课：</span>按自然时效计算。时效内至多可预约私教课 16 节，其余营业时间尊享场地无限制自由训练。</li>
+            </ul>
         </div>
     </div>
 
@@ -347,6 +369,10 @@
                 <button class="btn-clear" onclick="clearCanvas()">重新签名</button>
                 <button class="btn-confirm-sig" onclick="submitSignature()">确认保存并生成合同</button>
             </div>
+            
+            <div style="margin-top: 10px; font-size: 10px; color: #666; text-align: center;">
+                * 签署即代表您同意本门店之《课程有效期及场地使用规范》。
+            </div>
         </div>
     </div>
 
@@ -370,7 +396,7 @@
             return m * 3888;
         }
 
-        // 🚨 底层周数与加粗语料
+        // 🚨 核心：在周数显示中加入 (X个月) 补充说明
         const planData = {
             'posture': {
                 type: 'feature', icon: '<svg viewBox="0 0 24 24"><path d="M12 5v14"/><path d="M8 9l4-4 4 4"/><path d="M8 19l4 4 4-4"/></svg>',
@@ -493,7 +519,7 @@
                     <div class="check-circle"></div>
                     <div class="p-step">● PHASE 01 / 阶段一</div>
                     <div class="p-cycle-highlight">
-                        <div class="cycle-row"><span class="icon">⏱</span> 阶段耗时：<span class="highlight-text">${data.p1_w} 周</span></div>
+                        <div class="cycle-row"><span class="icon">⏱</span> 阶段耗时：<span class="highlight-text">${data.p1_w} 周 (${data.p1_w/4}个月)</span></div>
                         <div class="cycle-row"><span class="icon">🎯</span> 需配课时：<span class="highlight-text" id="p1-val">${data.p1_w * userFreq} 节</span></div>
                     </div>
                     <div class="p-name">${data.p1_name}</div>
@@ -508,7 +534,7 @@
                     <div class="check-circle"></div>
                     <div class="p-step">● PHASE 02 / 阶段二</div>
                     <div class="p-cycle-highlight">
-                        <div class="cycle-row"><span class="icon">⏱</span> 阶段耗时：<span class="highlight-text">${data.p2_w} 周</span></div>
+                        <div class="cycle-row"><span class="icon">⏱</span> 阶段耗时：<span class="highlight-text">${data.p2_w} 周 (${data.p2_w/4}个月)</span></div>
                         <div class="cycle-row"><span class="icon">🎯</span> 需配课时：<span class="highlight-text" id="p2-val">${data.p2_w * userFreq} 节</span></div>
                     </div>
                     <div class="p-name">${data.p2_name}</div>
@@ -523,7 +549,7 @@
                     <div class="check-circle"></div>
                     <div class="p-step">● PHASE 03 / 阶段三</div>
                     <div class="p-cycle-highlight">
-                        <div class="cycle-row"><span class="icon">⏱</span> 阶段耗时：<span class="highlight-text">${data.p3_w} 周</span></div>
+                        <div class="cycle-row"><span class="icon">⏱</span> 阶段耗时：<span class="highlight-text">${data.p3_w} 周 (${data.p3_w/4}个月)</span></div>
                         <div class="cycle-row"><span class="icon">🎯</span> 需配课时：<span class="highlight-text" id="p3-val">${data.p3_w * userFreq} 节</span></div>
                     </div>
                     <div class="p-name">${data.p3_name}</div>
@@ -707,7 +733,7 @@
             }
         }
 
-        // 🚨 终极核武：仅弹出两套方案 (精准匹配主推包 + 降阶体验启动包)
+        // 🚨 智能报价双轨拦截
         function showUpsellModal() {
             if(globalTotalExact === 0) return;
             
@@ -766,11 +792,9 @@
                 let exactSessions = globalTotalExact; 
                 let pkgCore = exactSessions; 
                 
-                // 核心：方案二 (兜底体验包) 向下寻找最近的标准包
+                // 方案二：兜底包
                 let pkgEntry = [...standardPackages].reverse().find(p => p < pkgCore);
-                // 如果 exact 本身就很小 (比如8节)，那兜底体验包可以给更少，或者至少保底一小点。
                 if (!pkgEntry) pkgEntry = Math.max(4, Math.floor(pkgCore / 2));
-                // 防止一样
                 if (pkgEntry === pkgCore) pkgEntry = Math.max(4, pkgCore - 4);
 
                 let unitB = getUnitPrice(pkgCore, data.type); 
@@ -783,11 +807,10 @@
                 let totalNewB = pkgCore * newbiePrice;
                 let totalNewC = pkgEntry * newbiePrice;
 
-                // 动态命名标题
                 document.getElementById('up-b-title').innerText = `方案一：【${targetName}】专属精准包`;
                 document.getElementById('up-c-title').innerText = `方案二：【降阶破冰】无压启动包`;
 
-                // 赋值 B (主推精准包)
+                // 赋值 B (主推)
                 document.getElementById('up-b-unit-ori').innerText = `¥${unitB}/节`;
                 document.getElementById('up-b-unit-new').innerText = `¥${newbiePrice}/节`;
                 document.getElementById('up-b-sessions').innerHTML = `${pkgCore} <span>节</span>`;
@@ -795,13 +818,13 @@
                 document.getElementById('up-b-new').innerText = formatMoney(totalNewB);
                 document.getElementById('btn-sign-b').onclick = function() { openSignature(targetName + ' 专属精准包', pkgCore + '节', '¥ ' + formatMoney(totalNewB)); };
 
-                // 赋值 C (兜底体验包)
+                // 赋值 C (兜底)
                 document.getElementById('up-c-unit-ori').innerText = `¥${unitC}/节`;
                 document.getElementById('up-c-unit-new').innerText = `¥${newbiePrice}/节`;
                 document.getElementById('up-c-sessions').innerHTML = `${pkgEntry} <span>节</span>`;
-                document.getElementById('up-c-ori').innerText = `原总价 ¥${formatMoney(totalOriC)}`;
+                document.getElementById('up-c-ori').innerText = `原价 ¥${formatMoney(totalOriC)}`;
                 document.getElementById('up-c-new').innerText = formatMoney(totalNewC);
-                document.getElementById('btn-sign-c').onclick = function() { openSignature('降阶破冰无压启动包', pkgEntry + '节', '¥ ' + formatMoney(totalNewC)); };
+                document.getElementById('btn-sign-c').onclick = function() { openSignature('降阶无压启动包', pkgEntry + '节', '¥ ' + formatMoney(totalNewC)); };
             }
 
             document.getElementById('upsellOverlay').classList.add('show');
@@ -813,7 +836,6 @@
             document.getElementById('upsellModal').classList.remove('show');
         }
 
-        // 电子签名画布系统
         let sigCanvas, sigCtx, isSigning = false;
 
         function openSignature(pkgName, sessions, price) {
