@@ -8,7 +8,6 @@
         /* 顶级香槟黑金配色 */
         :root { --primary: #D4AF37; --accent: #C5A059; --bg: #050505; --surface: #121212; --text-main: #E2E8F0; --text-sub: #8A92A3; }
         
-        /* 彻底锁死防漂移 */
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; margin: 0; padding: 0; }
         html, body { width: 100%; max-width: 100vw; overflow-x: hidden; background: var(--bg); color: var(--text-main); font-family: "DIN Alternate", "Helvetica Neue", sans-serif; -webkit-font-smoothing: antialiased; }
         
@@ -85,7 +84,6 @@
         .p-name { font-size: 18px; font-weight: 900; color: #888; margin-bottom: 15px; transition: 0.3s;}
         .phase-box.selected .p-name { color: #fff; }
         
-        /* 🚨 活体编辑引擎样式 */
         .sales-points { display: flex; flex-direction: column; gap: 12px; opacity: 0.5; transition: 0.3s; }
         .phase-box.selected .sales-points { opacity: 1; }
         .sp-row { display: flex; align-items: flex-start; gap: 10px; font-size: 13px; line-height: 1.6; }
@@ -109,14 +107,25 @@
         .cb-input::-webkit-outer-spin-button, .cb-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
         .cb-input[type=number] { -moz-appearance: textfield; }
 
-        .visual-feedback-section { margin-top: 30px; background: #0a0a0c; border: 1px solid rgba(212, 175, 55, 0.15); border-radius: 16px; padding: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        .fb-header { text-align: center; font-size: 15px; font-weight: 900; color: var(--primary); margin-bottom: 15px; letter-spacing: 2px; }
-        .visual-card { width: 100%; height: 300px; border-radius: 12px; overflow: hidden; position: relative; border: 1px solid rgba(255,255,255,0.1); background: #111;}
-        .visual-img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.7) contrast(1.1); transition: all 0.5s ease-in-out; }
-        .visual-overlay { position: absolute; bottom: 0; left: 0; width: 100%; padding: 40px 15px 15px; background: linear-gradient(to top, rgba(0,0,0,0.95), rgba(0,0,0,0.6), transparent); display: flex; flex-direction: column; justify-content: flex-end; }
-        .visual-title { color: var(--primary); font-size: 20px; font-weight: 900; letter-spacing: 1px; margin-bottom: 6px; text-shadow: 0 2px 5px rgba(0,0,0,0.8);}
-        .visual-desc { color: #ddd; font-size: 13px; line-height: 1.5; text-shadow: 0 1px 3px rgba(0,0,0,0.8); }
+        /* 🚨 终极视觉投射图 CSS 升级 */
+        .visual-feedback-section { margin-top: 30px; background: linear-gradient(145deg, #111, #050505); border: 1px solid rgba(212, 175, 55, 0.2); border-radius: 16px; padding: 20px; box-shadow: 0 15px 40px rgba(0,0,0,0.8); position: relative; overflow: hidden;}
+        .fb-header { text-align: center; font-size: 15px; font-weight: 900; color: var(--primary); margin-bottom: 15px; letter-spacing: 3px; display: flex; align-items: center; justify-content: center; gap: 8px;}
+        .fb-header::before, .fb-header::after { content: ''; height: 1px; width: 30px; background: rgba(212,175,55,0.5); }
+        
+        .visual-card { width: 100%; height: 380px; border-radius: 12px; overflow: hidden; position: relative; border: 1px solid rgba(255,255,255,0.1); background: #000;}
+        .visual-img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.6) contrast(1.15) saturate(1.1); transition: all 0.8s cubic-bezier(0.2, 0.8, 0.2, 1); transform: scale(1.02);}
+        
+        /* AI 扫描光效 */
+        .scanning-line { position: absolute; top: -10%; left: 0; width: 100%; height: 2px; background: rgba(212, 175, 55, 0.8); box-shadow: 0 0 20px 5px rgba(212, 175, 55, 0.4); opacity: 0; z-index: 5; pointer-events: none;}
+        @keyframes aiScan { 0% { top: -10%; opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { top: 110%; opacity: 0; } }
+        .scanning-active .scanning-line { animation: aiScan 1.5s ease-in-out; }
+        .scanning-active .visual-img { filter: brightness(0.9) contrast(1.2) saturate(1.2); transform: scale(1.05); }
 
+        .visual-overlay { position: absolute; bottom: 0; left: 0; width: 100%; padding: 60px 20px 20px; background: linear-gradient(to top, rgba(0,0,0,0.95) 10%, rgba(0,0,0,0.5) 60%, transparent); display: flex; flex-direction: column; justify-content: flex-end; z-index: 10;}
+        .visual-title { color: var(--primary); font-size: 22px; font-weight: 900; letter-spacing: 2px; margin-bottom: 8px; text-shadow: 0 2px 10px rgba(0,0,0,0.9); font-style: italic;}
+        .visual-desc { color: #eee; font-size: 13px; line-height: 1.6; text-shadow: 0 1px 5px rgba(0,0,0,0.9); font-weight: bold;}
+
+        /* 购物车底栏 */
         .checkout-bar { position: fixed; bottom: 0; left: 0; width: 100%; padding: 15px 20px 25px; background: rgba(10, 10, 12, 0.98); border-top: 1px solid rgba(212,175,55,0.3); box-shadow: 0 -10px 30px rgba(0,0,0,0.8); z-index: 100; backdrop-filter: blur(15px); display: flex; justify-content: space-between; align-items: center; }
         .checkout-info { display: flex; flex-direction: column; gap: 4px; }
         .c-info-label { font-size: 11px; color: #888; font-weight: bold; letter-spacing: 1px; }
@@ -126,10 +135,11 @@
         .btn-checkout:active { transform: scale(0.96); }
         .btn-checkout.disabled { background: #333; color: #666; box-shadow: none; pointer-events: none; }
 
-        .upsell-overlay { position: fixed; top:0; left:0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; opacity: 0; pointer-events: none; transition: 0.4s; backdrop-filter: blur(5px); }
+        /* 仪表盘级逼单弹窗 */
+        .upsell-overlay { position: fixed; top:0; left:0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 1000; opacity: 0; pointer-events: none; transition: 0.4s; backdrop-filter: blur(8px); }
         .upsell-overlay.show { opacity: 1; pointer-events: auto; }
         
-        .upsell-modal { position: fixed; bottom: -100%; left: 0; width: 100%; background: linear-gradient(180deg, #1A1A20, #0A0A0C); border-top: 1px solid var(--primary); border-radius: 24px 24px 0 0; z-index: 1001; padding: 25px 20px 30px; transition: 0.5s cubic-bezier(0.2, 0.8, 0.2, 1); box-shadow: 0 -10px 40px rgba(212,175,55,0.15); max-height: 90vh; overflow-y: hidden; overflow-x: hidden; display: flex; flex-direction: column;}
+        .upsell-modal { position: fixed; bottom: -100%; left: 0; width: 100%; background: linear-gradient(180deg, #121215, #050505); border-top: 1px solid var(--primary); border-radius: 24px 24px 0 0; z-index: 1001; padding: 25px 20px 30px; transition: 0.5s cubic-bezier(0.2, 0.8, 0.2, 1); box-shadow: 0 -10px 50px rgba(212,175,55,0.15); max-height: 90vh; overflow-y: hidden; overflow-x: hidden; display: flex; flex-direction: column;}
         .upsell-modal.show { bottom: 0; }
         
         .up-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px; flex-shrink: 0;}
@@ -137,36 +147,42 @@
         .up-sub { font-size: 11px; color: #aaa; margin-top: 6px; line-height: 1.5; }
         .up-close { color: #888; font-size: 28px; background: none; border: none; padding: 0; line-height: 1; cursor: pointer; }
 
-        .upsell-cards-container { overflow-y: auto; overflow-x: hidden; padding-bottom: 10px; flex: 1; -webkit-overflow-scrolling: touch;}
+        .upsell-cards-container { overflow-y: auto; overflow-x: hidden; padding-bottom: 10px; flex: 1; -webkit-overflow-scrolling: touch; padding-top: 10px;}
         
-        .up-card { background: #111; border-radius: 12px; padding: 24px 15px 15px; border: 2px solid #222; margin-bottom: 15px; position: relative; overflow: hidden; opacity: 0.5; transition: all 0.3s ease; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.5);}
-        .up-card.selected-card { border-color: var(--primary); opacity: 1; transform: scale(1.02); box-shadow: 0 5px 25px rgba(212,175,55,0.25); background: linear-gradient(145deg, #1C1810, #0A0A0C); }
-        .up-card.selected-card::before { content: '✓ 已优选此方案'; position: absolute; top: 0; right: 0; background: linear-gradient(90deg, var(--accent), var(--primary)); color: #000; font-size: 11px; font-weight: bold; padding: 4px 12px; border-radius: 0 0 0 12px; z-index: 10;}
+        .dash-card { background: linear-gradient(145deg, #16161A, #0A0A0C); border: 2px solid #222; border-radius: 16px; padding: 20px 15px 15px; position: relative; margin-bottom: 15px; transition: 0.3s; opacity: 0.6; cursor: pointer; box-shadow: 0 5px 15px rgba(0,0,0,0.5);}
+        .dash-card.selected-card { opacity: 1; border-color: var(--primary); background: linear-gradient(145deg, #1F1910, #0A0A0C); box-shadow: 0 10px 30px rgba(212,175,55,0.2); transform: scale(1.02); }
         
-        .uc-title { font-size: 16px; font-weight: 900; color: #fff; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; transition: 0.3s;}
-        .selected-card .uc-title { color: var(--primary); }
+        .check-ribbon { display: none; position: absolute; top: -2px; left: -2px; background: linear-gradient(135deg, var(--accent), var(--primary)); color: #000; font-size: 10px; font-weight: bold; padding: 4px 12px; border-radius: 14px 0 14px 0; z-index: 10;}
+        .selected-card .check-ribbon { display: block; }
         
-        .uc-breakdown { background: rgba(0,0,0,0.4); border-radius: 8px; padding: 10px; margin-bottom: 12px; border: 1px solid rgba(255,255,255,0.05); }
-        .uc-brk-row { display: flex; justify-content: space-between; font-size: 12px; color: #888; margin-bottom: 6px; }
-        .uc-brk-row:last-child { margin-bottom: 0; }
-        .uc-brk-row.hl { color: var(--primary); font-weight: bold; }
-        .uc-brk-row del { color: #555; }
+        .save-tag { position: absolute; top: -2px; right: -2px; background: linear-gradient(135deg, #FF4B40, #D91D12); color: #fff; font-size: 10px; font-weight: 900; padding: 4px 12px; border-radius: 0 14px 0 14px; z-index: 10; box-shadow: -2px 2px 10px rgba(217, 29, 18, 0.3);}
+        .dash-card.basic .save-tag { background: #444; color: #aaa; box-shadow: none;}
 
-        .uc-footer { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 5px; border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 12px;}
-        .uc-sessions { font-size: 22px; font-weight: 900; color: #fff; transition: 0.3s;}
-        .selected-card .uc-sessions { font-size: 26px; color: var(--primary); }
-        .uc-sessions span { font-size: 12px; font-weight: normal; color: #888; }
+        .dc-title { font-size: 16px; font-weight: 900; color: #fff; margin-bottom: 4px; display: flex; align-items: center; gap: 6px; margin-top: 5px;}
+        .selected-card .dc-title { color: var(--primary); }
+        .dc-subtitle { font-size: 11px; color: #888; margin-bottom: 15px; line-height: 1.4;}
         
-        .uc-price-box { text-align: right; }
-        .uc-ori-total { font-size: 11px; color: #888; text-decoration: line-through; margin-bottom: 2px; }
-        .uc-new-total { font-size: 22px; font-weight: 900; color: #fff; display: flex; align-items: baseline; justify-content: flex-end; gap: 4px; transition: 0.3s;}
-        .selected-card .uc-new-total { font-size: 26px; color: #fff; text-shadow: 0 0 10px rgba(212,175,55,0.4);}
-        .uc-price-unit { font-size: 11px; color: #888; margin-top: 4px; display: flex; align-items: center; justify-content: flex-end; gap: 4px;}
+        .dc-flex { display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 1px dashed rgba(255,255,255,0.1); padding-bottom: 12px; margin-bottom: 12px;}
+        .dc-ses { font-size: 36px; font-weight: 900; color: #fff; line-height: 1;}
+        .selected-card .dc-ses { color: var(--primary); }
+        .dc-ses span { font-size: 12px; font-weight: normal; color: #888; margin-left: 4px;}
         
+        .dc-right { text-align: right; }
+        .dc-ori { font-size: 12px; color: #666; text-decoration: line-through; margin-bottom: 4px;}
+        .dc-new { font-size: 28px; font-weight: 900; color: #fff; display: flex; align-items: baseline; justify-content: flex-end; gap: 2px;}
+        .selected-card .dc-new { color: var(--primary); text-shadow: 0 0 15px rgba(212, 175, 55, 0.4);}
+        .dc-new span { font-size: 16px; }
+        
+        .dc-footer { display: flex; justify-content: space-between; align-items: center; font-size: 11px;}
+        .dc-f-ori { color: #888; }
+        .dc-f-ori del { color: #666; margin-left: 4px;}
+        .dc-f-new { color: var(--primary); font-weight: bold; font-size: 13px;}
+        .basic .dc-f-new { color: #aaa; }
+
         .urgency-rule { background: rgba(212,175,55,0.08); border: 1px dashed rgba(212,175,55,0.4); border-radius: 6px; padding: 10px; margin-top: 15px; font-size: 10px; color: #aaa; line-height: 1.6; }
         .urgency-rule strong { color: var(--primary); }
 
-        .upsell-action-bar { position: sticky; bottom: 0; background: linear-gradient(to top, #0A0A0C 85%, transparent); padding: 15px 0 0 0; margin-top: 5px; flex-shrink: 0;}
+        .upsell-action-bar { position: sticky; bottom: 0; background: linear-gradient(to top, #050505 85%, transparent); padding: 15px 0 0 0; margin-top: 5px; flex-shrink: 0;}
         .btn-confirm-master { width: 100%; background: linear-gradient(135deg, var(--primary), #AA8A2A); color: #000; border: none; padding: 16px; border-radius: 12px; font-size: 16px; font-weight: 900; box-shadow: 0 8px 25px rgba(212, 175, 55, 0.3); cursor: pointer; transition: 0.3s; }
         .btn-confirm-master:active { transform: scale(0.98); }
 
@@ -272,7 +288,7 @@
             </div>
         
         <div class="upsell-action-bar">
-            <button class="btn-confirm-master" onclick="confirmUpsellSelection()">确认所选方案并签署合同 ➔</button>
+            <button class="btn-confirm-master" id="btn-submit" onclick="confirmUpsellSelection()">确认所选方案并签署合同 ➔</button>
         </div>
     </div>
 
@@ -282,10 +298,7 @@
             <button class="close-btn" onclick="closeSignature()" style="font-size: 28px; color: #888;">×</button>
         </div>
         <div class="sig-content">
-            
-            <div id="sig-pad-wrap" class="sig-pad-wrap">
-                </div>
-
+            <div id="sig-pad-wrap" class="sig-pad-wrap"></div>
         </div>
     </div>
 
@@ -294,7 +307,6 @@
             'regular': [ { t: 100, p: 350 }, { t: 72, p: 380 }, { t: 48, p: 400 }, { t: 24, p: 420 }, { t: 0, p: 440 } ],
             'feature': [ { t: 100, p: 380 }, { t: 72, p: 400 }, { t: 48, p: 420 }, { t: 24, p: 440 }, { t: 0, p: 460 } ]
         };
-        const standardPackages = [12, 24, 36, 48, 72, 100, 144, 200];
 
         function getUnitPrice(sessions, type) {
             if(sessions <= 0) return 0;
@@ -309,6 +321,7 @@
             return m * 3888;
         }
 
+        // 🚨 顶级视觉图片库：体现出从基础到完美的绝佳演变！
         const planData = {
             'posture': {
                 type: 'feature', icon: '<img src="https://cdn-icons-png.flaticon.com/512/16292/16292717.png">',
@@ -321,10 +334,10 @@
                 p3_goal: '将正确排列<strong>刻入神经潜意识</strong>。', p3_tech: '复合抗阻结合生活轨迹二次重塑。', p3_feel: '不自觉地<strong>保持挺拔高姿态</strong>。',
                 p4_name: '全息体态终身维稳', p4_w: 48,
                 p4_goal: '<strong>重塑底层筋膜张力网络</strong>，告别代偿。', p4_tech: '高阶动态控制与全息稳定训练。', p4_feel: '<strong>气质产生肉眼可见的高级蜕变</strong>。',
-                img1: 'https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=600&q=80', 
-                img2: 'https://images.unsplash.com/photo-1599901860904-17e6ed7083a0?auto=format&fit=crop&w=600&q=80', 
-                img3: 'https://images.unsplash.com/photo-1552196563-55cd4e45efb3?auto=format&fit=crop&w=600&q=80', 
-                img4: 'https://images.unsplash.com/photo-1574680178050-55c6a6a96e0a?auto=format&fit=crop&w=600&q=80',
+                img1: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=800&q=80', 
+                img2: 'https://images.unsplash.com/photo-1518310383802-640c2de311b2?auto=format&fit=crop&w=800&q=80', 
+                img3: 'https://images.unsplash.com/photo-1552196563-55cd4e45efb3?auto=format&fit=crop&w=800&q=80', 
+                img4: 'https://images.unsplash.com/photo-1607962837359-5da7858da5fb?auto=format&fit=crop&w=800&q=80',
                 txt1: '初期改善：异常张力释放，肩颈舒展', txt2: '进阶蜕变：核心建立，气质初显', txt3: '深度定型：脊柱完美中立，绝美背影', txt4: '年度维稳：从骨骼到气质的终极升华'
             },
             'fatloss': {
@@ -338,10 +351,10 @@
                 p3_goal: '拉高基础代谢基数，让身体在<strong>睡眠中持续燃烧</strong>。', p3_tech: '肌肥大训练提升整体肌肉储备。', p3_feel: '<strong>偶尔放纵吃喝不再反弹</strong>。',
                 p4_name: '代谢基因终极重写', p4_w: 48,
                 p4_goal: '<strong>彻底终结反弹宿命</strong>，维持常态化低体脂。', p4_tech: '高阶碳水循环与全域能量消耗训练。', p4_feel: '体能炸裂，<strong>拥有清晰的腹肌线条</strong>。',
-                img1: 'https://images.unsplash.com/photo-1584735175315-9d5df23860e6?auto=format&fit=crop&w=600&q=80', 
-                img2: 'https://images.unsplash.com/photo-1608228079968-c7681eaef81e?auto=format&fit=crop&w=600&q=80', 
-                img3: 'https://images.unsplash.com/photo-1508215885820-4585e5610ea0?auto=format&fit=crop&w=600&q=80', 
-                img4: 'https://images.unsplash.com/photo-1603988363607-e1e4a66962c6?auto=format&fit=crop&w=600&q=80',
+                img1: 'https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?auto=format&fit=crop&w=800&q=80', 
+                img2: 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?auto=format&fit=crop&w=800&q=80', 
+                img3: 'https://images.unsplash.com/photo-1508215885820-4585e5610ea0?auto=format&fit=crop&w=800&q=80', 
+                img4: 'https://images.unsplash.com/photo-1603988363607-e1e4a66962c6?auto=format&fit=crop&w=800&q=80',
                 txt1: '初期效果：水肿排空，体能极速唤醒', txt2: '进阶效果：围度缩小，内脏脂肪大量剥离', txt3: '深度定型：体脂降至黄金点，马甲线显现', txt4: '年度维稳：常态化极低体脂，身材自由'
             },
             'shape': {
@@ -355,10 +368,10 @@
                 p3_goal: '强行呈现出<strong>极致的漏斗形曲线</strong>。', p3_tech: '强化背部阔度，极致压缩腰围数据。', p3_feel: 'S曲线完全固化，<strong>拍照自带高级感</strong>。',
                 p4_name: '绝美比例终极锁死', p4_w: 48,
                 p4_goal: '<strong>精雕细琢每一寸肌肉走向</strong>，实现超模比例。', p4_tech: '高阶肌力微调与极致分离度训练。', p4_feel: '完美驾驭任何紧身衣物，<strong>气场全开</strong>。',
-                img1: 'https://images.unsplash.com/photo-1574680096145-d05b474e2155?auto=format&fit=crop&w=600&q=80', 
-                img2: 'https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?auto=format&fit=crop&w=600&q=80', 
-                img3: 'https://images.unsplash.com/photo-1605296867304-46d5465a13f1?auto=format&fit=crop&w=600&q=80', 
-                img4: 'https://images.unsplash.com/photo-1579758629938-03607ccdbaba?auto=format&fit=crop&w=600&q=80',
+                img1: 'https://images.unsplash.com/photo-1574680096145-d05b474e2155?auto=format&fit=crop&w=800&q=80', 
+                img2: 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=800&q=80', 
+                img3: 'https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?auto=format&fit=crop&w=800&q=80', 
+                img4: 'https://images.unsplash.com/photo-1605296867304-46d5465a13f1?auto=format&fit=crop&w=800&q=80',
                 txt1: '初期唤醒：臀部肌肉苏醒，发力感建立', txt2: '进阶填充：局部饱满度提升，臀线拉高', txt3: '深度定型：绝美腰臀比，极具视觉杀伤力', txt4: '年度维稳：超模级曲线锁死，肌肉质感极致'
             },
             'postpartum': {
@@ -372,10 +385,10 @@
                 p3_goal: '在安全前提下，<strong>剥离孕期囤积脂肪</strong>。', p3_tech: '无跳跃温和抗阻代谢组。', p3_feel: '逐步<strong>穿回孕前尺码衣服</strong>，皮肤恢复紧致。',
                 p4_name: '辣妈巅峰体态重铸', p4_w: 48,
                 p4_goal: '<strong>全面超越产前身体机能</strong>，打造极品辣妈。', p4_tech: '全域力量与体态精雕系统方案。', p4_feel: '不仅恢复如初，<strong>甚至比孕前更挺拔自信</strong>。',
-                img1: 'https://images.unsplash.com/photo-1609899536866-99396547465a?auto=format&fit=crop&w=600&q=80', 
-                img2: 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=600&q=80', 
-                img3: 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=600&q=80', 
-                img4: 'https://images.unsplash.com/photo-1553532070-539150b2077d?auto=format&fit=crop&w=600&q=80',
+                img1: 'https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=800&q=80', 
+                img2: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&w=800&q=80', 
+                img3: 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=800&q=80', 
+                img4: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=800&q=80',
                 txt1: '初期恢复：盆底激活，内源性功能重建', txt2: '进阶缝合：腹直肌闭合，核心力量回归', txt3: '深度定型：重返少女时代紧致身型', txt4: '年度维稳：机能全面超越孕前，顶级辣妈'
             },
             'rehab': {
@@ -389,10 +402,10 @@
                 p3_goal: '重建本体感觉，<strong>适应复杂运动轨迹</strong>。', p3_tech: '闭链与不平衡介质高阶神经调控。', p3_feel: '能<strong>极其自信地完成复杂动作</strong>，无惧损伤。',
                 p4_name: '高阶护甲与运动表现', p4_w: 48,
                 p4_goal: '<strong>绝对消除二次损伤隐患</strong>，提升爆发力。', p4_tech: '超等长收缩与专项运动机能强化。', p4_feel: '享受运动带来的绝对快乐，<strong>机能登顶</strong>。',
-                img1: 'https://images.unsplash.com/photo-1609899517237-77d357b03007?auto=format&fit=crop&w=600&q=80', 
-                img2: 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?auto=format&fit=crop&w=600&q=80', 
-                img3: 'https://images.unsplash.com/photo-1552674605-db6ffd4facb5?auto=format&fit=crop&w=600&q=80', 
-                img4: 'https://images.unsplash.com/photo-1599058917212-d750089bc07e?auto=format&fit=crop&w=600&q=80',
+                img1: 'https://images.unsplash.com/photo-1552674605-db6ffd4facb5?auto=format&fit=crop&w=800&q=80', 
+                img2: 'https://images.unsplash.com/photo-1599058917212-d750089bc07e?auto=format&fit=crop&w=800&q=80', 
+                img3: 'https://images.unsplash.com/photo-1584735935682-2f2b69dff9d2?auto=format&fit=crop&w=800&q=80', 
+                img4: 'https://images.unsplash.com/photo-1571019613576-2b22c76fd955?auto=format&fit=crop&w=800&q=80',
                 txt1: '初期镇痛：软组织压力释放，疼痛消失', txt2: '进阶护甲：关节周围力量增强，建立保护', txt3: '满血重返：无惧任何发力，重返高强度', txt4: '年度维稳：绝对护甲锁定，巅峰运动表现'
             },
             'antiaging': {
@@ -406,10 +419,10 @@
                 p3_goal: '提升最大摄氧量，由内而外焕发<strong>极致年轻态</strong>。', p3_tech: '稳态有氧配合心率变异率科学监控。', p3_feel: '爬楼梯不喘，<strong>气色红润，精力爆表</strong>。',
                 p4_name: '细胞级机能终身抗衰', p4_w: 48,
                 p4_goal: '<strong>真正实现生理年龄的逆转</strong>，常态化冻龄。', p4_tech: '全周期高阶体能与线粒体强化训练。', p4_feel: '由内而外散发活力，<strong>远超同龄人的巅峰状态</strong>。',
-                img1: 'https://images.unsplash.com/photo-1576678927484-cc907957088c?auto=format&fit=crop&w=600&q=80', 
-                img2: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=600&q=80', 
-                img3: 'https://images.unsplash.com/photo-1553532070-539150b2077d?auto=format&fit=crop&w=600&q=80', 
-                img4: 'https://images.unsplash.com/photo-1583454155184-870a1f63aebc?auto=format&fit=crop&w=600&q=80',
+                img1: 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=800&q=80', 
+                img2: 'https://images.unsplash.com/photo-1518310383802-640c2de311b2?auto=format&fit=crop&w=800&q=80', 
+                img3: 'https://images.unsplash.com/photo-1508215885820-4585e5610ea0?auto=format&fit=crop&w=800&q=80', 
+                img4: 'https://images.unsplash.com/photo-1583454155184-870a1f63aebc?auto=format&fit=crop&w=800&q=80',
                 txt1: '初期唤醒：关节润滑，身体恢复柔韧自由', txt2: '进阶储备：骨密提升，肌肉张力重返年轻', txt3: '逆龄冻龄：心肺引擎重置，绝对巅峰活力', txt4: '年度维稳：彻底对抗岁月，生理机能终极冻龄'
             }
         };
@@ -539,13 +552,14 @@
                     </div>
                 </div>
 
-                <div class="visual-feedback-section">
+                <div class="visual-feedback-section" id="visual-sec">
+                    <div class="scanning-line"></div>
                     <div class="fb-header">✦ AI 目标形态视觉投射 ✦</div>
                     <div class="visual-card">
-                        <img id="visual-img" class="visual-img" src="${data.img1}" alt="形态演变" style="filter: brightness(0.3) grayscale(1);">
+                        <img id="visual-img" class="visual-img" src="${data.img1}" alt="形态演变" style="filter: brightness(0.2) grayscale(1);">
                         <div class="visual-overlay">
-                            <div class="visual-title" id="visual-title">请选择您的蜕变目标</div>
-                            <div class="visual-desc" id="visual-desc">点选上方阶段，AI将为您投射对应形态</div>
+                            <div class="visual-title" id="visual-title">等待接入重塑网络...</div>
+                            <div class="visual-desc" id="visual-desc">点选上方阶段，AI将为您投射巅峰形态</div>
                         </div>
                     </div>
                 </div>
@@ -564,9 +578,7 @@
             document.getElementById('modalBody').innerHTML = ''; 
         }
 
-        function closeDetail() {
-            finishAndReturn();
-        }
+        function closeDetail() { finishAndReturn(); }
 
         function setFreq(f) {
             userFreq = f;
@@ -608,7 +620,6 @@
 
         function togglePhase(el, e) {
             if(e) e.stopPropagation();
-
             if (el.id === 'phase-5-box') {
                 document.querySelectorAll('.phase-box:not(.combo-box)').forEach(b => b.classList.remove('selected'));
                 el.classList.toggle('selected');
@@ -630,6 +641,13 @@
                 el.classList.toggle('selected');
             }
             updateCheckout();
+        }
+
+        function triggerAIScan() {
+            let sec = document.getElementById('visual-sec');
+            sec.classList.remove('scanning-active');
+            void sec.offsetWidth; // trigger reflow
+            sec.classList.add('scanning-active');
         }
 
         function updateCheckout() {
@@ -672,23 +690,23 @@
             const vDesc = document.getElementById('visual-desc');
 
             if(maxPhaseSelected === 0) {
-                vImg.style.filter = 'brightness(0.3) grayscale(1)';
-                vTitle.innerText = '请选择您的蜕变目标';
-                vDesc.innerText = '点选上方阶段，AI将为您投射对应形态';
+                vImg.style.filter = 'brightness(0.2) grayscale(1)';
+                vTitle.innerText = '等待接入重塑网络...';
+                vDesc.innerText = '点选上方阶段，AI将为您投射巅峰形态';
                 valDisplay.innerHTML = '<span style="color:#666; font-size:12px;">待选择目标阶段</span>';
                 btn.classList.add('disabled');
             } else {
-                vImg.style.filter = 'brightness(0.8) contrast(1.1)';
+                triggerAIScan();
                 if(maxPhaseSelected === 1) {
-                    vImg.src = data.img1; vTitle.innerText = 'PHASE 01: 基础达成'; vDesc.innerText = data.txt1;
+                    vImg.src = data.img1; vTitle.innerText = 'PHASE 01: 基础焕新'; vDesc.innerText = data.txt1;
                 } else if(maxPhaseSelected === 2) {
                     vImg.src = data.img2; vTitle.innerText = 'PHASE 02: 进阶蜕变'; vDesc.innerText = data.txt2;
                 } else if(maxPhaseSelected === 3) {
                     vImg.src = data.img3; vTitle.innerText = 'PHASE 03: 深度定型'; vDesc.innerText = data.txt3;
                 } else if(maxPhaseSelected === 4) {
-                    vImg.src = data.img4; vTitle.innerText = 'PHASE 04: 年度维稳'; vDesc.innerText = data.txt4;
+                    vImg.src = data.img4; vTitle.innerText = 'PHASE 04: 年度顶配'; vDesc.innerText = data.txt4;
                 } else {
-                    vImg.src = data.img4; vTitle.innerText = '✦ 顶级私教VIP托管 ✦'; vDesc.innerText = '突破单一瓶颈，量身定制全息巅峰状态';
+                    vImg.src = data.img4; vTitle.innerText = '✦ 顶级私教VIP托管 ✦'; vDesc.innerText = '打破一切局限，AI锁定您的全息巅峰状态';
                 }
                 
                 if (isCustom) {
@@ -703,9 +721,14 @@
         }
 
         function selectUpPlan(cardId, name, sessions, price) {
-            document.querySelectorAll('.up-card').forEach(c => c.classList.remove('selected-card'));
+            document.querySelectorAll('.dash-card').forEach(c => c.classList.remove('selected-card'));
             document.getElementById(cardId).classList.add('selected-card');
+            
             selectedUpsell = { name: name, sessions: sessions, price: price };
+            
+            let btn = document.getElementById('btn-submit');
+            btn.innerHTML = `确认锁定 ${name} ➔`;
+            
             if(navigator.vibrate) navigator.vibrate(20);
         }
 
@@ -714,12 +737,17 @@
             openSignature(selectedUpsell.name, selectedUpsell.sessions, selectedUpsell.price);
         }
 
+        // 🚨 弹窗重构：引入价格库同款仪表盘 UI 与散客锚定法
         function showUpsellModal() {
             if(globalTotalExact === 0) return;
             
             let customBox = document.getElementById('phase-5-box');
             let isCustom = customBox && customBox.classList.contains('selected');
             const data = planData[currentPlanKey];
+            
+            // 当前体系的散客价
+            const baseOriPrice = (data.type === 'feature') ? 460 : 440;
+            const newbiePrice = (data.type === 'feature') ? 380 : 350;
 
             let container = document.getElementById('upsell-cards-container');
             container.innerHTML = ''; 
@@ -731,77 +759,68 @@
                 let f = parseInt(document.getElementById('cb-feat').value) || 0;
                 let m = parseInt(document.getElementById('cb-mon').value) || 0;
 
-                let oriReg1 = r * getUnitPrice(r, 'regular');
-                let oriFeat1 = f * getUnitPrice(f, 'feature');
+                // 方案一：满配
+                let oriReg1 = r * 440; // 散客锚定
+                let oriFeat1 = f * 460;
                 let oriMon1 = m > 0 ? getMonthlyPrice(m) : 0;
                 let totalOri1 = oriReg1 + oriFeat1 + oriMon1;
 
                 let newReg1 = r * 350; let newFeat1 = f * 380;
                 let totalNew1 = newReg1 + newFeat1 + oriMon1;
+                let save1 = totalOri1 - totalNew1;
 
-                let r2 = Math.ceil(r / 2);
-                let f2 = Math.ceil(f / 2);
-                let m2 = m;
-                
-                let unitR2 = getUnitPrice(r2, 'regular');
-                let unitF2 = getUnitPrice(f2, 'feature');
+                // 方案二：原价半程包
+                let r2 = Math.ceil(r / 2); let f2 = Math.ceil(f / 2); let m2 = m;
+                let unitR2 = getUnitPrice(r2, 'regular'); let unitF2 = getUnitPrice(f2, 'feature');
                 let totalNew2 = (r2 * unitR2) + (f2 * unitF2) + (m2 > 0 ? getMonthlyPrice(m2) : 0); 
 
-                let bHtml1 = '';
-                if(r > 0) bHtml1 += `<div class="uc-brk-row"><span>常规课(${r}节)原阶梯<del>¥${getUnitPrice(r,'regular')}</del>:</span> <span class="hl">¥350/节</span></div>`;
-                if(f > 0) bHtml1 += `<div class="uc-brk-row"><span>特色课(${f}节)原阶梯<del>¥${getUnitPrice(f,'feature')}</del>:</span> <span class="hl">¥380/节</span></div>`;
-                if(m > 0) bHtml1 += `<div class="uc-brk-row"><span>包月卡(${m}个月):</span> <span class="hl">¥${formatMoney(getMonthlyPrice(m))}</span></div>`;
-
                 let card1 = `
-                    <div class="up-card premium" id="card-scheme-1" onclick="selectUpPlan('card-scheme-1', '【专属高定】全息私享包', '${r+f}节+${m}个月', '¥ ${formatMoney(totalNew1)}')">
-                        <div class="uc-title">方案一：【专属高定】全息私享包</div>
-                        <div style="font-size:11px; color:#aaa; margin-bottom: 10px;">锁定新客底价，覆盖完整高定计划</div>
-                        <div class="uc-breakdown">${bHtml1}</div>
-                        <div class="uc-footer">
-                            <div class="uc-sessions">${r+f} <span>节 (+包月)</span></div>
-                            <div class="uc-price-box">
-                                <div class="uc-ori-total">原总价 ¥${formatMoney(totalOri1)}</div>
-                                <div class="uc-new-total">¥ <span>${formatMoney(totalNew1)}</span></div>
+                    <div class="dash-card selected-card" id="card-scheme-1" onclick="selectUpPlan('card-scheme-1', '【专属高定】全息私享包', '${r+f}节+${m}个月', '¥ ${formatMoney(totalNew1)}')">
+                        ${save1 > 0 ? `<div class="save-tag">首购省 ¥${formatMoney(save1)}</div>` : ''}
+                        <div class="dc-title">方案一：【专属高定】全息私享包</div>
+                        <div class="dc-subtitle">锁定新客底价，覆盖教练为您组合的完整计划</div>
+                        <div class="dc-flex">
+                            <div class="dc-left">
+                                <div class="dc-ses">${r+f}<span>节(+包月)</span></div>
+                            </div>
+                            <div class="dc-right">
+                                <div class="dc-ori">散客原总价 ¥${formatMoney(totalOri1)}</div>
+                                <div class="dc-new"><span>¥</span>${formatMoney(totalNew1)}</div>
                             </div>
                         </div>
+                        <div class="dc-footer">
+                            <div class="dc-f-ori">按项混合计价</div>
+                            <div class="dc-f-new">享首购破冰特权</div>
+                        </div>
+                        <div class="check-ribbon">✓ 已优选</div>
                     </div>
                 `;
-
-                let bHtml2 = '';
-                if(r2 > 0) bHtml2 += `<div class="uc-brk-row"><span>常规课(${r2}节)执行原价:</span> <span class="hl">¥${unitR2}/节</span></div>`;
-                if(f2 > 0) bHtml2 += `<div class="uc-brk-row"><span>特色课(${f2}节)执行原价:</span> <span class="hl">¥${unitF2}/节</span></div>`;
-                if(m2 > 0) bHtml2 += `<div class="uc-brk-row"><span>包月卡(${m2}个月):</span> <span class="hl">¥${formatMoney(getMonthlyPrice(m2))}</span></div>`;
 
                 let card2 = `
-                    <div class="up-card basic" id="card-scheme-2" onclick="selectUpPlan('card-scheme-2', '【原价启动】半程保留包', '${r2+f2}节+${m2}个月', '¥ ${formatMoney(totalNew2)}')">
-                        <div class="uc-title">方案二：【原价启动】半程保留包</div>
-                        <div style="font-size:11px; color:#888; margin-bottom: 10px;">先以原价启动半程，2周内补全差价即可追溯特权价</div>
-                        <div class="uc-breakdown">${bHtml2}</div>
-                        <div class="uc-footer">
-                            <div class="uc-sessions">${r2+f2} <span>节 (+包月)</span></div>
-                            <div class="uc-price-box">
-                                <div class="uc-new-total" style="font-size:22px;">¥ <span>${formatMoney(totalNew2)}</span></div>
+                    <div class="dash-card basic" id="card-scheme-2" onclick="selectUpPlan('card-scheme-2', '【原价启动】半程保留包', '${r2+f2}节+${m2}个月', '¥ ${formatMoney(totalNew2)}')">
+                        <div class="dc-title" style="color:#aaa;">方案二：【原价启动】半程保留包</div>
+                        <div class="dc-subtitle">先以原价启动半程，2周内补全差价即可追溯特权价</div>
+                        <div class="dc-flex">
+                            <div class="dc-left">
+                                <div class="dc-ses" style="color:#fff;">${r2+f2}<span>节(+包月)</span></div>
+                            </div>
+                            <div class="dc-right">
+                                <div class="dc-new" style="color:#fff;"><span>¥</span>${formatMoney(totalNew2)}</div>
                             </div>
                         </div>
-                        <div class="urgency-rule">
-                            <strong>⚠️ 锁价升级法则：</strong> 本方案按原阶梯价结算。在 <strong>2周内</strong> 补齐尾款，即可将全部课程追溯升级为【方案一】的首购特权底价。
+                        <div class="dc-footer">
+                            <div class="dc-f-ori" style="text-decoration:none;">常规阶梯价计算</div>
+                            <div class="dc-f-new" style="color:#aaa;">暂不享特权底价</div>
                         </div>
+                        <div class="check-ribbon" style="background:#555; color:#fff;">✓ 已优选</div>
                     </div>
                 `;
 
-                container.innerHTML = card1 + card2 + `
-                    <div class="validity-note">
-                        <div class="vn-title">✦ 课程有效期与门店使用规范</div>
-                        <ul class="vn-list">
-                            <li><span>常规/特色课：</span>有效期按【5天/节】自动顺延计算。</li>
-                            <li><span>包月周期课：</span>按自然时效计算。时效内至多可预约私教课 16 节，其余时间尊享场地无限制。</li>
-                        </ul>
-                    </div>
-                `;
-
+                container.innerHTML = card1 + card2 + `<div class="urgency-rule"><strong>⚠️ 锁价法则：</strong> 方案二按原阶梯价结算。<strong>2周内</strong>补齐尾款，即可将全部课程追溯升级为【方案一】的首购特权底价。</div>`;
                 selectUpPlan('card-scheme-1', '【专属高定】全息私享包', `${r+f}节+${m}个月`, `¥ ${formatMoney(totalNew1)}`);
 
             } else {
+                // ====== 阶段双轨 ======
                 let phaseNames = [];
                 document.querySelectorAll('.phase-box.selected:not(.combo-box)').forEach(box => {
                     let pStep = box.querySelector('.p-step').innerText; 
@@ -819,63 +838,57 @@
                 let pkgEntry = Math.ceil(pkgCore / 2);
                 if (pkgEntry < 1) pkgEntry = 1;
 
-                let unitB = getUnitPrice(pkgCore, data.type); 
                 let unitC = getUnitPrice(pkgEntry, data.type); 
                 
-                let totalOriB = pkgCore * unitB;
-                let newbiePrice = (data.type === 'feature') ? 380 : 350;
+                let totalOriB = pkgCore * baseOriPrice; // 散客锚定法
                 let totalNewB = pkgCore * newbiePrice; 
+                let saveB = totalOriB - totalNewB;
                 
                 let totalNewC = pkgEntry * unitC; 
 
                 let card1 = `
-                    <div class="up-card premium selected-card" id="card-scheme-1" onclick="selectUpPlan('card-scheme-1', '${targetName} 专属精准包', '${pkgCore}节', '¥ ${formatMoney(totalNewB)}')">
-                        <div class="uc-title">方案一：【${targetName}】专属精准包</div>
-                        <div style="font-size:11px; color:#aaa; margin-bottom: 10px;">完全契合您选择的周期与频次，效果最大化</div>
-                        <div class="uc-breakdown">
-                            <div class="uc-brk-row"><span>常规阶梯单价:</span> <span><del>¥${unitB}/节</del></span></div>
-                            <div class="uc-brk-row hl"><span>首购特权底价:</span> <span>¥${newbiePrice}/节</span></div>
-                        </div>
-                        <div class="uc-footer">
-                            <div class="uc-sessions">${pkgCore} <span>节</span></div>
-                            <div class="uc-price-box">
-                                <div class="uc-ori-total">原总价 ¥${formatMoney(totalOriB)}</div>
-                                <div class="uc-new-total">¥ <span>${formatMoney(totalNewB)}</span></div>
+                    <div class="dash-card selected-card" id="card-scheme-1" onclick="selectUpPlan('card-scheme-1', '${targetName} 专属精准包', '${pkgCore}节', '¥ ${formatMoney(totalNewB)}')">
+                        ${saveB > 0 ? `<div class="save-tag">首购省 ¥${formatMoney(saveB)}</div>` : ''}
+                        <div class="dc-title">方案一：【${targetName}】专属精准包</div>
+                        <div class="dc-subtitle">完全契合您选择的周期与频次，效果最大化</div>
+                        <div class="dc-flex">
+                            <div class="dc-left">
+                                <div class="dc-ses">${pkgCore}<span>节</span></div>
+                            </div>
+                            <div class="dc-right">
+                                <div class="dc-ori">散客原总价 ¥${formatMoney(totalOriB)}</div>
+                                <div class="dc-new"><span>¥</span>${formatMoney(totalNewB)}</div>
                             </div>
                         </div>
+                        <div class="dc-footer">
+                            <div class="dc-f-ori">原散客价 <del>¥${baseOriPrice}/节</del></div>
+                            <div class="dc-f-new">首购特权 ¥${newbiePrice}/节</div>
+                        </div>
+                        <div class="check-ribbon">✓ 已优选</div>
                     </div>
                 `;
 
                 let card2 = `
-                    <div class="up-card basic" id="card-scheme-2" onclick="selectUpPlan('card-scheme-2', '【原价启动】半程保留包', '${pkgEntry}节', '¥ ${formatMoney(totalNewC)}')">
-                        <div class="uc-title">方案二：【原价启动】半程保留包</div>
-                        <div style="font-size:11px; color:#888; margin-bottom: 10px;">先以原价启动半程，2周内补全差价即可追溯特权价</div>
-                        <div class="uc-breakdown">
-                            <div class="uc-brk-row"><span>常规阶梯执行单价:</span> <span class="hl">¥${unitC}/节</span></div>
-                            <div class="uc-brk-row" style="color:#666;"><span>首购特权底价:</span> <span>暂不享受延期</span></div>
-                        </div>
-                        <div class="uc-footer">
-                            <div class="uc-sessions">${pkgEntry} <span>节</span></div>
-                            <div class="uc-price-box">
-                                <div class="uc-new-total" style="font-size:22px;">¥ <span>${formatMoney(totalNewC)}</span></div>
+                    <div class="dash-card basic" id="card-scheme-2" onclick="selectUpPlan('card-scheme-2', '【原价启动】半程保留包', '${pkgEntry}节', '¥ ${formatMoney(totalNewC)}')">
+                        <div class="dc-title" style="color:#aaa;">方案二：【原价启动】半程保留包</div>
+                        <div class="dc-subtitle">先以原价启动半程，2周内补全差价即可追溯特权价</div>
+                        <div class="dc-flex">
+                            <div class="dc-left">
+                                <div class="dc-ses" style="color:#fff;">${pkgEntry}<span>节</span></div>
+                            </div>
+                            <div class="dc-right">
+                                <div class="dc-new" style="color:#fff;"><span>¥</span>${formatMoney(totalNewC)}</div>
                             </div>
                         </div>
-                        <div class="urgency-rule">
-                            <strong>⚠️ 锁价升级法则：</strong> 本方案按原阶梯价结算。在 <strong>2周内</strong> 补齐尾款，即可将全部课程追溯升级为【方案一】的首购特权底价。
+                        <div class="dc-footer">
+                            <div class="dc-f-ori" style="text-decoration:none;">按原阶梯执行</div>
+                            <div class="dc-f-new" style="color:#aaa;">原价 ¥${unitC}/节</div>
                         </div>
+                        <div class="check-ribbon" style="background:#555; color:#fff;">✓ 已优选</div>
                     </div>
                 `;
 
-                container.innerHTML = card1 + card2 + `
-                    <div class="validity-note">
-                        <div class="vn-title">✦ 课程有效期与门店使用规范</div>
-                        <ul class="vn-list">
-                            <li><span>常规/特色课：</span>有效期按【5天/节】自动顺延计算。</li>
-                            <li><span>包月周期课：</span>按自然时效计算。时效内至多可预约私教课 16 节，其余时间尊享场地无限制。</li>
-                        </ul>
-                    </div>
-                `;
-
+                container.innerHTML = card1 + card2 + `<div class="urgency-rule"><strong>⚠️ 锁价法则：</strong> 方案二按原阶梯价结算。<strong>2周内</strong>补齐尾款，即可将全部课程追溯升级为【方案一】的首购特权底价。</div>`;
                 selectUpPlan('card-scheme-1', `${targetName} 专属精准包`, `${pkgCore}节`, `¥ ${formatMoney(totalNewB)}`);
             }
 
@@ -892,7 +905,6 @@
 
         function openSignature(pkgName, sessions, price) {
             closeUpsellModal();
-            
             document.getElementById('signatureModal').classList.add('show');
             
             document.getElementById('sig-pad-wrap').innerHTML = `
@@ -939,18 +951,10 @@
             }, 400);
         }
 
-        function closeSignature() {
-            document.getElementById('signatureModal').classList.remove('show');
-            clearCanvas();
-        }
-
         function getSignPos(e) {
             let rect = sigCanvas.getBoundingClientRect();
             let x = e.clientX, y = e.clientY;
-            if(e.touches && e.touches.length > 0) {
-                x = e.touches[0].clientX;
-                y = e.touches[0].clientY;
-            }
+            if(e.touches && e.touches.length > 0) { x = e.touches[0].clientX; y = e.touches[0].clientY; }
             return { x: x - rect.left, y: y - rect.top };
         }
 
@@ -972,11 +976,7 @@
             sigCtx.stroke();
         }
 
-        function endSign() {
-            isSigning = false;
-            sigCtx.closePath();
-        }
-
+        function endSign() { isSigning = false; sigCtx.closePath(); }
         function clearCanvas() {
             if(!sigCtx) return;
             sigCtx.clearRect(0, 0, sigCanvas.width, sigCanvas.height);
