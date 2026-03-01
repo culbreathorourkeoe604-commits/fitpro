@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>私人定制高端课程</title>
     <style>
-        /* 顶级香槟黑金配色，底色不变 */
+        /* 顶级香槟黑金配色 */
         :root { --primary: #D4AF37; --accent: #C5A059; --bg: #050505; --surface: #121212; --text-main: #E2E8F0; --text-sub: #8A92A3; }
         
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; margin: 0; padding: 0; }
@@ -36,11 +36,10 @@
         .detail-modal { position: fixed; top: 100vh; left: 0; width: 100%; height: 100vh; background: var(--bg); z-index: 999; transition: top 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); display: flex; flex-direction: column; overflow-x: hidden; }
         .detail-modal.show { top: 0; }
 
-        .modal-header { height: 60px; display: flex; justify-content: space-between; align-items: center; padding: 0 20px; background: rgba(5,5,5,0.95); border-bottom: 1px solid rgba(212,175,55,0.2); backdrop-filter: blur(10px); flex-shrink: 0;}
+        /* 优化头部大叉 */
+        .modal-header { height: 60px; display: flex; justify-content: space-between; align-items: center; padding: 0 20px; background: rgba(5,5,5,0.95); border-bottom: 1px solid rgba(212,175,55,0.2); backdrop-filter: blur(10px); flex-shrink: 0; position: relative; z-index: 50;}
         .modal-title { font-size: 16px; font-weight: bold; color: var(--primary); }
-        
-        /* 🚨 优化关闭按钮：增大触控面积，绝对置顶防遮挡 */
-        .close-btn { color: #888; font-size: 32px; font-weight: normal; background: none; border: none; width: 44px; height: 44px; margin-right: -10px; display: flex; justify-content: center; align-items: center; cursor: pointer; transition: 0.3s; z-index: 100; touch-action: manipulation;}
+        .close-btn { color: #aaa; font-size: 32px; font-weight: normal; background: none; border: none; padding: 10px 20px; margin-right: -15px; cursor: pointer; transition: 0.3s; touch-action: manipulation;}
         .close-btn:active { color: #fff; transform: scale(0.9); }
 
         .modal-body { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 20px 20px 140px; -webkit-overflow-scrolling: touch; }
@@ -124,11 +123,12 @@
         .scanning-active .scanning-line { animation: aiScan 1.5s ease-in-out; }
         .scanning-active .visual-img { filter: brightness(1.05) saturate(1.05); transform: scale(1.05); }
 
-        .visual-overlay { position: absolute; bottom: 0; left: 0; width: 100%; padding: 40px 15px 15px; background: linear-gradient(to top, rgba(0,0,0,0.9), rgba(0,0,0,0.3), transparent); display: flex; flex-direction: column; justify-content: flex-end; z-index: 10; pointer-events: none;}
+        .visual-overlay { position: absolute; bottom: 0; left: 0; width: 100%; padding: 40px 15px 15px; background: linear-gradient(to top, rgba(0,0,0,0.95), rgba(0,0,0,0.3), transparent); display: flex; flex-direction: column; justify-content: flex-end; z-index: 10; pointer-events: none;}
         .visual-title { color: var(--primary); font-size: 20px; font-weight: 900; letter-spacing: 1px; margin-bottom: 6px; text-shadow: 0 2px 5px rgba(0,0,0,0.8);}
         .visual-desc { color: #fff; font-size: 13px; line-height: 1.5; text-shadow: 0 1px 3px rgba(0,0,0,0.8); font-weight: bold;}
 
-        .checkout-bar { position: fixed; bottom: 0; left: 0; width: 100%; padding: 15px 20px 25px; background: rgba(10, 10, 12, 0.98); border-top: 1px solid rgba(212,175,55,0.3); box-shadow: 0 -10px 30px rgba(0,0,0,0.8); z-index: 100; backdrop-filter: blur(15px); display: flex; justify-content: space-between; align-items: center; }
+        /* 🚨 核心修复：提升底部结账栏的 z-index，彻底解决点不到的Bug */
+        .checkout-bar { position: fixed; bottom: 0; left: 0; width: 100%; padding: 15px 20px 25px; background: rgba(10, 10, 12, 0.98); border-top: 1px solid rgba(212,175,55,0.3); box-shadow: 0 -10px 30px rgba(0,0,0,0.8); z-index: 9999; backdrop-filter: blur(15px); display: flex; justify-content: space-between; align-items: center; }
         .checkout-info { display: flex; flex-direction: column; gap: 4px; }
         .c-info-label { font-size: 11px; color: #888; font-weight: bold; letter-spacing: 1px; }
         .c-info-val { font-size: 15px; font-weight: 900; color: #fff; display: flex; align-items: baseline; gap: 4px;}
@@ -137,14 +137,12 @@
         .btn-checkout:active { transform: scale(0.96); }
         .btn-checkout.disabled { background: #333; color: #666; box-shadow: none; pointer-events: none; }
 
-        /* 专属图库控制台 */
-        .admin-modal-wrap { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 3000; display: none; flex-direction: column; justify-content: center; align-items: center; padding: 20px; backdrop-filter: blur(10px); opacity: 0; transition: opacity 0.3s;}
+        .admin-modal-wrap { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 10005; display: none; flex-direction: column; justify-content: center; align-items: center; padding: 20px; backdrop-filter: blur(10px); opacity: 0; transition: opacity 0.3s;}
         .admin-modal-wrap.show { display: flex; opacity: 1;}
         .admin-modal-content { background: #111; border: 1px solid var(--primary); border-radius: 16px; width: 100%; max-width: 400px; padding: 20px; box-shadow: 0 10px 40px rgba(212,175,55,0.3); max-height: 90vh; overflow-y: auto;}
         .admin-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed rgba(212,175,55,0.3); padding-bottom: 15px; margin-bottom: 15px;}
         .admin-title { color: var(--primary); font-size: 18px; font-weight: bold;}
-        .admin-close { color: #888; font-size: 32px; font-weight: normal; cursor: pointer; line-height: 1; width: 40px; height: 40px; display: flex; justify-content: center; align-items: center; margin-right:-10px;}
-        .admin-close:active { color: #fff; }
+        .admin-close { color: #888; font-size: 28px; cursor: pointer; line-height: 1;}
         .admin-subtitle { color: #fff; font-size: 14px; margin-bottom: 15px; text-align: center; font-weight: bold;}
         .admin-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px;}
         .admin-slot { background: #000; border: 1px solid #333; border-radius: 10px; padding: 10px; display: flex; flex-direction: column; align-items: center;}
@@ -154,18 +152,16 @@
         .slot-btn:active { background: var(--primary); color: #000;}
         .admin-save-btn { width: 100%; background: linear-gradient(135deg, var(--primary), #AA8A2A); color: #000; border: none; padding: 14px; border-radius: 10px; font-size: 16px; font-weight: 900; box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3); cursor: pointer;}
 
-        /* 仪表盘弹窗 */
-        .upsell-overlay { position: fixed; top:0; left:0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 1000; opacity: 0; pointer-events: none; transition: 0.4s; backdrop-filter: blur(8px); }
+        .upsell-overlay { position: fixed; top:0; left:0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 10000; opacity: 0; pointer-events: none; transition: 0.4s; backdrop-filter: blur(8px); }
         .upsell-overlay.show { opacity: 1; pointer-events: auto; }
         
-        .upsell-modal { position: fixed; bottom: -100%; left: 0; width: 100%; background: linear-gradient(180deg, #121215, #050505); border-top: 1px solid var(--primary); border-radius: 24px 24px 0 0; z-index: 1001; padding: 25px 20px 30px; transition: 0.5s cubic-bezier(0.2, 0.8, 0.2, 1); box-shadow: 0 -10px 50px rgba(212,175,55,0.15); max-height: 90vh; overflow-y: hidden; overflow-x: hidden; display: flex; flex-direction: column;}
+        .upsell-modal { position: fixed; bottom: -100%; left: 0; width: 100%; background: linear-gradient(180deg, #121215, #050505); border-top: 1px solid var(--primary); border-radius: 24px 24px 0 0; z-index: 10001; padding: 25px 20px 30px; transition: 0.5s cubic-bezier(0.2, 0.8, 0.2, 1); box-shadow: 0 -10px 50px rgba(212,175,55,0.15); max-height: 90vh; overflow-y: hidden; overflow-x: hidden; display: flex; flex-direction: column;}
         .upsell-modal.show { bottom: 0; }
         
         .up-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px; flex-shrink: 0;}
         .up-title { font-size: 18px; font-weight: 900; color: #fff; letter-spacing: 1px; }
         .up-sub { font-size: 11px; color: #aaa; margin-top: 6px; line-height: 1.5; }
-        .up-close { color: #888; font-size: 32px; font-weight: normal; background: none; border: none; padding: 0; line-height: 1; cursor: pointer; width: 44px; height: 44px; display: flex; justify-content: center; align-items: center; margin-right: -10px;}
-        .up-close:active { color: #fff; transform: scale(0.9);}
+        .up-close { color: #888; font-size: 28px; background: none; border: none; padding: 0; line-height: 1; cursor: pointer; }
 
         .upsell-cards-container { overflow-y: auto; overflow-x: hidden; padding-bottom: 10px; flex: 1; -webkit-overflow-scrolling: touch; padding-top: 10px;}
         
@@ -200,8 +196,7 @@
         .btn-confirm-master { width: 100%; background: linear-gradient(135deg, var(--primary), #AA8A2A); color: #000; border: none; padding: 16px; border-radius: 12px; font-size: 16px; font-weight: 900; box-shadow: 0 8px 25px rgba(212, 175, 55, 0.3); cursor: pointer; transition: 0.3s; }
         .btn-confirm-master:active { transform: scale(0.98); }
 
-        /* 签名台 */
-        .sig-modal { position: fixed; top: 100vh; left: 0; width: 100%; height: 100vh; background: #08080A; z-index: 2000; transition: top 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); display: flex; flex-direction: column; overflow-x: hidden;}
+        .sig-modal { position: fixed; top: 100vh; left: 0; width: 100%; height: 100vh; background: #08080A; z-index: 20000; transition: top 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); display: flex; flex-direction: column; overflow-x: hidden;}
         .sig-modal.show { top: 0; }
         .sig-header { height: 60px; display: flex; justify-content: space-between; align-items: center; padding: 0 20px; background: rgba(5,5,5,0.95); border-bottom: 1px solid rgba(212,175,55,0.3); flex-shrink:0;}
         .sig-title { font-size: 16px; font-weight: bold; color: var(--primary); }
@@ -263,15 +258,19 @@
     <div class="detail-modal" id="detailModal">
         <div class="modal-header">
             <div class="modal-title" id="m-header-title">定制路径推演</div>
-            <button class="close-btn" onclick="closeDetail(event)">×</button>
+            <button class="close-btn" onclick="closeDetail()">×</button>
         </div>
+        
         <div class="modal-body" id="modalBody"></div>
+        
         <div class="checkout-bar">
             <div class="checkout-info">
                 <div class="c-info-label">系统核算预估课时</div>
                 <div class="c-info-val" id="calc-val">-- <span>节</span></div>
             </div>
-            <button class="btn-checkout disabled" id="btn-checkout" onclick="showUpsellModal()">获取智能报价方案 ➔</button>
+            <button class="btn-checkout disabled" id="btn-checkout" onclick="showUpsellModal()">
+                获取智能报价方案 ➔
+            </button>
         </div>
     </div>
 
@@ -279,9 +278,10 @@
         <div class="admin-modal-content">
             <div class="admin-header">
                 <div class="admin-title">✦ 专属视觉配置台 ✦</div>
-                <div class="admin-close" onclick="closeAdmin(event)">×</div>
+                <div class="admin-close" onclick="closeAdmin()">×</div>
             </div>
-            <div class="admin-subtitle" id="admin-subtitle">当前配置：...</div>
+            <div class="admin-subtitle" id="admin-subtitle">当前配置：体态矫正与结构优化</div>
+            
             <div class="admin-grid">
                 <div class="admin-slot">
                     <div class="slot-title">对应：阶段一</div>
@@ -308,18 +308,19 @@
                     <input type="file" id="file-4" accept="image/*" style="display:none" onchange="processAdminImg(event, 4)">
                 </div>
             </div>
+            
             <button class="admin-save-btn" onclick="saveAdmin()">保存并应用至当前方案 ➔</button>
         </div>
     </div>
 
-    <div class="upsell-overlay" id="upsellOverlay" onclick="closeUpsellModal(event)"></div>
+    <div class="upsell-overlay" id="upsellOverlay" onclick="closeUpsellModal()"></div>
     <div class="upsell-modal" id="upsellModal">
         <div class="up-header">
             <div>
                 <div class="up-title" id="up-main-title">✦ 智能匹配双轨方案 ✦</div>
                 <div class="up-sub" id="up-sub-text">基于您选择的阶段与出勤频率，为您精准匹配以下方案：</div>
             </div>
-            <button class="up-close" onclick="closeUpsellModal(event)">×</button>
+            <button class="up-close" onclick="closeUpsellModal()">×</button>
         </div>
         <div class="upsell-cards-container" id="upsell-cards-container"></div>
         <div class="upsell-action-bar">
@@ -330,7 +331,7 @@
     <div class="sig-modal" id="signatureModal">
         <div class="sig-header">
             <div class="sig-title">✦ 电子合同签署中心 ✦</div>
-            <button class="close-btn" onclick="closeSignature(event)">×</button>
+            <button class="close-btn" onclick="closeSignature()" style="font-size: 28px; color: #888;">×</button>
         </div>
         <div class="sig-content">
             <div id="sig-pad-wrap" class="sig-pad-wrap"></div>
@@ -356,7 +357,6 @@
             return m * 3888;
         }
 
-        // 🚨 24张顶级女性大片库（明亮、自信、无死肌肉）
         const planData = {
             'posture': {
                 type: 'feature', icon: '<img src="https://cdn-icons-png.flaticon.com/512/16292/16292717.png">',
@@ -369,12 +369,11 @@
                 p3_goal: '将正确排列<strong>刻入神经潜意识</strong>。', p3_tech: '复合抗阻结合生活轨迹二次重塑。', p3_feel: '不自觉地<strong>保持挺拔高姿态</strong>。',
                 p4_name: '全息体态终身维稳', p4_w: 48,
                 p4_goal: '<strong>重塑底层筋膜张力网络</strong>，告别代偿。', p4_tech: '高阶动态控制与全息稳定训练。', p4_feel: '<strong>气质产生肉眼可见的高级蜕变</strong>。',
-                // 优雅背部/肩颈线条
-                img1: 'https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=800&q=80', 
-                img2: 'https://images.unsplash.com/photo-1552196563-55cd4e45efb3?auto=format&fit=crop&w=800&q=80', 
-                img3: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=800&q=80', 
-                img4: 'https://images.unsplash.com/photo-1599901860904-17e6ed7083a0?auto=format&fit=crop&w=800&q=80',
-                txt1: '初期改善：异常张力释放，肩颈舒展', txt2: '进阶蜕变：核心建立，气质初显', txt3: '深度定型：脊柱完美中立，绝美背影', txt4: '年度维稳：从骨骼到气质的终极升华'
+                img1: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=800&q=80', 
+                img2: 'https://images.unsplash.com/photo-1552674605-db6ffd4facb5?auto=format&fit=crop&w=800&q=80', 
+                img3: 'https://images.unsplash.com/photo-1588286840104-8957b019727f?auto=format&fit=crop&w=800&q=80', 
+                img4: 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=800&q=80',
+                txt1: '初期改善：异常张力释放，肩颈舒展', txt2: '进阶蜕变：核心建立，气质初显', txt3: '深度定型：脊柱完美中立，舒展优雅', txt4: '年度维稳：从骨骼到气质的终极升华'
             },
             'fatloss': {
                 type: 'regular', icon: '<img src="https://cdn-icons-png.flaticon.com/512/12805/12805546.png">',
@@ -387,11 +386,10 @@
                 p3_goal: '拉高基础代谢基数，让身体在<strong>睡眠中持续燃烧</strong>。', p3_tech: '肌肥大训练提升整体肌肉储备。', p3_feel: '<strong>偶尔放纵吃喝不再反弹</strong>。',
                 p4_name: '代谢基因终极重写', p4_w: 48,
                 p4_goal: '<strong>彻底终结反弹宿命</strong>，维持常态化低体脂。', p4_tech: '高阶碳水循环与全域能量消耗训练。', p4_feel: '体能炸裂，<strong>拥有清晰的腹肌线条</strong>。',
-                // 阳光、汗水、清晰马甲线
-                img1: 'https://images.unsplash.com/photo-1538805060514-97d9cc17730c?auto=format&fit=crop&w=800&q=80', 
-                img2: 'https://images.unsplash.com/photo-1518310383802-640c2de311b2?auto=format&fit=crop&w=800&q=80', 
-                img3: 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?auto=format&fit=crop&w=800&q=80', 
-                img4: 'https://images.unsplash.com/photo-1603988363607-e1e4a66962c6?auto=format&fit=crop&w=800&q=80',
+                img1: 'https://images.unsplash.com/photo-1476480862126-25e47da24ab6?auto=format&fit=crop&w=800&q=80', 
+                img2: 'https://images.unsplash.com/photo-1538805060514-97d9cc17730c?auto=format&fit=crop&w=800&q=80', 
+                img3: 'https://images.unsplash.com/photo-1526506114805-4e3158ddb16d?auto=format&fit=crop&w=800&q=80', 
+                img4: 'https://images.unsplash.com/photo-1605296867304-46d5465a13f1?auto=format&fit=crop&w=800&q=80',
                 txt1: '初期效果：水肿排空，体能极速唤醒', txt2: '进阶效果：围度缩小，内脏脂肪大量剥离', txt3: '深度定型：体脂降至黄金点，马甲线显现', txt4: '年度维稳：常态化极低体脂，身材自由'
             },
             'shape': {
@@ -405,11 +403,10 @@
                 p3_goal: '强行呈现出<strong>极致的漏斗形曲线</strong>。', p3_tech: '强化背部阔度，极致压缩腰围数据。', p3_feel: 'S曲线完全固化，<strong>拍照自带高级感</strong>。',
                 p4_name: '绝美比例终极锁死', p4_w: 48,
                 p4_goal: '<strong>精雕细琢每一寸肌肉走向</strong>，实现超模比例。', p4_tech: '高阶肌力微调与极致分离度训练。', p4_feel: '完美驾驭任何紧身衣物，<strong>气场全开</strong>。',
-                // 若隐若现S型、极致腰臀比
-                img1: 'https://images.unsplash.com/photo-1574680096145-d05b474e2155?auto=format&fit=crop&w=800&q=80', 
+                img1: 'https://images.unsplash.com/photo-1584735935682-2f2b69dff9d2?auto=format&fit=crop&w=800&q=80', 
                 img2: 'https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?auto=format&fit=crop&w=800&q=80', 
-                img3: 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=800&q=80', 
-                img4: 'https://images.unsplash.com/photo-1605296867304-46d5465a13f1?auto=format&fit=crop&w=800&q=80',
+                img3: 'https://images.unsplash.com/photo-1594381898411-846e7d193883?auto=format&fit=crop&w=800&q=80', 
+                img4: 'https://images.unsplash.com/photo-1574680096145-d05b474e2155?auto=format&fit=crop&w=800&q=80',
                 txt1: '初期唤醒：臀部肌肉苏醒，发力感建立', txt2: '进阶填充：局部饱满度提升，臀线拉高', txt3: '深度定型：绝美腰臀比，极具视觉杀伤力', txt4: '年度维稳：超模级曲线锁死，肌肉质感极致'
             },
             'postpartum': {
@@ -423,11 +420,10 @@
                 p3_goal: '在安全前提下，<strong>剥离孕期囤积脂肪</strong>。', p3_tech: '无跳跃温和抗阻代谢组。', p3_feel: '逐步<strong>穿回孕前尺码衣服</strong>，皮肤恢复紧致。',
                 p4_name: '辣妈巅峰体态重铸', p4_w: 48,
                 p4_goal: '<strong>全面超越产前身体机能</strong>，打造极品辣妈。', p4_tech: '全域力量与体态精雕系统方案。', p4_feel: '不仅恢复如初，<strong>甚至比孕前更挺拔自信</strong>。',
-                // 温馨、阳光、紧致核心的辣妈
-                img1: 'https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=800&q=80', 
-                img2: 'https://images.unsplash.com/photo-1556817411-31ae72fa3ea0?auto=format&fit=crop&w=800&q=80', 
-                img3: 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=800&q=80', 
-                img4: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=800&q=80',
+                img1: 'https://images.unsplash.com/photo-1556817411-31ae72fa3ea0?auto=format&fit=crop&w=800&q=80', 
+                img2: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&w=800&q=80', 
+                img3: 'https://images.unsplash.com/photo-1559148540-047391cb730a?auto=format&fit=crop&w=800&q=80', 
+                img4: 'https://images.unsplash.com/photo-1524594152303-9fd13543fe6e?auto=format&fit=crop&w=800&q=80',
                 txt1: '初期恢复：盆底激活，内源性功能重建', txt2: '进阶缝合：腹直肌闭合，核心力量回归', txt3: '深度定型：重返少女时代紧致身型', txt4: '年度维稳：机能全面超越孕前，顶级辣妈'
             },
             'rehab': {
@@ -441,11 +437,10 @@
                 p3_goal: '重建本体感觉，<strong>适应复杂运动轨迹</strong>。', p3_tech: '闭链与不平衡介质高阶神经调控。', p3_feel: '能<strong>极其自信地完成复杂动作</strong>，无惧损伤。',
                 p4_name: '高阶护甲与运动表现', p4_w: 48,
                 p4_goal: '<strong>绝对消除二次损伤隐患</strong>，提升爆发力。', p4_tech: '超等长收缩与专项运动机能强化。', p4_feel: '享受运动带来的绝对快乐，<strong>机能登顶</strong>。',
-                // 灵动、力量、健康关节展示
-                img1: 'https://images.unsplash.com/photo-1588286840104-8957b019727f?auto=format&fit=crop&w=800&q=80', 
-                img2: 'https://images.unsplash.com/photo-1574680178050-55c6a6a96e0a?auto=format&fit=crop&w=800&q=80', 
-                img3: 'https://images.unsplash.com/photo-1599058917212-d750089bc07e?auto=format&fit=crop&w=800&q=80', 
-                img4: 'https://images.unsplash.com/photo-1571019613576-2b22c76fd955?auto=format&fit=crop&w=800&q=80',
+                img1: 'https://images.unsplash.com/photo-1502825751399-28cbafbf8275?auto=format&fit=crop&w=800&q=80', 
+                img2: 'https://images.unsplash.com/photo-1599058917212-d750089bc07e?auto=format&fit=crop&w=800&q=80', 
+                img3: 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=800&q=80', 
+                img4: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=800&q=80',
                 txt1: '初期镇痛：软组织压力释放，疼痛消失', txt2: '进阶护甲：关节周围力量增强，建立保护', txt3: '满血重返：无惧任何发力，重返高强度', txt4: '年度维稳：绝对护甲锁定，巅峰运动表现'
             },
             'antiaging': {
@@ -459,7 +454,6 @@
                 p3_goal: '提升最大摄氧量，由内而外焕发<strong>极致年轻态</strong>。', p3_tech: '稳态有氧配合心率变异率科学监控。', p3_feel: '爬楼梯不喘，<strong>气色红润，精力爆表</strong>。',
                 p4_name: '细胞级机能终身抗衰', p4_w: 48,
                 p4_goal: '<strong>真正实现生理年龄的逆转</strong>，常态化冻龄。', p4_tech: '全周期高阶体能与线粒体强化训练。', p4_feel: '由内而外散发活力，<strong>远超同龄人的巅峰状态</strong>。',
-                // 阳光伸展 -> 皮肤发光、充满青春胶原蛋白
                 img1: 'https://images.unsplash.com/photo-1579126031931-7911d74c291e?auto=format&fit=crop&w=800&q=80', 
                 img2: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=800&q=80', 
                 img3: 'https://images.unsplash.com/photo-1508215885820-4585e5610ea0?auto=format&fit=crop&w=800&q=80', 
@@ -468,7 +462,7 @@
             }
         };
 
-        // 初始化加载保存在浏览器的老板私密照片
+        // 重新加载本地图库
         for(let key in planData) {
             for(let i=1; i<=4; i++) {
                 let savedImg = localStorage.getItem(`custom_${key}_img_${i}`);
@@ -481,7 +475,16 @@
         let userFreq = 3; 
         let selectedUpsell = {};
 
+        // 🚨 安全定时器，防止误触清空数据
+        let closeModalTimer = null;
+
         function openDetail(key) {
+            // 如果刚刚点过关闭，马上又点开，拦截定时器，保护数据不被清空！
+            if(closeModalTimer) {
+                clearTimeout(closeModalTimer);
+                closeModalTimer = null;
+            }
+
             currentPlanKey = key;
             userFreq = 3; 
             const data = planData[key];
@@ -634,8 +637,7 @@
             document.getElementById('adminModalWrap').classList.add('show');
         }
 
-        function closeAdmin(e) {
-            if(e) e.stopPropagation();
+        function closeAdmin() {
             document.getElementById('adminModalWrap').classList.remove('show');
         }
 
@@ -648,17 +650,13 @@
                 img.onload = function() {
                     const canvas = document.createElement('canvas');
                     const ctx = canvas.getContext('2d');
-                    // 压缩图片防止浏览器内存崩盘
-                    const scale = Math.min(600 / img.width, 1);
+                    const scale = Math.min(800 / img.width, 1);
                     canvas.width = img.width * scale;
                     canvas.height = img.height * scale;
                     ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
                     
                     const base64 = canvas.toDataURL('image/jpeg', 0.8);
-                    
-                    // 立即更新预览
                     document.getElementById(`admin-prev-${phase}`).src = base64;
-                    // 暂存到当前数据中
                     planData[currentPlanKey][`img${phase}`] = base64;
                 };
                 img.src = e.target.result;
@@ -667,43 +665,41 @@
         }
 
         function saveAdmin() {
-            // 将4个阶段的图永久保存到本地缓存
             for(let i=1; i<=4; i++) {
                 const base64 = planData[currentPlanKey][`img${i}`];
                 localStorage.setItem(`custom_${currentPlanKey}_img_${i}`, base64);
             }
             closeAdmin();
-            updateCheckout(); // 刷新主界面图片
+            updateCheckout(); 
             alert("老板，当前方案的 4 张专属大片已成功锁定！");
         }
 
-        // 🚨 修复退场动画问题：延迟清理数据，让关闭变丝滑
-        function closeDetail(e) { 
-            if(e) e.stopPropagation();
+        // 🚨 丝滑退场修复：分离数据清空逻辑，保证下滑动画完美执行且不暴毙
+        function closeDetail() { 
             document.getElementById('detailModal').classList.remove('show');
-            setTimeout(() => {
+            if(closeModalTimer) clearTimeout(closeModalTimer); // 清除旧定时器
+            closeModalTimer = setTimeout(() => {
                 globalTotalExact = 0;
                 currentPlanKey = '';
                 selectedUpsell = {};
                 document.getElementById('modalBody').innerHTML = ''; 
                 document.getElementById('calc-val').innerHTML = '-- <span>节</span>';
-                document.getElementById('btn-checkout').classList.add('disabled');
-            }, 400); // 留出 400ms 等待弹窗降下去
+                
+                let btn = document.getElementById('btn-checkout');
+                btn.classList.add('disabled');
+                btn.style.pointerEvents = 'none'; // 确保关闭时彻底禁用
+            }, 400); 
         }
 
         function finishAndReturn() {
             document.getElementById('signatureModal').classList.remove('show');
             document.getElementById('detailModal').classList.remove('show');
-            document.getElementById('upsellModal').classList.remove('show');
-            document.getElementById('upsellOverlay').classList.remove('show');
-            
-            setTimeout(() => {
+            if(closeModalTimer) clearTimeout(closeModalTimer);
+            closeModalTimer = setTimeout(() => {
                 globalTotalExact = 0;
                 currentPlanKey = '';
                 selectedUpsell = {};
                 document.getElementById('modalBody').innerHTML = ''; 
-                document.getElementById('calc-val').innerHTML = '-- <span>节</span>';
-                document.getElementById('btn-checkout').classList.add('disabled');
             }, 400);
         }
 
@@ -772,17 +768,21 @@
 
         function triggerAIScan() {
             let sec = document.getElementById('visual-sec');
-            sec.classList.remove('scanning-active');
-            void sec.offsetWidth; 
-            sec.classList.add('scanning-active');
+            if(sec) {
+                sec.classList.remove('scanning-active');
+                void sec.offsetWidth; 
+                sec.classList.add('scanning-active');
+            }
         }
 
         function updateCheckout() {
             let totalExactSessions = 0;
             let maxPhaseSelected = 0;
-            const data = planData[currentPlanKey];
             
-            if(!data) return;
+            // 🚨 防御机制：如果planKey被清空，立刻中断
+            if(!currentPlanKey || !planData[currentPlanKey]) return; 
+            
+            const data = planData[currentPlanKey];
 
             let customBox = document.getElementById('phase-5-box');
             let isCustom = customBox && customBox.classList.contains('selected');
@@ -821,7 +821,9 @@
                 vTitle.innerText = '等待接入重塑网络...';
                 vDesc.innerText = '点选上方阶段，AI将为您投射巅峰形态';
                 valDisplay.innerHTML = '<span style="color:#666; font-size:12px;">待选择目标阶段</span>';
+                
                 btn.classList.add('disabled');
+                btn.style.pointerEvents = 'none'; // 彻底锁死
             } else {
                 triggerAIScan();
                 if(maxPhaseSelected === 1) {
@@ -844,7 +846,10 @@
                     valDisplay.innerHTML = `${totalExactSessions} <span>节 (系统精准核算)</span>`;
                 }
                 
+                // 🚨 强制解开锁定，让按钮绝对可点
                 btn.classList.remove('disabled');
+                btn.style.pointerEvents = 'auto';
+                
                 if(navigator.vibrate) navigator.vibrate(50);
             }
         }
@@ -866,185 +871,9 @@
             openSignature(selectedUpsell.name, selectedUpsell.sessions, selectedUpsell.price);
         }
 
-        // 🚨 弹窗关闭修复，延时清空数据
-        function closeUpsellModal(e) {
-            if(e) e.stopPropagation();
-            document.getElementById('upsellOverlay').classList.remove('show');
-            document.getElementById('upsellModal').classList.remove('show');
-        }
-
-        function openSignature(pkgName, sessions, price) {
-            closeUpsellModal();
-            document.getElementById('signatureModal').classList.add('show');
-            
-            document.getElementById('sig-pad-wrap').innerHTML = `
-                <div class="sig-summary" id="sig-summary-box">
-                    <div class="sig-sum-title">即将为您锁定以下专属重塑方案：</div>
-                    <div style="font-size:12px; color:#888;">所属体系: <span style="color:#ccc;">${planData[currentPlanKey].title}</span></div>
-                    <div class="sig-sum-data">
-                        <div class="sig-sum-name">${pkgName} <span style="font-size:12px; color:#fff;">(${sessions})</span></div>
-                        <div class="sig-sum-price">${price}</div>
-                    </div>
-                </div>
-                <div class="sig-pad-container">
-                    <div class="sig-placeholder">请在此处手写签名</div>
-                    <canvas id="sigCanvas"></canvas>
-                </div>
-                <div class="sig-actions" id="sig-actions-box">
-                    <button class="btn-clear" onclick="clearCanvas()">重新签名</button>
-                    <button class="btn-confirm-sig" onclick="generateContractImage()">确认保存并生成合同</button>
-                </div>
-                <div style="margin-top: 5px; font-size: 10px; color: #666; text-align: center;" id="sig-footer-note">
-                    * 签署即代表您同意本门店之《课程有效期及场地使用规范》。
-                </div>
-            `;
-
-            setTimeout(() => {
-                sigCanvas = document.getElementById('sigCanvas');
-                sigCtx = sigCanvas.getContext('2d');
-                let rect = sigCanvas.parentElement.getBoundingClientRect();
-                sigCanvas.width = rect.width;
-                sigCanvas.height = rect.height;
-                
-                sigCtx.strokeStyle = '#D4AF37'; 
-                sigCtx.lineWidth = 4;
-                sigCtx.lineCap = 'round';
-                sigCtx.lineJoin = 'round';
-                
-                sigCanvas.addEventListener('touchstart', startSign, {passive: false});
-                sigCanvas.addEventListener('touchmove', drawSign, {passive: false});
-                sigCanvas.addEventListener('touchend', endSign);
-                sigCanvas.addEventListener('mousedown', startSign);
-                sigCanvas.addEventListener('mousemove', drawSign);
-                sigCanvas.addEventListener('mouseup', endSign);
-                sigCanvas.addEventListener('mouseout', endSign);
-            }, 400);
-        }
-
-        function getSignPos(e) {
-            let rect = sigCanvas.getBoundingClientRect();
-            let x = e.clientX, y = e.clientY;
-            if(e.touches && e.touches.length > 0) { x = e.touches[0].clientX; y = e.touches[0].clientY; }
-            return { x: x - rect.left, y: y - rect.top };
-        }
-
-        function startSign(e) {
-            e.preventDefault();
-            isSigning = true;
-            let pos = getSignPos(e);
-            sigCtx.beginPath();
-            sigCtx.moveTo(pos.x, pos.y);
-            let ph = document.querySelector('.sig-placeholder');
-            if(ph) ph.style.display = 'none'; 
-        }
-
-        function drawSign(e) {
-            if(!isSigning) return;
-            e.preventDefault();
-            let pos = getSignPos(e);
-            sigCtx.lineTo(pos.x, pos.y);
-            sigCtx.stroke();
-        }
-
-        function endSign() { isSigning = false; sigCtx.closePath(); }
-        function clearCanvas() {
-            if(!sigCtx) return;
-            sigCtx.clearRect(0, 0, sigCanvas.width, sigCanvas.height);
-            let ph = document.querySelector('.sig-placeholder');
-            if(ph) ph.style.display = 'block';
-        }
-
-        // 🚨 签名台大叉关闭修复
-        function closeSignature(e) {
-            if(e) e.stopPropagation();
-            document.getElementById('signatureModal').classList.remove('show');
-            clearCanvas();
-        }
-
-        function generateContractImage() {
-            if(!sigCtx) return;
-
-            const finalCanvas = document.createElement('canvas');
-            finalCanvas.width = 800;
-            finalCanvas.height = 1100;
-            const ctx = finalCanvas.getContext('2d');
-
-            ctx.fillStyle = '#0D0D11';
-            ctx.fillRect(0, 0, finalCanvas.width, finalCanvas.height);
-
-            ctx.strokeStyle = '#D4AF37';
-            ctx.lineWidth = 6;
-            ctx.strokeRect(30, 30, finalCanvas.width - 60, finalCanvas.height - 60);
-
-            ctx.fillStyle = '#D4AF37';
-            ctx.font = 'bold 50px sans-serif';
-            ctx.textAlign = 'center';
-            ctx.fillText('LUXIOU 尊享定制合约', 400, 120);
-            
-            ctx.fillStyle = '#444';
-            ctx.font = '24px sans-serif';
-            ctx.fillText('EXCLUSIVE CUSTOMIZED CONTRACT', 400, 165);
-
-            ctx.textAlign = 'left';
-            ctx.fillStyle = '#FFFFFF';
-            ctx.font = '32px sans-serif';
-            
-            const sysName = planData[currentPlanKey].title;
-            const pkgName = selectedUpsell.name;
-            const pkgSessions = selectedUpsell.sessions;
-            const pkgPrice = selectedUpsell.price;
-
-            ctx.fillText('所属体系：' + sysName, 80, 280);
-            ctx.fillText('锁定方案：' + pkgName, 80, 360);
-            ctx.fillText('包含课时：' + pkgSessions, 80, 440);
-
-            ctx.fillStyle = '#D4AF37';
-            ctx.font = 'bold 46px sans-serif';
-            ctx.fillText('核算总价：' + pkgPrice, 80, 540);
-
-            ctx.fillStyle = '#888888';
-            ctx.font = '24px sans-serif';
-            ctx.fillText('* 本合约包含门店常规课程有效期及场地使用权限', 80, 620);
-            ctx.fillText('* 签字即代表认同《LUXIOU 门店会员健康管理规章》', 80, 660);
-
-            ctx.fillStyle = '#FFFFFF';
-            ctx.font = 'bold 32px sans-serif';
-            ctx.fillText('客户手写确认签名：', 80, 780);
-
-            const scW = sigCanvas.width;
-            const scH = sigCanvas.height;
-            const scale = Math.min(640 / scW, 250 / scH);
-            const dw = scW * scale;
-            const dh = scH * scale;
-
-            ctx.drawImage(sigCanvas, 80, 810, dw, dh);
-            
-            ctx.strokeStyle = '#333';
-            ctx.lineWidth = 2;
-            ctx.beginPath();
-            ctx.moveTo(80, 810 + dh + 10);
-            ctx.lineTo(720, 810 + dh + 10);
-            ctx.stroke();
-
-            const dataURL = finalCanvas.toDataURL('image/png');
-
-            document.getElementById('sig-pad-wrap').innerHTML = `
-                <div style="text-align:center; color:var(--primary); margin-bottom:15px; font-weight:bold; font-size:18px;">
-                    ✦ 合同生成成功 ✦<br>
-                    <span style="font-size:12px; color:#aaa; font-weight:normal;">请长按下方图片，保存至手机相册留存</span>
-                </div>
-                <div style="flex:1; overflow-y:auto; border-radius:12px; box-shadow: 0 10px 40px rgba(212,175,55,0.25); border: 1px solid rgba(212,175,55,0.5);">
-                    <img src="${dataURL}" style="width:100%; display:block;">
-                </div>
-                <div class="sig-actions" style="margin-top:20px;">
-                    <button class="btn-confirm-master" onclick="finishAndReturn()">完成签约，返回首页 ➔</button>
-                </div>
-            `;
-        }
-
-        // ================= 🚨 报价弹窗重构：基于选择的阶段精准推送 =================
         function showUpsellModal() {
-            if(globalTotalExact === 0) return;
+            // 🚨 拦截无效点击
+            if(globalTotalExact === 0 || !currentPlanKey || !planData[currentPlanKey]) return;
             
             let customBox = document.getElementById('phase-5-box');
             let isCustom = customBox && customBox.classList.contains('selected');
@@ -1192,6 +1021,178 @@
                 container.innerHTML = card1 + card2 + `<div class="urgency-rule"><strong>⚠️ 锁价法则：</strong> 方案二按原阶梯价结算。<strong>2周内</strong>补齐尾款，即可将全部课程追溯升级为【方案一】的首购特权底价。</div>`;
                 selectUpPlan('card-scheme-1', `${targetName} 专属精准包`, `${pkgCore}节`, `¥ ${formatMoney(totalNewB)}`);
             }
+
+            document.getElementById('upsellOverlay').classList.add('show');
+            document.getElementById('upsellModal').classList.add('show');
+        }
+
+        function closeUpsellModal() {
+            document.getElementById('upsellOverlay').classList.remove('show');
+            document.getElementById('upsellModal').classList.remove('show');
+        }
+
+        let sigCanvas, sigCtx, isSigning = false;
+
+        function openSignature(pkgName, sessions, price) {
+            closeUpsellModal();
+            document.getElementById('signatureModal').classList.add('show');
+            
+            document.getElementById('sig-pad-wrap').innerHTML = `
+                <div class="sig-summary" id="sig-summary-box">
+                    <div class="sig-sum-title">即将为您锁定以下专属重塑方案：</div>
+                    <div style="font-size:12px; color:#888;">所属体系: <span style="color:#ccc;">${planData[currentPlanKey].title}</span></div>
+                    <div class="sig-sum-data">
+                        <div class="sig-sum-name">${pkgName} <span style="font-size:12px; color:#fff;">(${sessions})</span></div>
+                        <div class="sig-sum-price">${price}</div>
+                    </div>
+                </div>
+                <div class="sig-pad-container">
+                    <div class="sig-placeholder">请在此处手写签名</div>
+                    <canvas id="sigCanvas"></canvas>
+                </div>
+                <div class="sig-actions" id="sig-actions-box">
+                    <button class="btn-clear" onclick="clearCanvas()">重新签名</button>
+                    <button class="btn-confirm-sig" onclick="generateContractImage()">确认保存并生成合同</button>
+                </div>
+                <div style="margin-top: 5px; font-size: 10px; color: #666; text-align: center;" id="sig-footer-note">
+                    * 签署即代表您同意本门店之《课程有效期及场地使用规范》。
+                </div>
+            `;
+
+            setTimeout(() => {
+                sigCanvas = document.getElementById('sigCanvas');
+                sigCtx = sigCanvas.getContext('2d');
+                let rect = sigCanvas.parentElement.getBoundingClientRect();
+                sigCanvas.width = rect.width;
+                sigCanvas.height = rect.height;
+                
+                sigCtx.strokeStyle = '#D4AF37'; 
+                sigCtx.lineWidth = 4;
+                sigCtx.lineCap = 'round';
+                sigCtx.lineJoin = 'round';
+                
+                sigCanvas.addEventListener('touchstart', startSign, {passive: false});
+                sigCanvas.addEventListener('touchmove', drawSign, {passive: false});
+                sigCanvas.addEventListener('touchend', endSign);
+                sigCanvas.addEventListener('mousedown', startSign);
+                sigCanvas.addEventListener('mousemove', drawSign);
+                sigCanvas.addEventListener('mouseup', endSign);
+                sigCanvas.addEventListener('mouseout', endSign);
+            }, 400);
+        }
+
+        function getSignPos(e) {
+            let rect = sigCanvas.getBoundingClientRect();
+            let x = e.clientX, y = e.clientY;
+            if(e.touches && e.touches.length > 0) { x = e.touches[0].clientX; y = e.touches[0].clientY; }
+            return { x: x - rect.left, y: y - rect.top };
+        }
+
+        function startSign(e) {
+            e.preventDefault();
+            isSigning = true;
+            let pos = getSignPos(e);
+            sigCtx.beginPath();
+            sigCtx.moveTo(pos.x, pos.y);
+            let ph = document.querySelector('.sig-placeholder');
+            if(ph) ph.style.display = 'none'; 
+        }
+
+        function drawSign(e) {
+            if(!isSigning) return;
+            e.preventDefault();
+            let pos = getSignPos(e);
+            sigCtx.lineTo(pos.x, pos.y);
+            sigCtx.stroke();
+        }
+
+        function endSign() { isSigning = false; sigCtx.closePath(); }
+        function clearCanvas() {
+            if(!sigCtx) return;
+            sigCtx.clearRect(0, 0, sigCanvas.width, sigCanvas.height);
+            let ph = document.querySelector('.sig-placeholder');
+            if(ph) ph.style.display = 'block';
+        }
+
+        function generateContractImage() {
+            if(!sigCtx) return;
+
+            const finalCanvas = document.createElement('canvas');
+            finalCanvas.width = 800;
+            finalCanvas.height = 1100;
+            const ctx = finalCanvas.getContext('2d');
+
+            ctx.fillStyle = '#0D0D11';
+            ctx.fillRect(0, 0, finalCanvas.width, finalCanvas.height);
+
+            ctx.strokeStyle = '#D4AF37';
+            ctx.lineWidth = 6;
+            ctx.strokeRect(30, 30, finalCanvas.width - 60, finalCanvas.height - 60);
+
+            ctx.fillStyle = '#D4AF37';
+            ctx.font = 'bold 50px sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText('LUXIOU 尊享定制合约', 400, 120);
+            
+            ctx.fillStyle = '#444';
+            ctx.font = '24px sans-serif';
+            ctx.fillText('EXCLUSIVE CUSTOMIZED CONTRACT', 400, 165);
+
+            ctx.textAlign = 'left';
+            ctx.fillStyle = '#FFFFFF';
+            ctx.font = '32px sans-serif';
+            
+            const sysName = planData[currentPlanKey].title;
+            const pkgName = selectedUpsell.name;
+            const pkgSessions = selectedUpsell.sessions;
+            const pkgPrice = selectedUpsell.price;
+
+            ctx.fillText('所属体系：' + sysName, 80, 280);
+            ctx.fillText('锁定方案：' + pkgName, 80, 360);
+            ctx.fillText('包含课时：' + pkgSessions, 80, 440);
+
+            ctx.fillStyle = '#D4AF37';
+            ctx.font = 'bold 46px sans-serif';
+            ctx.fillText('核算总价：' + pkgPrice, 80, 540);
+
+            ctx.fillStyle = '#888888';
+            ctx.font = '24px sans-serif';
+            ctx.fillText('* 本合约包含门店常规课程有效期及场地使用权限', 80, 620);
+            ctx.fillText('* 签字即代表认同《LUXIOU 门店会员健康管理规章》', 80, 660);
+
+            ctx.fillStyle = '#FFFFFF';
+            ctx.font = 'bold 32px sans-serif';
+            ctx.fillText('客户手写确认签名：', 80, 780);
+
+            const scW = sigCanvas.width;
+            const scH = sigCanvas.height;
+            const scale = Math.min(640 / scW, 250 / scH);
+            const dw = scW * scale;
+            const dh = scH * scale;
+
+            ctx.drawImage(sigCanvas, 80, 810, dw, dh);
+            
+            ctx.strokeStyle = '#333';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(80, 810 + dh + 10);
+            ctx.lineTo(720, 810 + dh + 10);
+            ctx.stroke();
+
+            const dataURL = finalCanvas.toDataURL('image/png');
+
+            document.getElementById('sig-pad-wrap').innerHTML = `
+                <div style="text-align:center; color:var(--primary); margin-bottom:15px; font-weight:bold; font-size:18px;">
+                    ✦ 合同生成成功 ✦<br>
+                    <span style="font-size:12px; color:#aaa; font-weight:normal;">请长按下方图片，保存至手机相册留存</span>
+                </div>
+                <div style="flex:1; overflow-y:auto; border-radius:12px; box-shadow: 0 10px 40px rgba(212,175,55,0.25); border: 1px solid rgba(212,175,55,0.5);">
+                    <img src="${dataURL}" style="width:100%; display:block;">
+                </div>
+                <div class="sig-actions" style="margin-top:20px;">
+                    <button class="btn-confirm-master" onclick="finishAndReturn()">完成签约，返回首页 ➔</button>
+                </div>
+            `;
         }
     </script>
 </body>
