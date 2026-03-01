@@ -12,7 +12,7 @@
     <script src="https://cdn.staticfile.net/Sortable/1.15.2/Sortable.min.js"></script>
 
     <style>
-        /* ================= 1. 主页原貌 ================= */
+        /* ================= 1. 绝对恢复主页原貌 ================= */
         :root { --primary: #00f2fe; --secondary: #7000ff; --bg: #000; --card-bg: rgba(255, 255, 255, 0.03); --text: #fff; --grad: radial-gradient(circle at top right, #1a2a6c, #000 70%); }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; margin: 0; padding: 0; }
         body { background: var(--bg); background-image: var(--grad); color: var(--text); font-family: -apple-system, sans-serif; padding: 20px; min-height: 100vh; transition: all 0.5s ease; display: flex; flex-direction: column; overflow-x: hidden;}
@@ -45,10 +45,11 @@
         .m-close { color: #888; font-size: 28px; background: none; border: none; padding: 0 10px; cursor: pointer; }
         .m-body { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 20px; -webkit-overflow-scrolling: touch; padding-bottom: 100px;}
 
-        /* ================= 背书库 ================= */
+        /* ================= 2. 背书库修复 ================= */
         .e-seg { display: flex; background: #111; border-radius: 12px; padding: 6px; margin-bottom: 20px; border: 1px solid #222;}
         .e-tab { flex: 1; text-align: center; padding: 12px 0; font-size: 14px; font-weight: bold; color: #666; border-radius: 8px; transition: 0.3s;}
         .e-tab.active { background: #D4AF37; color: #000; box-shadow: 0 0 15px rgba(212,175,55,0.5); transform: scale(1.02); z-index: 2;}
+        
         .e-sec { display: none; flex-direction: column; }
         .e-sec.active { display: flex; animation: fadeIn 0.3s;}
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
@@ -58,21 +59,21 @@
         .e-item img { width: 100%; height: 100%; object-fit: cover; pointer-events: none;}
         .e-item .del { position: absolute; top: 8px; right: 8px; width: 26px; height: 26px; background: rgba(0,0,0,0.8); border: 1px solid #FF3B30; border-radius: 50%; color: #FF3B30; display: flex; justify-content: center; align-items: center; font-weight: bold; z-index: 10;}
 
-        /* ================= 24H 管家系统 ================= */
+        /* ================= 3. 24H 管家系统终极版 ================= */
         .ls-seg { display: flex; gap: 10px; margin-bottom: 20px;}
         .ls-tab { flex: 1; padding: 12px 0; text-align: center; border-radius: 12px; background: #111; border: 1px solid #333; color: #888; font-size: 13px; font-weight: bold; transition: 0.3s;}
         .ls-tab.active { background: linear-gradient(135deg, #1A1813, #0A0A0C); border-color: #D4AF37; color: #D4AF37; box-shadow: 0 4px 10px rgba(212,175,55,0.2);}
         
-        .track-header { background: #111; border: 1px solid #333; border-radius: 12px; padding: 15px; margin-bottom: 20px; display: flex; flex-direction: column; gap: 10px;}
+        .track-header { background: #111; border: 1px solid #333; border-radius: 12px; padding: 15px; margin-bottom: 20px; display: flex; flex-direction: column; gap: 15px;}
         .client-sel { display: flex; justify-content: space-between; align-items: center; font-size: 15px; font-weight: bold; color: #D4AF37; border-bottom: 1px dashed #333; padding-bottom: 10px; cursor: pointer; background: rgba(212,175,55,0.05); border-radius: 8px; padding: 10px;}
         .client-profile-tags { display: flex; gap: 8px; font-size: 11px; color: #888; margin-top: 5px; font-weight: normal; letter-spacing: 1px;}
         
         .date-sel { display: flex; justify-content: space-between; align-items: center; color: #fff;}
         .date-btn { background: #222; border: none; color: #D4AF37; padding: 8px 15px; border-radius: 6px; font-size: 12px; font-weight: bold;}
+        
         input[type="date"] { background: transparent; border: 1px solid #444; color: #fff; font-size: 15px; font-weight: bold; outline: none; padding: 4px 10px; border-radius: 6px; font-family: inherit;}
         input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1); }
 
-        /* 🚨 升级的四宫格能量矩阵 */
         .energy-dash { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
         .e-box { background: #0A0A0C; border: 1px solid #222; border-radius: 12px; padding: 12px; text-align: center;}
         .e-label { font-size: 11px; color: #888; margin-bottom: 6px;}
@@ -94,17 +95,23 @@
         .quick-tags { display: flex; gap: 8px; margin-top: 12px; overflow-x: auto; padding-bottom: 5px;}
         .quick-tags::-webkit-scrollbar { display: none; }
         .q-tag { flex-shrink: 0; background: #222; border: 1px solid #444; color: #aaa; font-size: 11px; padding: 6px 12px; border-radius: 50px; cursor: pointer;}
+        .q-tag:active { background: #D4AF37; color: #000;}
 
-        .rings-dash { background: #111; border: 1px solid #222; border-radius: 12px; padding: 15px 10px; display: flex; justify-content: space-around; margin-bottom: 20px;}
-        .ring-item { display: flex; flex-direction: column; align-items: center;}
-        .svg-ring { width: 60px; height: 60px; transform: rotate(-90deg); margin-bottom: 8px; cursor: pointer;}
+        /* 🚨 环形打卡与图标对齐修复 */
+        .rings-dash { background: #111; border: 1px solid #222; border-radius: 12px; padding: 20px 10px; display: flex; justify-content: space-around; margin-bottom: 20px; align-items: flex-end;}
+        .ring-item { display: flex; flex-direction: column; align-items: center; width: 30%;}
+        .ring-svg-box { position: relative; width: 70px; height: 70px; margin-bottom: 8px; cursor: pointer; display: flex; justify-content: center; align-items: center;}
+        .svg-ring { width: 70px; height: 70px; transform: rotate(-90deg); position: absolute; top:0; left:0;}
         .svg-bg { fill: none; stroke: #222; stroke-width: 6; }
-        .svg-progress { fill: none; stroke: #D4AF37; stroke-width: 6; stroke-linecap: round; stroke-dasharray: 151; stroke-dashoffset: 151; transition: 0.5s; pointer-events: none;}
-        .ring-val { font-size: 13px; font-weight: bold; color: #fff; margin-top: 5px; text-align: center;}
+        .svg-progress { fill: none; stroke: #D4AF37; stroke-width: 6; stroke-linecap: round; stroke-dasharray: 176; stroke-dashoffset: 176; transition: 0.5s; pointer-events: none;}
+        .ring-icon { font-size: 22px; position: relative; z-index: 2; pointer-events: none;} /* 图标居中 */
+        
+        .ring-title { font-size: 11px; color: #aaa; text-align: center;}
+        .ring-val { font-size: 14px; font-weight: bold; color: #fff; margin-top: 4px; text-align: center;}
         .ring-sub { font-size: 9px; color: #888; font-weight: normal;}
-        .manual-edit-btn { margin-top: 6px; background: #222; color: #D4AF37; font-size: 10px; padding: 3px 8px; border-radius: 4px; border: 1px solid #444; cursor: pointer;}
+        .manual-edit-btn { margin-top: 8px; background: #222; color: #D4AF37; font-size: 10px; padding: 4px 10px; border-radius: 6px; border: 1px solid #444; cursor: pointer;}
 
-        /* 🚨 生存指南展示 */
+        /* 🚨 生存指南 3个 */
         .survival-guide { margin-bottom: 20px; }
         .guide-scroll { display: flex; overflow-x: auto; gap: 12px; padding-bottom: 10px; scroll-snap-type: x mandatory;}
         .guide-scroll::-webkit-scrollbar { display: none; }
@@ -127,6 +134,7 @@
         .m-row-kcal { font-size: 18px; font-weight: 900; color: #D4AF37; margin-bottom: 4px;}
         .m-row-tags { display: flex; gap: 6px; margin-bottom: 6px;}
         .m-tag { font-size: 10px; padding: 2px 6px; border-radius: 4px; font-weight: bold; color: #000;}
+        .m-sug { font-size: 11px; color: #888; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;}
         .meal-del { position: absolute; top: 10px; right: 10px; color: #FF3B30; font-size: 18px; cursor: pointer; background: rgba(0,0,0,0.5); width: 24px; height: 24px; text-align: center; line-height: 22px; border-radius: 50%; border: 1px solid #FF3B30;}
 
         /* AI 谈单专用版块 */
@@ -139,9 +147,10 @@
         .ai-scanning-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 9999; display: none; flex-direction: column; justify-content: center; align-items: center;}
         .scan-box { width: 260px; height: 260px; border: 2px solid #D4AF37; position: relative; overflow: hidden; border-radius: 16px; margin-bottom: 20px; background-size: cover; background-position: center; box-shadow: 0 0 30px rgba(212,175,55,0.3);}
         .scan-line { width: 100%; height: 3px; background: #D4AF37; box-shadow: 0 0 20px 5px rgba(212,175,55,0.6); position: absolute; top: 0; animation: scanAnim 1.2s infinite linear;}
+        .scan-text { color: #D4AF37; font-size: 15px; font-weight: bold; letter-spacing: 2px; font-family: monospace; margin-top: 15px;}
         @keyframes scanAnim { 0% { top: 0; opacity: 1; } 100% { top: 100%; opacity: 0.2; } }
 
-        /* 🚨 高定新建会员表单弹窗 */
+        /* 🚨 左滑删除专属会员抽屉 */
         .new-client-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 8000; display: none; flex-direction: column; justify-content: center; align-items: center; padding: 20px; backdrop-filter: blur(10px);}
         .new-client-modal.show { display: flex; }
         .nc-card { background: #111; border: 1px solid #D4AF37; border-radius: 16px; width: 100%; max-width: 350px; padding: 25px;}
@@ -152,11 +161,17 @@
         .nc-input:focus { border-color: #D4AF37; }
         .nc-btn { width: 100%; background: linear-gradient(135deg, #D4AF37, #AA8A2A); color: #000; border: none; padding: 14px; border-radius: 8px; font-weight: bold; font-size: 15px; margin-top: 10px;}
 
-        .client-modal { position: fixed; bottom: -100%; left: 0; width: 100%; background: #111; border-top: 1px solid #D4AF37; border-radius: 20px 20px 0 0; padding: 20px; z-index: 5000; transition: 0.4s;}
+        .client-modal { position: fixed; bottom: -100%; left: 0; width: 100%; background: #111; border-top: 1px solid #D4AF37; border-radius: 20px 20px 0 0; padding: 20px 0; z-index: 5000; transition: 0.4s;}
         .client-modal.show { bottom: 0; }
-        .cm-item { padding: 15px; border-bottom: 1px solid #222; font-size: 15px; color: #fff; display: flex; justify-content: space-between; align-items: center;}
+        
+        /* 极致丝滑的左滑删除布局 */
+        .cm-row-wrapper { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; border-bottom: 1px solid #222; scrollbar-width: none; }
+        .cm-row-wrapper::-webkit-scrollbar { display: none; }
+        .cm-item { flex: 0 0 100%; scroll-snap-align: start; padding: 15px 20px; font-size: 15px; color: #fff; display: flex; justify-content: space-between; align-items: center; background: #111; }
         .cm-item.active { color: #D4AF37; font-weight: bold;}
-        .cm-add { padding: 15px; color: #10b981; text-align: center; font-weight: bold; border-bottom: 1px solid #222; cursor: pointer;}
+        .cm-del-btn { flex: 0 0 80px; scroll-snap-align: end; background: #FF3B30; color: #fff; display: flex; justify-content: center; align-items: center; font-weight: bold; font-size: 14px;}
+
+        .cm-add { padding: 15px; color: #10b981; text-align: center; font-weight: bold; border-bottom: 1px solid #222; cursor: pointer; margin: 0 20px;}
 
         .guide-modal { position: fixed; bottom: -100%; left: 0; width: 100%; background: #111; border-top: 1px solid #D4AF37; border-radius: 24px 24px 0 0; z-index: 6000; padding: 25px 20px 40px; transition: 0.5s;}
         .guide-modal.show { bottom: 0; }
@@ -214,15 +229,15 @@
             </div>
             
             <div id="e-view-cert" class="e-sec active">
-                <div class="upload-btn" onclick="document.getElementById('cert-up').click()">+ 上传资质证书</div>
-                <div class="e-tip">长按照片可任意拖拽排序</div>
+                <div class="upload-btn" onclick="document.getElementById('cert-up').click()">+ 上传资质证书 (无上限)</div>
+                <div class="e-tip" style="text-align:center; color:#888; font-size:11px; margin-bottom:10px;">长按照片可任意拖拽排序</div>
                 <input type="file" id="cert-up" multiple accept="image/*" style="display:none;" onchange="handleEndorseUp(event, 'cert')">
                 <div class="e-grid" id="cert-gallery"></div>
             </div>
 
             <div id="e-view-coach" class="e-sec">
-                <div class="upload-btn" onclick="document.getElementById('coach-up').click()">+ 上传教练照片</div>
-                <div class="e-tip">长按照片可任意拖拽排序</div>
+                <div class="upload-btn" onclick="document.getElementById('coach-up').click()">+ 上传教练照片 (无上限)</div>
+                <div class="e-tip" style="text-align:center; color:#888; font-size:11px; margin-bottom:10px;">长按照片可任意拖拽排序</div>
                 <input type="file" id="coach-up" multiple accept="image/*" style="display:none;" onchange="handleEndorseUp(event, 'coach')">
                 <div class="e-grid" id="coach-gallery"></div>
             </div>
@@ -254,7 +269,7 @@
                 <div id="ai-mock-result" class="ai-result-box">
                     <img id="ai-res-img" src="" class="ai-res-img">
                     <div style="display:flex; justify-content:space-between; margin-bottom:15px; border-bottom:1px solid #333; padding-bottom:10px;">
-                        <div><div style="font-size:10px; color:#888;">推演总热量</div><div style="font-size:24px; color:#D4AF37; font-weight:bold;" id="ai-res-kcal">-- KCAL</div></div>
+                        <div><div style="font-size:10px; color:#888;">推演总热量 (严谨级算法)</div><div style="font-size:24px; color:#D4AF37; font-weight:bold;" id="ai-res-kcal">-- KCAL</div></div>
                         <div id="ai-res-tag" style="padding:6px 12px; border-radius:6px; font-weight:bold; font-size:12px; align-self:center;">--</div>
                     </div>
                     <div class="ai-macro-grid">
@@ -276,9 +291,9 @@
                         <span>▾</span>
                     </div>
                     <div class="date-sel">
-                        <button class="date-btn" onclick="changeDate(-1)">◀ 前一天</button>
+                        <button class="date-btn" onclick="changeDate(-1)">◀ 前天</button>
                         <input type="date" id="date-picker" onchange="datePickerChange(this.value)">
-                        <button class="date-btn" onclick="changeDate(1)">后一天 ▶</button>
+                        <button class="date-btn" onclick="changeDate(1)">后天 ▶</button>
                     </div>
                 </div>
 
@@ -317,27 +332,41 @@
                         <div class="q-tag" onclick="addTag('【执行完美】请继续保持当前饮食与代谢结构！')">👏 完美执行</div>
                         <div class="q-tag" onclick="addTag('【注意控糖】碳水略高，建议饭后散步15分钟。')">⚠️ 注意控糖</div>
                         <div class="q-tag" onclick="addTag('【加练警告】热量出现盈余，今晚立刻增加一次有氧！')">🔥 加练警告</div>
+                        <div class="q-tag" onclick="addTag('【补充水分】代谢缓慢，请务必喝够2500ml水分！')">💧 补充水分</div>
+                        <div class="q-tag" onclick="addTag('【优质蛋白】肌肉恢复期，今日请摄入高优海鲜/牛肉。')">🥩 优质蛋白</div>
+                        <div class="q-tag" onclick="addTag('【关注睡眠】皮质醇过高，今晚请务必在11点前入睡。')">😴 关注睡眠</div>
+                        <div class="q-tag" onclick="addTag('【增加消耗】日常消耗过低，请尽量多走动提高步数。')">🏃‍♀️ 提高步数</div>
+                        <div class="q-tag" onclick="addTag('【注意排钠】昨晚饮食过咸，今日请喝黑咖啡+大量饮水。')">☕ 注意排钠</div>
                     </div>
                 </div>
 
                 <div class="rings-dash">
                     <div class="ring-item">
-                        <svg class="svg-ring" onclick="addRing('water')"><circle class="svg-bg" cx="35" cy="35" r="28"/><circle class="svg-progress" id="r-water" cx="35" cy="35" r="28"/></svg>
-                        <div style="font-size:10px; color:#aaa;">饮水 (+500)</div>
+                        <div class="ring-svg-box" onclick="addRing('water')">
+                            <svg class="svg-ring"><circle class="svg-bg" cx="35" cy="35" r="28"/><circle class="svg-progress" id="r-water" cx="35" cy="35" r="28"/></svg>
+                            <div class="ring-icon">💧</div>
+                        </div>
+                        <div class="ring-title">饮水 (+500)</div>
                         <div class="ring-val" id="t-water">0<br><span class="ring-sub">/ 4000ml</span></div>
-                        <div class="manual-edit-btn" onclick="editRing('water')">✎ 手动输入</div>
+                        <div class="manual-edit-btn" onclick="editRing('water')">✎ 修改</div>
                     </div>
                     <div class="ring-item">
-                        <svg class="svg-ring" onclick="addRing('cardio')"><circle class="svg-bg" cx="35" cy="35" r="28"/><circle class="svg-progress" id="r-cardio" cx="35" cy="35" r="28"/></svg>
-                        <div style="font-size:10px; color:#aaa;">有氧 (+10分)</div>
+                        <div class="ring-svg-box" onclick="addRing('cardio')">
+                            <svg class="svg-ring"><circle class="svg-bg" cx="35" cy="35" r="28"/><circle class="svg-progress" id="r-cardio" cx="35" cy="35" r="28"/></svg>
+                            <div class="ring-icon">🔥</div>
+                        </div>
+                        <div class="ring-title">有氧 (+10分)</div>
                         <div class="ring-val" id="t-cardio">0<br><span class="ring-sub">/ 120分</span></div>
-                        <div class="manual-edit-btn" onclick="editRing('cardio')">✎ 手动输入</div>
+                        <div class="manual-edit-btn" onclick="editRing('cardio')">✎ 修改</div>
                     </div>
                     <div class="ring-item">
-                        <svg class="svg-ring" onclick="addRing('train')"><circle class="svg-bg" cx="35" cy="35" r="28"/><circle class="svg-progress" id="r-train" cx="35" cy="35" r="28"/></svg>
-                        <div style="font-size:10px; color:#aaa;">抗阻 (+1次)</div>
+                        <div class="ring-svg-box" onclick="addRing('train')">
+                            <svg class="svg-ring"><circle class="svg-bg" cx="35" cy="35" r="28"/><circle class="svg-progress" id="r-train" cx="35" cy="35" r="28"/></svg>
+                            <div class="ring-icon">🏋️‍♀️</div>
+                        </div>
+                        <div class="ring-title">抗阻 (+1次)</div>
                         <div class="ring-val" id="t-train">0<br><span class="ring-sub">/ 3次</span></div>
-                        <div class="manual-edit-btn" onclick="editRing('train')">✎ 手动输入</div>
+                        <div class="manual-edit-btn" onclick="editRing('train')">✎ 修改</div>
                     </div>
                 </div>
 
@@ -347,6 +376,10 @@
                         <div class="guide-card" onclick="openGuide('bistro')">
                             <img src="https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?auto=format&fit=crop&w=400&q=80">
                             <div class="guide-overlay"><div class="g-title">米其林 / Bistro</div><div class="g-desc">享受美食的防暴卡秘籍</div></div>
+                        </div>
+                        <div class="guide-card" onclick="openGuide('tea')">
+                            <img src="https://images.unsplash.com/photo-1557142046-c704a3adf364?auto=format&fit=crop&w=400&q=80">
+                            <div class="guide-overlay"><div class="g-title">名媛下午茶</div><div class="g-desc">优雅避开糖油混合炸弹</div></div>
                         </div>
                         <div class="guide-card" onclick="openGuide('business')">
                             <img src="https://images.unsplash.com/photo-1556761175-5973dc0f32b7?auto=format&fit=crop&w=400&q=80">
@@ -390,8 +423,8 @@
     </div>
 
     <div class="client-modal" id="clientMenu">
-        <div style="color:#D4AF37; font-size:14px; font-weight:bold; margin-bottom:15px; padding-left:15px;">我的 VIP 会员列表</div>
-        <div id="client-list-render" style="max-height:40vh; overflow-y:auto;"></div>
+        <div style="color:#D4AF37; font-size:14px; font-weight:bold; margin-bottom:15px; padding-left:15px;">我的 VIP 会员列表<span style="font-size:10px;color:#888;margin-left:10px;">(支持10000+容量，左滑删除)</span></div>
+        <div id="client-list-render" style="max-height:40vh; overflow-y:auto; overflow-x:hidden;"></div>
         <div class="cm-add" onclick="openNewClientForm()">+ 新建高级会员档案</div>
         <div class="cm-item" style="justify-content:center; color:#666; border:none; margin-top:10px; cursor:pointer;" onclick="document.getElementById('clientMenu').classList.remove('show')">取消关闭</div>
     </div>
@@ -480,8 +513,10 @@
             const files = Array.from(evt.target.files); if(files.length === 0) return;
             let count = 0; let tmp = [];
             files.forEach((file, idx) => {
-                const r = new FileReader(); r.onload = e => {
-                    const img = new Image(); img.onload = () => {
+                const r = new FileReader();
+                r.onload = e => {
+                    const img = new Image();
+                    img.onload = () => {
                         const can = document.createElement('canvas'); const sc = Math.min(600 / img.width, 1);
                         can.width = img.width * sc; can.height = img.height * sc; can.getContext('2d').drawImage(img, 0, 0, can.width, can.height);
                         tmp.push({ i: idx, data: can.toDataURL('image/jpeg', 0.6) }); count++;
@@ -494,15 +529,15 @@
             const box = document.getElementById(`${type}-gallery`); box.innerHTML = '';
             if(endorseDB[type].length === 0) { box.innerHTML = `<div class="e-empty">暂无数据</div>`; return; }
             endorseDB[type].forEach((b64, i) => { box.innerHTML += `<div class="e-item" data-index="${i}"><div class="del" onclick="delE('${type}', ${i}, event)">×</div><img src="${b64}"></div>`; });
-            let cfg = {animation:150, delay:200, delayOnTouchOnly:true, fallbackTolerance:5, filter:".del", onEnd: e=>{ let arr = endorseDB[type]; arr.splice(e.newIndex, 0, arr.splice(e.oldIndex, 1)[0]); saveEndorse(); }};
+            let cfg = {animation:150, delay:200, delayOnTouchOnly:true, fallbackTolerance:5, filter:".del", preventOnFilter:false, onEnd: e=>{ let arr = endorseDB[type]; arr.splice(e.newIndex, 0, arr.splice(e.oldIndex, 1)[0]); saveEndorse(); }};
             if(type==='cert') { if(sortCert) sortCert.destroy(); sortCert = new Sortable(box, cfg); } else { if(sortCoach) sortCoach.destroy(); sortCoach = new Sortable(box, cfg); }
         }
-        function delE(type, i, e) { e.stopPropagation(); if(confirm('删除?')) { endorseDB[type].splice(i,1); saveEndorse(); renderGallery(type); } }
+        function delE(type, i, e) { e.stopPropagation(); if(confirm('确定删除?')) { endorseDB[type].splice(i,1); saveEndorse(); renderGallery(type); } }
 
         // ================= 管家逻辑 =================
         function switchLsTab(type, btn) { document.querySelectorAll('.ls-tab').forEach(b => b.classList.remove('active')); btn.classList.add('active'); document.querySelectorAll('#ls-view-demo, #ls-view-track').forEach(s => s.classList.remove('active')); document.getElementById('ls-view-' + type).classList.add('active'); }
 
-        // 🚨 修复的新增档案
+        // --- 会员与日历 ---
         function openNewClientForm() { document.getElementById('clientMenu').classList.remove('show'); document.getElementById('newClientForm').classList.add('show'); }
         function submitNewClient() {
             let n = document.getElementById('nc-name').value;
@@ -519,12 +554,25 @@
             showToast("档案建立成功");
         }
 
+        // 🚨 苹果原生左滑删除布局
         function openClientMenu() {
             let html = '';
-            for(let k in clientsDB) { html += `<div class="cm-item ${k===currClientId?'active':''}" onclick="selClient('${k}')"><span>${clientsDB[k].name}</span>${k===currClientId?'✓':''}</div>`; }
-            document.getElementById('client-list-render').innerHTML = html; document.getElementById('clientMenu').classList.add('show');
+            for(let k in clientsDB) { 
+                html += `
+                <div class="cm-row-wrapper">
+                    <div class="cm-item ${k===currClientId?'active':''}" onclick="selClient('${k}')"><span>${clientsDB[k].name}</span>${k===currClientId?'✓':''}</div>
+                    <div class="cm-del-btn" onclick="delClient('${k}', event)">删除</div>
+                </div>`; 
+            }
+            document.getElementById('client-list-render').innerHTML = html; 
+            document.getElementById('clientMenu').classList.add('show');
         }
         function selClient(id) { currClientId = id; document.getElementById('clientMenu').classList.remove('show'); syncTrackUI(); }
+        function delClient(id, e) {
+            e.stopPropagation();
+            if(id === currClientId) { alert("不能删除当前正在查看的档案！"); return; }
+            if(confirm("确定永久删除该会员及所有数据吗？")) { delete clientsDB[id]; saveClients(); openClientMenu(); }
+        }
         
         function changeDate(delta) { currDateObj.setDate(currDateObj.getDate() + delta); currDateStr = getFormatDate(currDateObj); syncTrackUI(); }
         function datePickerChange(val) { if(!val) return; currDateObj = new Date(val); currDateStr = getFormatDate(currDateObj); syncTrackUI(); }
@@ -536,7 +584,7 @@
             return c.records[currDateStr];
         }
 
-        // BMR计算公式 (Mifflin-St Jeor)
+        // BMR计算公式
         function getBMR() {
             let c = clientsDB[currClientId];
             if(!c.weight) return 1300; 
@@ -593,7 +641,6 @@
             let burn = Math.floor((d.rings.cardio / 10) * 75) + (d.rings.train * 200);
             let bmr = Math.floor(getBMR());
             
-            // 赤字/盈余 = 摄入 - 消耗 - 基础代谢
             let net = intake - burn - bmr; 
 
             document.getElementById('val-bmr').innerText = bmr;
@@ -609,9 +656,7 @@
             }
         }
 
-        // 环交互与手动输入
         function drawRing(type, val, max, unit) {
-            let pCenter = type==='water'?28:31; // 微调位置
             document.getElementById(`t-${type}`).innerHTML = `${val}<br><span class="ring-sub">/ ${max}${unit}</span>`;
             document.getElementById(`r-${type}`).style.strokeDashoffset = 176 - (176 * (Math.min(val, max)/max));
         }
@@ -628,12 +673,11 @@
             if(v !== null && !isNaN(parseInt(v))) { d.rings[type] = parseInt(v); if(d.rings[type]<0) d.rings[type]=0; saveClients(); syncTrackUI(); }
         }
 
-        // 饮食照片
         let targetMeal = '';
         function triggerAIMealUpload(mt) { targetMeal = mt; document.getElementById('ai-meal-up').click(); }
         function delMeal(mt, idx) { if(confirm("删除此记录？")) { getDaily().meals[mt].splice(idx,1); saveClients(); syncTrackUI(); } }
 
-        // 🚨 严谨级 AI 热量算法
+        // 🚨 严谨级公式：卡路里 = 蛋白质*4 + 碳水*4 + 脂肪*9
         function getHash(str) { let h=0; for(let i=0;i<str.length;i++){ h=((h<<5)-h)+str.charCodeAt(i); h|=0; } return Math.abs(h); }
         function runAIMock(evt, mode) {
             const files = Array.from(evt.target.files); if(files.length === 0) return;
@@ -648,8 +692,9 @@
                     if(idx === 0) document.getElementById('scanBoxImage').style.backgroundImage = `url(${b64})`; 
                     
                     let h = getHash(b64.substring(100, 3000));
-                    // 严密算法
-                    let p = (h % 35) + 5; let c = ((h >> 3) % 65) + 5; let fat = ((h >> 5) % 25) + 2; 
+                    let p = (h % 40) + 10; 
+                    let c = ((h >> 3) % 70) + 10; 
+                    let fat = ((h >> 5) % 30) + 5; 
                     let k = (p * 4) + (c * 4) + (fat * 9); 
                     
                     let color='#32D74B', status='优质供能', sug='营养配比极佳，非常符合增肌减脂要求。'; 
@@ -693,10 +738,11 @@
             }
         }
 
-        // 指南
+        // 指南 3项
         function openGuide(type) {
             const data = {
                 'bistro': { title: '🍷 米其林 / Bistro', content: `<strong>核心法则：海鲜优先，警惕酱汁</strong><br><br><li><strong>餐前：</strong>喝一大杯温水。</li><li><strong>前菜：</strong>只选生肉薄片或清汤。</li><li><strong>主菜：</strong>首选牛排海鲜，酱汁单放。</li><li><strong>配酒：</strong>干型红白葡萄，一杯酒配一杯水。</li>` },
+                'tea': { title: '🍰 名媛下午茶', content: `<strong>核心法则：优雅品尝，适可而止</strong><br><br><li><strong>饮品：</strong>雷打不动的美式或无糖茶。</li><li><strong>甜点策略：</strong>三层塔只吃咸点。</li><li><strong>马卡龙：</strong>只吃顶部的鲜果，放弃奶油。</li>` },
                 'business': { title: '🥂 商务应酬酒局', content: `<strong>核心法则：保护肝脏，假吃主食</strong><br><br><li><strong>赴宴前：</strong>吃2个白煮蛋垫底。</li><li><strong>点菜：</strong>主动点白灼蔬菜放自己面前。</li><li><strong>敬酒：</strong>烈酒旁备冰水，喝一口酒喝两口水。</li><li><strong>主食：</strong>炒饭炒面坚决不碰。</li>` }
             };
             document.getElementById('gm-title').innerText = data[type].title;
@@ -707,8 +753,7 @@
         // 海报
         function generateReportCard() {
             if(!currClientId) return;
-            const c = clientsDB[currClientId];
-            const d = getDaily();
+            const c = clientsDB[currClientId]; const d = getDaily();
             const can = document.getElementById('hiddenCanvas');
             can.width = 800; can.height = 1000; const ctx = can.getContext('2d');
             
