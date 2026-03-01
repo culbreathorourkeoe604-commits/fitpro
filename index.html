@@ -12,7 +12,7 @@
     <script src="https://cdn.staticfile.net/Sortable/1.15.2/Sortable.min.js"></script>
 
     <style>
-        /* ================= 1. 绝对恢复主页原貌 ================= */
+        /* ================= 1. 主页原貌 ================= */
         :root { --primary: #00f2fe; --secondary: #7000ff; --bg: #000; --card-bg: rgba(255, 255, 255, 0.03); --text: #fff; --grad: radial-gradient(circle at top right, #1a2a6c, #000 70%); }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; margin: 0; padding: 0; }
         body { background: var(--bg); background-image: var(--grad); color: var(--text); font-family: -apple-system, sans-serif; padding: 20px; min-height: 100vh; transition: all 0.5s ease; display: flex; flex-direction: column; overflow-x: hidden;}
@@ -37,7 +37,7 @@
         .card:active img { transform: scale(1.05); }
         .card-info { position: absolute; bottom: 0; width: 100%; padding: 12px 5px; font-size: 11px; text-align: center; font-weight: bold; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: #fff; pointer-events: none;}
         
-        /* ================= 通用弹窗组件 ================= */
+        /* ================= 弹窗基础 ================= */
         .modal-base { position: fixed; top: 100vh; left: 0; width: 100%; height: 100vh; background: #050505; z-index: 3000; transition: top 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); display: flex; flex-direction: column;}
         .modal-base.show { top: 0; }
         .m-header { height: 60px; display: flex; justify-content: space-between; align-items: center; padding: 0 20px; background: rgba(5,5,5,0.95); border-bottom: 1px solid rgba(212,175,55,0.2); flex-shrink: 0;}
@@ -45,11 +45,10 @@
         .m-close { color: #888; font-size: 28px; background: none; border: none; padding: 0 10px; cursor: pointer; }
         .m-body { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 20px; -webkit-overflow-scrolling: touch; padding-bottom: 100px;}
 
-        /* ================= 2. 背书库修复 ================= */
+        /* ================= 背书库 ================= */
         .e-seg { display: flex; background: #111; border-radius: 12px; padding: 6px; margin-bottom: 20px; border: 1px solid #222;}
         .e-tab { flex: 1; text-align: center; padding: 12px 0; font-size: 14px; font-weight: bold; color: #666; border-radius: 8px; transition: 0.3s;}
         .e-tab.active { background: #D4AF37; color: #000; box-shadow: 0 0 15px rgba(212,175,55,0.5); transform: scale(1.02); z-index: 2;}
-        
         .e-sec { display: none; flex-direction: column; }
         .e-sec.active { display: flex; animation: fadeIn 0.3s;}
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
@@ -59,12 +58,12 @@
         .e-item img { width: 100%; height: 100%; object-fit: cover; pointer-events: none;}
         .e-item .del { position: absolute; top: 8px; right: 8px; width: 26px; height: 26px; background: rgba(0,0,0,0.8); border: 1px solid #FF3B30; border-radius: 50%; color: #FF3B30; display: flex; justify-content: center; align-items: center; font-weight: bold; z-index: 10;}
 
-        /* ================= 3. 24H 管家系统终极版 ================= */
+        /* ================= 24H 管家系统 ================= */
         .ls-seg { display: flex; gap: 10px; margin-bottom: 20px;}
         .ls-tab { flex: 1; padding: 12px 0; text-align: center; border-radius: 12px; background: #111; border: 1px solid #333; color: #888; font-size: 13px; font-weight: bold; transition: 0.3s;}
         .ls-tab.active { background: linear-gradient(135deg, #1A1813, #0A0A0C); border-color: #D4AF37; color: #D4AF37; box-shadow: 0 4px 10px rgba(212,175,55,0.2);}
         
-        .track-header { background: #111; border: 1px solid #333; border-radius: 12px; padding: 15px; margin-bottom: 20px; display: flex; flex-direction: column; gap: 15px;}
+        .track-header { background: #111; border: 1px solid #333; border-radius: 12px; padding: 15px; margin-bottom: 20px; display: flex; flex-direction: column; gap: 10px;}
         .client-sel { display: flex; justify-content: space-between; align-items: center; font-size: 15px; font-weight: bold; color: #D4AF37; border-bottom: 1px dashed #333; padding-bottom: 10px; cursor: pointer; background: rgba(212,175,55,0.05); border-radius: 8px; padding: 10px;}
         .client-profile-tags { display: flex; gap: 8px; font-size: 11px; color: #888; margin-top: 5px; font-weight: normal; letter-spacing: 1px;}
         
@@ -97,21 +96,20 @@
         .q-tag { flex-shrink: 0; background: #222; border: 1px solid #444; color: #aaa; font-size: 11px; padding: 6px 12px; border-radius: 50px; cursor: pointer;}
         .q-tag:active { background: #D4AF37; color: #000;}
 
-        /* 🚨 环形打卡与图标对齐修复 */
+        /* 环形打卡与图标对齐修复 */
         .rings-dash { background: #111; border: 1px solid #222; border-radius: 12px; padding: 20px 10px; display: flex; justify-content: space-around; margin-bottom: 20px; align-items: flex-end;}
         .ring-item { display: flex; flex-direction: column; align-items: center; width: 30%;}
         .ring-svg-box { position: relative; width: 70px; height: 70px; margin-bottom: 8px; cursor: pointer; display: flex; justify-content: center; align-items: center;}
         .svg-ring { width: 70px; height: 70px; transform: rotate(-90deg); position: absolute; top:0; left:0;}
         .svg-bg { fill: none; stroke: #222; stroke-width: 6; }
         .svg-progress { fill: none; stroke: #D4AF37; stroke-width: 6; stroke-linecap: round; stroke-dasharray: 176; stroke-dashoffset: 176; transition: 0.5s; pointer-events: none;}
-        .ring-icon { font-size: 22px; position: relative; z-index: 2; pointer-events: none;} /* 图标居中 */
+        .ring-icon { font-size: 22px; position: relative; z-index: 2; pointer-events: none;} 
         
         .ring-title { font-size: 11px; color: #aaa; text-align: center;}
         .ring-val { font-size: 14px; font-weight: bold; color: #fff; margin-top: 4px; text-align: center;}
         .ring-sub { font-size: 9px; color: #888; font-weight: normal;}
         .manual-edit-btn { margin-top: 8px; background: #222; color: #D4AF37; font-size: 10px; padding: 4px 10px; border-radius: 6px; border: 1px solid #444; cursor: pointer;}
 
-        /* 🚨 生存指南 3个 */
         .survival-guide { margin-bottom: 20px; }
         .guide-scroll { display: flex; overflow-x: auto; gap: 12px; padding-bottom: 10px; scroll-snap-type: x mandatory;}
         .guide-scroll::-webkit-scrollbar { display: none; }
@@ -150,7 +148,7 @@
         .scan-text { color: #D4AF37; font-size: 15px; font-weight: bold; letter-spacing: 2px; font-family: monospace; margin-top: 15px;}
         @keyframes scanAnim { 0% { top: 0; opacity: 1; } 100% { top: 100%; opacity: 0.2; } }
 
-        /* 🚨 左滑删除专属会员抽屉 */
+        /* 左滑删除专属会员抽屉 */
         .new-client-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 8000; display: none; flex-direction: column; justify-content: center; align-items: center; padding: 20px; backdrop-filter: blur(10px);}
         .new-client-modal.show { display: flex; }
         .nc-card { background: #111; border: 1px solid #D4AF37; border-radius: 16px; width: 100%; max-width: 350px; padding: 25px;}
@@ -164,14 +162,13 @@
         .client-modal { position: fixed; bottom: -100%; left: 0; width: 100%; background: #111; border-top: 1px solid #D4AF37; border-radius: 20px 20px 0 0; padding: 20px 0; z-index: 5000; transition: 0.4s;}
         .client-modal.show { bottom: 0; }
         
-        /* 极致丝滑的左滑删除布局 */
         .cm-row-wrapper { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; border-bottom: 1px solid #222; scrollbar-width: none; }
         .cm-row-wrapper::-webkit-scrollbar { display: none; }
         .cm-item { flex: 0 0 100%; scroll-snap-align: start; padding: 15px 20px; font-size: 15px; color: #fff; display: flex; justify-content: space-between; align-items: center; background: #111; }
         .cm-item.active { color: #D4AF37; font-weight: bold;}
         .cm-del-btn { flex: 0 0 80px; scroll-snap-align: end; background: #FF3B30; color: #fff; display: flex; justify-content: center; align-items: center; font-weight: bold; font-size: 14px;}
 
-        .cm-add { padding: 15px; color: #10b981; text-align: center; font-weight: bold; border-bottom: 1px solid #222; cursor: pointer; margin: 0 20px;}
+        .cm-add { padding: 15px; color: #10b981; text-align: center; font-weight: bold; border-bottom: 1px dashed #222; cursor: pointer; margin: 0 20px;}
 
         .guide-modal { position: fixed; bottom: -100%; left: 0; width: 100%; background: #111; border-top: 1px solid #D4AF37; border-radius: 24px 24px 0 0; z-index: 6000; padding: 25px 20px 40px; transition: 0.5s;}
         .guide-modal.show { bottom: 0; }
@@ -182,10 +179,12 @@
 
         .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: #D4AF37; color: #000; padding: 10px 20px; border-radius: 50px; font-weight: bold; font-size: 13px; z-index: 9999; display: none; box-shadow: 0 5px 15px rgba(212,175,55,0.4);}
         
-        .gen-btn { background: linear-gradient(135deg, #D4AF37, #AA8A2A); color: #000; text-align: center; padding: 16px; border-radius: 12px; font-size: 16px; font-weight: 900; margin-top: 20px; box-shadow: 0 5px 20px rgba(212,175,55,0.3); cursor: pointer;}
+        .gen-btn { background: linear-gradient(135deg, #D4AF37, #AA8A2A); color: #000; text-align: center; padding: 14px; border-radius: 12px; font-size: 15px; font-weight: 900; margin-top: 20px; box-shadow: 0 5px 20px rgba(212,175,55,0.3); cursor: pointer;}
+        .gen-btn-month { background: transparent; color: #D4AF37; border: 1px solid #D4AF37; text-align: center; padding: 14px; border-radius: 12px; font-size: 14px; font-weight: 900; margin-top: 10px; cursor: pointer;}
+        
         .poster-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 9999; display: none; flex-direction: column; justify-content: center; align-items: center; padding: 20px;}
         .poster-modal.show { display: flex; }
-        .poster-img { width: 100%; max-width: 350px; border-radius: 16px; box-shadow: 0 0 30px rgba(212,175,55,0.4); margin-bottom: 20px;}
+        .poster-img { width: 100%; max-width: 350px; max-height:75vh; object-fit:contain; border-radius: 16px; box-shadow: 0 0 30px rgba(212,175,55,0.4); margin-bottom: 20px;}
     </style>
 </head>
 <body>
@@ -298,18 +297,9 @@
                 </div>
 
                 <div class="energy-dash">
-                    <div class="e-box">
-                        <div class="e-label">基础代谢 BMR</div>
-                        <div class="e-val bmr" id="val-bmr">0</div>
-                    </div>
-                    <div class="e-box">
-                        <div class="e-label">运动消耗 (Kcal)</div>
-                        <div class="e-val burn" id="val-burn">0</div>
-                    </div>
-                    <div class="e-box">
-                        <div class="e-label">今日摄入 (Kcal)</div>
-                        <div class="e-val intake" id="val-intake">0</div>
-                    </div>
+                    <div class="e-box"><div class="e-label">基础代谢 BMR</div><div class="e-val bmr" id="val-bmr">0</div></div>
+                    <div class="e-box"><div class="e-label">运动消耗 (Kcal)</div><div class="e-val burn" id="val-burn">0</div></div>
+                    <div class="e-box"><div class="e-label">今日摄入 (Kcal)</div><div class="e-val intake" id="val-intake">0</div></div>
                     <div class="e-box" style="background: linear-gradient(145deg, #1A1813, #0A0A0C); border-color:#D4AF37;">
                         <div class="e-label" id="net-label" style="color:#D4AF37; font-weight:bold;">热量缺口</div>
                         <div class="e-val net" id="val-net">0</div>
@@ -325,14 +315,14 @@
                         <input type="file" id="ca-up" accept="image/*" style="display:none;" onchange="uploadCoachAvatar(event)">
                         <div class="directive-content">
                             <div class="directive-title">导师专属督促指令 ✎</div>
-                            <textarea id="val-directive" class="d-input" rows="2" placeholder="点击手写今日点评..." onblur="saveDailyData()"></textarea>
+                            <textarea id="val-directive" class="d-input" rows="3" placeholder="点击手写今日点评..." onblur="saveDailyData()"></textarea>
                         </div>
                     </div>
                     <div class="quick-tags">
                         <div class="q-tag" onclick="addTag('【执行完美】请继续保持当前饮食与代谢结构！')">👏 完美执行</div>
                         <div class="q-tag" onclick="addTag('【注意控糖】碳水略高，建议饭后散步15分钟。')">⚠️ 注意控糖</div>
                         <div class="q-tag" onclick="addTag('【加练警告】热量出现盈余，今晚立刻增加一次有氧！')">🔥 加练警告</div>
-                        <div class="q-tag" onclick="addTag('【补充水分】代谢缓慢，请务必喝够2500ml水分！')">💧 补充水分</div>
+                        <div class="q-tag" onclick="addTag('【补充水分】代谢缓慢，请务必喝够水分！')">💧 补充水分</div>
                         <div class="q-tag" onclick="addTag('【优质蛋白】肌肉恢复期，今日请摄入高优海鲜/牛肉。')">🥩 优质蛋白</div>
                         <div class="q-tag" onclick="addTag('【关注睡眠】皮质醇过高，今晚请务必在11点前入睡。')">😴 关注睡眠</div>
                         <div class="q-tag" onclick="addTag('【增加消耗】日常消耗过低，请尽量多走动提高步数。')">🏃‍♀️ 提高步数</div>
@@ -405,6 +395,7 @@
                 <input type="file" id="ai-meal-up" multiple accept="image/*" style="display:none;" onchange="runAIMock(event, 'track')">
                 
                 <div class="gen-btn" onclick="generateReportCard()">生成今日专属交付报告图 ➔</div>
+                <div class="gen-btn-month" onclick="generateMonthlyReport()">生成本月全息汇总报告 ➔</div>
             </div>
         </div>
     </div>
@@ -439,7 +430,6 @@
 
     <div class="ai-scanning-overlay" id="aiOverlay">
         <div class="scan-box" id="scanBoxImage"><div class="scan-line"></div></div>
-        <div class="scan-text" id="scanText">CONNECTING AI CORE...</div>
     </div>
 
     <div class="poster-modal" id="posterModal">
@@ -682,8 +672,6 @@
         function runAIMock(evt, mode) {
             const files = Array.from(evt.target.files); if(files.length === 0) return;
             document.getElementById('aiOverlay').style.display = 'flex';
-            let t = document.getElementById('scanText'); t.innerText = "CONNECTING AI MODEL...";
-            setTimeout(()=>t.innerText="ANALYZING MACROS...", 600);
             
             let loadedCount = 0; let tempRes = [];
             files.forEach((f, idx) => {
@@ -750,7 +738,22 @@
             document.getElementById('guideModal').classList.add('show');
         }
 
-        // 海报
+        // 辅助换行画字
+        function wrapText(context, text, x, y, maxWidth, lineHeight) {
+            let words = text.split('');
+            let line = '';
+            for(let n = 0; n < words.length; n++) {
+                let testLine = line + words[n];
+                let metrics = context.measureText(testLine);
+                if (metrics.width > maxWidth && n > 0) {
+                    context.fillText(line, x, y);
+                    line = words[n]; y += lineHeight;
+                } else { line = testLine; }
+            }
+            context.fillText(line, x, y);
+        }
+
+        // ================= 🚨 终极核武器：生成海报与月报 =================
         function generateReportCard() {
             if(!currClientId) return;
             const c = clientsDB[currClientId]; const d = getDaily();
@@ -763,7 +766,8 @@
             ctx.fillStyle = '#888'; ctx.font = '24px sans-serif'; ctx.fillText('EXCLUSIVE FITNESS REPORT', 400, 140);
             
             ctx.textAlign = 'left'; ctx.fillStyle = '#fff'; ctx.font = '32px sans-serif';
-            ctx.fillText(`服务对象：${c.name}`, 60, 220); ctx.fillText(`核算日期：${currDateStr}`, 450, 220);
+            ctx.fillText(`服务对象：${c.name}`, 60, 220); 
+            ctx.textAlign = 'right'; ctx.fillText(`核算日期：${currDateStr}`, 740, 220); ctx.textAlign = 'left';
             ctx.fillStyle = '#888'; ctx.font = '24px sans-serif'; ctx.fillText(`${c.gender==='M'?'男':'女'} | ${c.age}岁 | ${c.height}cm | ${c.weight}kg`, 60, 270);
             
             let bmr = document.getElementById('val-bmr').innerText;
@@ -787,10 +791,64 @@
 
             ctx.fillStyle = '#111'; ctx.fillRect(60, 830, 680, 110);
             ctx.fillStyle = '#D4AF37'; ctx.font = 'bold 22px sans-serif'; ctx.fillText('导师专属指令：', 80, 870);
-            ctx.fillStyle = '#fff'; ctx.font = '24px sans-serif';
-            let msg = d.msg || "继续保持，期待蜕变。";
-            if(msg.length > 25) msg = msg.substring(0,25) + "...";
-            ctx.fillText(`"${msg}"`, 80, 915);
+            ctx.fillStyle = '#fff'; ctx.font = '22px sans-serif';
+            wrapText(ctx, d.msg || "继续保持，期待蜕变。", 80, 910, 640, 30);
+
+            document.getElementById('final-poster').src = can.toDataURL('image/png');
+            document.getElementById('posterModal').classList.add('show');
+        }
+
+        // 月报生成
+        function generateMonthlyReport() {
+            if(!currClientId) return;
+            const c = clientsDB[currClientId];
+            const monthStr = currDateStr.substring(0, 7); // e.g., "2026-03"
+            
+            let days=0, tTrain=0, tCardio=0, tIntake=0, tBurn=0, tBmr=0;
+            
+            for(let date in c.records) {
+                if(date.startsWith(monthStr)) {
+                    days++; let r = c.records[date];
+                    tTrain += r.rings.train || 0; tCardio += r.rings.cardio || 0;
+                    ['breakfast','lunch','dinner'].forEach(mt => { if(r.meals && r.meals[mt]) r.meals[mt].forEach(m => tIntake += m.kcal); });
+                    tBurn += Math.floor(((r.rings.cardio||0)/10)*75) + ((r.rings.train||0)*200);
+                    tBmr += Math.floor(getBMR()); 
+                }
+            }
+            if(days === 0) return alert("本月暂无任何打卡数据！");
+
+            let tNet = tIntake - tBurn - tBmr;
+            
+            const can = document.getElementById('hiddenCanvas');
+            can.width = 800; can.height = 1000; const ctx = can.getContext('2d');
+            
+            ctx.fillStyle = '#050505'; ctx.fillRect(0,0,800,1000);
+            ctx.strokeStyle = '#D4AF37'; ctx.lineWidth = 4; ctx.strokeRect(20,20,760,960);
+            ctx.fillStyle = '#D4AF37'; ctx.font = 'bold 46px sans-serif'; ctx.textAlign = 'center'; ctx.fillText('LUXIOU 月度交付汇总', 400, 100);
+            ctx.fillStyle = '#888'; ctx.font = '24px sans-serif'; ctx.fillText('MONTHLY FITNESS REPORT', 400, 140);
+            
+            ctx.textAlign = 'left'; ctx.fillStyle = '#fff'; ctx.font = '32px sans-serif';
+            ctx.fillText(`服务对象：${c.name}`, 60, 220); 
+            ctx.textAlign = 'right'; ctx.fillText(`核算月份：${monthStr}`, 740, 220); ctx.textAlign = 'left';
+            
+            ctx.fillStyle = '#111'; ctx.fillRect(60, 300, 320, 180); ctx.fillRect(420, 300, 320, 180);
+            ctx.fillStyle = '#111'; ctx.fillRect(60, 520, 320, 180); ctx.fillRect(420, 520, 320, 180);
+
+            ctx.fillStyle = '#888'; ctx.font = '22px sans-serif';
+            ctx.fillText('累计打卡天数', 90, 350); ctx.fillText('累计有氧时长', 450, 350);
+            ctx.fillText('累计抗阻训练', 90, 570); ctx.fillText('月度热量盈亏', 450, 570);
+
+            ctx.fillStyle = '#D4AF37'; ctx.font = 'bold 50px sans-serif';
+            ctx.fillText(days + ' 天', 90, 430); ctx.fillText(tCardio + ' 分钟', 450, 430);
+            ctx.fillText(tTrain + ' 次', 90, 650); 
+            
+            ctx.fillStyle = tNet > 0 ? '#FF453A' : '#32D74B';
+            ctx.fillText((tNet>0?'+':'') + tNet, 450, 650);
+
+            ctx.fillStyle = '#fff'; ctx.font = 'bold 28px sans-serif'; ctx.fillText('导师阶段性评语：', 60, 800);
+            ctx.font = '24px sans-serif'; ctx.fillStyle = '#ccc';
+            let finalMsg = tNet <= 0 ? "本月执行力极高，热量控制完美，下个月我们将进一步精雕身体曲线，敬请期待蜕变！" : "本月略有热量盈余，注意避开隐形碳水与糖油混合物，下个月我们加强消耗，一定能拿回好身材！";
+            wrapText(ctx, finalMsg, 60, 850, 680, 35);
 
             document.getElementById('final-poster').src = can.toDataURL('image/png');
             document.getElementById('posterModal').classList.add('show');
