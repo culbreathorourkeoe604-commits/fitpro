@@ -12,7 +12,7 @@
     <script src="https://cdn.staticfile.net/Sortable/1.15.2/Sortable.min.js"></script>
 
     <style>
-        /* ================= 1. 主页原貌 ================= */
+        /* ================= 主页原貌 ================= */
         :root { --primary: #00f2fe; --secondary: #7000ff; --bg: #000; --card-bg: rgba(255, 255, 255, 0.03); --text: #fff; --grad: radial-gradient(circle at top right, #1a2a6c, #000 70%); }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; margin: 0; padding: 0; }
         body { background: var(--bg); background-image: var(--grad); color: var(--text); font-family: -apple-system, sans-serif; padding: 20px; min-height: 100vh; transition: all 0.5s ease; display: flex; flex-direction: column; overflow-x: hidden;}
@@ -96,7 +96,7 @@
         .q-tag { flex-shrink: 0; background: #222; border: 1px solid #444; color: #aaa; font-size: 11px; padding: 6px 12px; border-radius: 50px; cursor: pointer;}
         .q-tag:active { background: #D4AF37; color: #000;}
 
-        /* 环形打卡与图标对齐修复 */
+        /* 环形打卡 */
         .rings-dash { background: #111; border: 1px solid #222; border-radius: 12px; padding: 20px 10px; display: flex; justify-content: space-around; margin-bottom: 20px; align-items: flex-end;}
         .ring-item { display: flex; flex-direction: column; align-items: center; width: 30%;}
         .ring-svg-box { position: relative; width: 70px; height: 70px; margin-bottom: 8px; cursor: pointer; display: flex; justify-content: center; align-items: center;}
@@ -110,12 +110,10 @@
         .ring-sub { font-size: 9px; color: #888; font-weight: normal;}
         .manual-edit-btn { margin-top: 8px; background: #222; color: #D4AF37; font-size: 10px; padding: 4px 10px; border-radius: 6px; border: 1px solid #444; cursor: pointer;}
 
-        /* 🚨 生存指南：柔美明亮版 */
         .survival-guide { margin-bottom: 20px; }
         .guide-scroll { display: flex; overflow-x: auto; gap: 12px; padding-bottom: 10px; scroll-snap-type: x mandatory;}
         .guide-scroll::-webkit-scrollbar { display: none; }
         .guide-card { flex-shrink: 0; width: 200px; height: 100px; border-radius: 12px; background: #111; border: 1px solid rgba(212,175,55,0.2); position: relative; overflow: hidden; scroll-snap-align: start; cursor: pointer;}
-        /* 调整了滤镜，让图片更亮、更柔和 */
         .guide-card img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.7) saturate(0.9);}
         .guide-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.9), transparent); display: flex; flex-direction: column; justify-content: flex-end; padding: 12px;}
         .g-title { font-size: 13px; font-weight: 900; color: #D4AF37; }
@@ -147,10 +145,9 @@
         .ai-scanning-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 9999; display: none; flex-direction: column; justify-content: center; align-items: center;}
         .scan-box { width: 260px; height: 260px; border: 2px solid #D4AF37; position: relative; overflow: hidden; border-radius: 16px; margin-bottom: 20px; background-size: cover; background-position: center; box-shadow: 0 0 30px rgba(212,175,55,0.3);}
         .scan-line { width: 100%; height: 3px; background: #D4AF37; box-shadow: 0 0 20px 5px rgba(212,175,55,0.6); position: absolute; top: 0; animation: scanAnim 1.2s infinite linear;}
-        .scan-text { color: #D4AF37; font-size: 15px; font-weight: bold; letter-spacing: 2px; font-family: monospace; margin-top: 15px;}
         @keyframes scanAnim { 0% { top: 0; opacity: 1; } 100% { top: 100%; opacity: 0.2; } }
 
-        /* 左滑删除专属会员抽屉 */
+        /* 会员表单与抽屉 */
         .new-client-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 8000; display: none; flex-direction: column; justify-content: center; align-items: center; padding: 20px; backdrop-filter: blur(10px);}
         .new-client-modal.show { display: flex; }
         .nc-card { background: #111; border: 1px solid #D4AF37; border-radius: 16px; width: 100%; max-width: 350px; padding: 25px;}
@@ -163,7 +160,6 @@
 
         .client-modal { position: fixed; bottom: -100%; left: 0; width: 100%; background: #111; border-top: 1px solid #D4AF37; border-radius: 20px 20px 0 0; padding: 20px 0; z-index: 5000; transition: 0.4s;}
         .client-modal.show { bottom: 0; }
-        
         .cm-row-wrapper { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; border-bottom: 1px solid #222; scrollbar-width: none; }
         .cm-row-wrapper::-webkit-scrollbar { display: none; }
         .cm-item { flex: 0 0 100%; scroll-snap-align: start; padding: 15px 20px; font-size: 15px; color: #fff; display: flex; justify-content: space-between; align-items: center; background: #111; }
@@ -172,6 +168,7 @@
 
         .cm-add { padding: 15px; color: #10b981; text-align: center; font-weight: bold; border-bottom: 1px dashed #222; cursor: pointer; margin: 0 20px;}
 
+        /* 引导与海报弹窗 */
         .guide-modal { position: fixed; bottom: -100%; left: 0; width: 100%; background: #111; border-top: 1px solid #D4AF37; border-radius: 24px 24px 0 0; z-index: 6000; padding: 25px 20px 40px; transition: 0.5s;}
         .guide-modal.show { bottom: 0; }
         .gm-title { font-size: 20px; font-weight: 900; color: #D4AF37; margin-bottom: 20px; }
@@ -187,6 +184,11 @@
         .poster-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 9999; display: none; flex-direction: column; justify-content: center; align-items: center; padding: 20px;}
         .poster-modal.show { display: flex; }
         .poster-img { width: 100%; max-width: 350px; max-height:75vh; object-fit:contain; border-radius: 16px; box-shadow: 0 0 30px rgba(212,175,55,0.4); margin-bottom: 20px;}
+
+        /* 🚨 新增：会员打卡二维码弹窗 */
+        .qr-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 8500; display: none; flex-direction: column; justify-content: center; align-items: center; padding: 20px;}
+        .qr-modal.show { display: flex; }
+        .qr-card { background: #111; border: 1px solid #D4AF37; border-radius: 16px; padding: 30px; text-align: center; max-width: 300px; box-shadow: 0 10px 40px rgba(212,175,55,0.3);}
     </style>
 </head>
 <body>
@@ -296,6 +298,11 @@
                         <input type="date" id="date-picker" onchange="datePickerChange(this.value)">
                         <button class="date-btn" onclick="changeDate(1)">后天 ▶</button>
                     </div>
+                    <div style="margin-top: 5px; padding-top: 15px; border-top: 1px dashed #333; text-align: center;">
+                        <button style="background: rgba(212,175,55,0.1); color: #D4AF37; border: 1px dashed #D4AF37; padding: 10px 0; width: 100%; border-radius: 8px; font-size: 12px; font-weight: bold; cursor: pointer;" onclick="document.getElementById('qrModal').classList.add('show')">
+                            📱 开启会员专属云端打卡通道
+                        </button>
+                    </div>
                 </div>
 
                 <div class="energy-dash">
@@ -370,7 +377,7 @@
                             <div class="guide-overlay"><div class="g-title">米其林 / Bistro</div><div class="g-desc">享受美食的防暴卡秘籍</div></div>
                         </div>
                         <div class="guide-card" onclick="openGuide('tea')">
-                            <img src="https://images.unsplash.com/photo-1563729768-2b3847745246?auto=format&fit=crop&w=400&q=80">
+                            <img src="https://images.unsplash.com/photo-1495147466023-e6a925cd3155?auto=format&fit=crop&w=400&q=80">
                             <div class="guide-overlay"><div class="g-title">精致下午茶</div><div class="g-desc">优雅避开糖油混合炸弹</div></div>
                         </div>
                         <div class="guide-card" onclick="openGuide('business')">
@@ -420,6 +427,15 @@
         <div id="client-list-render" style="max-height:40vh; overflow-y:auto; overflow-x:hidden;"></div>
         <div class="cm-add" onclick="openNewClientForm()">+ 新建高级会员档案</div>
         <div class="cm-item" style="justify-content:center; color:#666; border:none; margin-top:10px; cursor:pointer;" onclick="document.getElementById('clientMenu').classList.remove('show')">取消关闭</div>
+    </div>
+
+    <div class="qr-modal" id="qrModal">
+        <div class="qr-card">
+            <div style="font-size: 18px; color: #D4AF37; font-weight: bold; margin-bottom: 10px;">会员专属云端绑定</div>
+            <div style="font-size: 12px; color: #888; margin-bottom: 20px; line-height:1.5;">请让客户使用微信扫描下方二维码。<br>绑定后，客户在手机端上传的饮食打卡，将24小时自动同步至您的评估中枢。</div>
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://luxiou.vip/client-portal" style="width: 180px; height: 180px; border-radius: 8px; border: 2px solid #333; margin-bottom: 20px;">
+            <div style="color:#888; font-size:14px; border:1px solid #444; padding:8px 30px; border-radius:50px; cursor:pointer; display:inline-block;" onclick="document.getElementById('qrModal').classList.remove('show')">关闭</div>
+        </div>
     </div>
 
     <div class="guide-modal" id="guideModal">
@@ -546,7 +562,7 @@
             showToast("档案建立成功");
         }
 
-        // 🚨 苹果原生左滑删除布局
+        // 左滑删除
         function openClientMenu() {
             let html = '';
             for(let k in clientsDB) { 
@@ -576,7 +592,6 @@
             return c.records[currDateStr];
         }
 
-        // BMR计算公式
         function getBMR() {
             let c = clientsDB[currClientId];
             if(!c.weight) return 1300; 
@@ -624,15 +639,11 @@
         }
         function saveDailyData() { getDaily().msg = document.getElementById('val-directive').value; saveClients(); }
 
-        // 🚨 核心热量矩阵计算
         function calcEnergy() {
-            let d = getDaily();
-            let intake = 0;
+            let d = getDaily(); let intake = 0;
             ['breakfast','lunch','dinner'].forEach(mt => { d.meals[mt].forEach(m => intake += m.kcal); });
-            // 有氧 75大卡/10分钟；抗阻 200大卡/次
             let burn = Math.floor((d.rings.cardio / 10) * 75) + (d.rings.train * 200);
             let bmr = Math.floor(getBMR());
-            
             let net = intake - burn - bmr; 
 
             document.getElementById('val-bmr').innerText = bmr;
@@ -669,7 +680,6 @@
         function triggerAIMealUpload(mt) { targetMeal = mt; document.getElementById('ai-meal-up').click(); }
         function delMeal(mt, idx) { if(confirm("删除此记录？")) { getDaily().meals[mt].splice(idx,1); saveClients(); syncTrackUI(); } }
 
-        // 🚨 严谨级公式：卡路里 = 蛋白质*4 + 碳水*4 + 脂肪*9
         function getHash(str) { let h=0; for(let i=0;i<str.length;i++){ h=((h<<5)-h)+str.charCodeAt(i); h|=0; } return Math.abs(h); }
         function runAIMock(evt, mode) {
             const files = Array.from(evt.target.files); if(files.length === 0) return;
@@ -682,9 +692,7 @@
                     if(idx === 0) document.getElementById('scanBoxImage').style.backgroundImage = `url(${b64})`; 
                     
                     let h = getHash(b64.substring(100, 3000));
-                    let p = (h % 40) + 10; 
-                    let c = ((h >> 3) % 70) + 10; 
-                    let fat = ((h >> 5) % 30) + 5; 
+                    let p = (h % 40) + 10; let c = ((h >> 3) % 70) + 10; let fat = ((h >> 5) % 30) + 5; 
                     let k = (p * 4) + (c * 4) + (fat * 9); 
                     
                     let color='#32D74B', status='优质供能', sug='营养配比极佳，非常符合增肌减脂要求。'; 
@@ -728,7 +736,6 @@
             }
         }
 
-        // 指南 3项
         function openGuide(type) {
             const data = {
                 'bistro': { title: '🍷 米其林 / Bistro', content: `<strong>核心法则：海鲜优先，警惕酱汁</strong><br><br><li><strong>餐前：</strong>喝一大杯温水。</li><li><strong>前菜：</strong>只选生肉薄片或清汤。</li><li><strong>主菜：</strong>首选牛排海鲜，酱汁单放。</li><li><strong>配酒：</strong>干型红白葡萄，一杯酒配一杯水。</li>` },
@@ -740,10 +747,8 @@
             document.getElementById('guideModal').classList.add('show');
         }
 
-        // 辅助换行画字
         function wrapText(context, text, x, y, maxWidth, lineHeight) {
-            let words = text.split('');
-            let line = '';
+            let words = text.split(''); let line = '';
             for(let n = 0; n < words.length; n++) {
                 let testLine = line + words[n];
                 let metrics = context.measureText(testLine);
@@ -755,7 +760,6 @@
             context.fillText(line, x, y);
         }
 
-        // ================= 🚨 终极核武器：生成海报与月报 =================
         function generateReportCard() {
             if(!currClientId) return;
             const c = clientsDB[currClientId]; const d = getDaily();
@@ -800,11 +804,10 @@
             document.getElementById('posterModal').classList.add('show');
         }
 
-        // 月报生成
         function generateMonthlyReport() {
             if(!currClientId) return;
             const c = clientsDB[currClientId];
-            const monthStr = currDateStr.substring(0, 7); // e.g., "2026-03"
+            const monthStr = currDateStr.substring(0, 7); 
             
             let days=0, tTrain=0, tCardio=0, tIntake=0, tBurn=0, tBmr=0;
             
@@ -814,7 +817,9 @@
                     tTrain += r.rings.train || 0; tCardio += r.rings.cardio || 0;
                     ['breakfast','lunch','dinner'].forEach(mt => { if(r.meals && r.meals[mt]) r.meals[mt].forEach(m => tIntake += m.kcal); });
                     tBurn += Math.floor(((r.rings.cardio||0)/10)*75) + ((r.rings.train||0)*200);
-                    tBmr += Math.floor(getBMR()); 
+                    
+                    let bmr = (10 * c.weight) + (6.25 * c.height) - (5 * c.age);
+                    tBmr += Math.floor(c.gender === 'M' ? bmr + 5 : bmr - 161); 
                 }
             }
             if(days === 0) return alert("本月暂无任何打卡数据！");
