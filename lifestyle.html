@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>24H 全息节律管家</title>
+    <style>
+        /* 纯血黑金配色 */
+        :root { --primary: #D4AF37; --accent: #C5A059; --bg: #050505; --surface: #121212; --text-main: #E2E8F0; --text-sub: #8A92A3; 
+                --green: #32D74B; --yellow: #FFD60A; --red: #FF453A; }
+        
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; margin: 0; padding: 0; }
+        html, body { width: 100%; min-height: 100vh; background: var(--bg); color: var(--text-main); font-family: -apple-system, sans-serif; -webkit-font-smoothing: antialiased; }
+        
+        /* 顶部环境光晕 */
+        body::before { content: ''; position: fixed; top: -10vh; left: 50%; transform: translateX(-50%); width: 150vw; height: 30vh; background: radial-gradient(ellipse, rgba(212, 175, 55, 0.15) 0%, transparent 70%); z-index: 0; pointer-events: none; }
+
+        .header-brand { width: 100%; height: 60px; display: flex; align-items: center; justify-content: center; background: rgba(5, 5, 5, 0.85); position: sticky; top: 0; z-index: 50; border-bottom: 1px solid rgba(212, 175, 55, 0.15); backdrop-filter: blur(15px);}
+        .brand-text { font-size: 18px; font-weight: 900; color: var(--primary); letter-spacing: 2px; }
+        
+        .back-bar { padding: 15px 20px 5px; position: relative; z-index: 5;}
+        .btn-back { background: rgba(255,255,255,0.05); color: #fff; border: 1px solid rgba(255,255,255,0.1); padding: 8px 18px; border-radius: 50px; font-size: 13px; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; font-weight: bold;}
+
+        .main-container { padding: 15px 20px 40px; position: relative; z-index: 5; display: flex; flex-direction: column; gap: 25px;}
+
+        /* ================= 1. 导师指令板 ================= */
+        .coach-directive { background: linear-gradient(145deg, #1A1813, #0A0A0C); border: 1px solid rgba(212,175,55,0.3); border-radius: 16px; padding: 20px; display: flex; align-items: center; gap: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); position: relative; overflow: hidden;}
+        .coach-avatar { width: 60px; height: 60px; border-radius: 50%; border: 2px solid var(--primary); object-fit: cover; flex-shrink: 0; box-shadow: 0 0 15px rgba(212,175,55,0.4);}
+        .directive-content { flex: 1; }
+        .directive-title { font-size: 11px; color: var(--primary); font-weight: bold; letter-spacing: 2px; margin-bottom: 6px; display: flex; align-items: center; gap: 6px;}
+        .directive-title::before { content: ''; display: block; width: 6px; height: 6px; background: var(--primary); border-radius: 50%; box-shadow: 0 0 8px var(--primary); animation: pulse 2s infinite;}
+        .directive-text { font-size: 14px; color: #fff; font-weight: 900; line-height: 1.5; text-shadow: 0 2px 4px rgba(0,0,0,0.5);}
+        @keyframes pulse { 0% { opacity: 0.5; } 50% { opacity: 1; transform: scale(1.2); } 100% { opacity: 0.5; } }
+
+        /* ================= 2. 全息节律闭合环 ================= */
+        .rings-dashboard { background: #0A0A0C; border: 1px solid rgba(255,255,255,0.05); border-radius: 16px; padding: 20px 15px; box-shadow: inset 0 0 20px rgba(0,0,0,0.5);}
+        .sec-title { font-size: 16px; font-weight: 900; color: #fff; margin-bottom: 20px; text-align: center; letter-spacing: 1px;}
+        
+        .rings-wrap { display: flex; justify-content: space-around; align-items: flex-end;}
+        .ring-item { display: flex; flex-direction: column; align-items: center; cursor: pointer; transition: 0.3s;}
+        .ring-item:active { transform: scale(0.92); }
+        
+        .svg-ring { width: 80px; height: 80px; transform: rotate(-90deg); margin-bottom: 10px; filter: drop-shadow(0 0 6px rgba(212,175,55,0.2));}
+        .svg-bg { fill: none; stroke: #222; stroke-width: 8; }
+        .svg-progress { fill: none; stroke: var(--primary); stroke-width: 8; stroke-linecap: round; stroke-dasharray: 201; stroke-dashoffset: 201; transition: stroke-dashoffset 1s cubic-bezier(0.2, 0.8, 0.2, 1); }
+        
+        .ring-icon { position: absolute; font-size: 20px; top: 25px; left: 50%; transform: translateX(-50%); pointer-events: none;}
+        .ring-name { font-size: 12px; color: #aaa; font-weight: bold; margin-bottom: 4px;}
+        .ring-val { font-size: 14px; font-weight: 900; color: #fff;}
+        .ring-val span { font-size: 10px; color: #666; font-weight: normal;}
+
+        /* ================= 3. 高奢赴宴生存指南 ================= */
+        .survival-guide { margin-top: 5px; }
+        .guide-scroll { display: flex; overflow-x: auto; gap: 15px; padding-bottom: 10px; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;}
+        .guide-scroll::-webkit-scrollbar { display: none; }
+        .guide-card { flex-shrink: 0; width: 220px; height: 120px; border-radius: 14px; background: #111; border: 1px solid rgba(212,175,55,0.2); position: relative; overflow: hidden; scroll-snap-align: start; cursor: pointer;}
+        .guide-card img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.6) saturate(0.8); transition: 0.4s;}
+        .guide-card:active img { transform: scale(1.05); filter: brightness(0.8); }
+        .guide-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.9), transparent); display: flex; flex-direction: column; justify-content: flex-end; padding: 15px;}
+        .g-icon { font-size: 20px; margin-bottom: 5px; }
+        .g-title { font-size: 15px; font-weight: 900; color: var(--primary); letter-spacing: 1px;}
+        .g-desc { font-size: 11px; color: #ccc; margin-top: 4px;}
+
+        /* ================= 4. 饮食光影日记 ================= */
+        .diet-log { background: #0A0A0C; border: 1px solid rgba(255,255,255,0.05); border-radius: 16px; padding: 20px 15px; box-shadow: inset 0 0 20px rgba(0,0,0,0.5);}
+        .diet-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 20px;}
+        .d-title-wrap { flex: 1; }
+        .d-subtitle { font-size: 11px; color: #888; margin-top: 4px;}
+        
+        .btn-upload-diet { background: linear-gradient(135deg, var(--primary), #AA8A2A); color: #000; padding: 10px 16px; border-radius: 10px; font-weight: 900; font-size: 13px; box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3); border: none; cursor: pointer;}
+        .btn-upload-diet:active { transform: scale(0.96); }
+
+        .diet-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+        .diet-item { position: relative; border-radius: 12px; overflow: hidden; background: #111; aspect-ratio: 1/1; cursor: pointer; border: 1px solid transparent; transition: 0.3s;}
+        .diet-item:active { transform: scale(0.96); }
+        .diet-item img { width: 100%; height: 100%; object-fit: cover; }
+        
+        /* 状态光环 */
+        .diet-item.status-green { border-color: var(--green); box-shadow: 0 0 15px rgba(50, 215, 75, 0.2); }
+        .diet-item.status-yellow { border-color: var(--yellow); box-shadow: 0 0 15px rgba(255, 214, 10, 0.2); }
+        .diet-item.status-red { border-color: var(--red); box-shadow: 0 0 15px rgba(255, 69, 58, 0.2); }
+        .diet-item.status-pending { border-color: #444; }
+
+        .diet-time { position: absolute; bottom: 0; left: 0; width: 100%; padding: 15px 10px 8px; background: linear-gradient(to top, rgba(0,0,0,0.9), transparent); font-size: 11px; font-weight: bold; color: #fff;}
+        .status-badge { position: absolute; top: 8px; right: 8px; width: 12px; height: 12px; border-radius: 50%; border: 2px solid #000;}
+        .status-green .status-badge { background: var(--green); box-shadow: 0 0 8px var(--green);}
+        .status-yellow .status-badge { background: var(--yellow); box-shadow: 0 0 8px var(--yellow);}
+        .status-red .status-badge { background: var(--red); box-shadow: 0 0 8px var(--red);}
+        .status-pending .status-badge { background: #888; }
+
+        .empty-diet { grid-column: span 2; text-align: center; padding: 30px; border: 1px dashed #333; border-radius: 12px; font-size: 12px; color: #555; }
+
+        /* 导师点评弹窗 */
+        .eval-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 9999; display: none; flex-direction: column; justify-content: center; align-items: center; padding: 20px; backdrop-filter: blur(10px); opacity: 0; transition: 0.3s;}
+        .eval-modal.show { display: flex; opacity: 1;}
+        .eval-card { background: #111; border: 1px solid var(--primary); border-radius: 20px; width: 100%; max-width: 340px; padding: 25px 20px; text-align: center; box-shadow: 0 10px 40px rgba(212,175,55,0.2);}
+        .eval-title { font-size: 18px; color: #fff; font-weight: 900; margin-bottom: 20px; letter-spacing: 1px;}
+        .eval-btn { width: 100%; padding: 15px; border-radius: 12px; font-size: 15px; font-weight: bold; color: #000; border: none; margin-bottom: 12px; cursor: pointer; transition: 0.2s;}
+        .eval-btn:active { transform: scale(0.96); }
+        .btn-green { background: linear-gradient(135deg, #32D74B, #28A73C); box-shadow: 0 5px 15px rgba(50,215,75,0.3);}
+        .btn-yellow { background: linear-gradient(135deg, #FFD60A, #CCAA00); box-shadow: 0 5px 15px rgba(255,214,10,0.3);}
+        .btn-red { background: linear-gradient(135deg, #FF453A, #CC372E); box-shadow: 0 5px 15px rgba(255,69,58,0.3); color: #fff;}
+        .btn-cancel { background: transparent; border: 1px solid #444; color: #888; margin-bottom: 0; margin-top: 10px;}
+
+        /* 生存指南弹窗 */
+        .guide-modal { position: fixed; bottom: -100%; left: 0; width: 100%; background: linear-gradient(180deg, #121215, #050505); border-top: 1px solid var(--primary); border-radius: 24px 24px 0 0; z-index: 10000; padding: 25px 20px 40px; transition: 0.5s cubic-bezier(0.2, 0.8, 0.2, 1); box-shadow: 0 -10px 50px rgba(212,175,55,0.15);}
+        .guide-modal.show { bottom: 0; }
+        .gm-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px;}
+        .gm-title { font-size: 20px; font-weight: 900; color: var(--primary); letter-spacing: 1px; }
+        .gm-close { color: #888; font-size: 28px; background: none; border: none; padding: 0; line-height: 1; cursor: pointer; }
+        .gm-content { font-size: 14px; color: #ccc; line-height: 1.8;}
+        .gm-content strong { color: #fff; }
+        .gm-content ul { padding-left: 20px; margin-top: 10px; }
+        .gm-content li { margin-bottom: 8px; }
+
+    </style>
+</head>
+<body>
+
+    <div class="header-brand">
+        <div class="brand-text">24H 全息节律管家</div>
+    </div>
+    
+    <div class="back-bar">
+        <div class="btn-back" onclick="window.history.back()">← 返回首页</div>
+    </div>
+
+    <div class="main-container">
+        
+        <div class="coach-directive">
+            <img src="https://images.unsplash.com/photo-1594381898411-846e7d193883?auto=format&fit=crop&w=200&q=80" class="coach-avatar">
+            <div class="directive-content">
+                <div class="directive-title">首席重塑导师 | 今日指令</div>
+                <div class="directive-text">"不要让周末的放纵，<br>毁掉你周一绝美马甲线的轮廓。"</div>
+            </div>
+        </div>
+
+        <div class="rings-dashboard">
+            <div class="sec-title">✦ 节律闭合追踪 ✦</div>
+            <div class="rings-wrap">
+                <div class="ring-item" onclick="addProgress('water')">
+                    <div style="position:relative;">
+                        <svg class="svg-ring"><circle class="svg-bg" cx="40" cy="40" r="32"/><circle class="svg-progress" id="ring-water" cx="40" cy="40" r="32"/></svg>
+                        <div class="ring-icon">💧</div>
+                    </div>
+                    <div class="ring-name">唤醒之源</div>
+                    <div class="ring-val" id="val-water">0 <span>/ 2000ml</span></div>
+                </div>
+                <div class="ring-item" onclick="addProgress('cardio')">
+                    <div style="position:relative;">
+                        <svg class="svg-ring"><circle class="svg-bg" cx="40" cy="40" r="32"/><circle class="svg-progress" id="ring-cardio" cx="40" cy="40" r="32"/></svg>
+                        <div class="ring-icon">🔥</div>
+                    </div>
+                    <div class="ring-name">代谢引擎</div>
+                    <div class="ring-val" id="val-cardio">0 <span>/ 100%</span></div>
+                </div>
+                <div class="ring-item" onclick="addProgress('training')">
+                    <div style="position:relative;">
+                        <svg class="svg-ring"><circle class="svg-bg" cx="40" cy="40" r="32"/><circle class="svg-progress" id="ring-training" cx="40" cy="40" r="32"/></svg>
+                        <div class="ring-icon">🏋️‍♀️</div>
+                    </div>
+                    <div class="ring-name">核心重塑</div>
+                    <div class="ring-val" id="val-training">0 <span>/ 3次</span></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="survival-guide">
+            <div class="sec-title" style="margin-bottom:15px;">✦ 社交赴宴生存指南 ✦</div>
+            <div class="guide-scroll">
+                <div class="guide-card" onclick="openGuide('bistro')">
+                    <img src="https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?auto=format&fit=crop&w=400&q=80">
+                    <div class="guide-overlay">
+                        <div class="g-icon">🍷</div>
+                        <div class="g-title">米其林 / Bistro</div>
+                        <div class="g-desc">享受微醺与美食的防暴卡秘籍</div>
+                    </div>
+                </div>
+                <div class="guide-card" onclick="openGuide('tea')">
+                    <img src="https://images.unsplash.com/photo-1557142046-c704a3adf364?auto=format&fit=crop&w=400&q=80">
+                    <div class="guide-overlay">
+                        <div class="g-icon">🍰</div>
+                        <div class="g-title">名媛下午茶</div>
+                        <div class="g-desc">如何优雅地避开糖油混合炸弹</div>
+                    </div>
+                </div>
+                <div class="guide-card" onclick="openGuide('business')">
+                    <img src="https://images.unsplash.com/photo-1556761175-5973dc0f32b7?auto=format&fit=crop&w=400&q=80">
+                    <div class="guide-overlay">
+                        <div class="g-icon">🥂</div>
+                        <div class="g-title">高强商务应酬</div>
+                        <div class="g-desc">酒局与推杯换盏中的代谢保护法</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="diet-log">
+            <div class="diet-header">
+                <div class="d-title-wrap">
+                    <div class="sec-title" style="margin-bottom:0; text-align:left;">✦ 饮食光影日记</div>
+                    <div class="d-subtitle">放弃繁琐的热量计算，交给您的专属大脑。</div>
+                </div>
+                <button class="btn-upload-diet" onclick="document.getElementById('diet-upload').click()">+ 上传三餐</button>
+                <input type="file" id="diet-upload" accept="image/*" style="display:none;" onchange="handleDietUpload(event)">
+            </div>
+            
+            <div class="diet-grid" id="diet-gallery">
+                </div>
+        </div>
+
+    </div>
+
+    <div class="eval-modal" id="evalModal">
+        <div class="eval-card">
+            <div class="eval-title">✦ 导师能量评审 ✦</div>
+            <button class="eval-btn btn-green" onclick="setDietStatus('green')">🟢 完美赋能 (绿灯)</button>
+            <button class="eval-btn btn-yellow" onclick="setDietStatus('yellow')">🟡 略有瑕疵 (黄灯)</button>
+            <button class="eval-btn btn-red" onclick="setDietStatus('red')">🔴 触发警报 (红灯)</button>
+            <button class="eval-btn btn-cancel" onclick="closeEvalModal()">先不评价，点错了</button>
+            <div style="margin-top:20px; font-size:12px; color:#555; text-decoration:underline; cursor:pointer;" onclick="deleteCurrentDiet()">永久删除这张照片</div>
+        </div>
+    </div>
+
+    <div class="guide-modal" id="guideModal">
+        <div class="gm-header">
+            <div class="gm-title" id="gm-title">指南标题</div>
+            <button class="gm-close" onclick="closeGuide()">×</button>
+        </div>
+        <div class="gm-content" id="gm-content">内容</div>
+    </div>
+    <div class="upsell-overlay" id="guideOverlay" onclick="closeGuide()" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:9999;"></div>
+
+    <script>
+        // ================= 环形进度逻辑 =================
+        let progress = { water: 0, cardio: 0, training: 0 };
+        const max = { water: 2000, cardio: 100, training: 3 };
+        const step = { water: 250, cardio: 20, training: 1 };
+        const totalDash = 201; // 2 * pi * 32 约等于 201
+
+        function addProgress(type) {
+            progress[type] += step[type];
+            if (progress[type] > max[type]) progress[type] = 0; // 点满了重置
+            
+            // 更新数字
+            let unit = type === 'water' ? 'ml' : (type === 'cardio' ? '%' : '次');
+            document.getElementById(`val-${type}`).innerHTML = `${progress[type]} <span>/ ${max[type]}${unit}</span>`;
+            
+            // 更新 SVG 环
+            let percent = progress[type] / max[type];
+            let offset = totalDash - (totalDash * percent);
+            document.getElementById(`ring-${type}`).style.strokeDashoffset = offset;
+            
+            if(navigator.vibrate) navigator.vibrate(20);
+        }
+
+        // ================= 饮食日记逻辑 =================
+        let dietDB = [];
+        let currentEvalIndex = -1;
+
+        window.onload = function() {
+            let savedDiet = localStorage.getItem('ryue_diet_log');
+            if(savedDiet) dietDB = JSON.parse(savedDiet);
+            renderDiet();
+        }
+
+        function handleDietUpload(event) {
+            const file = event.target.files[0];
+            if(!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = new Image();
+                img.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+                    const MAX_WIDTH = 600; // 压缩防爆内存
+                    let scale = img.width > MAX_WIDTH ? (MAX_WIDTH / img.width) : 1;
+                    canvas.width = img.width * scale;
+                    canvas.height = img.height * scale;
+                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                    
+                    const base64 = canvas.toDataURL('image/jpeg', 0.6);
+                    
+                    // 获取当前时间
+                    let now = new Date();
+                    let timeStr = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
+                    
+                    dietDB.unshift({ img: base64, time: timeStr, status: 'pending' });
+                    localStorage.setItem('ryue_diet_log', JSON.stringify(dietDB));
+                    renderDiet();
+                    event.target.value = ''; 
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function renderDiet() {
+            const container = document.getElementById('diet-gallery');
+            container.innerHTML = '';
+            
+            if(dietDB.length === 0) {
+                container.innerHTML = `<div class="empty-diet">今天还没有记录哦<br>点击上方按钮，让教练为您把关</div>`;
+                return;
+            }
+
+            dietDB.forEach((item, index) => {
+                let html = `
+                    <div class="diet-item status-${item.status}" onclick="openEvalModal(${index})">
+                        <img src="${item.img}">
+                        <div class="status-badge"></div>
+                        <div class="diet-time">${item.time}</div>
+                    </div>
+                `;
+                container.insertAdjacentHTML('beforeend', html);
+            });
+        }
+
+        // ================= 评价弹窗逻辑 =================
+        function openEvalModal(index) {
+            currentEvalIndex = index;
+            document.getElementById('evalModal').classList.add('show');
+        }
+        function closeEvalModal() {
+            document.getElementById('evalModal').classList.remove('show');
+        }
+        function setDietStatus(status) {
+            if(currentEvalIndex > -1) {
+                dietDB[currentEvalIndex].status = status;
+                localStorage.setItem('ryue_diet_log', JSON.stringify(dietDB));
+                renderDiet();
+            }
+            closeEvalModal();
+            if(navigator.vibrate) navigator.vibrate(20);
+        }
+        function deleteCurrentDiet() {
+            if(currentEvalIndex > -1 && confirm("确定删除这条饮食记录吗？")) {
+                dietDB.splice(currentEvalIndex, 1);
+                localStorage.setItem('ryue_diet_log', JSON.stringify(dietDB));
+                renderDiet();
+                closeEvalModal();
+            }
+        }
+
+        // ================= 生存指南逻辑 =================
+        const guides = {
+            'bistro': {
+                title: '🍷 米其林 / Bistro 生存指南',
+                content: `
+                    <strong>核心法则：海鲜优先，警惕酱汁</strong><br><br>
+                    <ul>
+                        <li><strong>餐前：</strong>喝一大杯温水，占据胃容量。</li>
+                        <li><strong>前菜：</strong>只选生肉薄片（Carpaccio）或清汤，绝对避开酥皮和浓汤。</li>
+                        <li><strong>主菜：</strong>首选牛排、海鲜，要求【酱汁单放】。</li>
+                        <li><strong>配酒：</strong>只喝干型红/白葡萄酒，避开任何带甜味的起泡酒。一杯酒配一杯水。</li>
+                    </ul>
+                `
+            },
+            'tea': {
+                title: '🍰 名媛下午茶 生存指南',
+                content: `
+                    <strong>核心法则：优雅品尝，适可而止</strong><br><br>
+                    <ul>
+                        <li><strong>饮品：</strong>雷打不动的【美式】或【无糖手冲茶】。</li>
+                        <li><strong>甜点策略：</strong>三层塔只吃最下面一层（通常是咸点/三明治）。</li>
+                        <li><strong>马卡龙：</strong>只吃顶部的鲜果，放弃底部的酥皮和奶油。</li>
+                        <li><strong>心态：</strong>你是去社交和拍照的，不是去吃回本的。</li>
+                    </ul>
+                `
+            },
+            'business': {
+                title: '🥂 高强商务应酬 生存指南',
+                content: `
+                    <strong>核心法则：瞒天过海，保护肝脏</strong><br><br>
+                    <ul>
+                        <li><strong>赴宴前：</strong>务必吃2个白煮蛋或喝一杯无糖酸奶垫底。</li>
+                        <li><strong>点菜心机：</strong>主动点一份【白灼蔬菜】放在自己面前。</li>
+                        <li><strong>敬酒：</strong>烈酒旁边永远备一杯冰水，喝一口酒喝两口水加速代谢。</li>
+                        <li><strong>主食陷阱：</strong>最后上的炒饭、炒面坚决不碰，只喝清汤收尾。</li>
+                    </ul>
+                `
+            }
+        };
+
+        function openGuide(type) {
+            const data = guides[type];
+            document.getElementById('gm-title').innerText = data.title;
+            document.getElementById('gm-content').innerHTML = data.content;
+            document.getElementById('guideOverlay').style.display = 'block';
+            setTimeout(() => document.getElementById('guideModal').classList.add('show'), 10);
+        }
+
+        function closeGuide() {
+            document.getElementById('guideModal').classList.remove('show');
+            setTimeout(() => document.getElementById('guideOverlay').style.display = 'none', 400);
+        }
+    </script>
+</body>
+</html>
