@@ -7,14 +7,15 @@
     
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="LUXIOU谈单">
     
     <script src="https://cdn.staticfile.net/Sortable/1.15.2/Sortable.min.js"></script>
 
     <style>
-        /* ================= 主页基础UI (绝对保留原貌) ================= */
+        /* ================= 1. 绝对恢复主页原貌 ================= */
         :root { --primary: #00f2fe; --secondary: #7000ff; --bg: #000; --card-bg: rgba(255, 255, 255, 0.03); --text: #fff; --grad: radial-gradient(circle at top right, #1a2a6c, #000 70%); }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; margin: 0; padding: 0; }
-        body { background: var(--bg); background-image: var(--grad); color: var(--text); font-family: -apple-system, sans-serif; padding: 20px; min-height: 100vh; display: flex; flex-direction: column; overflow-x: hidden;}
+        body { background: var(--bg); background-image: var(--grad); color: var(--text); font-family: -apple-system, sans-serif; padding: 20px; min-height: 100vh; transition: all 0.5s ease; display: flex; flex-direction: column; overflow-x: hidden;}
         
         #style-trigger { position: fixed; top: 15px; right: 15px; z-index: 2000; background: rgba(255,255,255,0.1); padding: 8px 15px; border-radius: 50px; font-size: 11px; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2); color: #fff; }
         #style-panel { display: none; position: fixed; top: 60px; right: 15px; z-index: 2001; background: #111; border: 1px solid #333; border-radius: 15px; padding: 10px; width: 140px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
@@ -44,42 +45,53 @@
         .m-close { color: #888; font-size: 28px; background: none; border: none; padding: 0 10px; cursor: pointer; }
         .m-body { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 20px; -webkit-overflow-scrolling: touch; padding-bottom: 100px;}
 
-        /* ================= 背书库 CSS ================= */
+        /* ================= 2. 背书库修复 ================= */
         .e-seg { display: flex; background: #111; border-radius: 12px; padding: 6px; margin-bottom: 20px; border: 1px solid #222;}
-        .e-tab { flex: 1; text-align: center; padding: 10px 0; font-size: 13px; font-weight: bold; color: #666; border-radius: 8px; transition: 0.3s;}
-        .e-tab.active { background: #222; color: #D4AF37;}
+        .e-tab { flex: 1; text-align: center; padding: 12px 0; font-size: 14px; font-weight: bold; color: #666; border-radius: 8px; transition: 0.3s;}
+        /* 🚨 强化点击高亮效果 */
+        .e-tab.active { background: #D4AF37; color: #000; box-shadow: 0 0 15px rgba(212,175,55,0.5); transform: scale(1.02); z-index: 2;}
+        
         .e-sec { display: none; flex-direction: column; }
-        .e-sec.active { display: flex; }
+        .e-sec.active { display: flex; animation: fadeIn 0.3s;}
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         .upload-btn { background: linear-gradient(135deg, rgba(212,175,55,0.1), rgba(212,175,55,0.05)); border: 1px dashed #D4AF37; color: #D4AF37; text-align: center; padding: 15px; border-radius: 12px; font-size: 14px; font-weight: bold; cursor: pointer; margin-bottom: 15px;}
         .e-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
         .e-item { position: relative; border-radius: 12px; overflow: hidden; background: #111; border: 1px solid rgba(212,175,55,0.3); height: 220px; touch-action: none;}
         .e-item img { width: 100%; height: 100%; object-fit: cover; pointer-events: none;}
         .e-item .del { position: absolute; top: 8px; right: 8px; width: 26px; height: 26px; background: rgba(0,0,0,0.8); border: 1px solid #FF3B30; border-radius: 50%; color: #FF3B30; display: flex; justify-content: center; align-items: center; font-weight: bold; z-index: 10;}
 
-        /* ================= 24H 管家系统 CSS ================= */
+        /* ================= 3. 24H 管家系统终极版 ================= */
         .ls-seg { display: flex; gap: 10px; margin-bottom: 20px;}
         .ls-tab { flex: 1; padding: 12px 0; text-align: center; border-radius: 12px; background: #111; border: 1px solid #333; color: #888; font-size: 13px; font-weight: bold; transition: 0.3s;}
-        .ls-tab.active { background: linear-gradient(135deg, #1A1813, #0A0A0C); border-color: #D4AF37; color: #D4AF37;}
+        .ls-tab.active { background: linear-gradient(135deg, #1A1813, #0A0A0C); border-color: #D4AF37; color: #D4AF37; box-shadow: 0 4px 10px rgba(212,175,55,0.2);}
         
-        /* 顶部档案与日历控件 */
         .track-header { background: #111; border: 1px solid #333; border-radius: 12px; padding: 15px; margin-bottom: 20px; display: flex; flex-direction: column; gap: 15px;}
         .client-sel { display: flex; justify-content: space-between; align-items: center; font-size: 15px; font-weight: bold; color: #D4AF37; border-bottom: 1px dashed #333; padding-bottom: 10px;}
         .date-sel { display: flex; justify-content: space-between; align-items: center; color: #fff;}
         .date-btn { background: #222; border: none; color: #D4AF37; padding: 8px 15px; border-radius: 6px; font-size: 12px; font-weight: bold;}
 
-        /* 能量面板与督促指令 */
+        /* 自动算热量仪表盘 */
         .energy-dash { display: flex; gap: 15px; margin-bottom: 20px; }
         .e-box { flex: 1; background: #0A0A0C; border: 1px solid #222; border-radius: 12px; padding: 15px; text-align: center;}
         .e-label { font-size: 11px; color: #888; margin-bottom: 8px;}
-        .e-input { width: 100%; background: transparent; border: none; border-bottom: 1px solid #444; color: #fff; font-size: 20px; font-weight: 900; text-align: center; padding-bottom: 5px; outline: none;}
-        .e-input:focus { border-color: #D4AF37; color: #D4AF37;}
+        .e-val { font-size: 24px; font-weight: 900; color: #fff; text-shadow: 0 0 10px rgba(255,255,255,0.2);}
+        .e-val.intake { color: #FFD60A; }
+        .e-val.burn { color: #32D74B; }
 
-        .coach-directive { background: linear-gradient(145deg, #1A1813, #0A0A0C); border: 1px solid rgba(212,175,55,0.3); border-radius: 12px; padding: 15px; display: flex; gap: 15px; margin-bottom: 20px;}
+        /* 导师指令与头像 */
+        .coach-directive { background: linear-gradient(145deg, #1A1813, #0A0A0C); border: 1px solid rgba(212,175,55,0.3); border-radius: 12px; padding: 15px; display: flex; gap: 15px; margin-bottom: 20px; flex-direction: column;}
+        .cd-top { display: flex; gap: 15px; align-items: flex-start;}
+        .coach-avatar-box { position: relative; cursor: pointer; }
         .coach-avatar { width: 50px; height: 50px; border-radius: 50%; border: 2px solid #D4AF37; object-fit: cover;}
+        .ca-edit { position: absolute; bottom: -5px; right: -5px; background: #D4AF37; color: #000; font-size: 10px; padding: 2px 4px; border-radius: 4px; font-weight: bold;}
         .directive-content { flex: 1; display: flex; flex-direction: column;}
         .directive-title { font-size: 11px; color: #D4AF37; font-weight: bold; margin-bottom: 6px; display: flex; align-items: center; gap: 6px;}
         .directive-title::before { content: ''; width: 6px; height: 6px; background: #D4AF37; border-radius: 50%;}
-        .d-input { width: 100%; background: transparent; border: none; color: #fff; font-size: 13px; line-height: 1.5; outline: none; resize: none; font-weight: bold; font-family: inherit;}
+        .d-input { width: 100%; background: transparent; border: none; border-bottom: 1px dashed #444; color: #fff; font-size: 14px; line-height: 1.5; outline: none; resize: none; font-weight: bold; font-family: inherit; padding-bottom: 5px;}
+        .quick-tags { display: flex; gap: 8px; margin-top: 12px; overflow-x: auto; padding-bottom: 5px;}
+        .quick-tags::-webkit-scrollbar { display: none; }
+        .q-tag { flex-shrink: 0; background: #222; border: 1px solid #444; color: #aaa; font-size: 11px; padding: 6px 12px; border-radius: 50px; cursor: pointer;}
+        .q-tag:active { background: #D4AF37; color: #000;}
 
         /* 环形打卡 */
         .rings-dash { background: #111; border: 1px solid #222; border-radius: 12px; padding: 20px 15px; display: flex; justify-content: space-around; margin-bottom: 25px;}
@@ -87,19 +99,25 @@
         .svg-ring { width: 70px; height: 70px; transform: rotate(-90deg); margin-bottom: 8px;}
         .svg-bg { fill: none; stroke: #222; stroke-width: 6; }
         .svg-progress { fill: none; stroke: #D4AF37; stroke-width: 6; stroke-linecap: round; stroke-dasharray: 176; stroke-dashoffset: 176; transition: 0.5s; }
-        .ring-val { font-size: 12px; font-weight: bold; color: #fff; margin-top: 5px;}
+        .ring-val { font-size: 13px; font-weight: bold; color: #fff; margin-top: 5px; text-align: center;}
+        .ring-sub { font-size: 9px; color: #888; font-weight: normal;}
 
-        /* 时间轴三餐 */
+        /* 三餐 AI 结构录入 */
         .timeline-box { display: flex; flex-direction: column; gap: 15px; }
         .meal-slot { background: #0A0A0C; border: 1px solid #222; border-radius: 12px; overflow: hidden; }
         .meal-header { padding: 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #222;}
         .meal-title { font-size: 14px; font-weight: bold; color: #fff; display: flex; align-items: center; gap: 8px;}
         .meal-add { color: #D4AF37; font-size: 12px; border: 1px solid #D4AF37; padding: 4px 10px; border-radius: 6px;}
-        .meal-content { padding: 15px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
-        .meal-img-box { position: relative; aspect-ratio: 1; border-radius: 8px; overflow: hidden; border: 1px solid #333; }
-        .meal-img-box img { width: 100%; height: 100%; object-fit: cover; }
-        .meal-img-box .del-meal { position: absolute; top: 4px; right: 4px; background: rgba(0,0,0,0.8); color: #FF3B30; width: 20px; height: 20px; border-radius: 50%; text-align: center; line-height: 18px; font-size: 14px; border: 1px solid #FF3B30;}
-        .empty-meal { grid-column: span 3; text-align: center; color: #555; font-size: 11px; padding: 15px 0;}
+        
+        .meal-list { display: flex; flex-direction: column; gap: 10px; padding: 15px; }
+        .meal-row { display: flex; gap: 12px; background: #111; border: 1px solid #333; padding: 12px; border-radius: 12px; position: relative;}
+        .meal-row img { width: 80px; height: 80px; object-fit: cover; border-radius: 8px; flex-shrink: 0; border: 1px solid #222;}
+        .meal-info { flex: 1; display: flex; flex-direction: column; justify-content: center;}
+        .m-row-kcal { font-size: 18px; font-weight: 900; color: #D4AF37; margin-bottom: 4px;}
+        .m-row-tags { display: flex; gap: 6px; margin-bottom: 6px;}
+        .m-tag { font-size: 10px; padding: 2px 6px; border-radius: 4px; font-weight: bold; color: #000;}
+        .m-sug { font-size: 11px; color: #888; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;}
+        .meal-del { position: absolute; top: 10px; right: 10px; color: #FF3B30; font-size: 18px; cursor: pointer; background: rgba(0,0,0,0.5); width: 24px; height: 24px; text-align: center; line-height: 22px; border-radius: 50%; border: 1px solid #FF3B30;}
 
         /* AI 谈单专用版块 */
         .ai-card { background: #111; border: 1px solid #D4AF37; border-radius: 16px; padding: 20px; text-align: center; margin-bottom: 20px;}
@@ -118,7 +136,9 @@
         .client-modal.show { bottom: 0; }
         .cm-item { padding: 15px; border-bottom: 1px solid #222; font-size: 15px; color: #fff; display: flex; justify-content: space-between;}
         .cm-item.active { color: #D4AF37; font-weight: bold;}
-        .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: #D4AF37; color: #000; padding: 10px 20px; border-radius: 50px; font-weight: bold; font-size: 13px; z-index: 9999; display: none;}
+        .cm-add { padding: 15px; color: #10b981; text-align: center; font-weight: bold; border-bottom: 1px solid #222; cursor: pointer;}
+        
+        .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: #D4AF37; color: #000; padding: 10px 20px; border-radius: 50px; font-weight: bold; font-size: 13px; z-index: 9999; display: none; box-shadow: 0 5px 15px rgba(212,175,55,0.4);}
     </style>
 </head>
 <body>
@@ -155,7 +175,7 @@
             <div class="m-title">品牌背书库</div>
             <button class="m-close" onclick="closeModal('endorseModal')">×</button>
         </div>
-        <div class="m-body">
+        <div class="m-body" style="padding-top: 20px;">
             <div class="e-seg">
                 <div class="e-tab active" onclick="switchEndorseTab('cert', this)">资质证书</div>
                 <div class="e-tab" onclick="switchEndorseTab('coach', this)">教练团队墙</div>
@@ -163,14 +183,14 @@
             
             <div id="e-view-cert" class="e-sec active">
                 <div class="upload-btn" onclick="document.getElementById('cert-up').click()">+ 上传资质证书</div>
-                <div class="e-tip">长按照片可拖拽排序</div>
+                <div class="e-tip" style="text-align:center; color:#888; font-size:11px; margin-bottom:10px;">长按照片可任意拖拽排序</div>
                 <input type="file" id="cert-up" multiple accept="image/*" style="display:none;" onchange="handleEndorseUp(event, 'cert')">
                 <div class="e-grid" id="cert-gallery"></div>
             </div>
 
             <div id="e-view-coach" class="e-sec">
                 <div class="upload-btn" onclick="document.getElementById('coach-up').click()">+ 上传教练照片</div>
-                <div class="e-tip">长按照片可拖拽排序</div>
+                <div class="e-tip" style="text-align:center; color:#888; font-size:11px; margin-bottom:10px;">长按照片可任意拖拽排序</div>
                 <input type="file" id="coach-up" multiple accept="image/*" style="display:none;" onchange="handleEndorseUp(event, 'coach')">
                 <div class="e-grid" id="coach-gallery"></div>
             </div>
@@ -179,7 +199,7 @@
 
     <div id="lifestyleModal" class="modal-base">
         <div class="m-header">
-            <div class="m-title" style="color:#10b981;">24H 节律管家</div>
+            <div class="m-title" style="color:#10b981;">24H 节律管家系统</div>
             <button class="m-close" onclick="closeModal('lifestyleModal')">×</button>
         </div>
         <div class="m-body">
@@ -192,10 +212,13 @@
             <div id="ls-view-demo" class="e-sec">
                 <div class="ai-card">
                     <div style="font-size:18px; color:#D4AF37; font-weight:bold; margin-bottom:10px;">视觉热量评估模型</div>
-                    <div style="font-size:11px; color:#888; margin-bottom:20px;">向客户演示系统如何通过视觉识别精准解构食物热量。</div>
-                    <div class="upload-btn" style="border-color:#10b981; color:#10b981;" onclick="document.getElementById('ai-scan-up').click()">+ 上传照片进行推演</div>
-                    <input type="file" id="ai-scan-up" accept="image/*" style="display:none;" onchange="runAIMock(event)">
+                    <div style="font-size:11px; color:#888; margin-bottom:20px;">向客户演示系统如何通过视觉识别，精准解构食物热量，免除客户记录烦恼。</div>
+                    <div class="upload-btn" style="border-color:#10b981; color:#10b981;" onclick="document.getElementById('ai-scan-up').click()">
+                        点击上传照片开始演算
+                    </div>
+                    <input type="file" id="ai-scan-up" accept="image/*" style="display:none;" onchange="runAIMock(event, 'demo')">
                 </div>
+                
                 <div id="ai-mock-result" class="ai-result-box">
                     <img id="ai-res-img" src="" class="ai-res-img">
                     <div style="display:flex; justify-content:space-between; margin-bottom:15px; border-bottom:1px solid #333; padding-bottom:10px;">
@@ -215,79 +238,100 @@
                 <div class="track-header">
                     <div class="client-sel" onclick="document.getElementById('clientMenu').classList.add('show')">
                         <span style="color:#aaa; font-size:12px;">当前档案：</span>
-                        <span id="current-client-name">获取中... ▾</span>
+                        <span id="current-client-name">加载中... ▾</span>
                     </div>
                     <div class="date-sel">
                         <button class="date-btn" onclick="changeDate(-1)">◀ 前一天</button>
-                        <span id="current-date-show" style="font-weight:bold; font-size:14px; letter-spacing:1px;">2026-03-01</span>
+                        <span id="current-date-show" style="font-weight:bold; font-size:14px; letter-spacing:1px;"></span>
                         <button class="date-btn" onclick="changeDate(1)">后一天 ▶</button>
                     </div>
                 </div>
 
                 <div class="energy-dash">
-                    <div class="e-box"><div class="e-label">总摄入量 (Kcal)</div><input type="number" id="val-intake" class="e-input" placeholder="0" onblur="saveDailyData()"></div>
-                    <div class="e-box"><div class="e-label">总消耗量 (Kcal)</div><input type="number" id="val-burn" class="e-input" placeholder="0" onblur="saveDailyData()"></div>
+                    <div class="e-box">
+                        <div class="e-label">今日总摄入 (Kcal)</div>
+                        <div class="e-val intake" id="val-intake">0</div>
+                    </div>
+                    <div class="e-box">
+                        <div class="e-label">今日总消耗 (Kcal)</div>
+                        <div class="e-val burn" id="val-burn">0</div>
+                    </div>
                 </div>
 
                 <div class="coach-directive">
-                    <img src="https://images.unsplash.com/photo-1594381898411-846e7d193883?auto=format&fit=crop&w=200&q=80" class="coach-avatar">
-                    <div class="directive-content">
-                        <div class="directive-title">导师专属督促指令 ✎</div>
-                        <textarea id="val-directive" class="d-input" rows="2" placeholder="点击输入今日对会员的督促与反馈..." onblur="saveDailyData()"></textarea>
+                    <div class="cd-top">
+                        <div class="coach-avatar-box" onclick="document.getElementById('ca-up').click()">
+                            <img id="my-coach-avatar" src="https://images.unsplash.com/photo-1594381898411-846e7d193883?auto=format&fit=crop&w=200&q=80" class="coach-avatar">
+                            <div class="ca-edit">更换</div>
+                        </div>
+                        <input type="file" id="ca-up" accept="image/*" style="display:none;" onchange="uploadCoachAvatar(event)">
+                        
+                        <div class="directive-content">
+                            <div class="directive-title">导师专属督促指令 ✎</div>
+                            <textarea id="val-directive" class="d-input" rows="2" placeholder="点击手写今日点评..." onblur="saveDailyData()"></textarea>
+                        </div>
+                    </div>
+                    <div class="quick-tags">
+                        <div class="q-tag" onclick="addTag('【执行完美】请继续保持当前饮食结构！')">👏 完美执行</div>
+                        <div class="q-tag" onclick="addTag('【注意控糖】碳水略高，建议饭后散步15分钟。')">⚠️ 注意控糖</div>
+                        <div class="q-tag" onclick="addTag('【加练警告】热量超标，今晚立刻增加一次有氧！')">🔥 加练警告</div>
+                        <div class="q-tag" onclick="addTag('【补充水分】代谢缓慢，请务必喝够2000ml水！')">💧 补充水分</div>
                     </div>
                 </div>
 
                 <div class="rings-dash">
-                    <div class="ring-item" onclick="addRing('water', 250)">
+                    <div class="ring-item" onclick="addRing('water')">
                         <svg class="svg-ring"><circle class="svg-bg" cx="35" cy="35" r="28"/><circle class="svg-progress" id="r-water" cx="35" cy="35" r="28"/></svg>
-                        <div style="font-size:10px; color:#aaa;">饮水(ml)</div>
-                        <div class="ring-val" id="t-water">0</div>
+                        <div style="font-size:10px; color:#aaa;">饮水 (500ml/次)</div>
+                        <div class="ring-val" id="t-water">0<br><span class="ring-sub">/ 2500ml</span></div>
                     </div>
-                    <div class="ring-item" onclick="addRing('cardio', 20)">
+                    <div class="ring-item" onclick="addRing('cardio')">
                         <svg class="svg-ring"><circle class="svg-bg" cx="35" cy="35" r="28"/><circle class="svg-progress" id="r-cardio" cx="35" cy="35" r="28"/></svg>
-                        <div style="font-size:10px; color:#aaa;">有氧(%)</div>
-                        <div class="ring-val" id="t-cardio">0</div>
+                        <div style="font-size:10px; color:#aaa;">有氧 (分钟)</div>
+                        <div class="ring-val" id="t-cardio">0<br><span class="ring-sub" id="t-hr">HR: --</span></div>
                     </div>
-                    <div class="ring-item" onclick="addRing('train', 1)">
+                    <div class="ring-item" onclick="addRing('train')">
                         <svg class="svg-ring"><circle class="svg-bg" cx="35" cy="35" r="28"/><circle class="svg-progress" id="r-train" cx="35" cy="35" r="28"/></svg>
-                        <div style="font-size:10px; color:#aaa;">训练(次)</div>
-                        <div class="ring-val" id="t-train">0</div>
+                        <div style="font-size:10px; color:#aaa;">抗阻 (+200Kcal)</div>
+                        <div class="ring-val" id="t-train">0<br><span class="ring-sub">/ 3次</span></div>
                     </div>
                 </div>
 
                 <div class="timeline-box">
                     <div class="meal-slot">
-                        <div class="meal-header"><div class="meal-title">☀️ 早餐</div><div class="meal-add" onclick="openMealUp('breakfast')">+ 添加</div></div>
-                        <div class="meal-content" id="m-breakfast"></div>
+                        <div class="meal-header"><div class="meal-title">☀️ 早餐</div><div class="meal-add" onclick="triggerAIMealUpload('breakfast')">+ 视觉评估录入</div></div>
+                        <div class="meal-list" id="m-breakfast"></div>
                     </div>
                     <div class="meal-slot">
-                        <div class="meal-header"><div class="meal-title">🔥 午餐</div><div class="meal-add" onclick="openMealUp('lunch')">+ 添加</div></div>
-                        <div class="meal-content" id="m-lunch"></div>
+                        <div class="meal-header"><div class="meal-title">🔥 午餐</div><div class="meal-add" onclick="triggerAIMealUpload('lunch')">+ 视觉评估录入</div></div>
+                        <div class="meal-list" id="m-lunch"></div>
                     </div>
                     <div class="meal-slot">
-                        <div class="meal-header"><div class="meal-title">🌙 晚餐 / 加餐</div><div class="meal-add" onclick="openMealUp('dinner')">+ 添加</div></div>
-                        <div class="meal-content" id="m-dinner"></div>
+                        <div class="meal-header"><div class="meal-title">🌙 晚餐 / 加餐</div><div class="meal-add" onclick="triggerAIMealUpload('dinner')">+ 视觉评估录入</div></div>
+                        <div class="meal-list" id="m-dinner"></div>
                     </div>
                 </div>
-                <input type="file" id="meal-up" multiple accept="image/*" style="display:none;" onchange="handleMealUp(event)">
+                <input type="file" id="ai-meal-up" accept="image/*" style="display:none;" onchange="runAIMock(event, 'track')">
             </div>
+
         </div>
     </div>
 
     <div class="client-modal" id="clientMenu">
-        <div style="color:#aaa; font-size:12px; margin-bottom:15px;">我的 VIP 会员列表</div>
-        <div id="c-list"></div>
-        <div class="cm-add" onclick="addClient()">+ 新建会员档案</div>
-        <div style="text-align:center; padding:15px; color:#666; margin-top:10px;" onclick="document.getElementById('clientMenu').classList.remove('show')">取消</div>
+        <div style="color:#aaa; font-size:12px; margin-bottom:15px; padding-left:15px;">我的 VIP 会员矩阵</div>
+        <div id="client-list-render"></div>
+        <div class="cm-add" onclick="addNewClient()">+ 新建会员档案</div>
+        <div class="cm-item" style="justify-content:center; color:#666; border:none; margin-top:10px;" onclick="document.getElementById('clientMenu').classList.remove('show')">取消关闭</div>
     </div>
 
-    <div class="ai-overlay" id="aiOverlay">
+    <div class="ai-scanning-overlay" id="aiOverlay">
         <div class="scan-box" id="scanBoxImage"><div class="scan-line"></div></div>
-        <div class="scan-text" id="scanText" style="color:#D4AF37; font-weight:bold; margin-top:20px;">CONNECTING AI CORE...</div>
+        <div class="scan-text" id="scanText">CONNECTING AI CORE...</div>
     </div>
+
 
     <script>
-        // 主题设置
+        // ================= 全局基础 =================
         function togglePanel() { const p = document.getElementById('style-panel'); p.style.display = p.style.display === 'block' ? 'none' : 'block'; }
         function applyTheme(idx) {
             const themes = [
@@ -301,73 +345,83 @@
             document.body.style.color = t.text;
             togglePanel();
         }
-        function showToast(m) { const t = document.getElementById('sysToast'); t.innerText=m; t.style.display='block'; setTimeout(()=>t.style.display='none', 2000); }
+
+        function showToast(msg) {
+            const t = document.getElementById('sysToast');
+            t.innerText = msg; t.style.display = 'block';
+            setTimeout(() => t.style.display = 'none', 2000);
+        }
         function openModal(id) { document.getElementById(id).classList.add('show'); }
         function closeModal(id) { document.getElementById(id).classList.remove('show'); }
 
-        // ================= 数据库 IndexedDB =================
+        // ================= 航天级数据库 IndexedDB 架构 =================
         let idb = null;
         let endorseDB = { cert: [], coach: [] }; 
         let clientsDB = {}; 
         let currClientId = null;
         let sortCert, sortCoach;
+        let globalCoachAvatar = localStorage.getItem('ryue_coach_avatar') || "https://images.unsplash.com/photo-1594381898411-846e7d193883?auto=format&fit=crop&w=200&q=80";
         
-        // 核心：处理日期追踪
         let currDateObj = new Date();
         function getFormatDate(d) { return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0'); }
         let currDateStr = getFormatDate(currDateObj);
 
         window.onload = function() {
-            const req = window.indexedDB.open("LuxiouSuperSystem", 5); 
-            req.onupgradeneeded = function(e) {
+            document.getElementById('my-coach-avatar').src = globalCoachAvatar;
+            
+            const request = window.indexedDB.open("LuxiouUltimateDB", 1); 
+            request.onupgradeneeded = function(e) {
                 idb = e.target.result;
                 if (!idb.objectStoreNames.contains("base")) idb.createObjectStore("base");
                 if (!idb.objectStoreNames.contains("clients")) idb.createObjectStore("clients");
             };
-            req.onsuccess = function(e) { idb = e.target.result; loadSysData(); };
+            request.onsuccess = function(e) {
+                idb = e.target.result;
+                loadSysData(); 
+            };
         }
 
         function loadSysData() {
-            // 加载背书库
+            // 加载背书（赋予6张顶级默认教练图）
             idb.transaction("base").objectStore("base").get("endorse").onsuccess = e => {
                 if(e.target.result && (e.target.result.cert.length > 0 || e.target.result.coach.length > 0)) {
                     endorseDB = e.target.result;
                 } else {
-                    // 🚨 防空窗机制：赋予顶级默认教练图
                     endorseDB.coach = [
+                        "https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=600&q=80",
                         "https://images.unsplash.com/photo-1594381898411-846e7d193883?auto=format&fit=crop&w=600&q=80",
-                        "https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=600&q=80"
+                        "https://images.unsplash.com/photo-1574680096145-d05b474e2155?auto=format&fit=crop&w=600&q=80",
+                        "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=600&q=80",
+                        "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=600&q=80",
+                        "https://images.unsplash.com/photo-1605296867304-46d5465a13f1?auto=format&fit=crop&w=600&q=80"
                     ];
+                    saveEndorse();
                 }
                 renderGallery('cert'); renderGallery('coach');
             };
 
-            // 加载多会员档案
-            idb.transaction("clients").objectStore("clients").getAll().onsuccess = e => {
-                let recs = e.target.result;
-                idb.transaction("clients").objectStore("clients").getAllKeys().onsuccess = ek => {
-                    let keys = ek.target.result;
-                    if(recs.length > 0) {
-                        for(let i=0; i<recs.length; i++) clientsDB[keys[i]] = recs[i];
-                        currClientId = keys[0];
-                    } else {
-                        // 默认档案
-                        let id = 'c_' + Date.now();
-                        clientsDB[id] = { id: id, name: 'VIP 默认档案', records: {} };
-                        currClientId = id;
-                        saveClient(id);
-                    }
-                    syncTrackUI();
-                };
+            // 完美的单字典会员存储，杜绝丢失
+            idb.transaction("clients").objectStore("clients").get("all_data").onsuccess = e => {
+                if(e.target.result && Object.keys(e.target.result).length > 0) {
+                    clientsDB = e.target.result;
+                    currClientId = Object.keys(clientsDB)[0];
+                } else {
+                    let id = 'c_' + Date.now();
+                    clientsDB = {};
+                    clientsDB[id] = { id: id, name: 'VIP 默认档案', records: {} };
+                    currClientId = id;
+                    saveClients();
+                }
+                syncTrackUI();
             };
         }
 
         function saveEndorse() { idb.transaction("base", "readwrite").objectStore("base").put(endorseDB, "endorse"); }
-        function saveClient(id) { idb.transaction("clients", "readwrite").objectStore("clients").put(clientsDB[id], id); }
+        function saveClients() { idb.transaction("clients", "readwrite").objectStore("clients").put(clientsDB, "all_data"); }
 
         // ================= 背书库逻辑 =================
         function switchEndorseTab(type, btn) {
-            document.querySelectorAll('.e-seg-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active');
+            document.querySelectorAll('.e-tab').forEach(b => b.classList.remove('active')); btn.classList.add('active');
             document.querySelectorAll('.e-sec').forEach(s => s.classList.remove('active')); document.getElementById('e-view-' + type).classList.add('active');
         }
         function handleEndorseUp(evt, type) {
@@ -396,10 +450,12 @@
         }
         function renderGallery(type) {
             const box = document.getElementById(`${type}-gallery`); box.innerHTML = '';
-            if(endorseDB[type].length === 0) { box.innerHTML = `<div class="e-empty">暂无数据</div>`; return; }
+            if(endorseDB[type].length === 0) { box.innerHTML = `<div class="e-empty">暂无数据，点击上方上传</div>`; return; }
             endorseDB[type].forEach((b64, i) => { box.innerHTML += `<div class="e-item"><div class="del" onclick="delE('${type}', ${i}, event)">×</div><img src="${b64}"></div>`; });
-            if(type==='cert') { if(sortCert) sortCert.destroy(); sortCert = new Sortable(box, {animation:150, delay:200, delayOnTouchOnly:true, filter:".del", preventOnFilter:false, onEnd: e=>{ let arr = endorseDB[type]; arr.splice(e.newIndex, 0, arr.splice(e.oldIndex, 1)[0]); saveEndorse(); }}); }
-            else { if(sortCoach) sortCoach.destroy(); sortCoach = new Sortable(box, {animation:150, delay:200, delayOnTouchOnly:true, filter:".del", preventOnFilter:false, onEnd: e=>{ let arr = endorseDB[type]; arr.splice(e.newIndex, 0, arr.splice(e.oldIndex, 1)[0]); saveEndorse(); }}); }
+            
+            let config = {animation:150, delay:200, delayOnTouchOnly:true, filter:".del", preventOnFilter:false, onEnd: e=>{ let arr = endorseDB[type]; arr.splice(e.newIndex, 0, arr.splice(e.oldIndex, 1)[0]); saveEndorse(); }};
+            if(type==='cert') { if(sortCert) sortCert.destroy(); sortCert = new Sortable(box, config); }
+            else { if(sortCoach) sortCoach.destroy(); sortCoach = new Sortable(box, config); }
         }
         function delE(type, i, e) { e.stopPropagation(); if(confirm('确定删除?')) { endorseDB[type].splice(i,1); saveEndorse(); renderGallery(type); } }
 
@@ -410,15 +466,15 @@
             document.getElementById('ls-view-' + type).classList.add('active');
         }
 
-        // --- 会员与日历管理 ---
+        // --- 会员与日历 ---
         function addClient() {
-            let n = prompt("输入会员名：");
-            if(n) { let id = 'c_'+Date.now(); clientsDB[id] = {id:id, name:n, records:{}}; currClientId = id; saveClient(id); syncTrackUI(); document.getElementById('clientMenu').classList.remove('show'); showToast("创建成功"); }
+            let n = prompt("输入新VIP会员名：");
+            if(n) { let id = 'c_'+Date.now(); clientsDB[id] = {id:id, name:n, records:{}}; currClientId = id; saveClients(); syncTrackUI(); document.getElementById('clientMenu').classList.remove('show'); showToast("创建成功"); }
         }
         function openClientMenu() {
             let html = '';
             for(let k in clientsDB) { html += `<div class="cm-item ${k===currClientId?'active':''}" onclick="selClient('${k}')"><span>${clientsDB[k].name}</span>${k===currClientId?'✓':''}</div>`; }
-            document.getElementById('c-list').innerHTML = html; document.getElementById('clientMenu').classList.add('show');
+            document.getElementById('client-list-render').innerHTML = html; document.getElementById('clientMenu').classList.add('show');
         }
         function selClient(id) { currClientId = id; document.getElementById('clientMenu').classList.remove('show'); syncTrackUI(); }
         
@@ -432,77 +488,117 @@
             let c = clientsDB[currClientId];
             if(!c.records) c.records = {};
             if(!c.records[currDateStr]) {
-                c.records[currDateStr] = { in: '', out: '', msg: '', rings: {water:0, cardio:0, train:0}, meals: {breakfast:[], lunch:[], dinner:[]} };
+                c.records[currDateStr] = { msg: '', rings: {water:0, cardio:0, train:0}, hr: '--', meals: {breakfast:[], lunch:[], dinner:[]} };
             }
             return c.records[currDateStr];
         }
 
+        // --- 教练头像与快捷语 ---
+        function uploadCoachAvatar(evt) {
+            const f = evt.target.files[0]; if(!f) return;
+            const r = new FileReader(); r.onload = e => {
+                const img = new Image(); img.onload = () => {
+                    const can = document.createElement('canvas'); can.width=200; can.height=200;
+                    can.getContext('2d').drawImage(img,0,0,200,200);
+                    globalCoachAvatar = can.toDataURL('image/jpeg', 0.8);
+                    localStorage.setItem('ryue_coach_avatar', globalCoachAvatar);
+                    document.getElementById('my-coach-avatar').src = globalCoachAvatar;
+                }; img.src=e.target.result;
+            }; r.readAsDataURL(f);
+        }
+        function addTag(txt) {
+            let el = document.getElementById('val-directive');
+            el.value = txt; saveDailyData(); showToast("已应用指令");
+        }
+
+        // --- 同步页面 UI ---
         function syncTrackUI() {
             if(!currClientId) return;
             document.getElementById('current-client-name').innerText = clientsDB[currClientId].name + " ▾";
-            document.getElementById('current-date-show').innerText = currDateStr === getFormatDate(new Date()) ? "今天 " + currDateStr : currDateStr;
+            let today = getFormatDate(new Date());
+            document.getElementById('current-date-show').innerText = currDateStr === today ? "今天 " + currDateStr : currDateStr;
             
             let d = getDaily();
-            document.getElementById('val-intake').value = d.in;
-            document.getElementById('val-burn').value = d.out;
-            document.getElementById('val-directive').value = d.msg;
+            document.getElementById('val-directive').value = d.msg || '';
             
-            drawRing('water', d.rings.water, 2000); drawRing('cardio', d.rings.cardio, 100); drawRing('train', d.rings.train, 3);
+            drawRing('water', d.rings.water, 2500); 
+            drawRing('cardio', d.rings.cardio, 60); 
+            document.getElementById('t-hr').innerText = 'HR: ' + (d.hr || '--');
+            drawRing('train', d.rings.train, 3);
             
+            // 渲染三餐列表
             ['breakfast', 'lunch', 'dinner'].forEach(mt => {
                 let box = document.getElementById(`m-${mt}`); box.innerHTML = '';
                 if(d.meals[mt].length === 0) box.innerHTML = `<div class="empty-meal">未上传照片</div>`;
-                else d.meals[mt].forEach((img, i) => box.innerHTML += `<div class="meal-img-box"><div class="del-meal" onclick="delMeal('${mt}', ${i})">×</div><img src="${img}"></div>`);
+                else {
+                    d.meals[mt].forEach((m, i) => {
+                        box.innerHTML += `
+                        <div class="meal-row">
+                            <img src="${m.img}">
+                            <div class="meal-info">
+                                <div class="m-row-kcal">${m.kcal} KCAL</div>
+                                <div class="m-row-tags"><span class="m-tag" style="background:${m.color}">${m.status}</span><span class="m-tag" style="background:#222;color:#aaa">P:${m.pro} C:${m.carb} F:${m.fat}</span></div>
+                                <div class="m-sug">${m.sug}</div>
+                            </div>
+                            <div class="meal-del" onclick="delMeal('${mt}', ${i})">×</div>
+                        </div>`;
+                    });
+                }
             });
+            
+            calcEnergy(); // 每次同步自动算总热量
         }
 
         function saveDailyData() {
-            let d = getDaily();
-            d.in = document.getElementById('val-intake').value;
-            d.out = document.getElementById('val-burn').value;
-            d.msg = document.getElementById('val-directive').value;
-            saveClient(currClientId);
+            getDaily().msg = document.getElementById('val-directive').value;
+            saveClients();
         }
 
-        // --- 督促三环 ---
+        // --- 核心：自动卡路里双向换算 ---
+        function calcEnergy() {
+            let d = getDaily();
+            let intake = 0;
+            ['breakfast','lunch','dinner'].forEach(mt => {
+                d.meals[mt].forEach(m => intake += m.kcal);
+            });
+            // 消耗：有氧 1分钟约8大卡，抗阻 1次固定200大卡
+            let burn = (d.rings.cardio * 8) + (d.rings.train * 200);
+            
+            document.getElementById('val-intake').innerText = intake;
+            document.getElementById('val-burn').innerText = burn;
+        }
+
+        // --- 督促三环交互 ---
         function drawRing(type, val, max) {
-            document.getElementById(`t-${type}`).innerText = val;
+            document.getElementById(`t-${type}`).childNodes[0].nodeValue = val;
             document.getElementById(`r-${type}`).style.strokeDashoffset = 176 - (176 * (Math.min(val, max)/max));
         }
-        function addRing(type, step) {
+        function addRing(type) {
             let d = getDaily();
-            let max = type==='water'?2000:(type==='cardio'?100:3);
-            d.rings[type] += step; if(d.rings[type] > max) d.rings[type] = 0;
-            saveClient(currClientId); drawRing(type, d.rings[type], max);
+            if(type === 'water') {
+                d.rings.water += 500; if(d.rings.water > 2500) d.rings.water = 0;
+            } else if(type === 'cardio') {
+                let hr = prompt("请输入本次有氧平均心率 (bpm):", "135");
+                if(hr) {
+                    d.rings.cardio += 10; if(d.rings.cardio > 60) d.rings.cardio = 0;
+                    d.hr = hr;
+                }
+            } else if(type === 'train') {
+                d.rings.train += 1; if(d.rings.train > 3) d.rings.train = 0;
+            }
+            saveClients(); syncTrackUI();
         }
 
-        // --- 三餐图库 ---
+        // --- 饮食图库与 AI ---
         let targetMeal = '';
-        function openMealUp(mt) { targetMeal = mt; document.getElementById('meal-up').click(); }
-        function handleMealUp(evt) {
-            const files = Array.from(evt.target.files); if(files.length===0) return;
-            let count = 0; let tmp = [];
-            files.forEach((f, idx) => {
-                const r = new FileReader(); r.onload = e => {
-                    const img = new Image(); img.onload = () => {
-                        const can = document.createElement('canvas'); const sc = Math.min(600/img.width, 1);
-                        can.width=img.width*sc; can.height=img.height*sc; can.getContext('2d').drawImage(img,0,0,can.width,can.height);
-                        tmp.push({i:idx, d:can.toDataURL('image/jpeg', 0.6)});
-                        count++;
-                        if(count === files.length) {
-                            tmp.sort((a,b)=>a.i-b.i);
-                            let d = getDaily(); d.meals[targetMeal] = tmp.map(t=>t.d).concat(d.meals[targetMeal]);
-                            saveClient(currClientId); syncTrackUI(); evt.target.value='';
-                        }
-                    }; img.src = e.target.result;
-                }; r.readAsDataURL(f);
-            });
-        }
-        function delMeal(mt, idx) { if(confirm("删除此记录？")) { getDaily().meals[mt].splice(idx,1); saveClient(currClientId); syncTrackUI(); } }
+        function triggerAIMealUpload(mt) { targetMeal = mt; document.getElementById('ai-meal-up').click(); }
+        
+        function delMeal(mt, idx) { if(confirm("删除此记录？")) { getDaily().meals[mt].splice(idx,1); saveClients(); syncTrackUI(); } }
 
-        // --- AI 视觉热量模拟 (哈希防穿帮) ---
+        // 统一的图像 Hash 函数，保证同一张图结果绝对一样
         function getHash(str) { let h=0; for(let i=0;i<str.length;i++){ h=((h<<5)-h)+str.charCodeAt(i); h|=0; } return Math.abs(h); }
-        function runAIMock(evt) {
+        
+        function runAIMock(evt, mode) {
             const f = evt.target.files[0]; if(!f) return;
             const r = new FileReader(); r.onload = e => {
                 const b64 = e.target.result;
@@ -510,15 +606,38 @@
                 document.getElementById('aiOverlay').style.display = 'flex';
                 let t = document.getElementById('scanText'); t.innerText = "CONNECTING AI...";
                 setTimeout(()=>t.innerText="ANALYZING MACROS...", 800);
+                
                 setTimeout(()=>{
                     document.getElementById('aiOverlay').style.display = 'none';
-                    let h = getHash(b64.substring(100, 2000));
-                    let k = (h%500)+150; let p = (h%30)+10; let c = ((h>>2)%60)+10; let fat = ((h>>4)%25)+2;
-                    let cls='status-green', txt='健康'; if(k>450||c>40) {cls='status-red'; txt='警报';}
-                    document.getElementById('ai-res-img').src = b64; document.getElementById('ai-res-kcal').innerText=k+' KCAL';
-                    document.getElementById('ai-res-pro').innerText=p+'g'; document.getElementById('ai-res-carb').innerText=c+'g'; document.getElementById('ai-res-fat').innerText=fat+'g';
-                    document.getElementById('ai-res-tag').className=cls; document.getElementById('ai-res-tag').innerText=txt;
-                    document.getElementById('ai-mock-result').style.display = 'block'; evt.target.value='';
+                    
+                    // Hash 计算热量与宏量
+                    let h = getHash(b64.substring(100, 3000));
+                    let k = (h%450)+150; let p = (h%30)+10; let c = ((h>>2)%60)+10; let fat = ((h>>4)%25)+2;
+                    let color='#32D74B', status='完美燃脂', sug='蛋白质配比极佳，继续保持。'; 
+                    if(k>450||c>45) {color='#FF453A'; status='高碳水警报'; sug='热量超标，建议今晚增加15分钟有氧或散步。';}
+                    else if(fat>15) {color='#FFD60A'; status='注意油脂'; sug='脂肪略高，记得多喝水加速代谢。';}
+
+                    // 如果是在演示模式
+                    if(mode === 'demo') {
+                        document.getElementById('ai-res-img').src = b64; 
+                        document.getElementById('ai-res-kcal').innerText=k+' KCAL';
+                        document.getElementById('ai-res-pro').innerText=p+'g'; document.getElementById('ai-res-carb').innerText=c+'g'; document.getElementById('ai-res-fat').innerText=fat+'g';
+                        document.getElementById('ai-res-tag').style.background=color; document.getElementById('ai-res-tag').innerText=status;
+                        document.getElementById('ai-mock-result').style.display = 'block';
+                    } 
+                    // 如果是在真实追踪模式，压缩后保存到当餐
+                    else if (mode === 'track') {
+                        const img = new Image(); img.onload = () => {
+                            const can = document.createElement('canvas'); const sc = Math.min(600/img.width, 1);
+                            can.width=img.width*sc; can.height=img.height*sc; can.getContext('2d').drawImage(img,0,0,can.width,can.height);
+                            let finalB64 = can.toDataURL('image/jpeg', 0.6);
+                            
+                            let d = getDaily();
+                            d.meals[targetMeal].push({img: finalB64, kcal: k, pro: p, carb: c, fat: fat, status: status, color: color, sug: sug});
+                            saveClients(); syncTrackUI();
+                        }; img.src = b64;
+                    }
+                    evt.target.value='';
                 }, 2000);
             }; r.readAsDataURL(f);
         }
