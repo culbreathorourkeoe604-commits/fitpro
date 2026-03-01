@@ -31,13 +31,13 @@
         .btn-b { background: rgba(255,255,255,0.05); border: 1px solid var(--secondary); color: #e2e8f0; }
         .btn-c { background: linear-gradient(90deg, var(--secondary), #e100ff); box-shadow: 0 5px 15px rgba(112, 0, 255, 0.3); border: none; }
         
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; flex: 1; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; flex: 1; padding-bottom: 30px;}
         .card { background: #111; border: 2px solid transparent; border-radius: 16px; overflow: hidden; position: relative; height: 160px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); cursor: pointer;}
         .card img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.8); transition: 0.3s;}
         .card:active img { transform: scale(1.05); }
         .card-info { position: absolute; bottom: 0; width: 100%; padding: 12px 5px; font-size: 11px; text-align: center; font-weight: bold; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: #fff; pointer-events: none;}
         
-        /* 背书库高级面板 */
+        /* 🚨 背书库高级面板 */
         .endorse-modal { position: fixed; top: 100vh; left: 0; width: 100%; height: 100vh; background: #050505; z-index: 3000; transition: top 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); display: flex; flex-direction: column; overflow-x: hidden;}
         .endorse-modal.show { top: 0; }
         
@@ -50,7 +50,6 @@
         .e-seg-btn.active { color: #000; font-weight: 900;}
         .e-seg-btn.active::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, #D4AF37, #C5A059); border-radius: 8px; z-index: -1; box-shadow: 0 4px 12px rgba(212, 175, 55, 0.4); }
 
-        /* 保证面板可滚动 */
         .e-body { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 0 20px 80px; -webkit-overflow-scrolling: touch; overscroll-behavior-y: contain;}
         
         .e-tab-sec { display: none; flex-direction: column; animation: fadeIn 0.4s ease; }
@@ -68,7 +67,6 @@
 
         .e-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
         
-        /* 移除 touch-action: none; 确保页面可以上下滑动 */
         .e-item { position: relative; border-radius: 12px; overflow: hidden; background: #111; border: 1px solid rgba(212,175,55,0.3); box-shadow: 0 8px 20px rgba(0,0,0,0.8); cursor: grab;}
         .e-item.sortable-ghost { opacity: 0.4; }
         .e-item.sortable-drag { box-shadow: 0 15px 30px rgba(212,175,55,0.5); transform: scale(1.05); z-index: 100;}
@@ -77,7 +75,6 @@
         .cert-view .e-item img { height: 200px; object-fit: contain; background: #0A0A0C; padding: 5px;}
         .coach-view .e-item img { height: 260px; object-fit: cover; }
         
-        /* 删除按钮 */
         .e-delete { position: absolute; top: 8px; right: 8px; width: 28px; height: 28px; background: rgba(0,0,0,0.8); border: 1px solid rgba(255,59,48,0.6); border-radius: 50%; display: flex; justify-content: center; align-items: center; color: #FF3B30; font-size: 18px; font-weight: bold; cursor: pointer; z-index: 999; backdrop-filter: blur(5px);}
         .e-delete:active { background: #FF3B30; color: #fff; transform: scale(0.9);}
         
@@ -120,6 +117,11 @@
         
         <div class="card" style="border-color:#f472b6" onclick="window.location.href='./price.html'">
             <img src="product.jpg" loading="lazy"><div class="card-info">【黑金报价库】</div>
+        </div>
+
+        <div class="card" style="border-color:#10b981; grid-column: 1 / -1;" onclick="window.location.href='./管家.html'">
+            <img src="case.jpg" loading="lazy" style="filter: brightness(0.5) saturate(1.2);">
+            <div class="card-info" style="font-size: 14px; letter-spacing: 2px; padding: 15px 5px;">【24H 全息节律管家】</div>
         </div>
     </div>
 
@@ -186,13 +188,12 @@
             togglePanel();
         }
 
-        // 数据库与数据管理
+        // ================= 数据库与数据管理 =================
         let endorseDB = { cert: [], coach: [] };
         let sortableCert = null;
         let sortableCoach = null;
         let idb = null;
 
-        // 优先连接高级数据库 IndexedDB，突破 5MB 限制
         window.onload = function() {
             const request = window.indexedDB.open("RyueEndorseDB", 1);
             
@@ -209,7 +210,6 @@
             };
             
             request.onerror = function(e) {
-                // 降级使用基础存储
                 let savedCert = localStorage.getItem('ryue_cert_images');
                 let savedCoach = localStorage.getItem('ryue_coach_images');
                 if(savedCert) endorseDB.cert = JSON.parse(savedCert);
@@ -261,7 +261,6 @@
             document.getElementById('e-view-' + type).classList.add('active');
         }
 
-        // 并发压缩上传引擎
         function handleUpload(event, type) {
             const files = Array.from(event.target.files);
             if(files.length === 0) return;
@@ -277,7 +276,6 @@
                         const canvas = document.createElement('canvas');
                         const ctx = canvas.getContext('2d');
                         
-                        // 压缩优化：宽度上限设为 600px，极大减少体积
                         const MAX_WIDTH = 600;
                         let scale = img.width > MAX_WIDTH ? (MAX_WIDTH / img.width) : 1;
                         
@@ -285,7 +283,6 @@
                         canvas.height = img.height * scale;
                         ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
                         
-                        // 压缩画质设为 0.6，视觉无损，内存占用降低一倍
                         const base64 = canvas.toDataURL('image/jpeg', 0.6);
                         
                         tempImages.push({ idx: index, data: base64 });
@@ -330,13 +327,12 @@
             initSortable(type, container);
         }
 
-        // 拖拽排序引擎配置
         function initSortable(type, container) {
             const config = {
                 animation: 150,
-                delay: 250, // 增加延迟至 250ms，长按后才触发，防止误触
+                delay: 250, 
                 delayOnTouchOnly: true,
-                fallbackTolerance: 5, // 核心：允许 5px 以内的误滑动不触发拖拽，恢复页面原生滚动
+                fallbackTolerance: 5, 
                 filter: ".e-delete",
                 preventOnFilter: false,
                 onEnd: function(evt) {
@@ -358,7 +354,6 @@
             }
         }
 
-        // 拦截删除事件，防止渗透
         function deleteImage(type, index, event) {
             event.stopPropagation();
             if(confirm('确定要永久移除这张照片吗？')) {
