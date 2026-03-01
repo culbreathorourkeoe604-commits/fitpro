@@ -72,7 +72,7 @@
         <div class="card" style="border-color:#eab308" onclick="window.location.href='./plan.html'">
             <img src="plan.jpg" loading="lazy"><div class="card-info">【高定方案库】</div>
         </div>
-        <div class="card" style="border-color:#22d3ee" onclick="showModule('背书库','资质证书','cert_1.jpg','荣誉奖项','cert_2.jpg')">
+        <div class="card" style="border-color:#22d3ee" onclick="window.location.href='./证书.html'">
             <img src="cert.jpg" loading="lazy"><div class="card-info">【背书库】</div>
         </div>
         <div class="card" style="border-color:#f472b6" onclick="window.location.href='./price.html'">
@@ -110,6 +110,7 @@
             togglePanel();
         }
 
+        // 这个旧的弹窗方法保留，防止其他地方用到，但背书库已经不用它了
         function showModule(title, t1, i1, t2, i2) {
             const m = document.getElementById('modal');
             document.getElementById('modalTitle').innerText = title;
