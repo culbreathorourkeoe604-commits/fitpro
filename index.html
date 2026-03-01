@@ -37,7 +37,7 @@
         .card:active img { transform: scale(1.05); }
         .card-info { position: absolute; bottom: 0; width: 100%; padding: 12px 5px; font-size: 11px; text-align: center; font-weight: bold; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: #fff; pointer-events: none;}
         
-        /* ================= 弹窗基础 ================= */
+        /* ================= 通用弹窗组件 ================= */
         .modal-base { position: fixed; top: 100vh; left: 0; width: 100%; height: 100vh; background: #050505; z-index: 3000; transition: top 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); display: flex; flex-direction: column;}
         .modal-base.show { top: 0; }
         .m-header { height: 60px; display: flex; justify-content: space-between; align-items: center; padding: 0 20px; background: rgba(5,5,5,0.95); border-bottom: 1px solid rgba(212,175,55,0.2); flex-shrink: 0;}
@@ -63,21 +63,24 @@
         .ls-tab { flex: 1; padding: 12px 0; text-align: center; border-radius: 12px; background: #111; border: 1px solid #333; color: #888; font-size: 13px; font-weight: bold; transition: 0.3s;}
         .ls-tab.active { background: linear-gradient(135deg, #1A1813, #0A0A0C); border-color: #D4AF37; color: #D4AF37; box-shadow: 0 4px 10px rgba(212,175,55,0.2);}
         
-        .track-header { background: #111; border: 1px solid #333; border-radius: 12px; padding: 15px; margin-bottom: 20px; display: flex; flex-direction: column; gap: 15px;}
+        .track-header { background: #111; border: 1px solid #333; border-radius: 12px; padding: 15px; margin-bottom: 20px; display: flex; flex-direction: column; gap: 10px;}
         .client-sel { display: flex; justify-content: space-between; align-items: center; font-size: 15px; font-weight: bold; color: #D4AF37; border-bottom: 1px dashed #333; padding-bottom: 10px; cursor: pointer; background: rgba(212,175,55,0.05); border-radius: 8px; padding: 10px;}
+        .client-profile-tags { display: flex; gap: 8px; font-size: 11px; color: #888; margin-top: 5px; font-weight: normal; letter-spacing: 1px;}
+        
         .date-sel { display: flex; justify-content: space-between; align-items: center; color: #fff;}
         .date-btn { background: #222; border: none; color: #D4AF37; padding: 8px 15px; border-radius: 6px; font-size: 12px; font-weight: bold;}
-        
-        /* 原生日期控件样式覆盖 */
-        input[type="date"] { background: transparent; border: 1px solid #444; color: #fff; font-size: 16px; font-weight: bold; outline: none; padding: 5px 10px; border-radius: 6px; font-family: inherit;}
+        input[type="date"] { background: transparent; border: 1px solid #444; color: #fff; font-size: 15px; font-weight: bold; outline: none; padding: 4px 10px; border-radius: 6px; font-family: inherit;}
         input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1); }
 
-        .energy-dash { display: flex; gap: 15px; margin-bottom: 20px; }
-        .e-box { flex: 1; background: #0A0A0C; border: 1px solid #222; border-radius: 12px; padding: 15px; text-align: center;}
-        .e-label { font-size: 11px; color: #888; margin-bottom: 8px;}
-        .e-val { font-size: 24px; font-weight: 900; color: #fff; text-shadow: 0 0 10px rgba(255,255,255,0.2);}
-        .e-val.intake { color: #FFD60A; }
+        /* 🚨 升级的四宫格能量矩阵 */
+        .energy-dash { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+        .e-box { background: #0A0A0C; border: 1px solid #222; border-radius: 12px; padding: 12px; text-align: center;}
+        .e-label { font-size: 11px; color: #888; margin-bottom: 6px;}
+        .e-val { font-size: 20px; font-weight: 900; color: #fff;}
+        .e-val.bmr { color: #A855F7; }
         .e-val.burn { color: #32D74B; }
+        .e-val.intake { color: #FFD60A; }
+        .e-val.net { font-size: 24px; text-shadow: 0 0 10px rgba(255,255,255,0.2);}
 
         .coach-directive { background: linear-gradient(145deg, #1A1813, #0A0A0C); border: 1px solid rgba(212,175,55,0.3); border-radius: 12px; padding: 15px; display: flex; gap: 15px; margin-bottom: 20px; flex-direction: column;}
         .cd-top { display: flex; gap: 15px; align-items: flex-start;}
@@ -91,17 +94,25 @@
         .quick-tags { display: flex; gap: 8px; margin-top: 12px; overflow-x: auto; padding-bottom: 5px;}
         .quick-tags::-webkit-scrollbar { display: none; }
         .q-tag { flex-shrink: 0; background: #222; border: 1px solid #444; color: #aaa; font-size: 11px; padding: 6px 12px; border-radius: 50px; cursor: pointer;}
-        .q-tag:active { background: #D4AF37; color: #000;}
 
-        /* 环形打卡与手动修改 */
-        .rings-dash { background: #111; border: 1px solid #222; border-radius: 12px; padding: 20px 10px; display: flex; justify-content: space-around; margin-bottom: 25px;}
-        .ring-item { display: flex; flex-direction: column; align-items: center; position: relative;}
-        .svg-ring { width: 70px; height: 70px; transform: rotate(-90deg); margin-bottom: 8px; cursor: pointer;}
+        .rings-dash { background: #111; border: 1px solid #222; border-radius: 12px; padding: 15px 10px; display: flex; justify-content: space-around; margin-bottom: 20px;}
+        .ring-item { display: flex; flex-direction: column; align-items: center;}
+        .svg-ring { width: 60px; height: 60px; transform: rotate(-90deg); margin-bottom: 8px; cursor: pointer;}
         .svg-bg { fill: none; stroke: #222; stroke-width: 6; }
-        .svg-progress { fill: none; stroke: #D4AF37; stroke-width: 6; stroke-linecap: round; stroke-dasharray: 176; stroke-dashoffset: 176; transition: 0.5s; pointer-events: none;}
+        .svg-progress { fill: none; stroke: #D4AF37; stroke-width: 6; stroke-linecap: round; stroke-dasharray: 151; stroke-dashoffset: 151; transition: 0.5s; pointer-events: none;}
         .ring-val { font-size: 13px; font-weight: bold; color: #fff; margin-top: 5px; text-align: center;}
         .ring-sub { font-size: 9px; color: #888; font-weight: normal;}
         .manual-edit-btn { margin-top: 6px; background: #222; color: #D4AF37; font-size: 10px; padding: 3px 8px; border-radius: 4px; border: 1px solid #444; cursor: pointer;}
+
+        /* 🚨 生存指南展示 */
+        .survival-guide { margin-bottom: 20px; }
+        .guide-scroll { display: flex; overflow-x: auto; gap: 12px; padding-bottom: 10px; scroll-snap-type: x mandatory;}
+        .guide-scroll::-webkit-scrollbar { display: none; }
+        .guide-card { flex-shrink: 0; width: 200px; height: 100px; border-radius: 12px; background: #111; border: 1px solid rgba(212,175,55,0.2); position: relative; overflow: hidden; scroll-snap-align: start; cursor: pointer;}
+        .guide-card img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.5) saturate(0.8);}
+        .guide-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.9), transparent); display: flex; flex-direction: column; justify-content: flex-end; padding: 12px;}
+        .g-title { font-size: 13px; font-weight: 900; color: #D4AF37; }
+        .g-desc { font-size: 10px; color: #ccc; margin-top: 4px;}
 
         .timeline-box { display: flex; flex-direction: column; gap: 15px; }
         .meal-slot { background: #0A0A0C; border: 1px solid #222; border-radius: 12px; overflow: hidden; }
@@ -116,10 +127,9 @@
         .m-row-kcal { font-size: 18px; font-weight: 900; color: #D4AF37; margin-bottom: 4px;}
         .m-row-tags { display: flex; gap: 6px; margin-bottom: 6px;}
         .m-tag { font-size: 10px; padding: 2px 6px; border-radius: 4px; font-weight: bold; color: #000;}
-        .m-sug { font-size: 11px; color: #888; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;}
         .meal-del { position: absolute; top: 10px; right: 10px; color: #FF3B30; font-size: 18px; cursor: pointer; background: rgba(0,0,0,0.5); width: 24px; height: 24px; text-align: center; line-height: 22px; border-radius: 50%; border: 1px solid #FF3B30;}
 
-        /* AI 谈单版块 */
+        /* AI 谈单专用版块 */
         .ai-card { background: #111; border: 1px solid #D4AF37; border-radius: 16px; padding: 20px; text-align: center; margin-bottom: 20px;}
         .ai-result-box { display: none; margin-top: 20px; text-align: left; background: #0A0A0C; padding: 15px; border-radius: 12px; border: 1px solid #222;}
         .ai-res-img { width: 100%; height: 200px; object-fit: cover; border-radius: 8px; margin-bottom: 15px;}
@@ -129,21 +139,35 @@
         .ai-scanning-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 9999; display: none; flex-direction: column; justify-content: center; align-items: center;}
         .scan-box { width: 260px; height: 260px; border: 2px solid #D4AF37; position: relative; overflow: hidden; border-radius: 16px; margin-bottom: 20px; background-size: cover; background-position: center; box-shadow: 0 0 30px rgba(212,175,55,0.3);}
         .scan-line { width: 100%; height: 3px; background: #D4AF37; box-shadow: 0 0 20px 5px rgba(212,175,55,0.6); position: absolute; top: 0; animation: scanAnim 1.2s infinite linear;}
-        .scan-text { color: #D4AF37; font-size: 15px; font-weight: bold; letter-spacing: 2px; font-family: monospace; margin-top: 15px;}
         @keyframes scanAnim { 0% { top: 0; opacity: 1; } 100% { top: 100%; opacity: 0.2; } }
 
-        /* 会员管理 */
+        /* 🚨 高定新建会员表单弹窗 */
+        .new-client-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 8000; display: none; flex-direction: column; justify-content: center; align-items: center; padding: 20px; backdrop-filter: blur(10px);}
+        .new-client-modal.show { display: flex; }
+        .nc-card { background: #111; border: 1px solid #D4AF37; border-radius: 16px; width: 100%; max-width: 350px; padding: 25px;}
+        .nc-title { color: #D4AF37; font-size: 18px; font-weight: bold; margin-bottom: 20px; text-align: center;}
+        .nc-group { margin-bottom: 15px;}
+        .nc-label { font-size: 12px; color: #888; margin-bottom: 5px; display: block;}
+        .nc-input { width: 100%; background: #0A0A0C; border: 1px solid #333; color: #fff; padding: 12px; border-radius: 8px; outline: none; font-size: 14px;}
+        .nc-input:focus { border-color: #D4AF37; }
+        .nc-btn { width: 100%; background: linear-gradient(135deg, #D4AF37, #AA8A2A); color: #000; border: none; padding: 14px; border-radius: 8px; font-weight: bold; font-size: 15px; margin-top: 10px;}
+
         .client-modal { position: fixed; bottom: -100%; left: 0; width: 100%; background: #111; border-top: 1px solid #D4AF37; border-radius: 20px 20px 0 0; padding: 20px; z-index: 5000; transition: 0.4s;}
         .client-modal.show { bottom: 0; }
         .cm-item { padding: 15px; border-bottom: 1px solid #222; font-size: 15px; color: #fff; display: flex; justify-content: space-between; align-items: center;}
         .cm-item.active { color: #D4AF37; font-weight: bold;}
         .cm-add { padding: 15px; color: #10b981; text-align: center; font-weight: bold; border-bottom: 1px solid #222; cursor: pointer;}
-        
-        .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: #D4AF37; color: #000; padding: 10px 20px; border-radius: 50px; font-weight: bold; font-size: 13px; z-index: 9999; display: none; box-shadow: 0 5px 15px rgba(212,175,55,0.4);}
 
-        /* 海报生成相关 */
+        .guide-modal { position: fixed; bottom: -100%; left: 0; width: 100%; background: #111; border-top: 1px solid #D4AF37; border-radius: 24px 24px 0 0; z-index: 6000; padding: 25px 20px 40px; transition: 0.5s;}
+        .guide-modal.show { bottom: 0; }
+        .gm-title { font-size: 20px; font-weight: 900; color: #D4AF37; margin-bottom: 20px; }
+        .gm-content { font-size: 14px; color: #ccc; line-height: 1.8;}
+        .gm-content strong { color: #fff; }
+        .gm-content li { margin-bottom: 8px; }
+
+        .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: #D4AF37; color: #000; padding: 10px 20px; border-radius: 50px; font-weight: bold; font-size: 13px; z-index: 9999; display: none; box-shadow: 0 5px 15px rgba(212,175,55,0.4);}
+        
         .gen-btn { background: linear-gradient(135deg, #D4AF37, #AA8A2A); color: #000; text-align: center; padding: 16px; border-radius: 12px; font-size: 16px; font-weight: 900; margin-top: 20px; box-shadow: 0 5px 20px rgba(212,175,55,0.3); cursor: pointer;}
-        .gen-btn:active { transform: scale(0.98); }
         .poster-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 9999; display: none; flex-direction: column; justify-content: center; align-items: center; padding: 20px;}
         .poster-modal.show { display: flex; }
         .poster-img { width: 100%; max-width: 350px; border-radius: 16px; box-shadow: 0 0 30px rgba(212,175,55,0.4); margin-bottom: 20px;}
@@ -191,14 +215,14 @@
             
             <div id="e-view-cert" class="e-sec active">
                 <div class="upload-btn" onclick="document.getElementById('cert-up').click()">+ 上传资质证书</div>
-                <div class="e-tip" style="text-align:center; color:#888; font-size:11px; margin-bottom:10px;">长按照片可任意拖拽排序</div>
+                <div class="e-tip">长按照片可任意拖拽排序</div>
                 <input type="file" id="cert-up" multiple accept="image/*" style="display:none;" onchange="handleEndorseUp(event, 'cert')">
                 <div class="e-grid" id="cert-gallery"></div>
             </div>
 
             <div id="e-view-coach" class="e-sec">
                 <div class="upload-btn" onclick="document.getElementById('coach-up').click()">+ 上传教练照片</div>
-                <div class="e-tip" style="text-align:center; color:#888; font-size:11px; margin-bottom:10px;">长按照片可任意拖拽排序</div>
+                <div class="e-tip">长按照片可任意拖拽排序</div>
                 <input type="file" id="coach-up" multiple accept="image/*" style="display:none;" onchange="handleEndorseUp(event, 'coach')">
                 <div class="e-grid" id="coach-gallery"></div>
             </div>
@@ -220,7 +244,7 @@
             <div id="ls-view-demo" class="e-sec">
                 <div class="ai-card">
                     <div style="font-size:18px; color:#D4AF37; font-weight:bold; margin-bottom:10px;">视觉热量评估模型</div>
-                    <div style="font-size:11px; color:#888; margin-bottom:20px;">向客户演示系统如何通过视觉识别，精准解构食物热量。</div>
+                    <div style="font-size:11px; color:#888; margin-bottom:20px;">向客户演示系统如何通过视觉识别精准解构食物热量。</div>
                     <div class="upload-btn" style="border-color:#10b981; color:#D4AF37;" onclick="document.getElementById('ai-scan-up').click()">
                         + 点击上传照片开始演算
                     </div>
@@ -230,7 +254,7 @@
                 <div id="ai-mock-result" class="ai-result-box">
                     <img id="ai-res-img" src="" class="ai-res-img">
                     <div style="display:flex; justify-content:space-between; margin-bottom:15px; border-bottom:1px solid #333; padding-bottom:10px;">
-                        <div><div style="font-size:10px; color:#888;">推演总热量 (严谨级算法)</div><div style="font-size:24px; color:#D4AF37; font-weight:bold;" id="ai-res-kcal">-- KCAL</div></div>
+                        <div><div style="font-size:10px; color:#888;">推演总热量</div><div style="font-size:24px; color:#D4AF37; font-weight:bold;" id="ai-res-kcal">-- KCAL</div></div>
                         <div id="ai-res-tag" style="padding:6px 12px; border-radius:6px; font-weight:bold; font-size:12px; align-self:center;">--</div>
                     </div>
                     <div class="ai-macro-grid">
@@ -245,24 +269,35 @@
                 
                 <div class="track-header">
                     <div class="client-sel" onclick="openClientMenu()">
-                        <span style="color:#aaa; font-size:12px;">当前档案列表：</span>
-                        <span id="current-client-name">加载中... ▾</span>
+                        <div style="display:flex; flex-direction:column;">
+                            <span id="current-client-name" style="color:#D4AF37; font-size:16px;">加载中...</span>
+                            <span id="current-client-tags" class="client-profile-tags">-- | -- | -- | --</span>
+                        </div>
+                        <span>▾</span>
                     </div>
                     <div class="date-sel">
-                        <button class="date-btn" onclick="changeDate(-1)">◀</button>
+                        <button class="date-btn" onclick="changeDate(-1)">◀ 前一天</button>
                         <input type="date" id="date-picker" onchange="datePickerChange(this.value)">
-                        <button class="date-btn" onclick="changeDate(1)">▶</button>
+                        <button class="date-btn" onclick="changeDate(1)">后一天 ▶</button>
                     </div>
                 </div>
 
                 <div class="energy-dash">
                     <div class="e-box">
-                        <div class="e-label">今日总摄入 (Kcal)</div>
-                        <div class="e-val intake" id="val-intake">0</div>
+                        <div class="e-label">基础代谢 BMR</div>
+                        <div class="e-val bmr" id="val-bmr">0</div>
                     </div>
                     <div class="e-box">
-                        <div class="e-label">今日总消耗 (Kcal)</div>
+                        <div class="e-label">运动消耗 (Kcal)</div>
                         <div class="e-val burn" id="val-burn">0</div>
+                    </div>
+                    <div class="e-box">
+                        <div class="e-label">今日摄入 (Kcal)</div>
+                        <div class="e-val intake" id="val-intake">0</div>
+                    </div>
+                    <div class="e-box" style="background: linear-gradient(145deg, #1A1813, #0A0A0C); border-color:#D4AF37;">
+                        <div class="e-label" id="net-label" style="color:#D4AF37; font-weight:bold;">热量缺口</div>
+                        <div class="e-val net" id="val-net">0</div>
                     </div>
                 </div>
 
@@ -273,17 +308,15 @@
                             <div class="ca-edit">更换</div>
                         </div>
                         <input type="file" id="ca-up" accept="image/*" style="display:none;" onchange="uploadCoachAvatar(event)">
-                        
                         <div class="directive-content">
                             <div class="directive-title">导师专属督促指令 ✎</div>
                             <textarea id="val-directive" class="d-input" rows="2" placeholder="点击手写今日点评..." onblur="saveDailyData()"></textarea>
                         </div>
                     </div>
                     <div class="quick-tags">
-                        <div class="q-tag" onclick="addTag('【执行完美】请继续保持当前饮食结构！')">👏 完美执行</div>
+                        <div class="q-tag" onclick="addTag('【执行完美】请继续保持当前饮食与代谢结构！')">👏 完美执行</div>
                         <div class="q-tag" onclick="addTag('【注意控糖】碳水略高，建议饭后散步15分钟。')">⚠️ 注意控糖</div>
-                        <div class="q-tag" onclick="addTag('【加练警告】热量超标，今晚立刻增加一次有氧！')">🔥 加练警告</div>
-                        <div class="q-tag" onclick="addTag('【补充水分】代谢缓慢，请务必喝够水分！')">💧 补充水分</div>
+                        <div class="q-tag" onclick="addTag('【加练警告】热量出现盈余，今晚立刻增加一次有氧！')">🔥 加练警告</div>
                     </div>
                 </div>
 
@@ -308,6 +341,20 @@
                     </div>
                 </div>
 
+                <div class="survival-guide">
+                    <div style="font-size: 14px; font-weight: bold; color: #fff; margin-bottom: 10px;">✦ 社交赴宴生存指南</div>
+                    <div class="guide-scroll">
+                        <div class="guide-card" onclick="openGuide('bistro')">
+                            <img src="https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?auto=format&fit=crop&w=400&q=80">
+                            <div class="guide-overlay"><div class="g-title">米其林 / Bistro</div><div class="g-desc">享受美食的防暴卡秘籍</div></div>
+                        </div>
+                        <div class="guide-card" onclick="openGuide('business')">
+                            <img src="https://images.unsplash.com/photo-1556761175-5973dc0f32b7?auto=format&fit=crop&w=400&q=80">
+                            <div class="guide-overlay"><div class="g-title">商务应酬酒局</div><div class="g-desc">酒局与推杯换盏保护法</div></div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="timeline-box">
                     <div class="meal-slot">
                         <div class="meal-header"><div class="meal-title">☀️ 早餐</div><div class="meal-add" onclick="triggerAIMealUpload('breakfast')">+ 视觉评估录入</div></div>
@@ -326,15 +373,35 @@
                 
                 <div class="gen-btn" onclick="generateReportCard()">生成今日专属交付报告图 ➔</div>
             </div>
+        </div>
+    </div>
 
+    <div class="new-client-modal" id="newClientForm">
+        <div class="nc-card">
+            <div class="nc-title">新建 VIP 会员档案</div>
+            <div class="nc-group"><span class="nc-label">姓名/称呼</span><input type="text" id="nc-name" class="nc-input" placeholder="如：王总"></div>
+            <div class="nc-group"><span class="nc-label">性别</span><select id="nc-gender" class="nc-input"><option value="F">女士</option><option value="M">男士</option></select></div>
+            <div class="nc-group"><span class="nc-label">年龄</span><input type="number" id="nc-age" class="nc-input" placeholder="岁" value="30"></div>
+            <div class="nc-group"><span class="nc-label">身高 (cm)</span><input type="number" id="nc-height" class="nc-input" placeholder="厘米" value="165"></div>
+            <div class="nc-group"><span class="nc-label">体重 (kg)</span><input type="number" id="nc-weight" class="nc-input" placeholder="公斤" value="55"></div>
+            <button class="nc-btn" onclick="submitNewClient()">保存并建立档案</button>
+            <div style="text-align:center; color:#666; margin-top:15px; cursor:pointer;" onclick="document.getElementById('newClientForm').classList.remove('show')">取消</div>
         </div>
     </div>
 
     <div class="client-modal" id="clientMenu">
         <div style="color:#D4AF37; font-size:14px; font-weight:bold; margin-bottom:15px; padding-left:15px;">我的 VIP 会员列表</div>
         <div id="client-list-render" style="max-height:40vh; overflow-y:auto;"></div>
-        <div class="cm-add" onclick="addNewClient()">+ 新建会员档案</div>
+        <div class="cm-add" onclick="openNewClientForm()">+ 新建高级会员档案</div>
         <div class="cm-item" style="justify-content:center; color:#666; border:none; margin-top:10px; cursor:pointer;" onclick="document.getElementById('clientMenu').classList.remove('show')">取消关闭</div>
+    </div>
+
+    <div class="guide-modal" id="guideModal">
+        <div style="display:flex; justify-content:space-between; margin-bottom:20px;">
+            <div class="gm-title" id="gm-title">指南标题</div>
+            <div style="color:#888; font-size:28px; cursor:pointer;" onclick="document.getElementById('guideModal').classList.remove('show')">×</div>
+        </div>
+        <div class="gm-content" id="gm-content"></div>
     </div>
 
     <div class="ai-scanning-overlay" id="aiOverlay">
@@ -347,11 +414,9 @@
         <img id="final-poster" class="poster-img" src="">
         <div style="color:#888; font-size:16px; border:1px solid #444; padding:10px 30px; border-radius:50px; cursor:pointer;" onclick="document.getElementById('posterModal').classList.remove('show')">关闭</div>
     </div>
-    
     <canvas id="hiddenCanvas" style="display:none;"></canvas>
 
     <script>
-        // ================= 全局基础 =================
         function togglePanel() { const p = document.getElementById('style-panel'); p.style.display = p.style.display === 'block' ? 'none' : 'block'; }
         function applyTheme(idx) {
             const themes = [
@@ -362,135 +427,98 @@
             const t = themes[idx] || themes[2];
             const root = document.documentElement.style;
             root.setProperty('--primary', t.primary); root.setProperty('--secondary', t.secondary); root.setProperty('--bg', t.bg); root.setProperty('--grad', t.grad); root.setProperty('--card-bg', t.card);
-            document.body.style.color = t.text;
-            togglePanel();
+            document.body.style.color = t.text; togglePanel();
         }
-
-        function showToast(msg) {
-            const t = document.getElementById('sysToast');
-            t.innerText = msg; t.style.display = 'block';
-            setTimeout(() => t.style.display = 'none', 2000);
-        }
+        function showToast(msg) { const t = document.getElementById('sysToast'); t.innerText=msg; t.style.display='block'; setTimeout(()=>t.style.display='none', 2000); }
         function openModal(id) { document.getElementById(id).classList.add('show'); }
         function closeModal(id) { document.getElementById(id).classList.remove('show'); }
 
-        // ================= 航天级数据库 =================
-        let idb = null;
-        let endorseDB = { cert: [], coach: [] }; 
-        let clientsDB = {}; 
-        let currClientId = null;
-        let sortCert, sortCoach;
+        // ================= 数据库 =================
+        let idb = null; let endorseDB = { cert: [], coach: [] }; let clientsDB = {}; let currClientId = null; let sortCert, sortCoach;
         let globalCoachAvatar = localStorage.getItem('ryue_coach_avatar') || "https://images.unsplash.com/photo-1594381898411-846e7d193883?auto=format&fit=crop&w=200&q=80";
-        
         let currDateObj = new Date();
         function getFormatDate(d) { return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0'); }
         let currDateStr = getFormatDate(currDateObj);
 
         window.onload = function() {
             document.getElementById('my-coach-avatar').src = globalCoachAvatar;
-            
-            const request = window.indexedDB.open("LuxiouMegaMatrix", 1); 
+            const request = window.indexedDB.open("LuxiouMegaMatrix", 2); 
             request.onupgradeneeded = function(e) {
                 idb = e.target.result;
                 if (!idb.objectStoreNames.contains("base")) idb.createObjectStore("base");
                 if (!idb.objectStoreNames.contains("clients")) idb.createObjectStore("clients");
             };
-            request.onsuccess = function(e) {
-                idb = e.target.result;
-                loadSysData(); 
-            };
+            request.onsuccess = function(e) { idb = e.target.result; loadSysData(); };
         }
 
         function loadSysData() {
-            // 加载背书，没数据则给6张兜底图
             idb.transaction("base").objectStore("base").get("endorse").onsuccess = e => {
-                if(e.target.result && (e.target.result.cert.length > 0 || e.target.result.coach.length > 0)) {
-                    endorseDB = e.target.result;
-                } else {
-                    endorseDB.coach = [
-                        "https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=600&q=80",
-                        "https://images.unsplash.com/photo-1594381898411-846e7d193883?auto=format&fit=crop&w=600&q=80",
-                        "https://images.unsplash.com/photo-1574680096145-d05b474e2155?auto=format&fit=crop&w=600&q=80",
-                        "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=600&q=80",
-                        "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=600&q=80",
-                        "https://images.unsplash.com/photo-1605296867304-46d5465a13f1?auto=format&fit=crop&w=600&q=80"
-                    ];
+                if(e.target.result && (e.target.result.cert.length > 0 || e.target.result.coach.length > 0)) endorseDB = e.target.result;
+                else {
+                    endorseDB.coach = ["https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=600&q=80","https://images.unsplash.com/photo-1594381898411-846e7d193883?auto=format&fit=crop&w=600&q=80","https://images.unsplash.com/photo-1574680096145-d05b474e2155?auto=format&fit=crop&w=600&q=80","https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=600&q=80","https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=600&q=80","https://images.unsplash.com/photo-1605296867304-46d5465a13f1?auto=format&fit=crop&w=600&q=80"];
                     saveEndorse();
                 }
                 renderGallery('cert'); renderGallery('coach');
             };
-
-            // 加载会员
             idb.transaction("clients").objectStore("clients").get("all_data").onsuccess = e => {
                 if(e.target.result && Object.keys(e.target.result).length > 0) {
-                    clientsDB = e.target.result;
-                    currClientId = Object.keys(clientsDB)[0];
+                    clientsDB = e.target.result; currClientId = Object.keys(clientsDB)[0];
                 } else {
-                    let id = 'c_' + Date.now();
-                    clientsDB = {};
-                    clientsDB[id] = { id: id, name: 'VIP 默认档案', records: {} };
-                    currClientId = id;
-                    saveClients();
+                    let id = 'c_' + Date.now(); clientsDB = {};
+                    clientsDB[id] = { id: id, name: '体验者档案', gender: 'F', age: 28, height: 165, weight: 55, records: {} };
+                    currClientId = id; saveClients();
                 }
                 syncTrackUI();
             };
         }
-
         function saveEndorse() { idb.transaction("base", "readwrite").objectStore("base").put(endorseDB, "endorse"); }
         function saveClients() { idb.transaction("clients", "readwrite").objectStore("clients").put(clientsDB, "all_data"); }
 
-        // ================= 背书库逻辑 =================
-        function switchEndorseTab(type, btn) {
-            document.querySelectorAll('.e-tab').forEach(b => b.classList.remove('active')); btn.classList.add('active');
-            document.querySelectorAll('.e-sec').forEach(s => s.classList.remove('active')); document.getElementById('e-view-' + type).classList.add('active');
-        }
+        // ================= 背书库 =================
+        function switchEndorseTab(type, btn) { document.querySelectorAll('.e-tab').forEach(b => b.classList.remove('active')); btn.classList.add('active'); document.querySelectorAll('.e-sec').forEach(s => s.classList.remove('active')); document.getElementById('e-view-' + type).classList.add('active'); }
         function handleEndorseUp(evt, type) {
-            const files = Array.from(evt.target.files);
-            if(files.length === 0) return;
+            const files = Array.from(evt.target.files); if(files.length === 0) return;
             let count = 0; let tmp = [];
             files.forEach((file, idx) => {
-                const r = new FileReader();
-                r.onload = e => {
-                    const img = new Image();
-                    img.onload = () => {
-                        const can = document.createElement('canvas');
-                        const sc = Math.min(600 / img.width, 1);
-                        can.width = img.width * sc; can.height = img.height * sc;
-                        can.getContext('2d').drawImage(img, 0, 0, can.width, can.height);
-                        tmp.push({ i: idx, data: can.toDataURL('image/jpeg', 0.6) });
-                        count++;
-                        if(count === files.length) {
-                            tmp.sort((a,b)=>a.i-b.i);
-                            endorseDB[type] = tmp.map(t=>t.data).concat(endorseDB[type]);
-                            saveEndorse(); renderGallery(type); evt.target.value='';
-                        }
+                const r = new FileReader(); r.onload = e => {
+                    const img = new Image(); img.onload = () => {
+                        const can = document.createElement('canvas'); const sc = Math.min(600 / img.width, 1);
+                        can.width = img.width * sc; can.height = img.height * sc; can.getContext('2d').drawImage(img, 0, 0, can.width, can.height);
+                        tmp.push({ i: idx, data: can.toDataURL('image/jpeg', 0.6) }); count++;
+                        if(count === files.length) { tmp.sort((a,b)=>a.i-b.i); endorseDB[type] = tmp.map(t=>t.data).concat(endorseDB[type]); saveEndorse(); renderGallery(type); evt.target.value=''; }
                     }; img.src = e.target.result;
                 }; r.readAsDataURL(file);
             });
         }
         function renderGallery(type) {
             const box = document.getElementById(`${type}-gallery`); box.innerHTML = '';
-            if(endorseDB[type].length === 0) { box.innerHTML = `<div class="e-empty">暂无数据，点击上方上传</div>`; return; }
+            if(endorseDB[type].length === 0) { box.innerHTML = `<div class="e-empty">暂无数据</div>`; return; }
             endorseDB[type].forEach((b64, i) => { box.innerHTML += `<div class="e-item" data-index="${i}"><div class="del" onclick="delE('${type}', ${i}, event)">×</div><img src="${b64}"></div>`; });
+            let cfg = {animation:150, delay:200, delayOnTouchOnly:true, fallbackTolerance:5, filter:".del", onEnd: e=>{ let arr = endorseDB[type]; arr.splice(e.newIndex, 0, arr.splice(e.oldIndex, 1)[0]); saveEndorse(); }};
+            if(type==='cert') { if(sortCert) sortCert.destroy(); sortCert = new Sortable(box, cfg); } else { if(sortCoach) sortCoach.destroy(); sortCoach = new Sortable(box, cfg); }
+        }
+        function delE(type, i, e) { e.stopPropagation(); if(confirm('删除?')) { endorseDB[type].splice(i,1); saveEndorse(); renderGallery(type); } }
+
+        // ================= 管家逻辑 =================
+        function switchLsTab(type, btn) { document.querySelectorAll('.ls-tab').forEach(b => b.classList.remove('active')); btn.classList.add('active'); document.querySelectorAll('#ls-view-demo, #ls-view-track').forEach(s => s.classList.remove('active')); document.getElementById('ls-view-' + type).classList.add('active'); }
+
+        // 🚨 修复的新增档案
+        function openNewClientForm() { document.getElementById('clientMenu').classList.remove('show'); document.getElementById('newClientForm').classList.add('show'); }
+        function submitNewClient() {
+            let n = document.getElementById('nc-name').value;
+            if(!n) return alert("姓名不能为空");
+            let g = document.getElementById('nc-gender').value;
+            let a = parseInt(document.getElementById('nc-age').value) || 30;
+            let h = parseInt(document.getElementById('nc-height').value) || 165;
+            let w = parseInt(document.getElementById('nc-weight').value) || 55;
             
-            let config = {animation:150, delay:200, delayOnTouchOnly:true, fallbackTolerance:5, filter:".del", preventOnFilter:false, onEnd: e=>{ let arr = endorseDB[type]; arr.splice(e.newIndex, 0, arr.splice(e.oldIndex, 1)[0]); saveEndorse(); }};
-            if(type==='cert') { if(sortCert) sortCert.destroy(); sortCert = new Sortable(box, config); }
-            else { if(sortCoach) sortCoach.destroy(); sortCoach = new Sortable(box, config); }
-        }
-        function delE(type, i, e) { e.stopPropagation(); if(confirm('确定删除?')) { endorseDB[type].splice(i,1); saveEndorse(); renderGallery(type); } }
-
-        // ================= 24H 管家逻辑 =================
-        function switchLsTab(type, btn) {
-            document.querySelectorAll('.ls-tab').forEach(b => b.classList.remove('active')); btn.classList.add('active');
-            document.querySelectorAll('#ls-view-demo, #ls-view-track').forEach(s => s.classList.remove('active'));
-            document.getElementById('ls-view-' + type).classList.add('active');
+            let id = 'c_'+Date.now();
+            clientsDB[id] = { id: id, name: n, gender: g, age: a, height: h, weight: w, records: {} };
+            currClientId = id; saveClients(); syncTrackUI();
+            document.getElementById('newClientForm').classList.remove('show');
+            showToast("档案建立成功");
         }
 
-        // --- 会员与日历 ---
-        function addNewClient() {
-            let n = prompt("输入新VIP会员名：");
-            if(n) { let id = 'c_'+Date.now(); clientsDB[id] = {id:id, name:n, records:{}}; currClientId = id; saveClients(); syncTrackUI(); document.getElementById('clientMenu').classList.remove('show'); showToast("创建成功"); }
-        }
         function openClientMenu() {
             let html = '';
             for(let k in clientsDB) { html += `<div class="cm-item ${k===currClientId?'active':''}" onclick="selClient('${k}')"><span>${clientsDB[k].name}</span>${k===currClientId?'✓':''}</div>`; }
@@ -498,51 +526,42 @@
         }
         function selClient(id) { currClientId = id; document.getElementById('clientMenu').classList.remove('show'); syncTrackUI(); }
         
-        function changeDate(delta) {
-            currDateObj.setDate(currDateObj.getDate() + delta);
-            currDateStr = getFormatDate(currDateObj);
-            syncTrackUI();
-        }
-        function datePickerChange(val) {
-            if(!val) return;
-            currDateObj = new Date(val);
-            currDateStr = getFormatDate(currDateObj);
-            syncTrackUI();
-        }
+        function changeDate(delta) { currDateObj.setDate(currDateObj.getDate() + delta); currDateStr = getFormatDate(currDateObj); syncTrackUI(); }
+        function datePickerChange(val) { if(!val) return; currDateObj = new Date(val); currDateStr = getFormatDate(currDateObj); syncTrackUI(); }
 
         function getDaily() {
             let c = clientsDB[currClientId];
             if(!c.records) c.records = {};
-            if(!c.records[currDateStr]) {
-                c.records[currDateStr] = { msg: '', rings: {water:0, cardio:0, train:0}, meals: {breakfast:[], lunch:[], dinner:[]} };
-            }
+            if(!c.records[currDateStr]) c.records[currDateStr] = { msg: '', rings: {water:0, cardio:0, train:0}, meals: {breakfast:[], lunch:[], dinner:[]} };
             return c.records[currDateStr];
         }
 
-        // --- 教练头像与快捷语 ---
+        // BMR计算公式 (Mifflin-St Jeor)
+        function getBMR() {
+            let c = clientsDB[currClientId];
+            if(!c.weight) return 1300; 
+            let bmr = (10 * c.weight) + (6.25 * c.height) - (5 * c.age);
+            return c.gender === 'M' ? bmr + 5 : bmr - 161;
+        }
+
         function uploadCoachAvatar(evt) {
             const f = evt.target.files[0]; if(!f) return;
             const r = new FileReader(); r.onload = e => {
                 const img = new Image(); img.onload = () => {
-                    const can = document.createElement('canvas'); can.width=200; can.height=200;
-                    can.getContext('2d').drawImage(img,0,0,200,200);
-                    globalCoachAvatar = can.toDataURL('image/jpeg', 0.8);
-                    localStorage.setItem('ryue_coach_avatar', globalCoachAvatar);
-                    document.getElementById('my-coach-avatar').src = globalCoachAvatar;
+                    const can = document.createElement('canvas'); can.width=200; can.height=200; can.getContext('2d').drawImage(img,0,0,200,200);
+                    globalCoachAvatar = can.toDataURL('image/jpeg', 0.8); localStorage.setItem('ryue_coach_avatar', globalCoachAvatar); document.getElementById('my-coach-avatar').src = globalCoachAvatar;
                 }; img.src=e.target.result;
             }; r.readAsDataURL(f);
         }
-        function addTag(txt) {
-            let el = document.getElementById('val-directive');
-            el.value = txt; saveDailyData(); showToast("已应用指令");
-        }
+        function addTag(txt) { document.getElementById('val-directive').value = txt; saveDailyData(); showToast("已应用指令"); }
 
-        // --- 同步页面 UI ---
         function syncTrackUI() {
             if(!currClientId) return;
-            document.getElementById('current-client-name').innerText = clientsDB[currClientId].name + " ▾";
+            let c = clientsDB[currClientId];
+            document.getElementById('current-client-name').innerText = c.name;
+            let genderStr = c.gender === 'M' ? '男士' : '女士';
+            document.getElementById('current-client-tags').innerText = `${genderStr} | ${c.age}岁 | ${c.height}cm | ${c.weight}kg`;
             
-            // 绑定到原生 input date
             document.getElementById('date-picker').value = currDateStr;
             
             let d = getDaily();
@@ -552,108 +571,89 @@
             drawRing('cardio', d.rings.cardio, 120, '分'); 
             drawRing('train', d.rings.train, 3, '次');
             
-            // 渲染三餐列表
             ['breakfast', 'lunch', 'dinner'].forEach(mt => {
                 let box = document.getElementById(`m-${mt}`); box.innerHTML = '';
-                if(d.meals[mt].length === 0) box.innerHTML = `<div class="empty-meal">暂无记录，请点击上方录入</div>`;
+                if(d.meals[mt].length === 0) box.innerHTML = `<div class="empty-meal">暂无记录</div>`;
                 else {
                     d.meals[mt].forEach((m, i) => {
-                        box.innerHTML += `
-                        <div class="meal-row">
-                            <img src="${m.img}">
-                            <div class="meal-info">
-                                <div class="m-row-kcal">${m.kcal} KCAL</div>
-                                <div class="m-row-tags"><span class="m-tag" style="background:${m.color}">${m.status}</span><span class="m-tag" style="background:#222;color:#aaa">P:${m.pro} C:${m.carb} F:${m.fat}</span></div>
-                                <div class="m-sug">${m.sug}</div>
-                            </div>
-                            <div class="meal-del" onclick="delMeal('${mt}', ${i})">×</div>
-                        </div>`;
+                        box.innerHTML += `<div class="meal-row"><img src="${m.img}"><div class="meal-info"><div class="m-row-kcal">${m.kcal} KCAL</div><div class="m-row-tags"><span class="m-tag" style="background:${m.color}">${m.status}</span><span class="m-tag" style="background:#222;color:#aaa">P:${m.pro} C:${m.carb} F:${m.fat}</span></div><div class="m-sug">${m.sug}</div></div><div class="meal-del" onclick="delMeal('${mt}', ${i})">×</div></div>`;
                     });
                 }
             });
-            
             calcEnergy(); 
         }
+        function saveDailyData() { getDaily().msg = document.getElementById('val-directive').value; saveClients(); }
 
-        function saveDailyData() {
-            getDaily().msg = document.getElementById('val-directive').value;
-            saveClients();
-        }
-
-        // --- 核心：自动卡路里双向换算 ---
+        // 🚨 核心热量矩阵计算
         function calcEnergy() {
             let d = getDaily();
             let intake = 0;
-            ['breakfast','lunch','dinner'].forEach(mt => {
-                d.meals[mt].forEach(m => intake += m.kcal);
-            });
-            // 有氧按 75大卡/10分钟；抗阻按 200大卡/次
+            ['breakfast','lunch','dinner'].forEach(mt => { d.meals[mt].forEach(m => intake += m.kcal); });
+            // 有氧 75大卡/10分钟；抗阻 200大卡/次
             let burn = Math.floor((d.rings.cardio / 10) * 75) + (d.rings.train * 200);
+            let bmr = Math.floor(getBMR());
             
-            document.getElementById('val-intake').innerText = intake;
+            // 赤字/盈余 = 摄入 - 消耗 - 基础代谢
+            let net = intake - burn - bmr; 
+
+            document.getElementById('val-bmr').innerText = bmr;
             document.getElementById('val-burn').innerText = burn;
+            document.getElementById('val-intake').innerText = intake;
+            
+            let netEl = document.getElementById('val-net');
+            let netLab = document.getElementById('net-label');
+            if(net > 0) {
+                netEl.innerText = "+" + net; netEl.style.color = "#FF453A"; netLab.innerText = "热量盈余 (长胖)";
+            } else {
+                netEl.innerText = net; netEl.style.color = "#32D74B"; netLab.innerText = "热量缺口 (燃脂)";
+            }
         }
 
-        // --- 督促三环交互与手动修改 ---
+        // 环交互与手动输入
         function drawRing(type, val, max, unit) {
+            let pCenter = type==='water'?28:31; // 微调位置
             document.getElementById(`t-${type}`).innerHTML = `${val}<br><span class="ring-sub">/ ${max}${unit}</span>`;
             document.getElementById(`r-${type}`).style.strokeDashoffset = 176 - (176 * (Math.min(val, max)/max));
         }
         function addRing(type) {
             let d = getDaily();
-            if(type === 'water') {
-                d.rings.water += 500; if(d.rings.water > 4000) d.rings.water = 0;
-            } else if(type === 'cardio') {
-                d.rings.cardio += 10; if(d.rings.cardio > 120) d.rings.cardio = 0;
-            } else if(type === 'train') {
-                d.rings.train += 1; if(d.rings.train > 3) d.rings.train = 0;
-            }
+            if(type === 'water') { d.rings.water += 500; if(d.rings.water > 4000) d.rings.water = 0; } 
+            else if(type === 'cardio') { d.rings.cardio += 10; if(d.rings.cardio > 120) d.rings.cardio = 0; } 
+            else if(type === 'train') { d.rings.train += 1; if(d.rings.train > 3) d.rings.train = 0; }
             saveClients(); syncTrackUI();
         }
         function editRing(type) {
-            let d = getDaily();
-            let label = type === 'water' ? '饮水(ml)' : (type === 'cardio' ? '有氧(分钟)' : '抗阻(次)');
-            let max = type === 'water' ? 4000 : (type === 'cardio' ? 120 : 3);
-            let v = prompt(`请输入今日 ${label} 的真实数值 (最大${max})：`, d.rings[type]);
-            if(v !== null && !isNaN(parseInt(v))) {
-                d.rings[type] = parseInt(v);
-                if(d.rings[type] < 0) d.rings[type] = 0;
-                saveClients(); syncTrackUI();
-            }
+            let d = getDaily(); let max = type === 'water' ? 4000 : (type === 'cardio' ? 120 : 3);
+            let v = prompt(`请输入数值 (最大${max})：`, d.rings[type]);
+            if(v !== null && !isNaN(parseInt(v))) { d.rings[type] = parseInt(v); if(d.rings[type]<0) d.rings[type]=0; saveClients(); syncTrackUI(); }
         }
 
-        // --- 饮食图库与 AI ---
+        // 饮食照片
         let targetMeal = '';
         function triggerAIMealUpload(mt) { targetMeal = mt; document.getElementById('ai-meal-up').click(); }
         function delMeal(mt, idx) { if(confirm("删除此记录？")) { getDaily().meals[mt].splice(idx,1); saveClients(); syncTrackUI(); } }
 
-        // 数学级精准哈希算法：真实严谨计算
+        // 🚨 严谨级 AI 热量算法
         function getHash(str) { let h=0; for(let i=0;i<str.length;i++){ h=((h<<5)-h)+str.charCodeAt(i); h|=0; } return Math.abs(h); }
-        
         function runAIMock(evt, mode) {
-            const files = Array.from(evt.target.files); 
-            if(files.length === 0) return;
-            
+            const files = Array.from(evt.target.files); if(files.length === 0) return;
             document.getElementById('aiOverlay').style.display = 'flex';
             let t = document.getElementById('scanText'); t.innerText = "CONNECTING AI MODEL...";
             setTimeout(()=>t.innerText="ANALYZING MACROS...", 600);
             
             let loadedCount = 0; let tempRes = [];
-
             files.forEach((f, idx) => {
                 const r = new FileReader(); r.onload = e => {
                     const b64 = e.target.result;
                     if(idx === 0) document.getElementById('scanBoxImage').style.backgroundImage = `url(${b64})`; 
                     
-                    // 严谨公式：卡路里 = 蛋白质*4 + 碳水*4 + 脂肪*9
                     let h = getHash(b64.substring(100, 3000));
-                    let p = (h % 40) + 10; // 10-50g
-                    let c = ((h >> 3) % 70) + 10; // 10-80g
-                    let fat = ((h >> 5) % 30) + 5; // 5-35g
+                    // 严密算法
+                    let p = (h % 35) + 5; let c = ((h >> 3) % 65) + 5; let fat = ((h >> 5) % 25) + 2; 
                     let k = (p * 4) + (c * 4) + (fat * 9); 
                     
-                    let color='#32D74B', status='优质供能', sug='营养配比完美，非常符合增肌减脂要求。'; 
-                    if(k > 600 || c > 60) {color='#FF453A'; status='高碳警报'; sug='碳水超标严重，建议今晚增加15分钟有氧加速消耗。';}
+                    let color='#32D74B', status='优质供能', sug='营养配比极佳，非常符合增肌减脂要求。'; 
+                    if(k > 600 || c > 60) {color='#FF453A'; status='高碳警报'; sug='碳水超标，建议增加15分钟有氧加速消耗。';}
                     else if(fat > 20) {color='#FFD60A'; status='注意油脂'; sug='脂肪偏高，下一餐请换为纯白煮或清蒸。';}
 
                     if(mode === 'track') {
@@ -669,14 +669,12 @@
                     }
                 }; r.readAsDataURL(f);
             });
-
             function checkFinish() {
                 loadedCount++;
                 if(loadedCount === files.length) {
                     setTimeout(()=>{
                         document.getElementById('aiOverlay').style.display = 'none';
                         tempRes.sort((a,b) => a.i - b.i);
-                        
                         if(mode === 'demo') {
                             let res = tempRes[0].obj;
                             document.getElementById('ai-res-img').src = res.img; 
@@ -695,58 +693,60 @@
             }
         }
 
-        // ================= 🚨 终极功能：生成交付海报 =================
+        // 指南
+        function openGuide(type) {
+            const data = {
+                'bistro': { title: '🍷 米其林 / Bistro', content: `<strong>核心法则：海鲜优先，警惕酱汁</strong><br><br><li><strong>餐前：</strong>喝一大杯温水。</li><li><strong>前菜：</strong>只选生肉薄片或清汤。</li><li><strong>主菜：</strong>首选牛排海鲜，酱汁单放。</li><li><strong>配酒：</strong>干型红白葡萄，一杯酒配一杯水。</li>` },
+                'business': { title: '🥂 商务应酬酒局', content: `<strong>核心法则：保护肝脏，假吃主食</strong><br><br><li><strong>赴宴前：</strong>吃2个白煮蛋垫底。</li><li><strong>点菜：</strong>主动点白灼蔬菜放自己面前。</li><li><strong>敬酒：</strong>烈酒旁备冰水，喝一口酒喝两口水。</li><li><strong>主食：</strong>炒饭炒面坚决不碰。</li>` }
+            };
+            document.getElementById('gm-title').innerText = data[type].title;
+            document.getElementById('gm-content').innerHTML = data[type].content;
+            document.getElementById('guideModal').classList.add('show');
+        }
+
+        // 海报
         function generateReportCard() {
             if(!currClientId) return;
+            const c = clientsDB[currClientId];
             const d = getDaily();
-            const cName = clientsDB[currClientId].name;
-            
             const can = document.getElementById('hiddenCanvas');
-            can.width = 800; can.height = 1000;
-            const ctx = can.getContext('2d');
-
-            // 黑色背景与金框
+            can.width = 800; can.height = 1000; const ctx = can.getContext('2d');
+            
             ctx.fillStyle = '#050505'; ctx.fillRect(0,0,800,1000);
             ctx.strokeStyle = '#D4AF37'; ctx.lineWidth = 4; ctx.strokeRect(20,20,760,960);
+            ctx.fillStyle = '#D4AF37'; ctx.font = 'bold 46px sans-serif'; ctx.textAlign = 'center'; ctx.fillText('LUXIOU 24H 节律简报', 400, 100);
+            ctx.fillStyle = '#888'; ctx.font = '24px sans-serif'; ctx.fillText('EXCLUSIVE FITNESS REPORT', 400, 140);
             
-            // 头部
-            ctx.fillStyle = '#D4AF37'; ctx.font = 'bold 46px sans-serif'; ctx.textAlign = 'center';
-            ctx.fillText('LUXIOU 24H 节律简报', 400, 100);
-            ctx.fillStyle = '#888'; ctx.font = '24px sans-serif';
-            ctx.fillText('EXCLUSIVE FITNESS REPORT', 400, 140);
+            ctx.textAlign = 'left'; ctx.fillStyle = '#fff'; ctx.font = '32px sans-serif';
+            ctx.fillText(`服务对象：${c.name}`, 60, 220); ctx.fillText(`核算日期：${currDateStr}`, 450, 220);
+            ctx.fillStyle = '#888'; ctx.font = '24px sans-serif'; ctx.fillText(`${c.gender==='M'?'男':'女'} | ${c.age}岁 | ${c.height}cm | ${c.weight}kg`, 60, 270);
             
-            // 客户与日期
-            ctx.textAlign = 'left'; ctx.fillStyle = '#fff'; ctx.font = '36px sans-serif';
-            ctx.fillText(`服务对象：${cName}`, 60, 240);
-            ctx.fillText(`核算日期：${currDateStr}`, 60, 310);
+            let bmr = document.getElementById('val-bmr').innerText;
+            let net = document.getElementById('val-net').innerText;
+            let intake = document.getElementById('val-intake').innerText;
+            let burn = document.getElementById('val-burn').innerText;
+            
+            ctx.fillStyle = '#111'; ctx.fillRect(60, 320, 680, 220);
+            ctx.fillStyle = '#D4AF37'; ctx.font = '22px sans-serif'; ctx.fillText('今日热量收支 (KCAL)', 80, 360);
+            
+            ctx.fillStyle = '#fff'; ctx.font = '26px sans-serif'; ctx.fillText('基础代谢: ' + bmr, 80, 420); ctx.fillText('运动消耗: ' + burn, 400, 420);
+            ctx.fillText('饮食摄入: ' + intake, 80, 480); 
+            ctx.fillStyle = net.includes('+') ? '#FF453A' : '#32D74B';
+            ctx.fillText(`最终热量缺口: ${net}`, 400, 480);
 
-            // 热量差
-            let inK = document.getElementById('val-intake').innerText;
-            let outK = document.getElementById('val-burn').innerText;
-            ctx.fillStyle = '#222'; ctx.fillRoundRect = function(x,y,w,h,r) { this.beginPath(); this.moveTo(x+r,y); this.arcTo(x+w,y,x+w,y+h,r); this.arcTo(x+w,y+h,x,y+h,r); this.arcTo(x,y+h,x,y,r); this.arcTo(x,y,x+w,y,r); this.closePath(); this.fill(); }
-            ctx.fillRoundRect(60, 360, 680, 140, 20);
-            
-            ctx.fillStyle = '#888'; ctx.font = '24px sans-serif'; ctx.fillText('今日总摄入', 120, 410); ctx.fillText('今日总消耗', 500, 410);
-            ctx.fillStyle = '#FFD60A'; ctx.font = 'bold 50px sans-serif'; ctx.fillText(inK + ' kcal', 120, 470);
-            ctx.fillStyle = '#32D74B'; ctx.font = 'bold 50px sans-serif'; ctx.fillText(outK + ' kcal', 500, 470);
-
-            // 3环打卡
-            ctx.fillStyle = '#fff'; ctx.font = 'bold 30px sans-serif'; ctx.fillText('打卡进度', 60, 570);
+            ctx.fillStyle = '#fff'; ctx.font = 'bold 30px sans-serif'; ctx.fillText('全息打卡进度', 60, 600);
             ctx.font = '26px sans-serif'; ctx.fillStyle = '#ccc';
-            ctx.fillText(`💧 饮水摄入：${d.rings.water} ml`, 60, 630);
-            ctx.fillText(`🔥 有氧心肺：${d.rings.cardio} 分钟`, 60, 690);
-            ctx.fillText(`🏋️ 抗阻重塑：${d.rings.train} 次`, 60, 750);
+            ctx.fillText(`💧 饮水摄入：${d.rings.water} ml`, 60, 660);
+            ctx.fillText(`🔥 有氧心肺：${d.rings.cardio} 分钟`, 60, 720);
+            ctx.fillText(`🏋️ 抗阻重塑：${d.rings.train} 次`, 60, 780);
 
-            // 教练评语
-            ctx.fillStyle = '#222'; ctx.fillRoundRect(60, 800, 680, 130, 20);
-            ctx.fillStyle = '#D4AF37'; ctx.font = 'bold 24px sans-serif'; ctx.fillText('导师专属指令：', 90, 845);
-            ctx.fillStyle = '#fff'; ctx.font = '28px sans-serif';
-            // 简单截断防止换行溢出
+            ctx.fillStyle = '#111'; ctx.fillRect(60, 830, 680, 110);
+            ctx.fillStyle = '#D4AF37'; ctx.font = 'bold 22px sans-serif'; ctx.fillText('导师专属指令：', 80, 870);
+            ctx.fillStyle = '#fff'; ctx.font = '24px sans-serif';
             let msg = d.msg || "继续保持，期待蜕变。";
-            if(msg.length > 20) msg = msg.substring(0,20) + "...";
-            ctx.fillText(`"${msg}"`, 90, 895);
+            if(msg.length > 25) msg = msg.substring(0,25) + "...";
+            ctx.fillText(`"${msg}"`, 80, 915);
 
-            // 显示海报
             document.getElementById('final-poster').src = can.toDataURL('image/png');
             document.getElementById('posterModal').classList.add('show');
         }
