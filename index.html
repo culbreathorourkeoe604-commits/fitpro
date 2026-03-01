@@ -14,7 +14,7 @@
     <style>
         :root { --primary: #00f2fe; --secondary: #7000ff; --bg: #000; --card-bg: rgba(255, 255, 255, 0.03); --text: #fff; --grad: radial-gradient(circle at top right, #1a2a6c, #000 70%); }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
-        body { background: var(--bg); background-image: var(--grad); color: var(--text); font-family: -apple-system, sans-serif; margin: 0; padding: 20px; min-height: 100vh; transition: all 0.5s ease; display: flex; flex-direction: column; }
+        body { background: var(--bg); background-image: var(--grad); color: var(--text); font-family: -apple-system, sans-serif; margin: 0; padding: 20px; min-height: 100vh; transition: all 0.5s ease; display: flex; flex-direction: column; overflow-x: hidden;}
         
         #style-trigger { position: fixed; top: 15px; right: 15px; z-index: 2000; background: rgba(255,255,255,0.1); padding: 8px 15px; border-radius: 50px; font-size: 11px; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2); color: #fff; }
         #style-panel { display: none; position: fixed; top: 60px; right: 15px; z-index: 2001; background: #111; border: 1px solid #333; border-radius: 15px; padding: 10px; width: 140px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
@@ -32,15 +32,46 @@
         .btn-c { background: linear-gradient(90deg, var(--secondary), #e100ff); box-shadow: 0 5px 15px rgba(112, 0, 255, 0.3); border: none; }
         
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; flex: 1; }
-        .card { background: #111; border: 2px solid transparent; border-radius: 16px; overflow: hidden; position: relative; height: 160px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
-        .card img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.8); }
-        .card-info { position: absolute; bottom: 0; width: 100%; padding: 12px 5px; font-size: 11px; text-align: center; font-weight: bold; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: #fff; }
+        .card { background: #111; border: 2px solid transparent; border-radius: 16px; overflow: hidden; position: relative; height: 160px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); cursor: pointer;}
+        .card img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.8); transition: 0.3s;}
+        .card:active img { transform: scale(1.05); }
+        .card-info { position: absolute; bottom: 0; width: 100%; padding: 12px 5px; font-size: 11px; text-align: center; font-weight: bold; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: #fff; pointer-events: none;}
         
-        #modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 1000; flex-direction: column; align-items: center; padding-top: 50px; backdrop-filter: blur(15px); }
-        .tab-box { display: flex; gap: 8px; margin-bottom: 15px; width: 92%; }
-        .tab-box.triple .tab { font-size: 11px; padding: 8px 5px; flex: 1; background: rgba(255,255,255,0.05); border-radius: 8px; text-align: center; color: #fff; border: 1px solid transparent; }
-        .tab-box.triple .tab.active { background: var(--primary); color: #000; font-weight: bold; }
-        #modalImg { max-width: 90%; max-height: 60%; border-radius: 15px; box-shadow: 0 0 25px var(--primary); }
+        /* 🚨 核心升级：内嵌的【背书库】高级面板 CSS */
+        .endorse-modal { position: fixed; top: 100vh; left: 0; width: 100%; height: 100vh; background: #050505; z-index: 3000; transition: top 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); display: flex; flex-direction: column; overflow-x: hidden;}
+        .endorse-modal.show { top: 0; }
+        
+        .e-header { height: 60px; display: flex; justify-content: space-between; align-items: center; padding: 0 20px; background: rgba(5,5,5,0.95); border-bottom: 1px solid rgba(212,175,55,0.2); backdrop-filter: blur(10px); flex-shrink: 0;}
+        .e-title { font-size: 16px; font-weight: bold; color: #D4AF37; }
+        .e-close { color: #fff; font-size: 28px; background: none; border: none; padding: 0 10px; cursor: pointer; line-height: 1;}
+
+        .e-seg-control { display: flex; background: rgba(20,20,25,0.8); border-radius: 12px; padding: 6px; margin: 20px 20px 15px; border: 1px solid rgba(255,255,255,0.05); flex-shrink: 0;}
+        .e-seg-btn { flex: 1; text-align: center; padding: 12px 0; font-size: 14px; font-weight: bold; color: #666; border-radius: 8px; transition: 0.3s; cursor: pointer; position: relative; z-index: 2;}
+        .e-seg-btn.active { color: #000; font-weight: 900;}
+        .e-seg-btn.active::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, #D4AF37, #C5A059); border-radius: 8px; z-index: -1; box-shadow: 0 4px 12px rgba(212, 175, 55, 0.4); }
+
+        .e-body { flex: 1; overflow-y: auto; padding: 0 20px 40px; -webkit-overflow-scrolling: touch; }
+        
+        .e-tab-sec { display: none; flex-direction: column; animation: fadeIn 0.4s ease; }
+        .e-tab-sec.active { display: flex; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .e-sec-header { margin-bottom: 20px; text-align: center; }
+        .e-sec-title { font-size: 18px; font-weight: 900; color: #fff; margin-bottom: 6px; letter-spacing: 1px;}
+        .e-sec-desc { font-size: 12px; color: #8A92A3; line-height: 1.5; }
+
+        .e-upload-btn { background: linear-gradient(135deg, rgba(212,175,55,0.1), rgba(212,175,55,0.05)); border: 1px dashed #D4AF37; color: #D4AF37; text-align: center; padding: 15px; border-radius: 12px; font-size: 14px; font-weight: bold; cursor: pointer; margin-bottom: 25px; transition: 0.3s; letter-spacing: 1px;}
+        .e-upload-btn:active { background: rgba(212,175,55,0.2); transform: scale(0.98); }
+
+        .e-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
+        .e-item { position: relative; border-radius: 12px; overflow: hidden; background: #111; border: 1px solid rgba(212,175,55,0.3); box-shadow: 0 8px 20px rgba(0,0,0,0.8); }
+        .e-item img { width: 100%; height: 220px; object-fit: cover; display: block; filter: brightness(0.95) contrast(1.05);}
+        .cert-view .e-item img { height: 200px; object-fit: contain; background: #0A0A0C; padding: 5px;}
+        .coach-view .e-item img { height: 260px; object-fit: cover; }
+        
+        .e-delete { position: absolute; top: 8px; right: 8px; width: 26px; height: 26px; background: rgba(0,0,0,0.7); border: 1px solid rgba(255,59,48,0.5); border-radius: 50%; display: flex; justify-content: center; align-items: center; color: #FF3B30; font-size: 16px; font-weight: bold; cursor: pointer; z-index: 10;}
+        .e-delete:active { background: #FF3B30; color: #fff; }
+        .e-empty { grid-column: span 2; text-align: center; padding: 40px 20px; color: #555; border: 1px dashed #333; border-radius: 12px; font-size: 13px; }
     </style>
 </head>
 <body>
@@ -72,19 +103,52 @@
         <div class="card" style="border-color:#eab308" onclick="window.location.href='./plan.html'">
             <img src="plan.jpg" loading="lazy"><div class="card-info">【高定方案库】</div>
         </div>
-        <div class="card" style="border-color:#22d3ee" onclick="window.location.href='./证书.html'">
+        
+        <div class="card" style="border-color:#22d3ee" onclick="openEndorseModal()">
             <img src="cert.jpg" loading="lazy"><div class="card-info">【背书库】</div>
         </div>
+        
         <div class="card" style="border-color:#f472b6" onclick="window.location.href='./price.html'">
             <img src="product.jpg" loading="lazy"><div class="card-info">【黑金报价库】</div>
         </div>
     </div>
 
-    <div id="modal">
-        <div id="modalTitle" style="color:var(--primary); font-size:18px; margin-bottom:20px; font-weight:bold;"></div>
-        <div class="tab-box triple" id="tabBox"></div>
-        <img id="modalImg" src="">
-        <div onclick="document.getElementById('modal').style.display='none'" style="margin-top:30px; color:#fff; font-size:18px; border:1px solid #444; padding:8px 25px; border-radius:50px;">× 点击关闭</div>
+    <div id="endorseModal" class="endorse-modal">
+        <div class="e-header">
+            <div class="e-title">R玥精致健身 | 品牌背书库</div>
+            <button class="e-close" onclick="closeEndorseModal()">×</button>
+        </div>
+        
+        <div class="e-seg-control">
+            <div class="e-seg-btn active" onclick="switchEndorseTab('cert', this)">资质证书</div>
+            <div class="e-seg-btn" onclick="switchEndorseTab('coach', this)">教练团队墙</div>
+        </div>
+
+        <div class="e-body">
+            <div id="e-view-cert" class="e-tab-sec cert-view active">
+                <div class="e-sec-header">
+                    <div class="e-sec-title">国际权威认证矩阵</div>
+                    <div class="e-sec-desc">医学排查与运动康复级别执业资质展示。</div>
+                </div>
+                <div class="e-upload-btn" onclick="document.getElementById('cert-upload').click()">
+                    + 从手机相册上传【资质证书】
+                </div>
+                <input type="file" id="cert-upload" multiple accept="image/*" style="display:none;" onchange="handleUpload(event, 'cert')">
+                <div class="e-grid" id="cert-gallery"></div>
+            </div>
+
+            <div id="e-view-coach" class="e-tab-sec coach-view">
+                <div class="e-sec-header">
+                    <div class="e-sec-title">顶配重塑导师阵容</div>
+                    <div class="e-sec-desc">由内而外散发极致美感，您的未来身材推演者。</div>
+                </div>
+                <div class="e-upload-btn" onclick="document.getElementById('coach-upload').click()">
+                    + 从手机相册上传【教练形象照】
+                </div>
+                <input type="file" id="coach-upload" multiple accept="image/*" style="display:none;" onchange="handleUpload(event, 'coach')">
+                <div class="e-grid" id="coach-gallery"></div>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -110,22 +174,97 @@
             togglePanel();
         }
 
-        // 这个旧的弹窗方法保留，防止其他地方用到，但背书库已经不用它了
-        function showModule(title, t1, i1, t2, i2) {
-            const m = document.getElementById('modal');
-            document.getElementById('modalTitle').innerText = title;
-            document.getElementById('tabBox').innerHTML = `
-                <div class="tab active" onclick="switchTab(this, '${i1}')">${t1}</div>
-                <div class="tab" onclick="switchTab(this, '${i2}')">${t2}</div>
-            `;
-            document.getElementById('modalImg').src = i1;
-            m.style.display = 'flex';
+        // ================= 内置背书库逻辑 =================
+        let endorseDB = { cert: [], coach: [] };
+
+        // 页面初始化时加载相册数据
+        window.onload = function() {
+            let savedCert = localStorage.getItem('ryue_cert_images');
+            let savedCoach = localStorage.getItem('ryue_coach_images');
+            if(savedCert) endorseDB.cert = JSON.parse(savedCert);
+            if(savedCoach) endorseDB.coach = JSON.parse(savedCoach);
+            renderGallery('cert');
+            renderGallery('coach');
         }
 
-        function switchTab(el, img) {
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            el.classList.add('active');
-            document.getElementById('modalImg').src = img;
+        function openEndorseModal() {
+            document.getElementById('endorseModal').classList.add('show');
+        }
+
+        function closeEndorseModal() {
+            document.getElementById('endorseModal').classList.remove('show');
+        }
+
+        function switchEndorseTab(type, btn) {
+            document.querySelectorAll('.e-seg-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            document.querySelectorAll('.e-tab-sec').forEach(sec => sec.classList.remove('active'));
+            document.getElementById('e-view-' + type).classList.add('active');
+        }
+
+        function handleUpload(event, type) {
+            const files = Array.from(event.target.files);
+            if(files.length === 0) return;
+            
+            let loadedCount = 0;
+            files.forEach((file) => {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = new Image();
+                    img.onload = function() {
+                        const canvas = document.createElement('canvas');
+                        const ctx = canvas.getContext('2d');
+                        const MAX_WIDTH = 800;
+                        let scale = img.width > MAX_WIDTH ? (MAX_WIDTH / img.width) : 1;
+                        
+                        canvas.width = img.width * scale;
+                        canvas.height = img.height * scale;
+                        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                        
+                        const base64 = canvas.toDataURL('image/jpeg', 0.8);
+                        endorseDB[type].unshift(base64); // 新图在最前面
+                        
+                        loadedCount++;
+                        if(loadedCount === files.length) {
+                            localStorage.setItem(`ryue_${type}_images`, JSON.stringify(endorseDB[type]));
+                            renderGallery(type);
+                            event.target.value = '';
+                        }
+                    };
+                    img.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        function renderGallery(type) {
+            const container = document.getElementById(`${type}-gallery`);
+            const images = endorseDB[type];
+            container.innerHTML = ''; 
+
+            if(images.length === 0) {
+                container.innerHTML = `<div class="e-empty">暂无照片数据<br><span style="font-size:11px; color:#666;">点击上方按钮从手机相册导入</span></div>`;
+                return;
+            }
+
+            images.forEach((base64, index) => {
+                let html = `
+                    <div class="e-item">
+                        <div class="e-delete" onclick="deleteImage('${type}', ${index})">×</div>
+                        <img src="${base64}" alt="image">
+                    </div>
+                `;
+                container.insertAdjacentHTML('beforeend', html);
+            });
+        }
+
+        function deleteImage(type, index) {
+            if(confirm('确定要移除这张照片吗？')) {
+                endorseDB[type].splice(index, 1);
+                localStorage.setItem(`ryue_${type}_images`, JSON.stringify(endorseDB[type]));
+                renderGallery(type);
+                if(navigator.vibrate) navigator.vibrate(20);
+            }
         }
 
         let timer;
