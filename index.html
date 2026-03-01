@@ -37,7 +37,7 @@
         .card:active img { transform: scale(1.05); }
         .card-info { position: absolute; bottom: 0; width: 100%; padding: 12px 5px; font-size: 11px; text-align: center; font-weight: bold; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: #fff; pointer-events: none;}
         
-        /* 🚨 内嵌的【背书库】高级面板 CSS */
+        /* 背书库高级面板 */
         .endorse-modal { position: fixed; top: 100vh; left: 0; width: 100%; height: 100vh; background: #050505; z-index: 3000; transition: top 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); display: flex; flex-direction: column; overflow-x: hidden;}
         .endorse-modal.show { top: 0; }
         
@@ -50,7 +50,8 @@
         .e-seg-btn.active { color: #000; font-weight: 900;}
         .e-seg-btn.active::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, #D4AF37, #C5A059); border-radius: 8px; z-index: -1; box-shadow: 0 4px 12px rgba(212, 175, 55, 0.4); }
 
-        .e-body { flex: 1; overflow-y: auto; padding: 0 20px 40px; -webkit-overflow-scrolling: touch; }
+        /* 保证面板可滚动 */
+        .e-body { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 0 20px 80px; -webkit-overflow-scrolling: touch; overscroll-behavior-y: contain;}
         
         .e-tab-sec { display: none; flex-direction: column; animation: fadeIn 0.4s ease; }
         .e-tab-sec.active { display: flex; }
@@ -67,8 +68,8 @@
 
         .e-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
         
-        /* 拖拽时的浮空高级效果 */
-        .e-item { position: relative; border-radius: 12px; overflow: hidden; background: #111; border: 1px solid rgba(212,175,55,0.3); box-shadow: 0 8px 20px rgba(0,0,0,0.8); cursor: grab; touch-action: none;}
+        /* 移除 touch-action: none; 确保页面可以上下滑动 */
+        .e-item { position: relative; border-radius: 12px; overflow: hidden; background: #111; border: 1px solid rgba(212,175,55,0.3); box-shadow: 0 8px 20px rgba(0,0,0,0.8); cursor: grab;}
         .e-item.sortable-ghost { opacity: 0.4; }
         .e-item.sortable-drag { box-shadow: 0 15px 30px rgba(212,175,55,0.5); transform: scale(1.05); z-index: 100;}
         
@@ -76,7 +77,7 @@
         .cert-view .e-item img { height: 200px; object-fit: contain; background: #0A0A0C; padding: 5px;}
         .coach-view .e-item img { height: 260px; object-fit: cover; }
         
-        /* 🚨 修复的删除按钮，层级极高 */
+        /* 删除按钮 */
         .e-delete { position: absolute; top: 8px; right: 8px; width: 28px; height: 28px; background: rgba(0,0,0,0.8); border: 1px solid rgba(255,59,48,0.6); border-radius: 50%; display: flex; justify-content: center; align-items: center; color: #FF3B30; font-size: 18px; font-weight: bold; cursor: pointer; z-index: 999; backdrop-filter: blur(5px);}
         .e-delete:active { background: #FF3B30; color: #fff; transform: scale(0.9);}
         
@@ -142,7 +143,7 @@
                 <div class="e-upload-btn" onclick="document.getElementById('cert-upload').click()">
                     + 从手机相册多选上传【资质证书】
                 </div>
-                <div class="e-tip">💡 提示：无限上传，长按图片即可随意拖拽排序</div>
+                <div class="e-tip">💡 提示：无限上传，长按图片0.2秒即可随意拖拽排序</div>
                 <input type="file" id="cert-upload" multiple="multiple" accept="image/*" style="display:none;" onchange="handleUpload(event, 'cert')">
                 <div class="e-grid" id="cert-gallery"></div>
             </div>
@@ -155,7 +156,7 @@
                 <div class="e-upload-btn" onclick="document.getElementById('coach-upload').click()">
                     + 从手机相册多选上传【教练形象照】
                 </div>
-                <div class="e-tip">💡 提示：无限上传，长按图片即可随意拖拽排序</div>
+                <div class="e-tip">💡 提示：无限上传，长按图片0.2秒即可随意拖拽排序</div>
                 <input type="file" id="coach-upload" multiple="multiple" accept="image/*" style="display:none;" onchange="handleUpload(event, 'coach')">
                 <div class="e-grid" id="coach-gallery"></div>
             </div>
@@ -185,13 +186,13 @@
             togglePanel();
         }
 
-        // ================= 🚨 终极核武器：IndexedDB 无限容量数据库 =================
+        // 数据库与数据管理
         let endorseDB = { cert: [], coach: [] };
         let sortableCert = null;
         let sortableCoach = null;
         let idb = null;
 
-        // 页面初始化时，优先连接高级数据库
+        // 优先连接高级数据库 IndexedDB，突破 5MB 限制
         window.onload = function() {
             const request = window.indexedDB.open("RyueEndorseDB", 1);
             
@@ -204,12 +205,11 @@
             
             request.onsuccess = function(e) {
                 idb = e.target.result;
-                loadFromDB(); // 从无限数据库加载数据
+                loadFromDB(); 
             };
             
             request.onerror = function(e) {
-                console.error("高级数据库受限，降级使用基础存储。");
-                // 数据库失败时的备用方案（LocalStorage）
+                // 降级使用基础存储
                 let savedCert = localStorage.getItem('ryue_cert_images');
                 let savedCoach = localStorage.getItem('ryue_coach_images');
                 if(savedCert) endorseDB.cert = JSON.parse(savedCert);
@@ -219,7 +219,6 @@
             };
         }
 
-        // 读取数据库
         function loadFromDB() {
             const tx = idb.transaction("galleryStore", "readonly");
             const store = tx.objectStore("galleryStore");
@@ -234,7 +233,6 @@
             };
         }
 
-        // 保存到数据库
         function saveToDB(type) {
             if(idb) {
                 const tx = idb.transaction("galleryStore", "readwrite");
@@ -243,7 +241,7 @@
                 try {
                     localStorage.setItem(`ryue_${type}_images`, JSON.stringify(endorseDB[type]));
                 } catch(e) {
-                    alert("手机本地微型存储已满！系统已拦截崩溃。");
+                    alert("手机本地微型存储已满！部分照片可能无法长期保存。");
                 }
             }
         }
@@ -263,7 +261,7 @@
             document.getElementById('e-view-' + type).classList.add('active');
         }
 
-        // 🚨 并发多图压缩引擎，不卡死，不爆内存
+        // 并发压缩上传引擎
         function handleUpload(event, type) {
             const files = Array.from(event.target.files);
             if(files.length === 0) return;
@@ -279,26 +277,23 @@
                         const canvas = document.createElement('canvas');
                         const ctx = canvas.getContext('2d');
                         
-                        // 高级压缩：最大宽度1080，保证画质同时压缩体积
-                        const MAX_WIDTH = 1080;
+                        // 压缩优化：宽度上限设为 600px，极大减少体积
+                        const MAX_WIDTH = 600;
                         let scale = img.width > MAX_WIDTH ? (MAX_WIDTH / img.width) : 1;
                         
                         canvas.width = img.width * scale;
                         canvas.height = img.height * scale;
                         ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
                         
-                        // 压缩率0.75，肉眼看不出区别，但内存占用缩减一半
-                        const base64 = canvas.toDataURL('image/jpeg', 0.75);
+                        // 压缩画质设为 0.6，视觉无损，内存占用降低一倍
+                        const base64 = canvas.toDataURL('image/jpeg', 0.6);
                         
                         tempImages.push({ idx: index, data: base64 });
                         loadedCount++;
                         
                         if(loadedCount === files.length) {
-                            // 保证相册多选时的顺序不被打乱
                             tempImages.sort((a,b) => a.idx - b.idx);
                             const sortedBase64 = tempImages.map(item => item.data);
-                            
-                            // 将新照片放到最前面
                             endorseDB[type] = sortedBase64.concat(endorseDB[type]);
                             
                             saveToDB(type);
@@ -323,7 +318,6 @@
             }
 
             images.forEach((base64, index) => {
-                // 🚨 注意这里的 event，精准传递给删除函数
                 let html = `
                     <div class="e-item" data-index="${index}">
                         <div class="e-delete" onclick="deleteImage('${type}', ${index}, event)">×</div>
@@ -333,21 +327,20 @@
                 container.insertAdjacentHTML('beforeend', html);
             });
             
-            // 初始化/重置拖拽引擎
             initSortable(type, container);
         }
 
-        // 🚨 顶级悬浮拖拽引擎配置
+        // 拖拽排序引擎配置
         function initSortable(type, container) {
             const config = {
                 animation: 150,
-                delay: 200, // 长按 0.2 秒后悬浮，完美防误触
+                delay: 250, // 增加延迟至 250ms，长按后才触发，防止误触
                 delayOnTouchOnly: true,
-                filter: ".e-delete", // 拖拽引擎彻底无视删除按钮
+                fallbackTolerance: 5, // 核心：允许 5px 以内的误滑动不触发拖拽，恢复页面原生滚动
+                filter: ".e-delete",
                 preventOnFilter: false,
                 onEnd: function(evt) {
                     const arr = endorseDB[type];
-                    // 数组内元素位置交换
                     const movedItem = arr.splice(evt.oldIndex, 1)[0];
                     arr.splice(evt.newIndex, 0, movedItem);
                     
@@ -365,14 +358,13 @@
             }
         }
 
-        // 🚨 终极霸体防误触：加入 event.stopPropagation()
+        // 拦截删除事件，防止渗透
         function deleteImage(type, index, event) {
-            event.stopPropagation(); // 阻止点击事件渗透到下层的拖拽引擎！
+            event.stopPropagation();
             if(confirm('确定要永久移除这张照片吗？')) {
                 endorseDB[type].splice(index, 1);
-                saveToDB(type); // 同步到无限数据库
+                saveToDB(type); 
                 renderGallery(type);
-                if(navigator.vibrate) navigator.vibrate(20);
             }
         }
 
