@@ -36,7 +36,6 @@
         .detail-modal { position: fixed; top: 100vh; left: 0; width: 100%; height: 100vh; background: var(--bg); z-index: 999; transition: top 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); display: flex; flex-direction: column; overflow-x: hidden; }
         .detail-modal.show { top: 0; }
 
-        /* 优化头部大叉 */
         .modal-header { height: 60px; display: flex; justify-content: space-between; align-items: center; padding: 0 20px; background: rgba(5,5,5,0.95); border-bottom: 1px solid rgba(212,175,55,0.2); backdrop-filter: blur(10px); flex-shrink: 0; position: relative; z-index: 50;}
         .modal-title { font-size: 16px; font-weight: bold; color: var(--primary); }
         .close-btn { color: #aaa; font-size: 32px; font-weight: normal; background: none; border: none; padding: 10px 20px; margin-right: -15px; cursor: pointer; transition: 0.3s; touch-action: manipulation;}
@@ -112,22 +111,24 @@
         .visual-feedback-section { margin-top: 30px; background: #0a0a0c; border: 1px solid rgba(212, 175, 55, 0.15); border-radius: 16px; padding: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
         .fb-header { text-align: center; font-size: 15px; font-weight: 900; color: var(--primary); margin-bottom: 15px; letter-spacing: 2px; }
         
-        .admin-upload-btn { background: linear-gradient(135deg, rgba(212,175,55,0.1), rgba(212,175,55,0.05)); border: 1px dashed var(--primary); color: var(--primary); text-align: center; padding: 12px; border-radius: 8px; font-size: 13px; font-weight: bold; cursor: pointer; margin-bottom: 15px; transition: 0.3s; letter-spacing: 1px; box-shadow: 0 4px 10px rgba(0,0,0,0.5);}
-        .admin-upload-btn:active { background: rgba(212,175,55,0.2); transform: scale(0.98); }
-
-        .visual-card { width: 100%; height: 320px; border-radius: 12px; overflow: hidden; position: relative; border: 1px solid rgba(255,255,255,0.1); background: #111;}
-        .visual-img { width: 100%; height: 100%; object-fit: cover; transition: all 0.6s cubic-bezier(0.2, 0.8, 0.2, 1); }
+        /* 🚨 核心升级：滑动轮播图样式 */
+        .visual-card { width: 100%; height: 320px; border-radius: 12px; overflow: hidden; position: relative; border: 1px solid rgba(255,255,255,0.1); background: #111; touch-action: pan-y pinch-zoom;}
+        .carousel-track { display: flex; width: 400%; height: 100%; transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); will-change: transform; cursor: grab;}
+        .carousel-track:active { cursor: grabbing; }
+        .visual-img { width: 25%; height: 100%; object-fit: cover; flex-shrink: 0; pointer-events: none; filter: brightness(0.95) saturate(1.05);}
         
+        .carousel-indicators { position: absolute; bottom: 110px; left: 50%; transform: translateX(-50%); display: flex; gap: 6px; z-index: 20; pointer-events: none;}
+        .c-dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,0.3); transition: 0.3s; }
+        .c-dot.active { background: var(--primary); width: 12px; box-shadow: 0 0 8px var(--primary);}
+
         .scanning-line { position: absolute; top: -10%; left: 0; width: 100%; height: 2px; background: rgba(212, 175, 55, 0.9); box-shadow: 0 0 25px 8px rgba(212, 175, 55, 0.5); opacity: 0; z-index: 5; pointer-events: none;}
         @keyframes aiScan { 0% { top: -10%; opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { top: 110%; opacity: 0; } }
         .scanning-active .scanning-line { animation: aiScan 1.5s ease-in-out; }
-        .scanning-active .visual-img { filter: brightness(1.05) saturate(1.05); transform: scale(1.05); }
 
         .visual-overlay { position: absolute; bottom: 0; left: 0; width: 100%; padding: 40px 15px 15px; background: linear-gradient(to top, rgba(0,0,0,0.95), rgba(0,0,0,0.3), transparent); display: flex; flex-direction: column; justify-content: flex-end; z-index: 10; pointer-events: none;}
         .visual-title { color: var(--primary); font-size: 20px; font-weight: 900; letter-spacing: 1px; margin-bottom: 6px; text-shadow: 0 2px 5px rgba(0,0,0,0.8);}
         .visual-desc { color: #fff; font-size: 13px; line-height: 1.5; text-shadow: 0 1px 3px rgba(0,0,0,0.8); font-weight: bold;}
 
-        /* 🚨 核心修复：提升底部结账栏的 z-index，彻底解决点不到的Bug */
         .checkout-bar { position: fixed; bottom: 0; left: 0; width: 100%; padding: 15px 20px 25px; background: rgba(10, 10, 12, 0.98); border-top: 1px solid rgba(212,175,55,0.3); box-shadow: 0 -10px 30px rgba(0,0,0,0.8); z-index: 9999; backdrop-filter: blur(15px); display: flex; justify-content: space-between; align-items: center; }
         .checkout-info { display: flex; flex-direction: column; gap: 4px; }
         .c-info-label { font-size: 11px; color: #888; font-weight: bold; letter-spacing: 1px; }
@@ -474,19 +475,24 @@
         let globalTotalExact = 0; 
         let userFreq = 3; 
         let selectedUpsell = {};
-
-        // 🚨 安全定时器，防止误触清空数据
         let closeModalTimer = null;
 
-        function openDetail(key) {
-            // 如果刚刚点过关闭，马上又点开，拦截定时器，保护数据不被清空！
-            if(closeModalTimer) {
-                clearTimeout(closeModalTimer);
-                closeModalTimer = null;
-            }
+        // 🚨 核心升级：滑动相关变量
+        let currentVisualIndex = 0; // 0, 1, 2, 3
+        let startX = 0;
+        let currentTranslate = 0;
+        let prevTranslate = 0;
+        let isDragging = false;
 
+        function openDetail(key) {
+            if(closeModalTimer) { clearTimeout(closeModalTimer); closeModalTimer = null; }
             currentPlanKey = key;
             userFreq = 3; 
+            // 重置滑动索引
+            currentVisualIndex = 0;
+            currentTranslate = 0;
+            prevTranslate = 0;
+
             const data = planData[key];
             const modal = document.getElementById('detailModal');
             const body = document.getElementById('modalBody');
@@ -497,13 +503,13 @@
                 </div>
             `;
 
+            // 🚨 核心升级：HTML 结构改造为轮播图
             body.innerHTML = `
                 <div class="hero-banner">
                     <div class="hero-watermark">${data.icon}</div>
                     <div class="m-hero-title">${data.title}</div>
                     <div class="m-hero-desc">${data.desc}</div>
                 </div>
-
                 <div class="freq-panel">
                     <div class="freq-title">✦ 设定预期每周出勤频率 (用于科学排课)</div>
                     <div class="freq-group">
@@ -517,7 +523,7 @@
                 
                 <div class="phase-title-main">请点选您期望达成的重塑目标阶段：</div>
                 
-                <div class="phase-box" data-phase="1" data-weeks="${data.p1_w}" onclick="togglePhase(this, event)">
+                <div class="phase-box" id="p-box-1" data-phase="1" data-weeks="${data.p1_w}" onclick="togglePhase(this, event)">
                     <div class="check-circle"></div>
                     <div class="p-step">● PHASE 01 / 阶段一</div>
                     <div class="p-cycle-highlight">
@@ -532,7 +538,7 @@
                     </div>
                 </div>
 
-                <div class="phase-box" data-phase="2" data-weeks="${data.p2_w}" onclick="togglePhase(this, event)">
+                <div class="phase-box" id="p-box-2" data-phase="2" data-weeks="${data.p2_w}" onclick="togglePhase(this, event)">
                     <div class="check-circle"></div>
                     <div class="p-step">● PHASE 02 / 阶段二</div>
                     <div class="p-cycle-highlight">
@@ -547,7 +553,7 @@
                     </div>
                 </div>
 
-                <div class="phase-box" data-phase="3" data-weeks="${data.p3_w}" onclick="togglePhase(this, event)">
+                <div class="phase-box" id="p-box-3" data-phase="3" data-weeks="${data.p3_w}" onclick="togglePhase(this, event)">
                     <div class="check-circle"></div>
                     <div class="p-step">● PHASE 03 / 阶段三</div>
                     <div class="p-cycle-highlight">
@@ -562,7 +568,7 @@
                     </div>
                 </div>
 
-                <div class="phase-box" data-phase="4" data-weeks="${data.p4_w}" onclick="togglePhase(this, event)">
+                <div class="phase-box" id="p-box-4" data-phase="4" data-weeks="${data.p4_w}" onclick="togglePhase(this, event)">
                     <div class="check-circle"></div>
                     <div class="p-step">● PHASE 04 / 阶段四 (VIP限定)</div>
                     <div class="p-cycle-highlight">
@@ -581,7 +587,6 @@
                     <div class="check-circle"></div>
                     <div class="p-step">★ 特殊通道 / 教练专属定制组合包</div>
                     <div class="p-name" style="margin-bottom: 15px;">突破单一局限，全息方案托管</div>
-                    
                     <div class="custom-builder">
                         <div class="cb-item">
                             <div class="cb-label">常规训练课 <span>(减脂/增肌/塑形 <strong style="color:var(--primary);">60分钟/节</strong>)</span></div>
@@ -613,19 +618,99 @@
                 <div class="visual-feedback-section" id="visual-sec">
                     ${adminBtnHTML}
                     <div class="scanning-line"></div>
-                    <div class="fb-header">✦ AI 目标形态视觉投射 ✦</div>
-                    <div class="visual-card">
-                        <img id="visual-img" class="visual-img" src="${data.img1}" alt="形态演变" style="filter: brightness(0.9);">
+                    <div class="fb-header">✦ AI 目标形态视觉投射 (左右滑动查看) ✦</div>
+                    
+                    <div class="visual-card" id="visual-card-container">
+                        <div class="carousel-track" id="carousel-track">
+                            <img class="visual-img" id="v-img-1" src="${data.img1}" alt="Phase 1">
+                            <img class="visual-img" id="v-img-2" src="${data.img2}" alt="Phase 2">
+                            <img class="visual-img" id="v-img-3" src="${data.img3}" alt="Phase 3">
+                            <img class="visual-img" id="v-img-4" src="${data.img4}" alt="Phase 4">
+                        </div>
                         <div class="visual-overlay">
                             <div class="visual-title" id="visual-title">等待接入重塑网络...</div>
-                            <div class="visual-desc" id="visual-desc">点选上方阶段，AI将为您投射巅峰形态</div>
+                            <div class="visual-desc" id="visual-desc">点选上方阶段，或左右滑动查看巅峰形态</div>
+                        </div>
+                        <div class="carousel-indicators">
+                            <div class="c-dot active" id="dot-0"></div>
+                            <div class="c-dot" id="dot-1"></div>
+                            <div class="c-dot" id="dot-2"></div>
+                            <div class="c-dot" id="dot-3"></div>
                         </div>
                     </div>
                 </div>
             `;
             
             modal.classList.add('show');
+            // 🚨 核心升级：初始化触摸事件
+            initTouchEvents();
             updateCheckout(); 
+        }
+
+        // ================= 🚨 核心升级：触摸滑动逻辑 =================
+        function initTouchEvents() {
+            const track = document.getElementById('carousel-track');
+            const card = document.getElementById('visual-card-container');
+
+            card.addEventListener('touchstart', touchStart);
+            card.addEventListener('touchmove', touchMove);
+            card.addEventListener('touchend', touchEnd);
+
+            function touchStart(event) {
+                isDragging = true;
+                startX = event.touches[0].clientX;
+                // 按下时暂停过渡动画，保证跟手
+                track.style.transition = 'none';
+            }
+
+            function touchMove(event) {
+                if (!isDragging) return;
+                const currentX = event.touches[0].clientX;
+                const diffX = currentX - startX;
+                // 实时移动轨道
+                track.style.transform = `translateX(${prevTranslate + diffX}px)`;
+            }
+
+            function touchEnd(event) {
+                isDragging = false;
+                const movedBy = event.changedTouches[0].clientX - startX;
+                
+                // 恢复过渡动画
+                track.style.transition = 'transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1)';
+
+                // 判断滑动方向 (阈值 50px)
+                if (movedBy < -50 && currentVisualIndex < 3) {
+                    currentVisualIndex++;
+                } else if (movedBy > 50 && currentVisualIndex > 0) {
+                    currentVisualIndex--;
+                }
+
+                // 滑动到指定位置
+                slideToIndex(currentVisualIndex);
+            }
+        }
+
+        // 滑动到指定索引，并联动更新上方选项卡
+        function slideToIndex(index) {
+            currentVisualIndex = index;
+            const track = document.getElementById('carousel-track');
+            const cardWidth = document.getElementById('visual-card-container').offsetWidth;
+            currentTranslate = index * -cardWidth;
+            prevTranslate = currentTranslate;
+            track.style.transform = `translateX(${currentTranslate}px)`;
+
+            // 更新指示点
+            document.querySelectorAll('.c-dot').forEach((dot, idx) => {
+                dot.classList.toggle('active', idx === index);
+            });
+
+            // 🚨 核心联动：滑动图片后，自动触发上方对应 Phase 的点击
+            const targetPhaseId = `p-box-${index + 1}`;
+            const targetPhaseBox = document.getElementById(targetPhaseId);
+            if (targetPhaseBox && !targetPhaseBox.classList.contains('selected')) {
+                // 模拟点击，但传入一个特殊标志以避免死循环
+                togglePhase(targetPhaseBox, null, true);
+            }
         }
 
         // ================= 🚨 专属图库控制台逻辑 =================
@@ -658,6 +743,10 @@
                     const base64 = canvas.toDataURL('image/jpeg', 0.8);
                     document.getElementById(`admin-prev-${phase}`).src = base64;
                     planData[currentPlanKey][`img${phase}`] = base64;
+                    // 实时更新轮播图里的图片
+                    if(document.getElementById(`v-img-${phase}`)) {
+                         document.getElementById(`v-img-${phase}`).src = base64;
+                    }
                 };
                 img.src = e.target.result;
             };
@@ -674,10 +763,9 @@
             alert("老板，当前方案的 4 张专属大片已成功锁定！");
         }
 
-        // 🚨 丝滑退场修复：分离数据清空逻辑，保证下滑动画完美执行且不暴毙
         function closeDetail() { 
             document.getElementById('detailModal').classList.remove('show');
-            if(closeModalTimer) clearTimeout(closeModalTimer); // 清除旧定时器
+            if(closeModalTimer) clearTimeout(closeModalTimer); 
             closeModalTimer = setTimeout(() => {
                 globalTotalExact = 0;
                 currentPlanKey = '';
@@ -687,7 +775,7 @@
                 
                 let btn = document.getElementById('btn-checkout');
                 btn.classList.add('disabled');
-                btn.style.pointerEvents = 'none'; // 确保关闭时彻底禁用
+                btn.style.pointerEvents = 'none'; 
             }, 400); 
         }
 
@@ -741,7 +829,8 @@
             manualInput(el, e);
         }
 
-        function togglePhase(el, e) {
+        // 🚨 核心升级：TogglePhase 支持联动
+        function togglePhase(el, e, fromSwipe = false) {
             if(e) e.stopPropagation();
             if (el.id === 'phase-5-box') {
                 document.querySelectorAll('.phase-box:not(.combo-box)').forEach(b => b.classList.remove('selected'));
@@ -763,7 +852,7 @@
                 }
                 el.classList.toggle('selected');
             }
-            updateCheckout();
+            updateCheckout(fromSwipe);
         }
 
         function triggerAIScan() {
@@ -775,13 +864,11 @@
             }
         }
 
-        function updateCheckout() {
+        // 🚨 核心升级：updateCheckout 支持联动滑动
+        function updateCheckout(fromSwipe = false) {
             let totalExactSessions = 0;
             let maxPhaseSelected = 0;
-            
-            // 🚨 防御机制：如果planKey被清空，立刻中断
             if(!currentPlanKey || !planData[currentPlanKey]) return; 
-            
             const data = planData[currentPlanKey];
 
             let customBox = document.getElementById('phase-5-box');
@@ -812,33 +899,31 @@
             
             const btn = document.getElementById('btn-checkout');
             const valDisplay = document.getElementById('calc-val');
-            const vImg = document.getElementById('visual-img');
             const vTitle = document.getElementById('visual-title');
             const vDesc = document.getElementById('visual-desc');
 
+            // 更新文本信息
             if(maxPhaseSelected === 0) {
-                vImg.style.filter = 'brightness(0.9)'; 
                 vTitle.innerText = '等待接入重塑网络...';
-                vDesc.innerText = '点选上方阶段，AI将为您投射巅峰形态';
+                vDesc.innerText = '点选上方阶段，或左右滑动查看巅峰形态';
                 valDisplay.innerHTML = '<span style="color:#666; font-size:12px;">待选择目标阶段</span>';
-                
                 btn.classList.add('disabled');
-                btn.style.pointerEvents = 'none'; // 彻底锁死
+                btn.style.pointerEvents = 'none';
+                // 如果没有选中任何阶段，滑动到第一张
+                if(!fromSwipe) slideToIndex(0);
             } else {
                 triggerAIScan();
                 if(maxPhaseSelected === 1) {
-                    vImg.src = data.img1; vTitle.innerText = 'PHASE 01: 基础焕新'; vDesc.innerText = data.txt1;
+                    vTitle.innerText = 'PHASE 01: 基础焕新'; vDesc.innerText = data.txt1;
                 } else if(maxPhaseSelected === 2) {
-                    vImg.src = data.img2; vTitle.innerText = 'PHASE 02: 进阶蜕变'; vDesc.innerText = data.txt2;
+                    vTitle.innerText = 'PHASE 02: 进阶蜕变'; vDesc.innerText = data.txt2;
                 } else if(maxPhaseSelected === 3) {
-                    vImg.src = data.img3; vTitle.innerText = 'PHASE 03: 深度定型'; vDesc.innerText = data.txt3;
+                    vTitle.innerText = 'PHASE 03: 深度定型'; vDesc.innerText = data.txt3;
                 } else if(maxPhaseSelected === 4) {
-                    vImg.src = data.img4; vTitle.innerText = 'PHASE 04: 年度顶配'; vDesc.innerText = data.txt4;
+                    vTitle.innerText = 'PHASE 04: 年度顶配'; vDesc.innerText = data.txt4;
                 } else {
-                    vImg.src = data.img4; vTitle.innerText = '✦ 顶级私教VIP托管 ✦'; vDesc.innerText = '打破一切局限，AI锁定您的全息巅峰状态';
+                    vTitle.innerText = '✦ 顶级私教VIP托管 ✦'; vDesc.innerText = '打破一切局限，AI锁定您的全息巅峰状态';
                 }
-                
-                vImg.style.filter = 'brightness(1.0) saturate(1.05)';
 
                 if (isCustom) {
                     valDisplay.innerHTML = `${totalExactSessions} <span>节 (含包月折算)</span>`;
@@ -846,9 +931,16 @@
                     valDisplay.innerHTML = `${totalExactSessions} <span>节 (系统精准核算)</span>`;
                 }
                 
-                // 🚨 强制解开锁定，让按钮绝对可点
                 btn.classList.remove('disabled');
                 btn.style.pointerEvents = 'auto';
+                
+                // 🚨 核心联动：如果是点击上方盒子触发的，让轮播图滑到对应位置
+                // (如果是 VIP 自定义，就滑到最后一张)
+                if (!fromSwipe && maxPhaseSelected > 0 && maxPhaseSelected <= 4) {
+                    slideToIndex(maxPhaseSelected - 1);
+                } else if (!fromSwipe && maxPhaseSelected === 5) {
+                     slideToIndex(3); // VIP 滑到最后
+                }
                 
                 if(navigator.vibrate) navigator.vibrate(50);
             }
@@ -872,7 +964,6 @@
         }
 
         function showUpsellModal() {
-            // 🚨 拦截无效点击
             if(globalTotalExact === 0 || !currentPlanKey || !planData[currentPlanKey]) return;
             
             let customBox = document.getElementById('phase-5-box');
