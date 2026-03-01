@@ -36,9 +36,10 @@
         .detail-modal { position: fixed; top: 100vh; left: 0; width: 100%; height: 100vh; background: var(--bg); z-index: 999; transition: top 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); display: flex; flex-direction: column; overflow-x: hidden; }
         .detail-modal.show { top: 0; }
 
-        .modal-header { height: 60px; display: flex; justify-content: space-between; align-items: center; padding: 0 20px; background: rgba(5,5,5,0.95); border-bottom: 1px solid rgba(212,175,55,0.2); backdrop-filter: blur(10px); flex-shrink: 0;}
+        .modal-header { height: 60px; display: flex; justify-content: space-between; align-items: center; padding: 0 20px; background: rgba(5,5,5,0.95); border-bottom: 1px solid rgba(212,175,55,0.2); backdrop-filter: blur(10px); flex-shrink: 0; position: relative; z-index: 50;}
         .modal-title { font-size: 16px; font-weight: bold; color: var(--primary); }
-        .close-btn { color: #fff; font-size: 24px; font-weight: bold; background: none; border: none; padding: 0 10px; cursor: pointer;}
+        .close-btn { color: #aaa; font-size: 32px; font-weight: normal; background: none; border: none; padding: 10px 20px; margin-right: -15px; cursor: pointer; transition: 0.3s; touch-action: manipulation;}
+        .close-btn:active { color: #fff; transform: scale(0.9); }
 
         .modal-body { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 20px 20px 140px; -webkit-overflow-scrolling: touch; }
         
@@ -113,7 +114,6 @@
         .admin-upload-btn { background: linear-gradient(135deg, rgba(212,175,55,0.1), rgba(212,175,55,0.05)); border: 1px dashed var(--primary); color: var(--primary); text-align: center; padding: 12px; border-radius: 8px; font-size: 13px; font-weight: bold; cursor: pointer; margin-bottom: 15px; transition: 0.3s; letter-spacing: 1px; box-shadow: 0 4px 10px rgba(0,0,0,0.5);}
         .admin-upload-btn:active { background: rgba(212,175,55,0.2); transform: scale(0.98); }
 
-        /* 滑动轮播图样式 */
         .visual-card { width: 100%; height: 320px; border-radius: 12px; overflow: hidden; position: relative; border: 1px solid rgba(255,255,255,0.1); background: #111; touch-action: pan-y pinch-zoom;}
         .carousel-track { display: flex; width: 400%; height: 100%; transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); will-change: transform; cursor: grab;}
         .carousel-track:active { cursor: grabbing; }
@@ -363,10 +363,14 @@
             'posture': {
                 type: 'feature', icon: '<img src="https://cdn-icons-png.flaticon.com/512/16292/16292717.png">',
                 title: '体态矫正与结构优化', desc: '物理层面的结构重组，彻底切断疼痛代偿。',
-                p1_name: '筋膜解绑与痛点清零', p1_w: 4, p1_goal: '<strong>打破骨骼错误排列</strong>，恢复关节活动度。', p1_tech: '深层剥离胸小肌与髂腰肌。', p1_feel: '练完感觉<strong>肩颈彻底放松</strong>。',
-                p2_name: '弱点唤醒与核心重构', p2_w: 12, p2_goal: '<strong>激活休眠的肌肉</strong>，建立天然肌肉内衣。', p2_tech: '普拉提孤立性募集腹横肌。', p2_feel: '核心产生<strong>强烈的支撑感</strong>。',
-                p3_name: '动作模式初步定型', p3_w: 24, p3_goal: '将正确排列<strong>刻入神经潜意识</strong>。', p3_tech: '复合抗阻结合生活轨迹二次重塑。', p3_feel: '不自觉地<strong>保持挺拔高姿态</strong>。',
-                p4_name: '全息体态终身维稳', p4_w: 48, p4_goal: '<strong>重塑底层筋膜张力网络</strong>，告别代偿。', p4_tech: '高阶动态控制与全息稳定训练。', p4_feel: '<strong>气质产生肉眼可见的高级蜕变</strong>。',
+                p1_name: '筋膜解绑与痛点清零', p1_w: 4,
+                p1_goal: '<strong>打破骨骼错误排列</strong>，恢复关节活动度。', p1_tech: '深层剥离胸小肌与髂腰肌。', p1_feel: '练完感觉<strong>肩颈彻底放松</strong>。',
+                p2_name: '弱点唤醒与核心重构', p2_w: 12,
+                p2_goal: '<strong>激活休眠的肌肉</strong>，建立天然肌肉内衣。', p2_tech: '普拉提孤立性募集腹横肌。', p2_feel: '核心产生<strong>强烈的支撑感</strong>。',
+                p3_name: '动作模式初步定型', p3_w: 24,
+                p3_goal: '将正确排列<strong>刻入神经潜意识</strong>。', p3_tech: '复合抗阻结合生活轨迹二次重塑。', p3_feel: '不自觉地<strong>保持挺拔高姿态</strong>。',
+                p4_name: '全息体态终身维稳', p4_w: 48,
+                p4_goal: '<strong>重塑底层筋膜张力网络</strong>，告别代偿。', p4_tech: '高阶动态控制与全息稳定训练。', p4_feel: '<strong>气质产生肉眼可见的高级蜕变</strong>。',
                 img1: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=800&q=80', 
                 img2: 'https://images.unsplash.com/photo-1552674605-db6ffd4facb5?auto=format&fit=crop&w=800&q=80', 
                 img3: 'https://images.unsplash.com/photo-1588286840104-8957b019727f?auto=format&fit=crop&w=800&q=80', 
@@ -376,10 +380,14 @@
             'fatloss': {
                 type: 'regular', icon: '<img src="https://cdn-icons-png.flaticon.com/512/12805/12805546.png">',
                 title: '高效燃脂与代谢激活', desc: '重写身体基因，打造“24小时持续燃脂的火炉”。',
-                p1_name: '糖原排空与代谢唤醒', p1_w: 4, p1_goal: '<strong>强行切入脂肪氧化通道</strong>。', p1_tech: '循环抗阻配合低GI饮食干预。', p1_feel: '迅速<strong>排干体内顽固水肿</strong>，体重掉秤快。',
-                p2_name: '高容量顽固脂肪剥离', p2_w: 12, p2_goal: '靶向清理内脏脂肪，<strong>强力突破平台期</strong>。', p2_tech: 'HIIT激发强烈运动后燃效应。', p2_feel: '<strong>腰腹围度明显缩小</strong>，穿衣宽松。',
-                p3_name: '易瘦体质初步定型', p3_w: 24, p3_goal: '拉高基础代谢基数，让身体在<strong>睡眠中持续燃烧</strong>。', p3_tech: '肌肥大训练提升整体肌肉储备。', p3_feel: '<strong>偶尔放纵吃喝不再反弹</strong>。',
-                p4_name: '代谢基因终极重写', p4_w: 48, p4_goal: '<strong>彻底终结反弹宿命</strong>，维持常态化低体脂。', p4_tech: '高阶碳水循环与全域能量消耗训练。', p4_feel: '体能炸裂，<strong>拥有清晰的腹肌线条</strong>。',
+                p1_name: '糖原排空与代谢唤醒', p1_w: 4,
+                p1_goal: '<strong>强行切入脂肪氧化通道</strong>。', p1_tech: '循环抗阻配合低GI饮食干预。', p1_feel: '迅速<strong>排干体内顽固水肿</strong>，体重掉秤快。',
+                p2_name: '高容量顽固脂肪剥离', p2_w: 12,
+                p2_goal: '靶向清理内脏脂肪，<strong>强力突破平台期</strong>。', p2_tech: 'HIIT激发强烈运动后燃效应。', p2_feel: '<strong>腰腹围度明显缩小</strong>，穿衣宽松。',
+                p3_name: '易瘦体质初步定型', p3_w: 24,
+                p3_goal: '拉高基础代谢基数，让身体在<strong>睡眠中持续燃烧</strong>。', p3_tech: '肌肥大训练提升整体肌肉储备。', p3_feel: '<strong>偶尔放纵吃喝不再反弹</strong>。',
+                p4_name: '代谢基因终极重写', p4_w: 48,
+                p4_goal: '<strong>彻底终结反弹宿命</strong>，维持常态化低体脂。', p4_tech: '高阶碳水循环与全域能量消耗训练。', p4_feel: '体能炸裂，<strong>拥有清晰的腹肌线条</strong>。',
                 img1: 'https://images.unsplash.com/photo-1476480862126-25e47da24ab6?auto=format&fit=crop&w=800&q=80', 
                 img2: 'https://images.unsplash.com/photo-1538805060514-97d9cc17730c?auto=format&fit=crop&w=800&q=80', 
                 img3: 'https://images.unsplash.com/photo-1526506114805-4e3158ddb16d?auto=format&fit=crop&w=800&q=80', 
@@ -389,10 +397,14 @@
             'shape': {
                 type: 'regular', icon: '<img src="https://cdn-icons-png.flaticon.com/512/3340/3340004.png">',
                 title: 'S型曲线精雕训练', desc: '物理剥离与3D填充，打造极具视觉杀伤力的身材比例。',
-                p1_name: '目标靶向极速激活', p1_w: 4, p1_goal: '纠正错误发力，避免<strong>“练臀先粗腿”</strong>。', p1_tech: '孤立唤醒臀大肌上部与三角肌中束。', p1_feel: '体会到目标肌肉的<strong>深层酸胀泵感</strong>。',
-                p2_name: '弱点区域3D物理填充', p2_w: 12, p2_goal: '迫使肌纤维超量恢复，实现<strong>局部的饱满填充</strong>。', p2_tech: '渐进式超负荷，运用慢速离心控制。', p2_feel: '<strong>蜜桃臀逐渐饱满上翘</strong>，肩线平直。',
-                p3_name: '视觉比例拉扯精雕', p3_w: 24, p3_goal: '强行呈现出<strong>极致的漏斗形曲线</strong>。', p3_tech: '强化背部阔度，极致压缩腰围数据。', p3_feel: 'S曲线完全固化，<strong>拍照自带高级感</strong>。',
-                p4_name: '绝美比例终极锁死', p4_w: 48, p4_goal: '<strong>精雕细琢每一寸肌肉走向</strong>，实现超模比例。', p4_tech: '高阶肌力微调与极致分离度训练。', p4_feel: '完美驾驭任何紧身衣物，<strong>气场全开</strong>。',
+                p1_name: '目标靶向极速激活', p1_w: 4,
+                p1_goal: '纠正错误发力，避免<strong>“练臀先粗腿”</strong>。', p1_tech: '孤立唤醒臀大肌上部与三角肌中束。', p1_feel: '体会到目标肌肉的<strong>深层酸胀泵感</strong>。',
+                p2_name: '弱点区域3D物理填充', p2_w: 12,
+                p2_goal: '迫使肌纤维超量恢复，实现<strong>局部的饱满填充</strong>。', p2_tech: '渐进式超负荷，运用慢速离心控制。', p2_feel: '<strong>蜜桃臀逐渐饱满上翘</strong>，肩线平直。',
+                p3_name: '视觉比例拉扯精雕', p3_w: 24,
+                p3_goal: '强行呈现出<strong>极致的漏斗形曲线</strong>。', p3_tech: '强化背部阔度，极致压缩腰围数据。', p3_feel: 'S曲线完全固化，<strong>拍照自带高级感</strong>。',
+                p4_name: '绝美比例终极锁死', p4_w: 48,
+                p4_goal: '<strong>精雕细琢每一寸肌肉走向</strong>，实现超模比例。', p4_tech: '高阶肌力微调与极致分离度训练。', p4_feel: '完美驾驭任何紧身衣物，<strong>气场全开</strong>。',
                 img1: 'https://images.unsplash.com/photo-1584735935682-2f2b69dff9d2?auto=format&fit=crop&w=800&q=80', 
                 img2: 'https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?auto=format&fit=crop&w=800&q=80', 
                 img3: 'https://images.unsplash.com/photo-1594381898411-846e7d193883?auto=format&fit=crop&w=800&q=80', 
@@ -402,10 +414,14 @@
             'postpartum': {
                 type: 'feature', icon: '<img src="https://cdn-icons-png.flaticon.com/512/779/779980.png">',
                 title: '产后核心与体形恢复', desc: '无痛安全缝合腹直肌裂隙，助您重返少女级健康体态。',
-                p1_name: '盆底肌与内源安全修复', p1_w: 4, p1_goal: '重建盆底功能，<strong>绝对禁止传统卷腹</strong>。', p1_tech: '横向呼吸法温和唤醒腹横肌。', p1_feel: '<strong>漏尿改善</strong>，核心脏器有明显归位感。',
-                p2_name: '腹直肌物理闭合', p2_w: 12, p2_goal: '安全缝合腹部裂隙，改善<strong>骨盆过度前倾</strong>。', p2_tech: '抗旋转与抗伸展训练，强化深层核心。', p2_feel: '腹直肌间距肉眼收窄，<strong>腰背酸痛大幅缓解</strong>。',
-                p3_name: '温和减脂与皮肤收紧', p3_w: 24, p3_goal: '在安全前提下，<strong>剥离孕期囤积脂肪</strong>。', p3_tech: '无跳跃温和抗阻代谢组。', p3_feel: '逐步<strong>穿回孕前尺码衣服</strong>，皮肤恢复紧致。',
-                p4_name: '辣妈巅峰体态重铸', p4_w: 48, p4_goal: '<strong>全面超越产前身体机能</strong>，打造极品辣妈。', p4_tech: '全域力量与体态精雕系统方案。', p4_feel: '不仅恢复如初，<strong>甚至比孕前更挺拔自信</strong>。',
+                p1_name: '盆底肌与内源安全修复', p1_w: 4,
+                p1_goal: '重建盆底功能，<strong>绝对禁止传统卷腹</strong>。', p1_tech: '横向呼吸法温和唤醒腹横肌。', p1_feel: '<strong>漏尿改善</strong>，核心脏器有明显归位感。',
+                p2_name: '腹直肌物理闭合', p2_w: 12,
+                p2_goal: '安全缝合腹部裂隙，改善<strong>骨盆过度前倾</strong>。', p2_tech: '抗旋转与抗伸展训练，强化深层核心。', p2_feel: '腹直肌间距肉眼收窄，<strong>腰背酸痛大幅缓解</strong>。',
+                p3_name: '温和减脂与皮肤收紧', p3_w: 24,
+                p3_goal: '在安全前提下，<strong>剥离孕期囤积脂肪</strong>。', p3_tech: '无跳跃温和抗阻代谢组。', p3_feel: '逐步<strong>穿回孕前尺码衣服</strong>，皮肤恢复紧致。',
+                p4_name: '辣妈巅峰体态重铸', p4_w: 48,
+                p4_goal: '<strong>全面超越产前身体机能</strong>，打造极品辣妈。', p4_tech: '全域力量与体态精雕系统方案。', p4_feel: '不仅恢复如初，<strong>甚至比孕前更挺拔自信</strong>。',
                 img1: 'https://images.unsplash.com/photo-1556817411-31ae72fa3ea0?auto=format&fit=crop&w=800&q=80', 
                 img2: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&w=800&q=80', 
                 img3: 'https://images.unsplash.com/photo-1559148540-047391cb730a?auto=format&fit=crop&w=800&q=80', 
@@ -415,10 +431,14 @@
             'rehab': {
                 type: 'feature', icon: '<img src="https://cdn-icons-png.flaticon.com/512/2906/2906460.png">',
                 title: '运动功能提升与防护', desc: '精准神经肌肉调控，重建受损关节力学稳定性。',
-                p1_name: '炎症消除与代偿切断', p1_w: 4, p1_goal: '找出引起疼痛的<strong>错误发力源</strong>。', p1_tech: '激痛点按压技术释放代偿关节。', p1_feel: '<strong>弹响明显减少</strong>，尖锐刺痛感消失。',
-                p2_name: '受损关节肌肉护甲构建', p2_w: 12, p2_goal: '增强韧带强度，打造<strong>生物学护膝护腰</strong>。', p2_tech: '无痛角度内等长收缩强化深层小肌群。', p2_feel: '关节产生<strong>极强包裹感</strong>，发力不发虚。',
-                p3_name: '动态脱敏与赛场重返', p3_w: 24, p3_goal: '重建本体感觉，<strong>适应复杂运动轨迹</strong>。', p3_tech: '闭链与不平衡介质高阶神经调控。', p3_feel: '能<strong>极其自信地完成复杂动作</strong>，无惧损伤。',
-                p4_name: '高阶护甲与运动表现', p4_w: 48, p4_goal: '<strong>绝对消除二次损伤隐患</strong>，提升爆发力。', p4_tech: '超等长收缩与专项运动机能强化。', p4_feel: '享受运动带来的绝对快乐，<strong>机能登顶</strong>。',
+                p1_name: '炎症消除与代偿切断', p1_w: 4,
+                p1_goal: '找出引起疼痛的<strong>错误发力源</strong>。', p1_tech: '激痛点按压技术释放代偿关节。', p1_feel: '<strong>弹响明显减少</strong>，尖锐刺痛感消失。',
+                p2_name: '受损关节肌肉护甲构建', p2_w: 12,
+                p2_goal: '增强韧带强度，打造<strong>生物学护膝护腰</strong>。', p2_tech: '无痛角度内等长收缩强化深层小肌群。', p2_feel: '关节产生<strong>极强包裹感</strong>，发力不发虚。',
+                p3_name: '动态脱敏与赛场重返', p3_w: 24,
+                p3_goal: '重建本体感觉，<strong>适应复杂运动轨迹</strong>。', p3_tech: '闭链与不平衡介质高阶神经调控。', p3_feel: '能<strong>极其自信地完成复杂动作</strong>，无惧损伤。',
+                p4_name: '高阶护甲与运动表现', p4_w: 48,
+                p4_goal: '<strong>绝对消除二次损伤隐患</strong>，提升爆发力。', p4_tech: '超等长收缩与专项运动机能强化。', p4_feel: '享受运动带来的绝对快乐，<strong>机能登顶</strong>。',
                 img1: 'https://images.unsplash.com/photo-1502825751399-28cbafbf8275?auto=format&fit=crop&w=800&q=80', 
                 img2: 'https://images.unsplash.com/photo-1599058917212-d750089bc07e?auto=format&fit=crop&w=800&q=80', 
                 img3: 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=800&q=80', 
@@ -428,10 +448,14 @@
             'antiaging': {
                 type: 'regular', icon: '<img src="https://cdn-icons-png.flaticon.com/512/8407/8407060.png">',
                 title: '活力体能与状态焕新', desc: '提升骨密度与肌肉储备，为您打造不老的肉体盔甲。',
-                p1_name: '机能唤醒与润滑系统', p1_w: 4, p1_goal: '促进滑液分泌，<strong>全面恢复生锈卡顿的机能</strong>。', p1_tech: '关节活动度打磨与全身筋膜链拉伸。', p1_feel: '<strong>晨起僵硬感消失，深度睡眠延长</strong>。',
-                p2_name: '骨密度与防流失储备', p2_w: 12, p2_goal: '刺激成骨细胞活跃，<strong>暴力对抗肌肉萎缩</strong>。', p2_tech: '重物抗阻配合慢速离心收缩技术。', p2_feel: '拎重物不吃力，<strong>下楼梯膝盖绝不发软</strong>。',
-                p3_name: '引擎重置与荷尔蒙唤醒', p3_w: 24, p3_goal: '提升最大摄氧量，由内而外焕发<strong>极致年轻态</strong>。', p3_tech: '稳态有氧配合心率变异率科学监控。', p3_feel: '爬楼梯不喘，<strong>气色红润，精力爆表</strong>。',
-                p4_name: '细胞级机能终身抗衰', p4_w: 48, p4_goal: '<strong>真正实现生理年龄的逆转</strong>，常态化冻龄。', p4_tech: '全周期高阶体能与线粒体强化训练。', p4_feel: '由内而外散发活力，<strong>远超同龄人的巅峰状态</strong>。',
+                p1_name: '机能唤醒与润滑系统', p1_w: 4,
+                p1_goal: '促进滑液分泌，<strong>全面恢复生锈卡顿的机能</strong>。', p1_tech: '关节活动度打磨与全身筋膜链拉伸。', p1_feel: '<strong>晨起僵硬感消失，深度睡眠延长</strong>。',
+                p2_name: '骨密度与防流失储备', p2_w: 12,
+                p2_goal: '刺激成骨细胞活跃，<strong>暴力对抗肌肉萎缩</strong>。', p2_tech: '重物抗阻配合慢速离心收缩技术。', p2_feel: '拎重物不吃力，<strong>下楼梯膝盖绝不发软</strong>。',
+                p3_name: '引擎重置与荷尔蒙唤醒', p3_w: 24,
+                p3_goal: '提升最大摄氧量，由内而外焕发<strong>极致年轻态</strong>。', p3_tech: '稳态有氧配合心率变异率科学监控。', p3_feel: '爬楼梯不喘，<strong>气色红润，精力爆表</strong>。',
+                p4_name: '细胞级机能终身抗衰', p4_w: 48,
+                p4_goal: '<strong>真正实现生理年龄的逆转</strong>，常态化冻龄。', p4_tech: '全周期高阶体能与线粒体强化训练。', p4_feel: '由内而外散发活力，<strong>远超同龄人的巅峰状态</strong>。',
                 img1: 'https://images.unsplash.com/photo-1579126031931-7911d74c291e?auto=format&fit=crop&w=800&q=80', 
                 img2: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=800&q=80', 
                 img3: 'https://images.unsplash.com/photo-1508215885820-4585e5610ea0?auto=format&fit=crop&w=800&q=80', 
@@ -453,7 +477,6 @@
         let selectedUpsell = {};
         let closeModalTimer = null;
 
-        // 🚨 滑动控制变量
         let currentVisualIndex = 0;
         let startX = 0;
         let startY = 0;
@@ -623,13 +646,12 @@
             updateCheckout(); 
         }
 
-        // ================= 🚨 核心修复：极致稳定的触摸防抖滑动逻辑 =================
         function initTouchEvents() {
             const track = document.getElementById('carousel-track');
             const card = document.getElementById('visual-card-container');
 
             card.addEventListener('touchstart', touchStart, {passive: true});
-            card.addEventListener('touchmove', touchMove, {passive: false}); // 必须false才能阻止默认滚动
+            card.addEventListener('touchmove', touchMove, {passive: false}); 
             card.addEventListener('touchend', touchEnd);
 
             function touchStart(e) {
@@ -647,16 +669,15 @@
                 const diffX = currentX - startX;
                 const diffY = currentY - startY;
                 
-                // 防抖检测：如果横向移动大于纵向，并且移动超过5px，锁定为左右滑动
                 if (!isHorizontalSwipe && Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 5) {
                     isHorizontalSwipe = true;
                 }
 
                 if (isHorizontalSwipe) {
-                    e.preventDefault(); // 彻底阻止页面上下滚动
+                    e.preventDefault(); 
                     track.style.transform = `translateX(${prevTranslate + diffX}px)`;
                 } else if (Math.abs(diffY) > 5) {
-                    isDragging = false; // 如果是上下滑动，直接放弃控制权
+                    isDragging = false; 
                 }
             }
 
@@ -666,7 +687,6 @@
                 const movedBy = e.changedTouches[0].clientX - startX;
                 track.style.transition = 'transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1)';
                 
-                // 增加滑动阈值，防止太敏感
                 if (movedBy < -60 && currentVisualIndex < 3) {
                     currentVisualIndex++;
                 } else if (movedBy > 60 && currentVisualIndex > 0) {
@@ -677,7 +697,6 @@
             }
         }
 
-        // 🚨 核心修复：滑动切换时，精准剥夺其他阶段的选中状态，防止死循环
         function slideToIndex(index) {
             currentVisualIndex = index;
             const track = document.getElementById('carousel-track');
@@ -690,17 +709,14 @@
                 dot.classList.toggle('active', idx === index);
             });
 
-            // 强制剥夺所有阶段的 selected 状态
             document.querySelectorAll('.phase-box:not(.combo-box)').forEach(b => b.classList.remove('selected'));
             document.getElementById('phase-5-box').classList.remove('selected');
             
-            // 为当前滑动到的阶段加上 selected 状态
             const targetPhaseBox = document.getElementById(`p-box-${index + 1}`);
             if (targetPhaseBox) {
                 targetPhaseBox.classList.add('selected');
             }
             
-            // 通知底层更新文案，传入 true 表示“我是滑动触发的，别再滑一遍了”
             updateCheckout(true); 
         }
 
@@ -767,6 +783,12 @@
             }, 400); 
         }
 
+        // 🚨 核心补全：修复签名的关闭功能
+        function closeSignature() {
+            document.getElementById('signatureModal').classList.remove('show');
+            clearCanvas(); // 关闭时清空签名画板
+        }
+
         function finishAndReturn() {
             document.getElementById('signatureModal').classList.remove('show');
             document.getElementById('detailModal').classList.remove('show');
@@ -798,7 +820,6 @@
             let totalCustom = r + f + m;
             
             if (totalCustom > 0) {
-                // 选了定制包，清空其他
                 document.querySelectorAll('.phase-box:not(.combo-box)').forEach(b => b.classList.remove('selected'));
                 box.classList.add('selected');
             } else if (totalCustom === 0) {
@@ -818,7 +839,6 @@
             manualInput(el, e);
         }
 
-        // 🚨 核心修复：点击卡片时，也必须清空所有其他的选中状态
         function togglePhase(el, e, fromSwipe = false) {
             if(e) e.stopPropagation();
             
@@ -834,14 +854,12 @@
                 }
             } else {
                 let isAlreadySelected = el.classList.contains('selected');
-                // 先全部剥夺
                 document.querySelectorAll('.phase-box:not(.combo-box)').forEach(b => b.classList.remove('selected'));
                 document.getElementById('phase-5-box').classList.remove('selected');
                 document.getElementById('cb-reg').value = 0;
                 document.getElementById('cb-feat').value = 0;
                 document.getElementById('cb-mon').value = 0;
                 
-                // 如果不是来自滑动的强制选中，且原来已经被选中了，就取消（反选功能）
                 if(!fromSwipe && isAlreadySelected) {
                     el.classList.remove('selected');
                 } else {
@@ -930,11 +948,10 @@
                 btn.classList.remove('disabled');
                 btn.style.pointerEvents = 'auto';
                 
-                // 🚨 联动滑动：如果是点击触发的更新，命令轮播图滑过去
                 if (!fromSwipe && maxPhaseSelected > 0 && maxPhaseSelected <= 4) {
                     slideToIndex(maxPhaseSelected - 1);
                 } else if (!fromSwipe && maxPhaseSelected === 5) {
-                    slideToIndex(3);
+                    slideToIndex(3); 
                 }
                 
                 if(navigator.vibrate) navigator.vibrate(50);
