@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>私人定制高端课程</title>
     <style>
-        /* 100% 捍卫您的顶级香槟黑金配色，绝不动底色！ */
+        /* 顶级香槟黑金配色 */
         :root { --primary: #D4AF37; --accent: #C5A059; --bg: #050505; --surface: #121212; --text-main: #E2E8F0; --text-sub: #8A92A3; }
         
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; margin: 0; padding: 0; }
@@ -110,19 +110,19 @@
         .visual-feedback-section { margin-top: 30px; background: #0a0a0c; border: 1px solid rgba(212, 175, 55, 0.15); border-radius: 16px; padding: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
         .fb-header { text-align: center; font-size: 15px; font-weight: 900; color: var(--primary); margin-bottom: 15px; letter-spacing: 2px; }
         
-        /* 🚨 老板专属一键导入按钮 */
-        .admin-upload-btn { background: linear-gradient(135deg, rgba(212,175,55,0.1), rgba(212,175,55,0.05)); border: 1px dashed var(--primary); color: var(--primary); text-align: center; padding: 12px; border-radius: 8px; font-size: 13px; font-weight: bold; cursor: pointer; margin-bottom: 15px; transition: 0.3s; letter-spacing: 1px; }
-        .admin-upload-btn:active { background: var(--primary); color: #000; }
+        /* 老板通道按钮：所有板块通用 */
+        .admin-upload-btn { background: linear-gradient(135deg, rgba(212,175,55,0.1), rgba(212,175,55,0.05)); border: 1px dashed var(--primary); color: var(--primary); text-align: center; padding: 12px; border-radius: 8px; font-size: 13px; font-weight: bold; cursor: pointer; margin-bottom: 15px; transition: 0.3s; letter-spacing: 1px; box-shadow: 0 4px 10px rgba(0,0,0,0.5);}
+        .admin-upload-btn:active { background: rgba(212,175,55,0.2); transform: scale(0.98); }
 
         .visual-card { width: 100%; height: 320px; border-radius: 12px; overflow: hidden; position: relative; border: 1px solid rgba(255,255,255,0.1); background: #111;}
-        .visual-img { width: 100%; height: 100%; object-fit: cover; transition: all 0.6s cubic-bezier(0.2, 0.8, 0.2, 1); }
+        .visual-img { width: 100%; height: 100%; object-fit: cover; transition: all 0.5s ease-in-out; }
         
         .scanning-line { position: absolute; top: -10%; left: 0; width: 100%; height: 2px; background: rgba(212, 175, 55, 0.9); box-shadow: 0 0 25px 8px rgba(212, 175, 55, 0.5); opacity: 0; z-index: 5; pointer-events: none;}
         @keyframes aiScan { 0% { top: -10%; opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { top: 110%; opacity: 0; } }
         .scanning-active .scanning-line { animation: aiScan 1.5s ease-in-out; }
         .scanning-active .visual-img { filter: brightness(1.05) saturate(1.05); transform: scale(1.05); }
 
-        .visual-overlay { position: absolute; bottom: 0; left: 0; width: 100%; padding: 60px 15px 15px; background: linear-gradient(to top, rgba(0,0,0,0.9), rgba(0,0,0,0.3), transparent); display: flex; flex-direction: column; justify-content: flex-end; z-index: 10; pointer-events: none;}
+        .visual-overlay { position: absolute; bottom: 0; left: 0; width: 100%; padding: 40px 15px 15px; background: linear-gradient(to top, rgba(0,0,0,0.9), rgba(0,0,0,0.3), transparent); display: flex; flex-direction: column; justify-content: flex-end; z-index: 10; pointer-events: none;}
         .visual-title { color: var(--primary); font-size: 20px; font-weight: 900; letter-spacing: 1px; margin-bottom: 6px; text-shadow: 0 2px 5px rgba(0,0,0,0.8);}
         .visual-desc { color: #fff; font-size: 13px; line-height: 1.5; text-shadow: 0 1px 3px rgba(0,0,0,0.8); font-weight: bold;}
 
@@ -135,6 +135,22 @@
         .btn-checkout:active { transform: scale(0.96); }
         .btn-checkout.disabled { background: #333; color: #666; box-shadow: none; pointer-events: none; }
 
+        /* 🚨 专属视觉配置台 (新加入的独立模块) */
+        .admin-modal-wrap { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 3000; display: none; flex-direction: column; justify-content: center; align-items: center; padding: 20px; backdrop-filter: blur(10px); opacity: 0; transition: opacity 0.3s;}
+        .admin-modal-wrap.show { display: flex; opacity: 1;}
+        .admin-modal-content { background: #111; border: 1px solid var(--primary); border-radius: 16px; width: 100%; max-width: 400px; padding: 20px; box-shadow: 0 10px 40px rgba(212,175,55,0.3); max-height: 90vh; overflow-y: auto;}
+        .admin-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed rgba(212,175,55,0.3); padding-bottom: 15px; margin-bottom: 15px;}
+        .admin-title { color: var(--primary); font-size: 18px; font-weight: bold;}
+        .admin-close { color: #888; font-size: 28px; cursor: pointer; line-height: 1;}
+        .admin-subtitle { color: #fff; font-size: 14px; margin-bottom: 15px; text-align: center; font-weight: bold;}
+        .admin-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px;}
+        .admin-slot { background: #000; border: 1px solid #333; border-radius: 10px; padding: 10px; display: flex; flex-direction: column; align-items: center;}
+        .slot-title { color: #888; font-size: 12px; margin-bottom: 8px;}
+        .slot-img { width: 100%; height: 120px; object-fit: cover; border-radius: 6px; margin-bottom: 10px; border: 1px solid #222;}
+        .slot-btn { background: #222; color: #fff; border: 1px solid #444; border-radius: 6px; padding: 8px; width: 100%; font-size: 12px; cursor: pointer;}
+        .slot-btn:active { background: var(--primary); color: #000;}
+        .admin-save-btn { width: 100%; background: linear-gradient(135deg, var(--primary), #AA8A2A); color: #000; border: none; padding: 14px; border-radius: 10px; font-size: 16px; font-weight: 900; box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3); cursor: pointer;}
+
         .upsell-overlay { position: fixed; top:0; left:0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 1000; opacity: 0; pointer-events: none; transition: 0.4s; backdrop-filter: blur(8px); }
         .upsell-overlay.show { opacity: 1; pointer-events: auto; }
         
@@ -145,39 +161,32 @@
         .up-title { font-size: 18px; font-weight: 900; color: #fff; letter-spacing: 1px; }
         .up-sub { font-size: 11px; color: #aaa; margin-top: 6px; line-height: 1.5; }
         .up-close { color: #888; font-size: 28px; background: none; border: none; padding: 0; line-height: 1; cursor: pointer; }
-
         .upsell-cards-container { overflow-y: auto; overflow-x: hidden; padding-bottom: 10px; flex: 1; -webkit-overflow-scrolling: touch; padding-top: 10px;}
         
         .dash-card { background: linear-gradient(145deg, #16161A, #0A0A0C); border: 2px solid #222; border-radius: 16px; padding: 32px 15px 15px; position: relative; margin-bottom: 15px; transition: 0.3s; opacity: 0.6; cursor: pointer; box-shadow: 0 5px 15px rgba(0,0,0,0.5);}
         .dash-card.selected-card { opacity: 1; border-color: var(--primary); background: linear-gradient(145deg, #1F1910, #0A0A0C); box-shadow: 0 10px 30px rgba(212,175,55,0.2); transform: scale(1.02); }
-        
         .check-ribbon { display: none; position: absolute; top: -2px; left: -2px; background: linear-gradient(135deg, var(--accent), var(--primary)); color: #000; font-size: 10px; font-weight: bold; padding: 4px 12px; border-radius: 14px 0 14px 0; z-index: 10;}
         .selected-card .check-ribbon { display: block; }
-        
         .save-tag { position: absolute; top: -2px; right: -2px; background: linear-gradient(135deg, #FF4B40, #D91D12); color: #fff; font-size: 10px; font-weight: 900; padding: 4px 12px; border-radius: 0 14px 0 14px; z-index: 10; box-shadow: -2px 2px 10px rgba(217, 29, 18, 0.3);}
         .dash-card.basic .save-tag { background: #444; color: #aaa; box-shadow: none;}
 
         .dc-title { font-size: 16px; font-weight: 900; color: #fff; margin-bottom: 4px; display: flex; align-items: center; gap: 6px; margin-top: 5px;}
         .selected-card .dc-title { color: var(--primary); }
         .dc-subtitle { font-size: 11px; color: #888; margin-bottom: 15px; line-height: 1.4;}
-        
         .dc-flex { display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 1px dashed rgba(255,255,255,0.1); padding-bottom: 12px; margin-bottom: 12px;}
         .dc-ses { font-size: 36px; font-weight: 900; color: #fff; line-height: 1;}
         .selected-card .dc-ses { color: var(--primary); }
         .dc-ses span { font-size: 12px; font-weight: normal; color: #888; margin-left: 4px;}
-        
         .dc-right { text-align: right; }
         .dc-ori { font-size: 12px; color: #666; text-decoration: line-through; margin-bottom: 4px;}
         .dc-new { font-size: 28px; font-weight: 900; color: #fff; display: flex; align-items: baseline; justify-content: flex-end; gap: 2px;}
         .selected-card .dc-new { color: var(--primary); text-shadow: 0 0 15px rgba(212, 175, 55, 0.4);}
         .dc-new span { font-size: 16px; }
-        
         .dc-footer { display: flex; justify-content: space-between; align-items: center; font-size: 11px;}
         .dc-f-ori { color: #888; }
         .dc-f-ori del { color: #666; margin-left: 4px;}
         .dc-f-new { color: var(--primary); font-weight: bold; font-size: 13px;}
         .basic .dc-f-new { color: #aaa; }
-
         .urgency-rule { background: rgba(212,175,55,0.08); border: 1px dashed rgba(212,175,55,0.4); border-radius: 6px; padding: 10px; margin-top: 15px; font-size: 10px; color: #aaa; line-height: 1.6; }
         .urgency-rule strong { color: var(--primary); }
 
@@ -185,14 +194,6 @@
         .btn-confirm-master { width: 100%; background: linear-gradient(135deg, var(--primary), #AA8A2A); color: #000; border: none; padding: 16px; border-radius: 12px; font-size: 16px; font-weight: 900; box-shadow: 0 8px 25px rgba(212, 175, 55, 0.3); cursor: pointer; transition: 0.3s; }
         .btn-confirm-master:active { transform: scale(0.98); }
 
-        .validity-note { background: #0a0a0c; border: 1px solid #333; border-radius: 8px; padding: 12px; margin-top: 15px; }
-        .vn-title { font-size: 12px; color: #aaa; font-weight: bold; margin-bottom: 8px; display: flex; align-items: center; gap: 4px;}
-        .vn-list { list-style: none; padding: 0; margin: 0; font-size: 11px; color: #888; line-height: 1.6; }
-        .vn-list li { position: relative; padding-left: 12px; margin-bottom: 6px; }
-        .vn-list li::before { content: '•'; position: absolute; left: 0; color: var(--primary); }
-        .vn-list li span { color: #ccc; font-weight: bold;}
-
-        /* 全屏电子签名合同台 */
         .sig-modal { position: fixed; top: 100vh; left: 0; width: 100%; height: 100vh; background: #08080A; z-index: 2000; transition: top 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); display: flex; flex-direction: column; overflow-x: hidden;}
         .sig-modal.show { top: 0; }
         .sig-header { height: 60px; display: flex; justify-content: space-between; align-items: center; padding: 0 20px; background: rgba(5,5,5,0.95); border-bottom: 1px solid rgba(212,175,55,0.3); flex-shrink:0;}
@@ -200,13 +201,11 @@
         .sig-content { padding: 20px; flex: 1; display: flex; flex-direction: column; overflow-y: auto;}
         
         .sig-pad-wrap { flex: 1; display: flex; flex-direction: column; min-height: 300px;}
-        
         .sig-summary { background: linear-gradient(145deg, #18181A, #0A0A0C); padding: 20px; border-radius: 12px; margin-bottom: 20px; border: 1px solid rgba(212,175,55,0.3); box-shadow: 0 10px 30px rgba(0,0,0,0.5);}
         .sig-sum-title { color: #fff; font-size: 14px; margin-bottom: 10px; font-weight: bold;}
         .sig-sum-data { display: flex; justify-content: space-between; align-items: flex-end; border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 15px; margin-top: 10px;}
         .sig-sum-name { font-size: 16px; color: var(--primary); font-weight: 900;}
         .sig-sum-price { font-size: 24px; color: #fff; font-weight: 900;}
-
         .sig-pad-container { flex: 1; border: 1px dashed #555; border-radius: 12px; background: #111; position: relative; overflow: hidden; box-shadow: inset 0 0 20px rgba(0,0,0,0.8); min-height: 250px;}
         #sigCanvas { width: 100%; height: 100%; touch-action: none; cursor: crosshair; display: block;}
         .sig-placeholder { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #444; font-size: 24px; font-weight: bold; pointer-events: none; letter-spacing: 2px;}
@@ -217,8 +216,6 @@
     </style>
 </head>
 <body>
-
-    <input type="file" id="img-uploader" multiple accept="image/*" style="display:none;" onchange="handleImageUpload(event)">
 
     <div class="header-brand">
         <div class="brand-text">私人定制高端课程</div>
@@ -261,45 +258,52 @@
             <div class="modal-title" id="m-header-title">定制路径推演</div>
             <button class="close-btn" onclick="closeDetail()">×</button>
         </div>
-        
         <div class="modal-body" id="modalBody"></div>
-        
         <div class="checkout-bar">
             <div class="checkout-info">
                 <div class="c-info-label">系统核算预估课时</div>
                 <div class="c-info-val" id="calc-val">-- <span>节</span></div>
             </div>
-            <button class="btn-checkout disabled" id="btn-checkout" onclick="showUpsellModal()">
-                获取智能报价方案 ➔
-            </button>
+            <button class="btn-checkout disabled" id="btn-checkout" onclick="showUpsellModal()">获取智能报价方案 ➔</button>
         </div>
     </div>
 
-    <div class="upsell-overlay" id="upsellOverlay" onclick="closeUpsellModal()"></div>
-    <div class="upsell-modal" id="upsellModal">
-        <div class="up-header">
-            <div>
-                <div class="up-title" id="up-main-title">✦ 智能匹配双轨方案 ✦</div>
-                <div class="up-sub" id="up-sub-text">基于您选择的阶段与出勤频率，为您精准匹配以下方案：</div>
+    <div class="admin-modal-wrap" id="adminModalWrap">
+        <div class="admin-modal-content">
+            <div class="admin-header">
+                <div class="admin-title">✦ 专属视觉配置台 ✦</div>
+                <div class="admin-close" onclick="closeAdmin()">×</div>
             </div>
-            <button class="up-close" onclick="closeUpsellModal()">×</button>
-        </div>
-        
-        <div class="upsell-cards-container" id="upsell-cards-container">
+            <div class="admin-subtitle" id="admin-subtitle">当前配置：体态矫正与结构优化</div>
+            
+            <div class="admin-grid">
+                <div class="admin-slot">
+                    <div class="slot-title">对应：阶段一</div>
+                    <img id="admin-prev-1" src="" class="slot-img">
+                    <button class="slot-btn" onclick="document.getElementById('file-1').click()">选择此图</button>
+                    <input type="file" id="file-1" accept="image/*" style="display:none" onchange="processAdminImg(event, 1)">
+                </div>
+                <div class="admin-slot">
+                    <div class="slot-title">对应：阶段二</div>
+                    <img id="admin-prev-2" src="" class="slot-img">
+                    <button class="slot-btn" onclick="document.getElementById('file-2').click()">选择此图</button>
+                    <input type="file" id="file-2" accept="image/*" style="display:none" onchange="processAdminImg(event, 2)">
+                </div>
+                <div class="admin-slot">
+                    <div class="slot-title">对应：阶段三</div>
+                    <img id="admin-prev-3" src="" class="slot-img">
+                    <button class="slot-btn" onclick="document.getElementById('file-3').click()">选择此图</button>
+                    <input type="file" id="file-3" accept="image/*" style="display:none" onchange="processAdminImg(event, 3)">
+                </div>
+                <div class="admin-slot">
+                    <div class="slot-title">对应：阶段四</div>
+                    <img id="admin-prev-4" src="" class="slot-img">
+                    <button class="slot-btn" onclick="document.getElementById('file-4').click()">选择此图</button>
+                    <input type="file" id="file-4" accept="image/*" style="display:none" onchange="processAdminImg(event, 4)">
+                </div>
             </div>
-        
-        <div class="upsell-action-bar">
-            <button class="btn-confirm-master" id="btn-submit" onclick="confirmUpsellSelection()">确认所选方案并签署合同 ➔</button>
-        </div>
-    </div>
-
-    <div class="sig-modal" id="signatureModal">
-        <div class="sig-header">
-            <div class="sig-title">✦ 电子合同签署中心 ✦</div>
-            <button class="close-btn" onclick="closeSignature()" style="font-size: 28px; color: #888;">×</button>
-        </div>
-        <div class="sig-content">
-            <div id="sig-pad-wrap" class="sig-pad-wrap"></div>
+            
+            <button class="admin-save-btn" onclick="saveAdmin()">保存并应用至当前方案 ➔</button>
         </div>
     </div>
 
@@ -322,74 +326,58 @@
             return m * 3888;
         }
 
-        // ================= 🚨 全球精选：24张无死角女性高奢大片 =================
+        // 🚨 24张纯女性高级感图片（去除压抑黑边，阳光自信性感）
         const planData = {
             'posture': {
                 type: 'feature', icon: '<img src="https://cdn-icons-png.flaticon.com/512/16292/16292717.png">',
                 title: '体态矫正与结构优化', desc: '物理层面的结构重组，彻底切断疼痛代偿。',
-                p1_name: '筋膜解绑与痛点清零', p1_w: 4,
-                p1_goal: '<strong>打破骨骼错误排列</strong>，恢复关节活动度。', p1_tech: '深层剥离胸小肌与髂腰肌。', p1_feel: '练完感觉<strong>肩颈彻底放松</strong>。',
-                p2_name: '弱点唤醒与核心重构', p2_w: 12,
-                p2_goal: '<strong>激活休眠的肌肉</strong>，建立天然肌肉内衣。', p2_tech: '普拉提孤立性募集腹横肌。', p2_feel: '核心产生<strong>强烈的支撑感</strong>。',
-                p3_name: '动作模式初步定型', p3_w: 24,
-                p3_goal: '将正确排列<strong>刻入神经潜意识</strong>。', p3_tech: '复合抗阻结合生活轨迹二次重塑。', p3_feel: '不自觉地<strong>保持挺拔高姿态</strong>。',
-                p4_name: '全息体态终身维稳', p4_w: 48,
-                p4_goal: '<strong>重塑底层筋膜张力网络</strong>，告别代偿。', p4_tech: '高阶动态控制与全息稳定训练。', p4_feel: '<strong>气质产生肉眼可见的高级蜕变</strong>。',
-                // 这是预留位。当您点击“一键绑定微信原图”后，网页会自动用您的图片覆盖这4张！
-                img1: 'https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=800&q=80', 
-                img2: 'https://images.unsplash.com/photo-1588286840104-8957b019727f?auto=format&fit=crop&w=800&q=80', 
-                img3: 'https://images.unsplash.com/photo-1552674605-db6ffd4facb5?auto=format&fit=crop&w=800&q=80', 
+                p1_name: '筋膜解绑与痛点清零', p1_w: 4, p1_goal: '<strong>打破骨骼错误排列</strong>，恢复关节活动度。', p1_tech: '深层剥离胸小肌与髂腰肌。', p1_feel: '练完感觉<strong>肩颈彻底放松</strong>。',
+                p2_name: '弱点唤醒与核心重构', p2_w: 12, p2_goal: '<strong>激活休眠的肌肉</strong>，建立天然肌肉内衣。', p2_tech: '普拉提孤立性募集腹横肌。', p2_feel: '核心产生<strong>强烈的支撑感</strong>。',
+                p3_name: '动作模式初步定型', p3_w: 24, p3_goal: '将正确排列<strong>刻入神经潜意识</strong>。', p3_tech: '复合抗阻结合生活轨迹二次重塑。', p3_feel: '不自觉地<strong>保持挺拔高姿态</strong>。',
+                p4_name: '全息体态终身维稳', p4_w: 48, p4_goal: '<strong>重塑底层筋膜张力网络</strong>，告别代偿。', p4_tech: '高阶动态控制与全息稳定训练。', p4_feel: '<strong>气质产生肉眼可见的高级蜕变</strong>。',
+                // 从基础伸展 -> 自信站姿 -> 绝美天鹅颈
+                img1: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=800&q=80', 
+                img2: 'https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=800&q=80', 
+                img3: 'https://images.unsplash.com/photo-1552196563-55cd4e45efb3?auto=format&fit=crop&w=800&q=80', 
                 img4: 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=800&q=80',
                 txt1: '初期改善：异常张力释放，肩颈舒展', txt2: '进阶蜕变：核心建立，气质初显', txt3: '深度定型：脊柱完美中立，舒展优雅', txt4: '年度维稳：从骨骼到气质的终极升华'
             },
             'fatloss': {
                 type: 'regular', icon: '<img src="https://cdn-icons-png.flaticon.com/512/12805/12805546.png">',
                 title: '高效燃脂与代谢激活', desc: '重写身体基因，打造“24小时持续燃脂的火炉”。',
-                p1_name: '糖原排空与代谢唤醒', p1_w: 4,
-                p1_goal: '<strong>强行切入脂肪氧化通道</strong>。', p1_tech: '循环抗阻配合低GI饮食干预。', p1_feel: '迅速<strong>排干体内顽固水肿</strong>，体重掉秤快。',
-                p2_name: '高容量顽固脂肪剥离', p2_w: 12,
-                p2_goal: '靶向清理内脏脂肪，<strong>强力突破平台期</strong>。', p2_tech: 'HIIT激发强烈运动后燃效应。', p2_feel: '<strong>腰腹围度明显缩小</strong>，穿衣宽松。',
-                p3_name: '易瘦体质初步定型', p3_w: 24,
-                p3_goal: '拉高基础代谢基数，让身体在<strong>睡眠中持续燃烧</strong>。', p3_tech: '肌肥大训练提升整体肌肉储备。', p3_feel: '<strong>偶尔放纵吃喝不再反弹</strong>。',
-                p4_name: '代谢基因终极重写', p4_w: 48,
-                p4_goal: '<strong>彻底终结反弹宿命</strong>，维持常态化低体脂。', p4_tech: '高阶碳水循环与全域能量消耗训练。', p4_feel: '体能炸裂，<strong>拥有清晰的腹肌线条</strong>。',
-                // 视觉故事：系鞋带起跑 -> 挥洒汗水 -> 极致平坦的腹部 -> 绝美超模马甲线
+                p1_name: '糖原排空与代谢唤醒', p1_w: 4, p1_goal: '<strong>强行切入脂肪氧化通道</strong>。', p1_tech: '循环抗阻配合低GI饮食干预。', p1_feel: '迅速<strong>排干体内顽固水肿</strong>，体重掉秤快。',
+                p2_name: '高容量顽固脂肪剥离', p2_w: 12, p2_goal: '靶向清理内脏脂肪，<strong>强力突破平台期</strong>。', p2_tech: 'HIIT激发强烈运动后燃效应。', p2_feel: '<strong>腰腹围度明显缩小</strong>，穿衣宽松。',
+                p3_name: '易瘦体质初步定型', p3_w: 24, p3_goal: '拉高基础代谢基数，让身体在<strong>睡眠中持续燃烧</strong>。', p3_tech: '肌肥大训练提升整体肌肉储备。', p3_feel: '<strong>偶尔放纵吃喝不再反弹</strong>。',
+                p4_name: '代谢基因终极重写', p4_w: 48, p4_goal: '<strong>彻底终结反弹宿命</strong>，维持常态化低体脂。', p4_tech: '高阶碳水循环与全域能量消耗训练。', p4_feel: '体能炸裂，<strong>拥有清晰的腹肌线条</strong>。',
+                // 系鞋带起跑 -> 汗水 -> 超模马甲线
                 img1: 'https://images.unsplash.com/photo-1483721310020-03333e577078?auto=format&fit=crop&w=800&q=80', 
-                img2: 'https://images.unsplash.com/photo-1607962837359-5da7858da5fb?auto=format&fit=crop&w=800&q=80', 
-                img3: 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?auto=format&fit=crop&w=800&q=80', 
+                img2: 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?auto=format&fit=crop&w=800&q=80', 
+                img3: 'https://images.unsplash.com/photo-1607962837359-5da7858da5fb?auto=format&fit=crop&w=800&q=80', 
                 img4: 'https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?auto=format&fit=crop&w=800&q=80',
                 txt1: '初期效果：水肿排空，体能极速唤醒', txt2: '进阶效果：围度缩小，内脏脂肪大量剥离', txt3: '深度定型：体脂降至黄金点，马甲线显现', txt4: '年度维稳：常态化极低体脂，身材自由'
             },
             'shape': {
                 type: 'regular', icon: '<img src="https://cdn-icons-png.flaticon.com/512/3340/3340004.png">',
                 title: 'S型曲线精雕训练', desc: '物理剥离与3D填充，打造极具视觉杀伤力的身材比例。',
-                p1_name: '目标靶向极速激活', p1_w: 4,
-                p1_goal: '纠正错误发力，避免<strong>“练臀先粗腿”</strong>。', p1_tech: '孤立唤醒臀大肌上部与三角肌中束。', p1_feel: '体会到目标肌肉的<strong>深层酸胀泵感</strong>。',
-                p2_name: '弱点区域3D物理填充', p2_w: 12,
-                p2_goal: '迫使肌纤维超量恢复，实现<strong>局部的饱满填充</strong>。', p2_tech: '渐进式超负荷，运用慢速离心控制。', p2_feel: '<strong>蜜桃臀逐渐饱满上翘</strong>，肩线平直。',
-                p3_name: '视觉比例拉扯精雕', p3_w: 24,
-                p3_goal: '强行呈现出<strong>极致的漏斗形曲线</strong>。', p3_tech: '强化背部阔度，极致压缩腰围数据。', p3_feel: 'S曲线完全固化，<strong>拍照自带高级感</strong>。',
-                p4_name: '绝美比例终极锁死', p4_w: 48,
-                p4_goal: '<strong>精雕细琢每一寸肌肉走向</strong>，实现超模比例。', p4_tech: '高阶肌力微调与极致分离度训练。', p4_feel: '完美驾驭任何紧身衣物，<strong>气场全开</strong>。',
-                // 视觉故事：局部力量唤醒 -> 到蜜桃臀线提升 -> 侧面绝美曲线 -> 极致沙漏型腰臀比
+                p1_name: '目标靶向极速激活', p1_w: 4, p1_goal: '纠正错误发力，避免<strong>“练臀先粗腿”</strong>。', p1_tech: '孤立唤醒臀大肌上部与三角肌中束。', p1_feel: '体会到目标肌肉的<strong>深层酸胀泵感</strong>。',
+                p2_name: '弱点区域3D物理填充', p2_w: 12, p2_goal: '迫使肌纤维超量恢复，实现<strong>局部的饱满填充</strong>。', p2_tech: '渐进式超负荷，运用慢速离心控制。', p2_feel: '<strong>蜜桃臀逐渐饱满上翘</strong>，肩线平直。',
+                p3_name: '视觉比例拉扯精雕', p3_w: 24, p3_goal: '强行呈现出<strong>极致的漏斗形曲线</strong>。', p3_tech: '强化背部阔度，极致压缩腰围数据。', p3_feel: 'S曲线完全固化，<strong>拍照自带高级感</strong>。',
+                p4_name: '绝美比例终极锁死', p4_w: 48, p4_goal: '<strong>精雕细琢每一寸肌肉走向</strong>，实现超模比例。', p4_tech: '高阶肌力微调与极致分离度训练。', p4_feel: '完美驾驭任何紧身衣物，<strong>气场全开</strong>。',
+                // 局部唤醒 -> 饱满腰臀比 -> 极致S型沙漏身材
                 img1: 'https://images.unsplash.com/photo-1584735935682-2f2b69dff9d2?auto=format&fit=crop&w=800&q=80', 
-                img2: 'https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?auto=format&fit=crop&w=800&q=80', 
-                img3: 'https://images.unsplash.com/photo-1594381898411-846e7d193883?auto=format&fit=crop&w=800&q=80', 
+                img2: 'https://images.unsplash.com/photo-1594381898411-846e7d193883?auto=format&fit=crop&w=800&q=80', 
+                img3: 'https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?auto=format&fit=crop&w=800&q=80', 
                 img4: 'https://images.unsplash.com/photo-1574680096145-d05b474e2155?auto=format&fit=crop&w=800&q=80',
                 txt1: '初期唤醒：臀部肌肉苏醒，发力感建立', txt2: '进阶填充：局部饱满度提升，臀线拉高', txt3: '深度定型：绝美腰臀比，极具视觉杀伤力', txt4: '年度维稳：超模级曲线锁死，肌肉质感极致'
             },
             'postpartum': {
                 type: 'feature', icon: '<img src="https://cdn-icons-png.flaticon.com/512/779/779980.png">',
                 title: '产后核心与体形恢复', desc: '无痛安全缝合腹直肌裂隙，助您重返少女级健康体态。',
-                p1_name: '盆底肌与内源安全修复', p1_w: 4,
-                p1_goal: '重建盆底功能，<strong>绝对禁止传统卷腹</strong>。', p1_tech: '横向呼吸法温和唤醒腹横肌。', p1_feel: '<strong>漏尿改善</strong>，核心脏器有明显归位感。',
-                p2_name: '腹直肌物理闭合', p2_w: 12,
-                p2_goal: '安全缝合腹部裂隙，改善<strong>骨盆过度前倾</strong>。', p2_tech: '抗旋转与抗伸展训练，强化深层核心。', p2_feel: '腹直肌间距肉眼收窄，<strong>腰背酸痛大幅缓解</strong>。',
-                p3_name: '温和减脂与皮肤收紧', p3_w: 24,
-                p3_goal: '在安全前提下，<strong>剥离孕期囤积脂肪</strong>。', p3_tech: '无跳跃温和抗阻代谢组。', p3_feel: '逐步<strong>穿回孕前尺码衣服</strong>，皮肤恢复紧致。',
-                p4_name: '辣妈巅峰体态重铸', p4_w: 48,
-                p4_goal: '<strong>全面超越产前身体机能</strong>，打造极品辣妈。', p4_tech: '全域力量与体态精雕系统方案。', p4_feel: '不仅恢复如初，<strong>甚至比孕前更挺拔自信</strong>。',
-                // 视觉故事：温和垫上修复 -> 核心唤醒 -> 展现平坦腹部 -> 阳光紧致、超越孕前的辣妈状态
+                p1_name: '盆底肌与内源安全修复', p1_w: 4, p1_goal: '重建盆底功能，<strong>绝对禁止传统卷腹</strong>。', p1_tech: '横向呼吸法温和唤醒腹横肌。', p1_feel: '<strong>漏尿改善</strong>，核心脏器有明显归位感。',
+                p2_name: '腹直肌物理闭合', p2_w: 12, p2_goal: '安全缝合腹部裂隙，改善<strong>骨盆过度前倾</strong>。', p2_tech: '抗旋转与抗伸展训练，强化深层核心。', p2_feel: '腹直肌间距肉眼收窄，<strong>腰背酸痛大幅缓解</strong>。',
+                p3_name: '温和减脂与皮肤收紧', p3_w: 24, p3_goal: '在安全前提下，<strong>剥离孕期囤积脂肪</strong>。', p3_tech: '无跳跃温和抗阻代谢组。', p3_feel: '逐步<strong>穿回孕前尺码衣服</strong>，皮肤恢复紧致。',
+                p4_name: '辣妈巅峰体态重铸', p4_w: 48, p4_goal: '<strong>全面超越产前身体机能</strong>，打造极品辣妈。', p4_tech: '全域力量与体态精雕系统方案。', p4_feel: '不仅恢复如初，<strong>甚至比孕前更挺拔自信</strong>。',
+                // 温和垫上 -> 阳光平坦腹部 -> 超越孕前的紧致
                 img1: 'https://images.unsplash.com/photo-1556817411-31ae72fa3ea0?auto=format&fit=crop&w=800&q=80', 
                 img2: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&w=800&q=80', 
                 img3: 'https://images.unsplash.com/photo-1559148540-047391cb730a?auto=format&fit=crop&w=800&q=80', 
@@ -399,15 +387,11 @@
             'rehab': {
                 type: 'feature', icon: '<img src="https://cdn-icons-png.flaticon.com/512/2906/2906460.png">',
                 title: '运动功能提升与防护', desc: '精准神经肌肉调控，重建受损关节力学稳定性。',
-                p1_name: '炎症消除与代偿切断', p1_w: 4,
-                p1_goal: '找出引起疼痛的<strong>错误发力源</strong>。', p1_tech: '激痛点按压技术释放代偿关节。', p1_feel: '<strong>弹响明显减少</strong>，尖锐刺痛感消失。',
-                p2_name: '受损关节肌肉护甲构建', p2_w: 12,
-                p2_goal: '增强韧带强度，打造<strong>生物学护膝护腰</strong>。', p2_tech: '无痛角度内等长收缩强化深层小肌群。', p2_feel: '关节产生<strong>极强包裹感</strong>，发力不发虚。',
-                p3_name: '动态脱敏与赛场重返', p3_w: 24,
-                p3_goal: '重建本体感觉，<strong>适应复杂运动轨迹</strong>。', p3_tech: '闭链与不平衡介质高阶神经调控。', p3_feel: '能<strong>极其自信地完成复杂动作</strong>，无惧损伤。',
-                p4_name: '高阶护甲与运动表现', p4_w: 48,
-                p4_goal: '<strong>绝对消除二次损伤隐患</strong>，提升爆发力。', p4_tech: '超等长收缩与专项运动机能强化。', p4_feel: '享受运动带来的绝对快乐，<strong>机能登顶</strong>。',
-                // 视觉故事：关节稳定训练 -> 自信器械 -> 强效爆发力 -> 灵动、健康巅峰的运动表现
+                p1_name: '炎症消除与代偿切断', p1_w: 4, p1_goal: '找出引起疼痛的<strong>错误发力源</strong>。', p1_tech: '激痛点按压技术释放代偿关节。', p1_feel: '<strong>弹响明显减少</strong>，尖锐刺痛感消失。',
+                p2_name: '受损关节肌肉护甲构建', p2_w: 12, p2_goal: '增强韧带强度，打造<strong>生物学护膝护腰</strong>。', p2_tech: '无痛角度内等长收缩强化深层小肌群。', p2_feel: '关节产生<strong>极强包裹感</strong>，发力不发虚。',
+                p3_name: '动态脱敏与赛场重返', p3_w: 24, p3_goal: '重建本体感觉，<strong>适应复杂运动轨迹</strong>。', p3_tech: '闭链与不平衡介质高阶神经调控。', p3_feel: '能<strong>极其自信地完成复杂动作</strong>，无惧损伤。',
+                p4_name: '高阶护甲与运动表现', p4_w: 48, p4_goal: '<strong>绝对消除二次损伤隐患</strong>，提升爆发力。', p4_tech: '超等长收缩与专项运动机能强化。', p4_feel: '享受运动带来的绝对快乐，<strong>机能登顶</strong>。',
+                // 关节稳定 -> 爆发力 -> 健康运动表现
                 img1: 'https://images.unsplash.com/photo-1502825751399-28cbafbf8275?auto=format&fit=crop&w=800&q=80', 
                 img2: 'https://images.unsplash.com/photo-1599058917212-d750089bc07e?auto=format&fit=crop&w=800&q=80', 
                 img3: 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=800&q=80', 
@@ -417,15 +401,11 @@
             'antiaging': {
                 type: 'regular', icon: '<img src="https://cdn-icons-png.flaticon.com/512/8407/8407060.png">',
                 title: '活力体能与状态焕新', desc: '提升骨密度与肌肉储备，为您打造不老的肉体盔甲。',
-                p1_name: '机能唤醒与润滑系统', p1_w: 4,
-                p1_goal: '促进滑液分泌，<strong>全面恢复生锈卡顿的机能</strong>。', p1_tech: '关节活动度打磨与全身筋膜链拉伸。', p1_feel: '<strong>晨起僵硬感消失，深度睡眠延长</strong>。',
-                p2_name: '骨密度与防流失储备', p2_w: 12,
-                p2_goal: '刺激成骨细胞活跃，<strong>暴力对抗肌肉萎缩</strong>。', p2_tech: '重物抗阻配合慢速离心收缩技术。', p2_feel: '拎重物不吃力，<strong>下楼梯膝盖绝不发软</strong>。',
-                p3_name: '引擎重置与荷尔蒙唤醒', p3_w: 24,
-                p3_goal: '提升最大摄氧量，由内而外焕发<strong>极致年轻态</strong>。', p3_tech: '稳态有氧配合心率变异率科学监控。', p3_feel: '爬楼梯不喘，<strong>气色红润，精力爆表</strong>。',
-                p4_name: '细胞级机能终身抗衰', p4_w: 48,
-                p4_goal: '<strong>真正实现生理年龄的逆转</strong>，常态化冻龄。', p4_tech: '全周期高阶体能与线粒体强化训练。', p4_feel: '由内而外散发活力，<strong>远超同龄人的巅峰状态</strong>。',
-                // 视觉故事：阳光下伸展 -> 焕发活力 -> 皮肤发光、充满青春胶原蛋白感的高级自信面容
+                p1_name: '机能唤醒与润滑系统', p1_w: 4, p1_goal: '促进滑液分泌，<strong>全面恢复生锈卡顿的机能</strong>。', p1_tech: '关节活动度打磨与全身筋膜链拉伸。', p1_feel: '<strong>晨起僵硬感消失，深度睡眠延长</strong>。',
+                p2_name: '骨密度与防流失储备', p2_w: 12, p2_goal: '刺激成骨细胞活跃，<strong>暴力对抗肌肉萎缩</strong>。', p2_tech: '重物抗阻配合慢速离心收缩技术。', p2_feel: '拎重物不吃力，<strong>下楼梯膝盖绝不发软</strong>。',
+                p3_name: '引擎重置与荷尔蒙唤醒', p3_w: 24, p3_goal: '提升最大摄氧量，由内而外焕发<strong>极致年轻态</strong>。', p3_tech: '稳态有氧配合心率变异率科学监控。', p3_feel: '爬楼梯不喘，<strong>气色红润，精力爆表</strong>。',
+                p4_name: '细胞级机能终身抗衰', p4_w: 48, p4_goal: '<strong>真正实现生理年龄的逆转</strong>，常态化冻龄。', p4_tech: '全周期高阶体能与线粒体强化训练。', p4_feel: '由内而外散发活力，<strong>远超同龄人的巅峰状态</strong>。',
+                // 阳光伸展 -> 皮肤发光、充满青春胶原蛋白
                 img1: 'https://images.unsplash.com/photo-1579126031931-7911d74c291e?auto=format&fit=crop&w=800&q=80', 
                 img2: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=800&q=80', 
                 img3: 'https://images.unsplash.com/photo-1508215885820-4585e5610ea0?auto=format&fit=crop&w=800&q=80', 
@@ -434,11 +414,11 @@
             }
         };
 
-        // 页面一加载，自动从浏览器记忆中读取老板您上传的微信私密大片！
-        for(let i=1; i<=4; i++) {
-            let savedBase64 = localStorage.getItem('custom_posture_img_' + i);
-            if(savedBase64) {
-                planData.posture['img' + i] = savedBase64;
+        // 初始化加载保存在浏览器的老板私密照片
+        for(let key in planData) {
+            for(let i=1; i<=4; i++) {
+                let savedImg = localStorage.getItem(`custom_${key}_img_${i}`);
+                if(savedImg) planData[key][`img${i}`] = savedImg;
             }
         }
 
@@ -454,15 +434,12 @@
             const modal = document.getElementById('detailModal');
             const body = document.getElementById('modalBody');
             
-            // 🚨 专属黑科技：老板专属一键导入按钮，只在“体态矫正”版块出现
-            let adminBtnHTML = '';
-            if(key === 'posture') {
-                adminBtnHTML = `
-                    <div style="background: linear-gradient(135deg, rgba(212,175,55,0.15), rgba(212,175,55,0.05)); border: 1px dashed #D4AF37; color: #D4AF37; text-align: center; padding: 12px; border-radius: 8px; font-size: 13px; font-weight: bold; cursor: pointer; margin-bottom: 15px; letter-spacing: 1px;" onclick="document.getElementById('img-uploader').click()">
-                        ✦ 老板专属通道：点击一键吸附您的4张微信大片 ✦
-                    </div>
-                `;
-            }
+            // 🚨 6大板块全部开放老板专属配置按钮
+            let adminBtnHTML = `
+                <div style="background: linear-gradient(135deg, rgba(212,175,55,0.15), rgba(212,175,55,0.05)); border: 1px dashed #D4AF37; color: #D4AF37; text-align: center; padding: 14px; border-radius: 12px; font-size: 13px; font-weight: bold; cursor: pointer; margin-bottom: 20px; letter-spacing: 1px; box-shadow: 0 5px 15px rgba(0,0,0,0.5);" onclick="openAdminModal()">
+                    ✦ 老板专属通道：自定义当前方案投射图 ✦
+                </div>
+            `;
 
             body.innerHTML = `
                 <div class="hero-banner">
@@ -595,44 +572,55 @@
             updateCheckout(); 
         }
 
-        // ================= 🚨 核心黑科技：图片浏览器本地吞噬引擎 =================
-        function handleImageUpload(event) {
-            const files = Array.from(event.target.files);
-            if(files.length === 0) return;
-            
-            // 按您下载的微信文件名顺序自动排序，确保阶段1到4完全对应！
-            files.sort((a,b) => a.name.localeCompare(b.name));
-            
-            let loadedCount = 0;
-            files.forEach((file, index) => {
-                if(index > 3) return; // 最多只吃4张图
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const img = new Image();
-                    img.onload = function() {
-                        const canvas = document.createElement('canvas');
-                        const ctx = canvas.getContext('2d');
-                        // 智能压缩，防止撑爆浏览器内存
-                        const scale = Math.min(800 / img.width, 1);
-                        canvas.width = img.width * scale;
-                        canvas.height = img.height * scale;
-                        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                        
-                        // 转换成神秘的 Base64 代码，永久存入浏览器！
-                        const base64 = canvas.toDataURL('image/jpeg', 0.8);
-                        localStorage.setItem('custom_posture_img_' + (index + 1), base64);
-                        planData.posture['img' + (index+1)] = base64;
-                        
-                        loadedCount++;
-                        if(loadedCount === Math.min(files.length, 4)) {
-                            alert("老板，您的4张微信大片已成功被网页永久吞入！现在点开阶段一到四看看效果吧！");
-                            if(currentPlanKey === 'posture') updateCheckout(); // 瞬间刷新画面
-                        }
-                    };
-                    img.src = e.target.result;
+        // ================= 🚨 专属图库控制台逻辑 =================
+        function openAdminModal() {
+            document.getElementById('admin-subtitle').innerText = `当前方案：${planData[currentPlanKey].title}`;
+            for(let i=1; i<=4; i++) {
+                document.getElementById(`admin-prev-${i}`).src = planData[currentPlanKey][`img${i}`];
+            }
+            document.getElementById('adminModalWrap').classList.add('show');
+        }
+
+        function closeAdmin() {
+            document.getElementById('adminModalWrap').classList.remove('show');
+        }
+
+        function processAdminImg(event, phase) {
+            const file = event.target.files[0];
+            if(!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = new Image();
+                img.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+                    // 压缩图片防止浏览器内存崩盘
+                    const scale = Math.min(600 / img.width, 1);
+                    canvas.width = img.width * scale;
+                    canvas.height = img.height * scale;
+                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                    
+                    const base64 = canvas.toDataURL('image/jpeg', 0.8);
+                    
+                    // 立即更新预览
+                    document.getElementById(`admin-prev-${phase}`).src = base64;
+                    // 暂存到当前数据中
+                    planData[currentPlanKey][`img${phase}`] = base64;
                 };
-                reader.readAsDataURL(file);
-            });
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function saveAdmin() {
+            // 将4个阶段的图永久保存到本地缓存
+            for(let i=1; i<=4; i++) {
+                const base64 = planData[currentPlanKey][`img${i}`];
+                localStorage.setItem(`custom_${currentPlanKey}_img_${i}`, base64);
+            }
+            closeAdmin();
+            updateCheckout(); // 刷新主界面图片
+            alert("老板，当前方案的 4 张专属大片已成功锁定！");
         }
 
         function finishAndReturn() {
@@ -775,7 +763,6 @@
                     vImg.src = data.img4; vTitle.innerText = '✦ 顶级私教VIP托管 ✦'; vDesc.innerText = '打破一切局限，AI锁定您的全息巅峰状态';
                 }
                 
-                // 🚨 选中阶段后，滤镜完全透亮，呈现高级大片的本来美感
                 vImg.style.filter = 'brightness(1.0) saturate(1.05)';
 
                 if (isCustom) {
