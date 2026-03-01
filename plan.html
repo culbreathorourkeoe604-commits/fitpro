@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>私人定制高端课程</title>
     <style>
-        /* 顶级香槟黑金配色 */
+        /* 100% 还原您原汁原味的顶级香槟黑金配色，绝不瞎改 */
         :root { --primary: #D4AF37; --accent: #C5A059; --bg: #050505; --surface: #121212; --text-main: #E2E8F0; --text-sub: #8A92A3; }
         
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; margin: 0; padding: 0; }
@@ -107,21 +107,24 @@
         .cb-input::-webkit-outer-spin-button, .cb-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
         .cb-input[type=number] { -moz-appearance: textfield; }
 
-        .visual-feedback-section { margin-top: 30px; background: #0a0a0c; border: 1px solid rgba(212, 175, 55, 0.15); border-radius: 16px; padding: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        /* 🚨 终极视觉投射图 CSS 升级：去除暗度，展现清晰明亮大片 */
+        .visual-feedback-section { margin-top: 30px; background: #0a0a0c; border: 1px solid rgba(212, 175, 55, 0.3); border-radius: 16px; padding: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
         .fb-header { text-align: center; font-size: 15px; font-weight: 900; color: var(--primary); margin-bottom: 15px; letter-spacing: 2px; }
-        .visual-card { width: 100%; height: 300px; border-radius: 12px; overflow: hidden; position: relative; border: 1px solid rgba(255,255,255,0.1); background: #111;}
-        /* 🚨 关键修改：移除了暗色滤镜，现在图片是清晰明亮的 */
-        .visual-img { width: 100%; height: 100%; object-fit: cover; transition: all 0.5s ease-in-out; }
+        .visual-card { width: 100%; height: 320px; border-radius: 12px; overflow: hidden; position: relative; border: 1px solid rgba(212, 175, 55, 0.2); background: #111;}
         
-        .scanning-line { position: absolute; top: -10%; left: 0; width: 100%; height: 2px; background: rgba(212, 175, 55, 0.8); box-shadow: 0 0 20px 5px rgba(212, 175, 55, 0.4); opacity: 0; z-index: 5; pointer-events: none;}
+        /* 图片本身保持极高的亮度和清晰度，拒绝压抑 */
+        .visual-img { width: 100%; height: 100%; object-fit: cover; transition: all 0.6s cubic-bezier(0.2, 0.8, 0.2, 1); }
+        
+        .scanning-line { position: absolute; top: -10%; left: 0; width: 100%; height: 2px; background: rgba(212, 175, 55, 0.9); box-shadow: 0 0 25px 8px rgba(212, 175, 55, 0.5); opacity: 0; z-index: 5; pointer-events: none;}
         @keyframes aiScan { 0% { top: -10%; opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { top: 110%; opacity: 0; } }
         .scanning-active .scanning-line { animation: aiScan 1.5s ease-in-out; }
-        /* 🚨 关键修改：扫描时轻微增加亮度和饱和度，保持清晰 */
-        .scanning-active .visual-img { filter: brightness(1.1) saturate(1.1); transform: scale(1.05); }
+        /* 激活时光影放大，不增加任何黑边 */
+        .scanning-active .visual-img { transform: scale(1.05); filter: brightness(1.05) contrast(1.05); }
 
-        .visual-overlay { position: absolute; bottom: 0; left: 0; width: 100%; padding: 40px 15px 15px; background: linear-gradient(to top, rgba(0,0,0,0.95), rgba(0,0,0,0.6), transparent); display: flex; flex-direction: column; justify-content: flex-end; z-index: 10;}
-        .visual-title { color: var(--primary); font-size: 20px; font-weight: 900; letter-spacing: 1px; margin-bottom: 6px; text-shadow: 0 2px 5px rgba(0,0,0,0.8);}
-        .visual-desc { color: #ddd; font-size: 13px; line-height: 1.5; text-shadow: 0 1px 3px rgba(0,0,0,0.8); }
+        /* 底部渐变透明度调低，确保不会黑掉图片，仅保护文字可读性 */
+        .visual-overlay { position: absolute; bottom: 0; left: 0; width: 100%; padding: 60px 15px 15px; background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.3) 50%, transparent 100%); display: flex; flex-direction: column; justify-content: flex-end; }
+        .visual-title { color: var(--primary); font-size: 20px; font-weight: 900; letter-spacing: 1px; margin-bottom: 6px; text-shadow: 0 2px 5px rgba(0,0,0,0.9);}
+        .visual-desc { color: #fff; font-size: 13px; line-height: 1.5; text-shadow: 0 1px 3px rgba(0,0,0,0.9); font-weight: bold;}
 
         .checkout-bar { position: fixed; bottom: 0; left: 0; width: 100%; padding: 15px 20px 25px; background: rgba(10, 10, 12, 0.98); border-top: 1px solid rgba(212,175,55,0.3); box-shadow: 0 -10px 30px rgba(0,0,0,0.8); z-index: 100; backdrop-filter: blur(15px); display: flex; justify-content: space-between; align-items: center; }
         .checkout-info { display: flex; flex-direction: column; gap: 4px; }
@@ -317,7 +320,7 @@
             return m * 3888;
         }
 
-        // 🚨 24张顶级女性形体大片，替换原有的压抑色调
+        // 🚨 24张顶级女性形体大片，明亮、清晰、阳光、健康自信
         const planData = {
             'posture': {
                 type: 'feature', icon: '<img src="https://cdn-icons-png.flaticon.com/512/16292/16292717.png">',
@@ -330,12 +333,11 @@
                 p3_goal: '将正确排列<strong>刻入神经潜意识</strong>。', p3_tech: '复合抗阻结合生活轨迹二次重塑。', p3_feel: '不自觉地<strong>保持挺拔高姿态</strong>。',
                 p4_name: '全息体态终身维稳', p4_w: 48,
                 p4_goal: '<strong>重塑底层筋膜张力网络</strong>，告别代偿。', p4_tech: '高阶动态控制与全息稳定训练。', p4_feel: '<strong>气质产生肉眼可见的高级蜕变</strong>。',
-                // 阳光、舒展、优雅的女性体态图
-                img1: 'https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=800&q=80', 
+                img1: 'https://images.unsplash.com/photo-1599901860904-17e6ed7083a0?auto=format&fit=crop&w=800&q=80', 
                 img2: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=800&q=80', 
-                img3: 'https://images.unsplash.com/photo-1552196563-55cd4e45efb3?auto=format&fit=crop&w=800&q=80', 
-                img4: 'https://images.unsplash.com/photo-1607962837359-5da7858da5fb?auto=format&fit=crop&w=800&q=80',
-                txt1: '初期改善：异常张力释放，肩颈舒展', txt2: '进阶蜕变：核心建立，气质初显', txt3: '深度定型：脊柱完美中立，绝美背影', txt4: '年度维稳：从骨骼到气质的终极升华'
+                img3: 'https://images.unsplash.com/photo-1588286840104-8957b019727f?auto=format&fit=crop&w=800&q=80', 
+                img4: 'https://images.unsplash.com/photo-1552196563-55cd4e45efb3?auto=format&fit=crop&w=800&q=80',
+                txt1: '初期改善：异常张力释放，肩颈舒展', txt2: '进阶蜕变：核心建立，气质初显', txt3: '深度定型：脊柱完美中立，优雅身姿', txt4: '年度维稳：从骨骼到气质的终极升华'
             },
             'fatloss': {
                 type: 'regular', icon: '<img src="https://cdn-icons-png.flaticon.com/512/12805/12805546.png">',
@@ -348,11 +350,10 @@
                 p3_goal: '拉高基础代谢基数，让身体在<strong>睡眠中持续燃烧</strong>。', p3_tech: '肌肥大训练提升整体肌肉储备。', p3_feel: '<strong>偶尔放纵吃喝不再反弹</strong>。',
                 p4_name: '代谢基因终极重写', p4_w: 48,
                 p4_goal: '<strong>彻底终结反弹宿命</strong>，维持常态化低体脂。', p4_tech: '高阶碳水循环与全域能量消耗训练。', p4_feel: '体能炸裂，<strong>拥有清晰的腹肌线条</strong>。',
-                // 清晰、活力、汗水与阳光结合的女性燃脂图
-                img1: 'https://images.unsplash.com/photo-1483721310020-03333e577078?auto=format&fit=crop&w=800&q=80', 
-                img2: 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?auto=format&fit=crop&w=800&q=80', 
-                img3: 'https://images.unsplash.com/photo-1574680096145-d05b474e2155?auto=format&fit=crop&w=800&q=80', 
-                img4: 'https://images.unsplash.com/photo-1599447292180-45fd84092ef0?auto=format&fit=crop&w=800&q=80',
+                img1: 'https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?auto=format&fit=crop&w=800&q=80', 
+                img2: 'https://images.unsplash.com/photo-1608228079968-c7681eaef81e?auto=format&fit=crop&w=800&q=80', 
+                img3: 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?auto=format&fit=crop&w=800&q=80', 
+                img4: 'https://images.unsplash.com/photo-1508215885820-4585e5610ea0?auto=format&fit=crop&w=800&q=80',
                 txt1: '初期效果：水肿排空，体能极速唤醒', txt2: '进阶效果：围度缩小，内脏脂肪大量剥离', txt3: '深度定型：体脂降至黄金点，马甲线显现', txt4: '年度维稳：常态化极低体脂，身材自由'
             },
             'shape': {
@@ -366,9 +367,8 @@
                 p3_goal: '强行呈现出<strong>极致的漏斗形曲线</strong>。', p3_tech: '强化背部阔度，极致压缩腰围数据。', p3_feel: 'S曲线完全固化，<strong>拍照自带高级感</strong>。',
                 p4_name: '绝美比例终极锁死', p4_w: 48,
                 p4_goal: '<strong>精雕细琢每一寸肌肉走向</strong>，实现超模比例。', p4_tech: '高阶肌力微调与极致分离度训练。', p4_feel: '完美驾驭任何紧身衣物，<strong>气场全开</strong>。',
-                // 若隐若现、高级性感、清晰马甲线与臀线的女性图
-                img1: 'https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?auto=format&fit=crop&w=800&q=80', 
-                img2: 'https://images.unsplash.com/photo-1518310383802-640c2de311b2?auto=format&fit=crop&w=800&q=80', 
+                img1: 'https://images.unsplash.com/photo-1574680096145-d05b474e2155?auto=format&fit=crop&w=800&q=80', 
+                img2: 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=800&q=80', 
                 img3: 'https://images.unsplash.com/photo-1605296867304-46d5465a13f1?auto=format&fit=crop&w=800&q=80', 
                 img4: 'https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?auto=format&fit=crop&w=800&q=80',
                 txt1: '初期唤醒：臀部肌肉苏醒，发力感建立', txt2: '进阶填充：局部饱满度提升，臀线拉高', txt3: '深度定型：绝美腰臀比，极具视觉杀伤力', txt4: '年度维稳：超模级曲线锁死，肌肉质感极致'
@@ -384,10 +384,9 @@
                 p3_goal: '在安全前提下，<strong>剥离孕期囤积脂肪</strong>。', p3_tech: '无跳跃温和抗阻代谢组。', p3_feel: '逐步<strong>穿回孕前尺码衣服</strong>，皮肤恢复紧致。',
                 p4_name: '辣妈巅峰体态重铸', p4_w: 48,
                 p4_goal: '<strong>全面超越产前身体机能</strong>，打造极品辣妈。', p4_tech: '全域力量与体态精雕系统方案。', p4_feel: '不仅恢复如初，<strong>甚至比孕前更挺拔自信</strong>。',
-                // 温馨、阳光、自信展示紧致核心的辣妈图
                 img1: 'https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=800&q=80', 
                 img2: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&w=800&q=80', 
-                img3: 'https://images.unsplash.com/photo-1559148540-047391cb730a?auto=format&fit=crop&w=800&q=80', 
+                img3: 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=800&q=80', 
                 img4: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=800&q=80',
                 txt1: '初期恢复：盆底激活，内源性功能重建', txt2: '进阶缝合：腹直肌闭合，核心力量回归', txt3: '深度定型：重返少女时代紧致身型', txt4: '年度维稳：机能全面超越孕前，顶级辣妈'
             },
@@ -402,11 +401,10 @@
                 p3_goal: '重建本体感觉，<strong>适应复杂运动轨迹</strong>。', p3_tech: '闭链与不平衡介质高阶神经调控。', p3_feel: '能<strong>极其自信地完成复杂动作</strong>，无惧损伤。',
                 p4_name: '高阶护甲与运动表现', p4_w: 48,
                 p4_goal: '<strong>绝对消除二次损伤隐患</strong>，提升爆发力。', p4_tech: '超等长收缩与专项运动机能强化。', p4_feel: '享受运动带来的绝对快乐，<strong>机能登顶</strong>。',
-                // 展示灵活度、健康肌肉线条的女性康复图
-                img1: 'https://images.unsplash.com/photo-1588286840104-8957b019727f?auto=format&fit=crop&w=800&q=80', 
-                img2: 'https://images.unsplash.com/photo-1599058917212-d750089bc07e?auto=format&fit=crop&w=800&q=80', 
-                img3: 'https://images.unsplash.com/photo-1584735935682-2f2b69dff9d2?auto=format&fit=crop&w=800&q=80', 
-                img4: 'https://images.unsplash.com/photo-1571019613576-2b22c76fd955?auto=format&fit=crop&w=800&q=80',
+                img1: 'https://images.unsplash.com/photo-1599058917212-d750089bc07e?auto=format&fit=crop&w=800&q=80', 
+                img2: 'https://images.unsplash.com/photo-1584735935682-2f2b69dff9d2?auto=format&fit=crop&w=800&q=80', 
+                img3: 'https://images.unsplash.com/photo-1571019613576-2b22c76fd955?auto=format&fit=crop&w=800&q=80', 
+                img4: 'https://images.unsplash.com/photo-1552674605-db6ffd4facb5?auto=format&fit=crop&w=800&q=80',
                 txt1: '初期镇痛：软组织压力释放，疼痛消失', txt2: '进阶护甲：关节周围力量增强，建立保护', txt3: '满血重返：无惧任何发力，重返高强度', txt4: '年度维稳：绝对护甲锁定，巅峰运动表现'
             },
             'antiaging': {
@@ -420,7 +418,6 @@
                 p3_goal: '提升最大摄氧量，由内而外焕发<strong>极致年轻态</strong>。', p3_tech: '稳态有氧配合心率变异率科学监控。', p3_feel: '爬楼梯不喘，<strong>气色红润，精力爆表</strong>。',
                 p4_name: '细胞级机能终身抗衰', p4_w: 48,
                 p4_goal: '<strong>真正实现生理年龄的逆转</strong>，常态化冻龄。', p4_tech: '全周期高阶体能与线粒体强化训练。', p4_feel: '由内而外散发活力，<strong>远超同龄人的巅峰状态</strong>。',
-                // 阳光、自信、展现皮肤光泽与健康肌肉的女性图
                 img1: 'https://images.unsplash.com/photo-1579126031931-7911d74c291e?auto=format&fit=crop&w=800&q=80', 
                 img2: 'https://images.unsplash.com/photo-1518310383802-640c2de311b2?auto=format&fit=crop&w=800&q=80', 
                 img3: 'https://images.unsplash.com/photo-1508215885820-4585e5610ea0?auto=format&fit=crop&w=800&q=80', 
@@ -558,7 +555,7 @@
                     <div class="scanning-line"></div>
                     <div class="fb-header">✦ AI 目标形态视觉投射 ✦</div>
                     <div class="visual-card">
-                        <img id="visual-img" class="visual-img" src="${data.img1}" alt="形态演变" style="filter: brightness(0.2) grayscale(1);">
+                        <img id="visual-img" class="visual-img" src="${data.img1}" alt="形态演变" style="filter: brightness(0.4) grayscale(0.8);">
                         <div class="visual-overlay">
                             <div class="visual-title" id="visual-title">等待接入重塑网络...</div>
                             <div class="visual-desc" id="visual-desc">点选上方阶段，AI将为您投射巅峰形态</div>
@@ -648,7 +645,7 @@
         function triggerAIScan() {
             let sec = document.getElementById('visual-sec');
             sec.classList.remove('scanning-active');
-            void sec.offsetWidth; // trigger reflow
+            void sec.offsetWidth; 
             sec.classList.add('scanning-active');
         }
 
@@ -692,7 +689,8 @@
             const vDesc = document.getElementById('visual-desc');
 
             if(maxPhaseSelected === 0) {
-                vImg.style.filter = 'brightness(0.2) grayscale(1)';
+                // 🚨 未选中阶段时，图片微暗作为待命状态
+                vImg.style.filter = 'brightness(0.4) grayscale(0.8)';
                 vTitle.innerText = '等待接入重塑网络...';
                 vDesc.innerText = '点选上方阶段，AI将为您投射巅峰形态';
                 valDisplay.innerHTML = '<span style="color:#666; font-size:12px;">待选择目标阶段</span>';
@@ -710,6 +708,9 @@
                 } else {
                     vImg.src = data.img4; vTitle.innerText = '✦ 顶级私教VIP托管 ✦'; vDesc.innerText = '打破一切局限，AI锁定您的全息巅峰状态';
                 }
+                
+                // 🚨 选中阶段时，取消暗色滤镜，全亮展示大片
+                vImg.style.filter = 'brightness(1.05) contrast(1.05)';
                 
                 if (isCustom) {
                     valDisplay.innerHTML = `${totalExactSessions} <span>节 (含包月折算)</span>`;
@@ -739,7 +740,6 @@
             openSignature(selectedUpsell.name, selectedUpsell.sessions, selectedUpsell.price);
         }
 
-        // 🚨 弹窗重构：引入价格库同款仪表盘 UI 与散客锚定法
         function showUpsellModal() {
             if(globalTotalExact === 0) return;
             
@@ -747,7 +747,6 @@
             let isCustom = customBox && customBox.classList.contains('selected');
             const data = planData[currentPlanKey];
             
-            // 当前体系的散客价
             const baseOriPrice = (data.type === 'feature') ? 460 : 440;
             const newbiePrice = (data.type === 'feature') ? 380 : 350;
 
@@ -761,8 +760,7 @@
                 let f = parseInt(document.getElementById('cb-feat').value) || 0;
                 let m = parseInt(document.getElementById('cb-mon').value) || 0;
 
-                // 方案一：满配
-                let oriReg1 = r * 440; // 散客锚定
+                let oriReg1 = r * 440; 
                 let oriFeat1 = f * 460;
                 let oriMon1 = m > 0 ? getMonthlyPrice(m) : 0;
                 let totalOri1 = oriReg1 + oriFeat1 + oriMon1;
@@ -771,7 +769,6 @@
                 let totalNew1 = newReg1 + newFeat1 + oriMon1;
                 let save1 = totalOri1 - totalNew1;
 
-                // 方案二：原价半程包
                 let r2 = Math.ceil(r / 2); let f2 = Math.ceil(f / 2); let m2 = m;
                 let unitR2 = getUnitPrice(r2, 'regular'); let unitF2 = getUnitPrice(f2, 'feature');
                 let totalNew2 = (r2 * unitR2) + (f2 * unitF2) + (m2 > 0 ? getMonthlyPrice(m2) : 0); 
@@ -822,7 +819,6 @@
                 selectUpPlan('card-scheme-1', '【专属高定】全息私享包', `${r+f}节+${m}个月`, `¥ ${formatMoney(totalNew1)}`);
 
             } else {
-                // ====== 阶段双轨 ======
                 let phaseNames = [];
                 document.querySelectorAll('.phase-box.selected:not(.combo-box)').forEach(box => {
                     let pStep = box.querySelector('.p-step').innerText; 
@@ -842,7 +838,7 @@
 
                 let unitC = getUnitPrice(pkgEntry, data.type); 
                 
-                let totalOriB = pkgCore * baseOriPrice; // 散客锚定法
+                let totalOriB = pkgCore * baseOriPrice; 
                 let totalNewB = pkgCore * newbiePrice; 
                 let saveB = totalOriB - totalNewB;
                 
