@@ -110,11 +110,13 @@
         .ring-sub { font-size: 9px; color: #888; font-weight: normal;}
         .manual-edit-btn { margin-top: 8px; background: #222; color: #D4AF37; font-size: 10px; padding: 4px 10px; border-radius: 6px; border: 1px solid #444; cursor: pointer;}
 
+        /* 🚨 生存指南：柔美明亮版 */
         .survival-guide { margin-bottom: 20px; }
         .guide-scroll { display: flex; overflow-x: auto; gap: 12px; padding-bottom: 10px; scroll-snap-type: x mandatory;}
         .guide-scroll::-webkit-scrollbar { display: none; }
         .guide-card { flex-shrink: 0; width: 200px; height: 100px; border-radius: 12px; background: #111; border: 1px solid rgba(212,175,55,0.2); position: relative; overflow: hidden; scroll-snap-align: start; cursor: pointer;}
-        .guide-card img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.5) saturate(0.8);}
+        /* 调整了滤镜，让图片更亮、更柔和 */
+        .guide-card img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.7) saturate(0.9);}
         .guide-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.9), transparent); display: flex; flex-direction: column; justify-content: flex-end; padding: 12px;}
         .g-title { font-size: 13px; font-weight: 900; color: #D4AF37; }
         .g-desc { font-size: 10px; color: #ccc; margin-top: 4px;}
@@ -364,15 +366,15 @@
                     <div style="font-size: 14px; font-weight: bold; color: #fff; margin-bottom: 10px;">✦ 社交赴宴生存指南</div>
                     <div class="guide-scroll">
                         <div class="guide-card" onclick="openGuide('bistro')">
-                            <img src="https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?auto=format&fit=crop&w=400&q=80">
+                            <img src="https://images.unsplash.com/photo-1550966871-3ed3cdb5ed0c?auto=format&fit=crop&w=400&q=80">
                             <div class="guide-overlay"><div class="g-title">米其林 / Bistro</div><div class="g-desc">享受美食的防暴卡秘籍</div></div>
                         </div>
                         <div class="guide-card" onclick="openGuide('tea')">
-                            <img src="https://images.unsplash.com/photo-1557142046-c704a3adf364?auto=format&fit=crop&w=400&q=80">
-                            <div class="guide-overlay"><div class="g-title">名媛下午茶</div><div class="g-desc">优雅避开糖油混合炸弹</div></div>
+                            <img src="https://images.unsplash.com/photo-1563729768-2b3847745246?auto=format&fit=crop&w=400&q=80">
+                            <div class="guide-overlay"><div class="g-title">精致下午茶</div><div class="g-desc">优雅避开糖油混合炸弹</div></div>
                         </div>
                         <div class="guide-card" onclick="openGuide('business')">
-                            <img src="https://images.unsplash.com/photo-1556761175-5973dc0f32b7?auto=format&fit=crop&w=400&q=80">
+                            <img src="https://images.unsplash.com/photo-1552566626-52f8b828add9?auto=format&fit=crop&w=400&q=80">
                             <div class="guide-overlay"><div class="g-title">商务应酬酒局</div><div class="g-desc">酒局与推杯换盏保护法</div></div>
                         </div>
                     </div>
@@ -730,7 +732,7 @@
         function openGuide(type) {
             const data = {
                 'bistro': { title: '🍷 米其林 / Bistro', content: `<strong>核心法则：海鲜优先，警惕酱汁</strong><br><br><li><strong>餐前：</strong>喝一大杯温水。</li><li><strong>前菜：</strong>只选生肉薄片或清汤。</li><li><strong>主菜：</strong>首选牛排海鲜，酱汁单放。</li><li><strong>配酒：</strong>干型红白葡萄，一杯酒配一杯水。</li>` },
-                'tea': { title: '🍰 名媛下午茶', content: `<strong>核心法则：优雅品尝，适可而止</strong><br><br><li><strong>饮品：</strong>雷打不动的美式或无糖茶。</li><li><strong>甜点策略：</strong>三层塔只吃咸点。</li><li><strong>马卡龙：</strong>只吃顶部的鲜果，放弃奶油。</li>` },
+                'tea': { title: '🍰 精致下午茶', content: `<strong>核心法则：优雅品尝，适可而止</strong><br><br><li><strong>饮品：</strong>雷打不动的美式或无糖茶。</li><li><strong>甜点策略：</strong>三层塔只吃咸点。</li><li><strong>马卡龙：</strong>只吃顶部的鲜果，放弃奶油。</li>` },
                 'business': { title: '🥂 商务应酬酒局', content: `<strong>核心法则：保护肝脏，假吃主食</strong><br><br><li><strong>赴宴前：</strong>吃2个白煮蛋垫底。</li><li><strong>点菜：</strong>主动点白灼蔬菜放自己面前。</li><li><strong>敬酒：</strong>烈酒旁备冰水，喝一口酒喝两口水。</li><li><strong>主食：</strong>炒饭炒面坚决不碰。</li>` }
             };
             document.getElementById('gm-title').innerText = data[type].title;
