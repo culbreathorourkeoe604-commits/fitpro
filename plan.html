@@ -5,237 +5,210 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>私人定制高端课程</title>
     <style>
-        /* 顶级白金香槟配色 - 明亮高奢版 */
-        :root { 
-            --primary: #D4AF37; /* 香槟金 */
-            --accent: #E8C37C; /* 亮金 */
-            --bg-main: #F8F8FA; /* 暖米白背景 */
-            --surface-light: #FFFFFF; /* 纯白表面 */
-            --surface-frosted: rgba(255, 255, 255, 0.85); /* 毛玻璃 */
-            --text-dark: #1A1A1A; /* 深灰主字 */
-            --text-sub: #666666; /* 次要文字 */
-            --shadow-soft: 0 10px 30px rgba(212, 175, 55, 0.15); /* 柔和金影 */
-        }
+        /* 顶级香槟黑金配色 */
+        :root { --primary: #D4AF37; --accent: #C5A059; --bg: #050505; --surface: #121212; --text-main: #E2E8F0; --text-sub: #8A92A3; }
         
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; margin: 0; padding: 0; }
-        html, body { width: 100%; max-width: 100vw; overflow-x: hidden; background: var(--bg-main); color: var(--text-dark); font-family: "DIN Alternate", "Helvetica Neue", sans-serif; -webkit-font-smoothing: antialiased; }
+        html, body { width: 100%; max-width: 100vw; overflow-x: hidden; background: var(--bg); color: var(--text-main); font-family: "DIN Alternate", "Helvetica Neue", sans-serif; -webkit-font-smoothing: antialiased; }
         
-        /* 增加一点大理石纹理背景感 */
-        body::before { content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: url('https://img.freepik.com/free-photo/white-marble-texture-with-natural-pattern-for-background-or-design-art-work_1258-969.jpg?w=1380&t=st=1709360000~exp=1709360600~hmac=b9c0000000000000000000000000000000000000000000000000000000000000'); opacity: 0.05; pointer-events: none; z-index: -1; background-size: cover;}
-
-        .header-brand { width: 100%; height: 60px; display: flex; align-items: center; justify-content: center; background: var(--surface-frosted); position: sticky; top: 0; z-index: 50; border-bottom: 1px solid rgba(212, 175, 55, 0.2); backdrop-filter: blur(20px); box-shadow: 0 4px 15px rgba(0,0,0,0.05);}
-        .brand-text { font-size: 18px; font-weight: 900; color: var(--text-dark); letter-spacing: 2px; display: flex; align-items: center; gap: 8px;}
-        .brand-text::before { content: '✦'; color: var(--primary); }
+        .header-brand { width: 100%; height: 60px; display: flex; align-items: center; justify-content: center; background: rgba(5, 5, 5, 0.85); position: sticky; top: 0; z-index: 50; border-bottom: 1px solid rgba(212, 175, 55, 0.15); backdrop-filter: blur(15px);}
+        .brand-text { font-size: 18px; font-weight: 900; color: var(--primary); letter-spacing: 2px; }
         
         .intro-sec { padding: 25px 20px 15px; text-align: center; }
-        .main-title { font-size: 22px; font-weight: 900; color: var(--text-dark); margin-bottom: 8px; letter-spacing: 1px;}
+        .main-title { font-size: 22px; font-weight: 900; color: #fff; margin-bottom: 8px; letter-spacing: 1px;}
         .sub-title { font-size: 12px; color: var(--text-sub); line-height: 1.5; }
 
         .gallery-container { padding: 10px 15px 100px; display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
         
-        /* 明亮卡片设计 */
-        .sol-card { position: relative; height: 190px; border-radius: 18px; overflow: hidden; display: flex; flex-direction: column; justify-content: flex-end; cursor: pointer; border: 1px solid rgba(212,175,55,0.1); box-shadow: var(--shadow-soft); transition: 0.3s; background: var(--surface-light); }
-        .sol-card:active { transform: scale(0.97); border-color: var(--primary); }
+        .sol-card { position: relative; height: 180px; border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; justify-content: flex-end; cursor: pointer; border: 1px solid rgba(255,255,255,0.08); box-shadow: inset 0 0 30px rgba(0,0,0,0.8), 0 10px 20px rgba(0,0,0,0.5); transition: 0.3s; background: linear-gradient(145deg, #18181C, #050505); }
+        .sol-card:active { transform: scale(0.96); border-color: var(--primary); box-shadow: 0 5px 15px rgba(212,175,55,0.2); }
         
-        .watermark { position: absolute; right: -15px; bottom: -15px; width: 140px; height: 140px; opacity: 0.08; z-index: 1; pointer-events: none; transition: transform 0.5s ease, opacity 0.5s ease; }
-        .watermark img { width: 100%; height: 100%; object-fit: contain; filter: grayscale(1) brightness(0.8); }
-        .sol-card:active .watermark { opacity: 0.15; transform: scale(1.1) translate(-5px, -5px); }
+        .watermark { position: absolute; right: -15px; bottom: -15px; width: 140px; height: 140px; opacity: 0.25; z-index: 1; pointer-events: none; transition: transform 0.5s ease, opacity 0.5s ease; filter: drop-shadow(0 0 8px rgba(212,175,55,0.2)); }
+        .watermark img { width: 100%; height: 100%; object-fit: contain; }
+        .sol-card:active .watermark { opacity: 0.4; transform: scale(1.1) translate(-5px, -5px); }
 
-        /* 卡片背景图 - 明亮奢华 */
-        .card-bg-img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; opacity: 0.9; transition: 0.3s; filter: brightness(0.95);}
-        .sol-card:hover .card-bg-img { transform: scale(1.05); }
+        .card-content { padding: 15px; position: relative; z-index: 2; }
+        .c-icon { margin-bottom: 10px; display: flex; align-items: center; }
+        .c-icon svg { width: 28px; height: 28px; stroke: var(--primary); filter: drop-shadow(0 0 6px rgba(212,175,55,0.8)); }
+        .c-title { font-size: 15px; font-weight: 900; color: #fff; margin-bottom: 6px; letter-spacing: 1px;}
+        .c-desc { font-size: 11px; color: #aaa; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 
-        .card-content { padding: 15px; position: relative; z-index: 2; background: linear-gradient(to top, rgba(255,255,255,0.95) 30%, rgba(255,255,255,0.6) 70%, transparent); height: 100%; display: flex; flex-direction: column; justify-content: flex-end; backdrop-filter: blur(2px);}
-        .c-icon { margin-bottom: 10px; display: flex; align-items: center; background: var(--surface-light); width: 40px; height: 40px; border-radius: 10px; justify-content: center; box-shadow: 0 4px 10px rgba(212,175,55,0.2);}
-        .c-icon svg { width: 22px; height: 22px; stroke: var(--primary); stroke-width: 2; }
-        .c-title { font-size: 15px; font-weight: 900; color: var(--text-dark); margin-bottom: 6px; letter-spacing: 1px;}
-        .c-desc { font-size: 11px; color: var(--text-sub); line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; font-weight: 500;}
-
-        /* 详情模态框 - 明亮版 */
-        .detail-modal { position: fixed; top: 100vh; left: 0; width: 100%; height: 100vh; background: var(--bg-main); z-index: 999; transition: top 0.5s cubic-bezier(0.2, 0.8, 0.2, 1); display: flex; flex-direction: column; overflow-x: hidden; }
+        .detail-modal { position: fixed; top: 100vh; left: 0; width: 100%; height: 100vh; background: var(--bg); z-index: 999; transition: top 0.5s cubic-bezier(0.2, 0.8, 0.2, 1); display: flex; flex-direction: column; overflow-x: hidden; }
         .detail-modal.show { top: 0; }
 
-        .modal-header { height: 60px; display: flex; justify-content: space-between; align-items: center; padding: 0 20px; background: var(--surface-frosted); border-bottom: 1px solid rgba(212,175,55,0.2); backdrop-filter: blur(20px); flex-shrink: 0; position: sticky; top: 0; z-index: 10;}
-        .modal-title { font-size: 16px; font-weight: bold; color: var(--text-dark); display: flex; align-items: center; gap: 6px;}
-        .modal-title::before { content: '✦'; color: var(--primary); }
-        .close-btn { color: var(--text-sub); font-size: 28px; background: none; border: none; padding: 0 10px; cursor: pointer; line-height: 1;}
+        .modal-header { height: 60px; display: flex; justify-content: space-between; align-items: center; padding: 0 20px; background: rgba(5,5,5,0.95); border-bottom: 1px solid rgba(212,175,55,0.2); backdrop-filter: blur(10px); flex-shrink: 0;}
+        .modal-title { font-size: 16px; font-weight: bold; color: var(--primary); }
+        .close-btn { color: #fff; font-size: 24px; font-weight: bold; background: none; border: none; padding: 0 10px; cursor: pointer;}
 
-        .modal-body { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 20px 20px 140px; -webkit-overflow-scrolling: touch; background: var(--bg-main); }
+        .modal-body { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 20px 20px 140px; -webkit-overflow-scrolling: touch; }
         
-        /* Hero Banner - 明亮奢华 */
-        .hero-banner { border: 1px solid rgba(212, 175, 55, 0.2); border-radius: 16px; padding: 25px 20px; margin-bottom: 20px; background: var(--surface-light); box-shadow: var(--shadow-soft); position: relative; overflow: hidden;}
-        .hero-watermark { position: absolute; right: -20px; top: -20px; width: 140px; height: 140px; opacity: 0.05; pointer-events: none; }
-        .m-hero-title { font-size: 22px; font-weight: 900; color: var(--text-dark); margin-bottom: 10px; letter-spacing: 1px; position: relative; z-index: 2;}
-        .m-hero-desc { font-size: 13px; color: var(--text-sub); line-height: 1.6; position: relative; z-index: 2; font-weight: 500;}
+        .hero-banner { border: 1px solid rgba(212, 175, 55, 0.3); border-radius: 16px; padding: 25px 20px; margin-bottom: 20px; background: linear-gradient(145deg, #16161A, #050505); box-shadow: 0 10px 30px rgba(0,0,0,0.5); position: relative; overflow: hidden;}
+        .hero-watermark { position: absolute; right: -20px; top: -20px; width: 140px; height: 140px; opacity: 0.15; pointer-events: none; filter: drop-shadow(0 0 15px rgba(255,255,255,0.1)); }
+        .hero-watermark img { width: 100%; height: 100%; object-fit: contain; }
+        .m-hero-title { font-size: 22px; font-weight: 900; color: #fff; margin-bottom: 10px; letter-spacing: 1px; position: relative; z-index: 2;}
+        .m-hero-desc { font-size: 13px; color: var(--text-sub); line-height: 1.6; position: relative; z-index: 2;}
         
-        /* 频率选择 - 明亮版 */
-        .freq-panel { background: var(--surface-light); border: 1px solid rgba(212,175,55,0.2); border-radius: 12px; padding: 18px 12px; margin-bottom: 25px; box-shadow: var(--shadow-soft); }
-        .freq-title { font-size: 13px; color: var(--text-dark); font-weight: bold; margin-bottom: 12px; padding-left: 5px; display: flex; align-items: center; gap: 6px;}
-        .freq-group { display: flex; gap: 8px; }
-        .freq-btn { flex: 1; text-align: center; padding: 10px 0; border-radius: 10px; background: #F0F0F5; border: 1px solid transparent; color: var(--text-sub); font-size: 13px; font-weight: 900; cursor: pointer; transition: 0.3s; line-height: 1.3;}
-        .freq-btn span { font-size: 10px; font-weight: normal; color: #999; display: block; margin-top: 2px;}
-        .freq-btn.active { background: var(--primary); border-color: var(--primary); color: #fff; box-shadow: 0 4px 12px rgba(212, 175, 55, 0.4);}
-        .freq-btn.active span { color: rgba(255,255,255,0.8); }
+        .freq-panel { background: rgba(212,175,55,0.05); border: 1px solid rgba(212,175,55,0.3); border-radius: 12px; padding: 15px 10px; margin-bottom: 25px; box-shadow: inset 0 0 20px rgba(0,0,0,0.5); }
+        .freq-title { font-size: 13px; color: var(--primary); font-weight: bold; margin-bottom: 12px; padding-left: 5px; display: flex; align-items: center; gap: 6px;}
+        .freq-group { display: flex; gap: 6px; }
+        .freq-btn { flex: 1; text-align: center; padding: 8px 0; border-radius: 8px; background: #111; border: 1px solid #333; color: #888; font-size: 13px; font-weight: 900; cursor: pointer; transition: 0.3s; line-height: 1.3;}
+        .freq-btn span { font-size: 9px; font-weight: normal; color: #666; display: block; transform: scale(0.9);}
+        .freq-btn.active { background: linear-gradient(135deg, #2A2210, #0A0A0C); border-color: var(--primary); color: var(--primary); box-shadow: 0 4px 10px rgba(212,175,55,0.2);}
+        .freq-btn.active span { color: #aaa; }
 
-        .phase-title-main { font-size: 14px; color: var(--text-sub); margin-bottom: 15px; display: flex; align-items: center; gap: 8px; border-top: 1px solid rgba(0,0,0,0.05); padding-top: 25px; letter-spacing: 1px; font-weight: bold;}
+        .phase-title-main { font-size: 14px; color: #888; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; border-top: 1px solid #222; padding-top: 25px; letter-spacing: 1px;}
         
-        /* 阶段卡片 - 明亮版 */
-        .phase-box { border: 1px solid rgba(212,175,55,0.1); border-radius: 14px; padding: 22px; position: relative; margin-bottom: 20px; background: var(--surface-light); cursor: pointer; transition: 0.3s; box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
-        .phase-box.selected { border-color: var(--primary); background: linear-gradient(145deg, #FFFCF5, #FFF); box-shadow: 0 8px 25px rgba(212,175,55,0.2); transform: translateY(-2px);}
+        .phase-box { border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 20px 50px 20px 20px; position: relative; margin-bottom: 20px; background: #0a0a0c; cursor: pointer; transition: 0.3s; box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
+        .phase-box.selected { border-color: rgba(212,175,55,0.6); background: linear-gradient(145deg, rgba(212,175,55,0.08), #050505); box-shadow: 0 10px 25px rgba(212,175,55,0.15); }
         
-        .combo-box { border: 1px dashed rgba(212,175,55,0.4); background: #FFFCF5; margin-top: 30px; }
-        .combo-box.selected { border: 1px solid var(--primary); background: linear-gradient(145deg, #FFF9E6, #FFF); }
+        .combo-box { border: 1px dashed rgba(212,175,55,0.4); background: linear-gradient(145deg, #18150D, #0A0A0C); margin-top: 30px; }
+        .combo-box.selected { border: 1px solid var(--primary); background: linear-gradient(145deg, #2A2210, #0A0A0C); box-shadow: 0 10px 25px rgba(212,175,55,0.25); }
 
-        .check-circle { position: absolute; top: 22px; right: 22px; width: 24px; height: 24px; border-radius: 50%; border: 2px solid #E0E0E0; display: flex; align-items: center; justify-content: center; transition: 0.3s; pointer-events: none; background: #FFF;}
-        .phase-box.selected .check-circle { border-color: var(--primary); background: var(--primary); box-shadow: 0 2px 8px rgba(212,175,55,0.3);}
-        .check-circle::after { content: '✓'; color: #FFF; font-size: 14px; font-weight: 900; opacity: 0; transition: 0.3s; margin-top: 1px;}
+        .check-circle { position: absolute; top: 20px; right: 20px; width: 22px; height: 22px; border-radius: 50%; border: 2px solid #444; display: flex; align-items: center; justify-content: center; transition: 0.3s; pointer-events: none;}
+        .phase-box.selected .check-circle { border-color: var(--primary); background: var(--primary); }
+        .check-circle::after { content: '✓'; color: #000; font-size: 14px; font-weight: 900; opacity: 0; transition: 0.3s; margin-top: 2px;}
         .phase-box.selected .check-circle::after { opacity: 1; }
 
-        .p-step { font-size: 11px; color: var(--primary); font-weight: bold; letter-spacing: 2px; margin-bottom: 12px;}
+        .p-step { font-size: 11px; color: #888; font-weight: bold; letter-spacing: 2px; margin-bottom: 12px;}
+        .phase-box.selected .p-step { color: var(--primary); }
         
-        .p-cycle-highlight { display: flex; flex-direction: column; gap: 6px; background: rgba(212, 175, 55, 0.05); border-left: 3px solid #E0E0E0; padding: 12px 15px; margin-bottom: 18px; border-radius: 0 10px 10px 0; transition: 0.3s; }
-        .phase-box.selected .p-cycle-highlight { border-left-color: var(--primary); background: rgba(212, 175, 55, 0.1); }
-        .cycle-row { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 900; color: var(--text-sub); letter-spacing: 1px; transition: 0.3s;}
-        .phase-box.selected .cycle-row { color: var(--text-dark); }
-        .cycle-row .icon { font-size: 16px; color: #CCC; margin-top: -2px; transition: 0.3s;}
+        .p-cycle-highlight { display: flex; flex-direction: column; gap: 6px; background: linear-gradient(90deg, rgba(212, 175, 55, 0.1), transparent); border-left: 3px solid #444; padding: 10px 12px; margin-bottom: 18px; border-radius: 0 8px 8px 0; transition: 0.3s; }
+        .phase-box.selected .p-cycle-highlight { border-left-color: var(--primary); background: linear-gradient(90deg, rgba(212, 175, 55, 0.2), transparent); }
+        .cycle-row { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 900; color: #888; letter-spacing: 1px; transition: 0.3s;}
+        .phase-box.selected .cycle-row { color: #fff; }
+        .cycle-row .icon { font-size: 16px; color: #555; margin-top: -2px; transition: 0.3s;}
         .phase-box.selected .cycle-row .icon { color: var(--primary); }
-        .cycle-row .highlight-text { color: var(--text-sub); }
-        .phase-box.selected .cycle-row .highlight-text { color: var(--primary); }
+        .cycle-row .highlight-text { color: #888; }
+        .phase-box.selected .cycle-row .highlight-text { color: var(--primary); text-shadow: 0 0 10px rgba(212,175,55,0.4); }
         
-        .p-name { font-size: 18px; font-weight: 900; color: var(--text-dark); margin-bottom: 15px; transition: 0.3s;}
+        .p-name { font-size: 18px; font-weight: 900; color: #888; margin-bottom: 15px; transition: 0.3s;}
+        .phase-box.selected .p-name { color: #fff; }
         
-        /* 活体编辑引擎 - 明亮版 */
-        .sales-points { display: flex; flex-direction: column; gap: 12px; opacity: 0.7; transition: 0.3s; }
+        .sales-points { display: flex; flex-direction: column; gap: 12px; opacity: 0.5; transition: 0.3s; }
         .phase-box.selected .sales-points { opacity: 1; }
         .sp-row { display: flex; align-items: flex-start; gap: 10px; font-size: 13px; line-height: 1.6; }
-        .sp-tag { flex-shrink: 0; font-size: 11px; font-weight: bold; padding: 3px 8px; border-radius: 6px; border: 1px solid; margin-top: 2px;}
-        .tag-goal { color: #666; border-color: #CCC; background: #F5F5F5; }
-        .tag-tech { color: var(--primary-dark); border-color: rgba(212,175,55,0.3); background: rgba(212,175,55,0.05); }
-        .tag-feel { color: #FFF; border-color: var(--primary); background: var(--primary); box-shadow: 0 2px 6px rgba(212,175,55,0.2);}
+        .sp-tag { flex-shrink: 0; font-size: 11px; font-weight: bold; padding: 3px 8px; border-radius: 4px; border: 1px solid; margin-top: 2px;}
+        .tag-goal { color: #aaa; border-color: #555; background: rgba(255,255,255,0.05); }
+        .tag-tech { color: #C5A059; border-color: rgba(212,175,55,0.4); background: rgba(212,175,55,0.05); }
+        .tag-feel { color: #000; border-color: var(--primary); background: var(--primary); }
         
-        .sp-text { color: var(--text-sub); flex: 1; border-bottom: 1px dashed rgba(0,0,0,0.1); padding-bottom: 3px; outline: none; transition: 0.3s; cursor: text; min-height: 22px; font-weight: 500;}
-        .sp-text:focus { border-bottom: 1px solid var(--primary); background: rgba(212,175,55,0.05); padding: 4px 8px; border-radius: 6px; color: var(--text-dark);}
-        .sp-text strong { color: var(--text-dark); font-weight: 900; }
-        .phase-box.selected .sp-text strong { color: var(--primary-dark); }
+        .sp-text { color: #ccc; flex: 1; border-bottom: 1px dashed rgba(212,175,55,0.2); padding-bottom: 3px; outline: none; transition: 0.3s; cursor: text; min-height: 22px;}
+        .sp-text:focus { border-bottom: 1px solid var(--primary); background: rgba(255,255,255,0.05); padding: 4px 6px; border-radius: 4px; color: #fff;}
+        .sp-text strong { color: var(--primary); font-weight: bold; text-shadow: 0 0 8px rgba(212,175,55,0.3); }
 
         .custom-builder { margin-top: 15px; border-top: 1px dashed rgba(212,175,55,0.3); padding-top: 15px; display: flex; flex-direction: column; gap: 12px; }
-        .cb-item { display: flex; justify-content: space-between; align-items: center; background: #F9F9F9; padding: 12px 15px; border-radius: 10px; border: 1px solid #EEE;}
-        .cb-label { font-size: 14px; color: var(--text-dark); font-weight: bold; display: flex; flex-direction: column; gap: 4px;}
+        .cb-item { display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.5); padding: 10px 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05);}
+        .cb-label { font-size: 14px; color: #fff; font-weight: bold; display: flex; flex-direction: column; gap: 4px;}
         .cb-label span { font-size: 10px; color: var(--primary); font-weight: normal; opacity: 0.9; margin-top: 2px;}
-        .cb-ctrl { display: flex; align-items: center; background: #FFF; border-radius: 8px; border: 1px solid #EEE; overflow: hidden; flex-shrink: 0; box-shadow: 0 2px 5px rgba(0,0,0,0.05);}
-        .cb-btn { width: 36px; height: 36px; display: flex; justify-content: center; align-items: center; color: var(--text-sub); font-size: 18px; font-weight: bold; cursor: pointer; user-select: none; background: #F5F5F5; transition: 0.2s;}
-        .cb-btn:active { background: #E0E0E0; }
-        .cb-input { width: 50px; text-align: center; background: #FFF; border: none; border-left: 1px solid #EEE; border-right: 1px solid #EEE; color: var(--text-dark); font-size: 16px; font-weight: 900; padding: 6px 0; outline: none; pointer-events: auto; touch-action: manipulation;}
+        .cb-ctrl { display: flex; align-items: center; background: #111; border-radius: 8px; border: 1px solid rgba(212,175,55,0.3); overflow: hidden; flex-shrink: 0;}
+        .cb-btn { width: 34px; height: 34px; display: flex; justify-content: center; align-items: center; color: var(--primary); font-size: 18px; font-weight: bold; cursor: pointer; user-select: none; }
+        .cb-btn:active { background: rgba(212,175,55,0.2); }
+        .cb-input { width: 45px; text-align: center; background: #000; border: none; border-left: 1px solid #333; border-right: 1px solid #333; color: #fff; font-size: 16px; font-weight: 900; padding: 6px 0; outline: none; pointer-events: auto; touch-action: manipulation;}
+        .cb-input::-webkit-outer-spin-button, .cb-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+        .cb-input[type=number] { -moz-appearance: textfield; }
 
-        /* 🚨 终极视觉投射图 CSS 升级 - 明亮光影版 */
-        .visual-feedback-section { margin-top: 35px; background: var(--surface-light); border: 1px solid rgba(212, 175, 55, 0.2); border-radius: 18px; padding: 25px 20px; box-shadow: var(--shadow-soft); position: relative; overflow: hidden;}
-        .fb-header { text-align: center; font-size: 15px; font-weight: 900; color: var(--text-dark); margin-bottom: 20px; letter-spacing: 3px; display: flex; align-items: center; justify-content: center; gap: 10px;}
-        .fb-header::before, .fb-header::after { content: ''; height: 2px; width: 30px; background: rgba(212,175,55,0.3); border-radius: 2px;}
+        .visual-feedback-section { margin-top: 30px; background: #0a0a0c; border: 1px solid rgba(212, 175, 55, 0.15); border-radius: 16px; padding: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .fb-header { text-align: center; font-size: 15px; font-weight: 900; color: var(--primary); margin-bottom: 15px; letter-spacing: 2px; }
+        .visual-card { width: 100%; height: 300px; border-radius: 12px; overflow: hidden; position: relative; border: 1px solid rgba(255,255,255,0.1); background: #111;}
+        .visual-img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.7) contrast(1.1); transition: all 0.5s ease-in-out; }
         
-        .visual-card { width: 100%; height: 420px; border-radius: 14px; overflow: hidden; position: relative; border: 1px solid #EEE; background: #F0F0F0; box-shadow: inset 0 0 20px rgba(0,0,0,0.05);}
-        /* 图片默认亮度提升，更自然 */
-        .visual-img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.9) contrast(1.05) saturate(1.05); transition: all 0.8s cubic-bezier(0.2, 0.8, 0.2, 1); transform: scale(1.01);}
-        
-        /* AI 扫描光效 - 金色光影 */
-        .scanning-line { position: absolute; top: -10%; left: 0; width: 100%; height: 3px; background: rgba(255, 255, 255, 0.9); box-shadow: 0 0 25px 10px rgba(212, 175, 55, 0.6); opacity: 0; z-index: 5; pointer-events: none; mix-blend-mode: overlay;}
+        .scanning-line { position: absolute; top: -10%; left: 0; width: 100%; height: 2px; background: rgba(212, 175, 55, 0.8); box-shadow: 0 0 20px 5px rgba(212, 175, 55, 0.4); opacity: 0; z-index: 5; pointer-events: none;}
         @keyframes aiScan { 0% { top: -10%; opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { top: 110%; opacity: 0; } }
         .scanning-active .scanning-line { animation: aiScan 1.5s ease-in-out; }
-        /* 激活后图片更亮、更清晰、更高级 */
-        .scanning-active .visual-img { filter: brightness(1.05) contrast(1.1) saturate(1.1); transform: scale(1.03); }
+        .scanning-active .visual-img { filter: brightness(0.9) contrast(1.2) saturate(1.2); transform: scale(1.05); }
 
-        /* 视觉遮罩 - 明亮渐变 */
-        .visual-overlay { position: absolute; bottom: 0; left: 0; width: 100%; padding: 80px 25px 25px; background: linear-gradient(to top, rgba(255,255,255,0.95) 20%, rgba(255,255,255,0.5) 60%, transparent); display: flex; flex-direction: column; justify-content: flex-end; z-index: 10;}
-        .visual-title { color: var(--text-dark); font-size: 24px; font-weight: 900; letter-spacing: 2px; margin-bottom: 10px; text-shadow: 0 2px 10px rgba(255,255,255,0.8); font-style: italic;}
-        .visual-desc { color: var(--text-sub); font-size: 14px; line-height: 1.6; text-shadow: 0 1px 5px rgba(255,255,255,0.8); font-weight: 600;}
+        .visual-overlay { position: absolute; bottom: 0; left: 0; width: 100%; padding: 40px 15px 15px; background: linear-gradient(to top, rgba(0,0,0,0.95), rgba(0,0,0,0.6), transparent); display: flex; flex-direction: column; justify-content: flex-end; z-index: 10;}
+        .visual-title { color: var(--primary); font-size: 20px; font-weight: 900; letter-spacing: 1px; margin-bottom: 6px; text-shadow: 0 2px 5px rgba(0,0,0,0.8);}
+        .visual-desc { color: #ddd; font-size: 13px; line-height: 1.5; text-shadow: 0 1px 3px rgba(0,0,0,0.8); }
 
-        /* 购物车底栏 - 明亮版 */
-        .checkout-bar { position: fixed; bottom: 0; left: 0; width: 100%; padding: 15px 20px 30px; background: var(--surface-frosted); border-top: 1px solid rgba(212,175,55,0.2); box-shadow: 0 -10px 30px rgba(0,0,0,0.05); z-index: 100; backdrop-filter: blur(20px); display: flex; justify-content: space-between; align-items: center; }
+        .checkout-bar { position: fixed; bottom: 0; left: 0; width: 100%; padding: 15px 20px 25px; background: rgba(10, 10, 12, 0.98); border-top: 1px solid rgba(212,175,55,0.3); box-shadow: 0 -10px 30px rgba(0,0,0,0.8); z-index: 100; backdrop-filter: blur(15px); display: flex; justify-content: space-between; align-items: center; }
         .checkout-info { display: flex; flex-direction: column; gap: 4px; }
-        .c-info-label { font-size: 11px; color: var(--text-sub); font-weight: bold; letter-spacing: 1px; }
-        .c-info-val { font-size: 18px; font-weight: 900; color: var(--text-dark); display: flex; align-items: baseline; gap: 4px;}
-        .c-info-val span { font-size: 11px; color: var(--text-sub); font-weight: normal; }
-        .btn-checkout { background: linear-gradient(135deg, var(--primary), #C69A45); color: #FFF; border: none; padding: 14px 24px; border-radius: 12px; font-size: 15px; font-weight: 900; box-shadow: 0 8px 20px rgba(212, 175, 55, 0.3); cursor: pointer; transition: 0.3s; letter-spacing: 1px;}
-        .btn-checkout:active { transform: scale(0.97); box-shadow: 0 4px 10px rgba(212, 175, 55, 0.2);}
-        .btn-checkout.disabled { background: #E0E0E0; color: #AAA; box-shadow: none; pointer-events: none; }
+        .c-info-label { font-size: 11px; color: #888; font-weight: bold; letter-spacing: 1px; }
+        .c-info-val { font-size: 15px; font-weight: 900; color: #fff; display: flex; align-items: baseline; gap: 4px;}
+        .c-info-val span { font-size: 11px; color: #888; font-weight: normal; }
+        .btn-checkout { background: linear-gradient(135deg, var(--primary), #AA8A2A); color: #000; border: none; padding: 14px 18px; border-radius: 12px; font-size: 14px; font-weight: 900; box-shadow: 0 8px 20px rgba(212, 175, 55, 0.3); cursor: pointer; transition: 0.3s; }
+        .btn-checkout:active { transform: scale(0.96); }
+        .btn-checkout.disabled { background: #333; color: #666; box-shadow: none; pointer-events: none; }
 
-        /* 仪表盘级逼单弹窗 - 明亮版 */
-        .upsell-overlay { position: fixed; top:0; left:0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1000; opacity: 0; pointer-events: none; transition: 0.4s; backdrop-filter: blur(10px); }
+        .upsell-overlay { position: fixed; top:0; left:0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 1000; opacity: 0; pointer-events: none; transition: 0.4s; backdrop-filter: blur(8px); }
         .upsell-overlay.show { opacity: 1; pointer-events: auto; }
         
-        .upsell-modal { position: fixed; bottom: -100%; left: 0; width: 100%; background: var(--bg-main); border-top: 1px solid var(--primary); border-radius: 24px 24px 0 0; z-index: 1001; padding: 25px 20px 35px; transition: 0.5s cubic-bezier(0.2, 0.8, 0.2, 1); box-shadow: 0 -10px 50px rgba(0,0,0,0.1); max-height: 90vh; overflow-y: hidden; overflow-x: hidden; display: flex; flex-direction: column;}
+        .upsell-modal { position: fixed; bottom: -100%; left: 0; width: 100%; background: linear-gradient(180deg, #121215, #050505); border-top: 1px solid var(--primary); border-radius: 24px 24px 0 0; z-index: 1001; padding: 25px 20px 30px; transition: 0.5s cubic-bezier(0.2, 0.8, 0.2, 1); box-shadow: 0 -10px 50px rgba(212,175,55,0.15); max-height: 90vh; overflow-y: hidden; overflow-x: hidden; display: flex; flex-direction: column;}
         .upsell-modal.show { bottom: 0; }
         
-        .up-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; flex-shrink: 0;}
-        .up-title { font-size: 18px; font-weight: 900; color: var(--text-dark); letter-spacing: 1px; }
-        .up-sub { font-size: 12px; color: var(--text-sub); margin-top: 6px; line-height: 1.5; }
-        .up-close { color: #CCC; font-size: 28px; background: none; border: none; padding: 0; line-height: 1; cursor: pointer; transition: 0.3s;}
-        .up-close:hover { color: var(--text-dark); }
+        .up-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px; flex-shrink: 0;}
+        .up-title { font-size: 18px; font-weight: 900; color: #fff; letter-spacing: 1px; }
+        .up-sub { font-size: 11px; color: #aaa; margin-top: 6px; line-height: 1.5; }
+        .up-close { color: #888; font-size: 28px; background: none; border: none; padding: 0; line-height: 1; cursor: pointer; }
 
-        .upsell-cards-container { overflow-y: auto; overflow-x: hidden; padding-bottom: 10px; flex: 1; -webkit-overflow-scrolling: touch; padding-top: 5px;}
+        .upsell-cards-container { overflow-y: auto; overflow-x: hidden; padding-bottom: 10px; flex: 1; -webkit-overflow-scrolling: touch; padding-top: 10px;}
         
-        /* 仪表盘卡片 - 明亮版 */
-        .dash-card { background: var(--surface-light); border: 2px solid #EEE; border-radius: 16px; padding: 20px 15px 15px; position: relative; margin-bottom: 15px; transition: 0.3s; cursor: pointer; box-shadow: 0 5px 15px rgba(0,0,0,0.03);}
-        .dash-card.selected-card { border-color: var(--primary); background: linear-gradient(145deg, #FFF, #FFF8E8); box-shadow: 0 12px 35px rgba(212,175,55,0.25); transform: scale(1.01); }
+        .dash-card { background: linear-gradient(145deg, #16161A, #0A0A0C); border: 2px solid #222; border-radius: 16px; padding: 32px 15px 15px; position: relative; margin-bottom: 15px; transition: 0.3s; opacity: 0.6; cursor: pointer; box-shadow: 0 5px 15px rgba(0,0,0,0.5);}
+        .dash-card.selected-card { opacity: 1; border-color: var(--primary); background: linear-gradient(145deg, #1F1910, #0A0A0C); box-shadow: 0 10px 30px rgba(212,175,55,0.2); transform: scale(1.02); }
         
-        .check-ribbon { display: none; position: absolute; top: -2px; left: -2px; background: linear-gradient(135deg, var(--primary), #C69A45); color: #FFF; font-size: 10px; font-weight: bold; padding: 4px 12px; border-radius: 14px 0 14px 0; z-index: 10; box-shadow: 2px 2px 10px rgba(212,175,55,0.3);}
+        .check-ribbon { display: none; position: absolute; top: -2px; left: -2px; background: linear-gradient(135deg, var(--accent), var(--primary)); color: #000; font-size: 10px; font-weight: bold; padding: 4px 12px; border-radius: 14px 0 14px 0; z-index: 10;}
         .selected-card .check-ribbon { display: block; }
         
         .save-tag { position: absolute; top: -2px; right: -2px; background: linear-gradient(135deg, #FF4B40, #D91D12); color: #fff; font-size: 10px; font-weight: 900; padding: 4px 12px; border-radius: 0 14px 0 14px; z-index: 10; box-shadow: -2px 2px 10px rgba(217, 29, 18, 0.3);}
-        .dash-card.basic .save-tag { background: #EEE; color: #999; box-shadow: none;}
+        .dash-card.basic .save-tag { background: #444; color: #aaa; box-shadow: none;}
 
-        .dc-title { font-size: 16px; font-weight: 900; color: var(--text-dark); margin-bottom: 4px; display: flex; align-items: center; gap: 6px; margin-top: 5px;}
-        .selected-card .dc-title { color: var(--primary-dark); }
-        .dc-subtitle { font-size: 11px; color: var(--text-sub); margin-bottom: 15px; line-height: 1.4; font-weight: 500;}
+        .dc-title { font-size: 16px; font-weight: 900; color: #fff; margin-bottom: 4px; display: flex; align-items: center; gap: 6px; margin-top: 5px;}
+        .selected-card .dc-title { color: var(--primary); }
+        .dc-subtitle { font-size: 11px; color: #888; margin-bottom: 15px; line-height: 1.4;}
         
-        .dc-flex { display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 1px dashed #EEE; padding-bottom: 12px; margin-bottom: 12px;}
-        .dc-ses { font-size: 36px; font-weight: 900; color: var(--text-dark); line-height: 1;}
-        .selected-card .dc-ses { color: var(--primary-dark); }
-        .dc-ses span { font-size: 12px; font-weight: normal; color: var(--text-sub); margin-left: 4px;}
+        .dc-flex { display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 1px dashed rgba(255,255,255,0.1); padding-bottom: 12px; margin-bottom: 12px;}
+        .dc-ses { font-size: 36px; font-weight: 900; color: #fff; line-height: 1;}
+        .selected-card .dc-ses { color: var(--primary); }
+        .dc-ses span { font-size: 12px; font-weight: normal; color: #888; margin-left: 4px;}
         
         .dc-right { text-align: right; }
-        .dc-ori { font-size: 12px; color: #999; text-decoration: line-through; margin-bottom: 4px;}
-        .dc-new { font-size: 28px; font-weight: 900; color: var(--text-dark); display: flex; align-items: baseline; justify-content: flex-end; gap: 2px;}
-        .selected-card .dc-new { color: var(--primary-dark); text-shadow: 0 0 20px rgba(212, 175, 55, 0.3);}
+        .dc-ori { font-size: 12px; color: #666; text-decoration: line-through; margin-bottom: 4px;}
+        .dc-new { font-size: 28px; font-weight: 900; color: #fff; display: flex; align-items: baseline; justify-content: flex-end; gap: 2px;}
+        .selected-card .dc-new { color: var(--primary); text-shadow: 0 0 15px rgba(212, 175, 55, 0.4);}
         .dc-new span { font-size: 16px; }
         
         .dc-footer { display: flex; justify-content: space-between; align-items: center; font-size: 11px;}
-        .dc-f-ori { color: var(--text-sub); }
-        .dc-f-ori del { color: #999; margin-left: 4px;}
-        .dc-f-new { color: var(--primary-dark); font-weight: bold; font-size: 13px;}
-        .basic .dc-f-new { color: #999; }
+        .dc-f-ori { color: #888; }
+        .dc-f-ori del { color: #666; margin-left: 4px;}
+        .dc-f-new { color: var(--primary); font-weight: bold; font-size: 13px;}
+        .basic .dc-f-new { color: #aaa; }
 
-        .urgency-rule { background: rgba(212,175,55,0.05); border: 1px dashed rgba(212,175,55,0.3); border-radius: 8px; padding: 12px; margin-top: 15px; font-size: 11px; color: var(--text-sub); line-height: 1.6; }
-        .urgency-rule strong { color: var(--primary-dark); }
+        .urgency-rule { background: rgba(212,175,55,0.08); border: 1px dashed rgba(212,175,55,0.4); border-radius: 6px; padding: 10px; margin-top: 15px; font-size: 10px; color: #aaa; line-height: 1.6; }
+        .urgency-rule strong { color: var(--primary); }
 
-        .upsell-action-bar { position: sticky; bottom: 0; background: linear-gradient(to top, var(--bg-main) 85%, transparent); padding: 20px 0 0 0; margin-top: 10px; flex-shrink: 0;}
-        .btn-confirm-master { width: 100%; background: linear-gradient(135deg, var(--primary), #C69A45); color: #FFF; border: none; padding: 16px; border-radius: 12px; font-size: 16px; font-weight: 900; box-shadow: 0 10px 30px rgba(212, 175, 55, 0.4); cursor: pointer; transition: 0.3s; letter-spacing: 1px;}
-        .btn-confirm-master:active { transform: scale(0.98); box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);}
+        .upsell-action-bar { position: sticky; bottom: 0; background: linear-gradient(to top, #050505 85%, transparent); padding: 15px 0 0 0; margin-top: 5px; flex-shrink: 0;}
+        .btn-confirm-master { width: 100%; background: linear-gradient(135deg, var(--primary), #AA8A2A); color: #000; border: none; padding: 16px; border-radius: 12px; font-size: 16px; font-weight: 900; box-shadow: 0 8px 25px rgba(212, 175, 55, 0.3); cursor: pointer; transition: 0.3s; }
+        .btn-confirm-master:active { transform: scale(0.98); }
 
-        /* 全屏电子签名合同台 - 明亮版 */
-        .sig-modal { position: fixed; top: 100vh; left: 0; width: 100%; height: 100vh; background: var(--bg-main); z-index: 2000; transition: top 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); display: flex; flex-direction: column; overflow-x: hidden;}
+        .validity-note { background: #0a0a0c; border: 1px solid #333; border-radius: 8px; padding: 12px; margin-top: 15px; }
+        .vn-title { font-size: 12px; color: #aaa; font-weight: bold; margin-bottom: 8px; display: flex; align-items: center; gap: 4px;}
+        .vn-list { list-style: none; padding: 0; margin: 0; font-size: 11px; color: #888; line-height: 1.6; }
+        .vn-list li { position: relative; padding-left: 12px; margin-bottom: 6px; }
+        .vn-list li::before { content: '•'; position: absolute; left: 0; color: var(--primary); }
+        .vn-list li span { color: #ccc; font-weight: bold;}
+
+        /* 全屏电子签名合同台 */
+        .sig-modal { position: fixed; top: 100vh; left: 0; width: 100%; height: 100vh; background: #08080A; z-index: 2000; transition: top 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); display: flex; flex-direction: column; overflow-x: hidden;}
         .sig-modal.show { top: 0; }
-        .sig-header { height: 60px; display: flex; justify-content: space-between; align-items: center; padding: 0 20px; background: var(--surface-frosted); border-bottom: 1px solid rgba(212,175,55,0.2); flex-shrink:0; backdrop-filter: blur(20px);}
-        .sig-title { font-size: 16px; font-weight: bold; color: var(--text-dark); display: flex; align-items: center; gap: 6px;}
-        .sig-title::before { content: '✦'; color: var(--primary); }
+        .sig-header { height: 60px; display: flex; justify-content: space-between; align-items: center; padding: 0 20px; background: rgba(5,5,5,0.95); border-bottom: 1px solid rgba(212,175,55,0.3); flex-shrink:0;}
+        .sig-title { font-size: 16px; font-weight: bold; color: var(--primary); }
         .sig-content { padding: 20px; flex: 1; display: flex; flex-direction: column; overflow-y: auto;}
         
         .sig-pad-wrap { flex: 1; display: flex; flex-direction: column; min-height: 300px;}
         
-        .sig-summary { background: var(--surface-light); padding: 20px; border-radius: 14px; margin-bottom: 20px; border: 1px solid rgba(212,175,55,0.2); box-shadow: var(--shadow-soft);}
-        .sig-sum-title { color: var(--text-dark); font-size: 14px; margin-bottom: 10px; font-weight: bold;}
-        .sig-sum-data { display: flex; justify-content: space-between; align-items: flex-end; border-top: 1px dashed #EEE; padding-top: 15px; margin-top: 10px;}
-        .sig-sum-name { font-size: 16px; color: var(--primary-dark); font-weight: 900;}
-        .sig-sum-price { font-size: 24px; color: var(--text-dark); font-weight: 900;}
+        .sig-summary { background: linear-gradient(145deg, #18181A, #0A0A0C); padding: 20px; border-radius: 12px; margin-bottom: 20px; border: 1px solid rgba(212,175,55,0.3); box-shadow: 0 10px 30px rgba(0,0,0,0.5);}
+        .sig-sum-title { color: #fff; font-size: 14px; margin-bottom: 10px; font-weight: bold;}
+        .sig-sum-data { display: flex; justify-content: space-between; align-items: flex-end; border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 15px; margin-top: 10px;}
+        .sig-sum-name { font-size: 16px; color: var(--primary); font-weight: 900;}
+        .sig-sum-price { font-size: 24px; color: #fff; font-weight: 900;}
 
-        .sig-pad-container { flex: 1; border: 1px dashed #CCC; border-radius: 14px; background: #F9F9F9; position: relative; overflow: hidden; box-shadow: inset 0 0 20px rgba(0,0,0,0.03); min-height: 250px;}
+        .sig-pad-container { flex: 1; border: 1px dashed #555; border-radius: 12px; background: #111; position: relative; overflow: hidden; box-shadow: inset 0 0 20px rgba(0,0,0,0.8); min-height: 250px;}
         #sigCanvas { width: 100%; height: 100%; touch-action: none; cursor: crosshair; display: block;}
-        .sig-placeholder { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #CCC; font-size: 20px; font-weight: bold; pointer-events: none; letter-spacing: 2px;}
+        .sig-placeholder { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #444; font-size: 24px; font-weight: bold; pointer-events: none; letter-spacing: 2px;}
         
         .sig-actions { display: flex; gap: 15px; margin-top: 20px; margin-bottom: 10px; flex-shrink:0;}
-        .btn-clear { flex: 1; background: #F0F0F0; color: var(--text-sub); padding: 16px; border-radius: 12px; text-align: center; border: 1px solid #DDD; font-weight: bold; font-size: 15px; cursor:pointer; transition: 0.2s;}
-        .btn-clear:active { background: #E0E0E0; }
-        .btn-confirm-sig { flex: 2; background: linear-gradient(135deg, var(--primary), #C69A45); color: #FFF; padding: 16px; border-radius: 12px; text-align: center; border: none; font-weight: 900; font-size: 16px; box-shadow: 0 8px 25px rgba(212,175,55,0.3); cursor:pointer; transition: 0.2s; letter-spacing: 1px;}
-        .btn-confirm-sig:active { transform: scale(0.98); box-shadow: 0 4px 10px rgba(212,175,55,0.2);}
+        .btn-clear { flex: 1; background: #222; color: #fff; padding: 16px; border-radius: 12px; text-align: center; border: 1px solid #444; font-weight: bold; font-size: 15px; cursor:pointer;}
+        .btn-confirm-sig { flex: 2; background: linear-gradient(135deg, var(--primary), #AA8A2A); color: #000; padding: 16px; border-radius: 12px; text-align: center; border: none; font-weight: 900; font-size: 16px; box-shadow: 0 5px 20px rgba(212,175,55,0.3); cursor:pointer;}
     </style>
 </head>
 <body>
@@ -251,27 +224,27 @@
 
     <div class="gallery-container">
         <div class="sol-card" onclick="openDetail('posture')">
-            <img src="https://images.unsplash.com/photo-1600881333168-2ef49b341f30?auto=format&fit=crop&w=600&q=80" class="card-bg-img" alt="体态">
+            <div class="watermark"><img src="https://cdn-icons-png.flaticon.com/512/16292/16292717.png" alt="bg"></div>
             <div class="card-content"><div class="c-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M8 9l4-4 4 4"/><path d="M8 19l4 4 4-4"/></svg></div><div class="c-title">体态矫正与结构优化</div><div class="c-desc">松解受限筋膜，重建脊柱中立位，彻底拔除肩颈腰背疼痛根源。</div></div>
         </div>
         <div class="sol-card" onclick="openDetail('fatloss')">
-            <img src="https://images.unsplash.com/photo-1574680096145-d05b474e2155?auto=format&fit=crop&w=600&q=80" class="card-bg-img" alt="燃脂">
+            <div class="watermark"><img src="https://cdn-icons-png.flaticon.com/512/12805/12805546.png" alt="bg"></div>
             <div class="card-content"><div class="c-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg></div><div class="c-title">高效燃脂与代谢激活</div><div class="c-desc">突破顽固平台期，科学剥离内脏脂肪，打造全天候高代谢体质。</div></div>
         </div>
         <div class="sol-card" onclick="openDetail('shape')">
-            <img src="https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?auto=format&fit=crop&w=600&q=80" class="card-bg-img" alt="塑形">
+            <div class="watermark"><img src="https://cdn-icons-png.flaticon.com/512/3340/3340004.png" alt="bg"></div>
             <div class="card-content"><div class="c-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 22h14"/><path d="M5 2h14"/><path d="M17 22v-4.172a2 2 0 0 0-.586-1.414L12 12l-4.414 4.414A2 2 0 0 0 7 17.828V22"/><path d="M7 2v4.172a2 2 0 0 0 .586 1.414L12 12l4.414-4.414A2 2 0 0 0 17 6.172V2"/></svg></div><div class="c-title">S型曲线精雕训练</div><div class="c-desc">专攻蜜桃臀、马甲线与直角肩，通过肌肥大填充塑造极致比例。</div></div>
         </div>
         <div class="sol-card" onclick="openDetail('postpartum')">
-            <img src="https://images.unsplash.com/photo-1599447292180-45fd84092ef0?auto=format&fit=crop&w=600&q=80" class="card-bg-img" alt="产后">
+            <div class="watermark"><img src="https://cdn-icons-png.flaticon.com/512/779/779980.png" alt="bg"></div>
             <div class="card-content"><div class="c-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></div><div class="c-title">产后核心与体形恢复</div><div class="c-desc">避开高危卷腹，内源性闭合腹直肌，安全有效地恢复盆底肌机能。</div></div>
         </div>
         <div class="sol-card" onclick="openDetail('rehab')">
-            <img src="https://images.unsplash.com/photo-1588286840104-8957b019727f?auto=format&fit=crop&w=600&q=80" class="card-bg-img" alt="康复">
+            <div class="watermark"><img src="https://cdn-icons-png.flaticon.com/512/2906/2906460.png" alt="bg"></div>
             <div class="card-content"><div class="c-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><div class="c-title">运动功能提升与防护</div><div class="c-desc">消除关节弹响与运动刺痛，强化深层小肌群，重建关节力学护甲。</div></div>
         </div>
         <div class="sol-card" onclick="openDetail('antiaging')">
-            <img src="https://images.unsplash.com/photo-1579126031931-7911d74c291e?auto=format&fit=crop&w=600&q=80" class="card-bg-img" alt="抗衰">
+            <div class="watermark"><img src="https://cdn-icons-png.flaticon.com/512/8407/8407060.png" alt="bg"></div>
             <div class="card-content"><div class="c-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div><div class="c-title">活力体能与状态焕新</div><div class="c-desc">通过抗阻力刺激成骨细胞，提升骨密度与心肺引擎，对抗机能衰老。</div></div>
         </div>
     </div>
@@ -342,10 +315,10 @@
             return m * 3888;
         }
 
-        // 🚨 24张顶级高奢女性大片库：明亮、高级、线条若隐若现
+        // 🚨 24张顶级女性形体大片，替换原有的压抑色调
         const planData = {
             'posture': {
-                type: 'feature', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2"><path d="M12 5v14"/><path d="M8 9l4-4 4 4"/><path d="M8 19l4 4 4-4"/></svg>',
+                type: 'feature', icon: '<img src="https://cdn-icons-png.flaticon.com/512/16292/16292717.png">',
                 title: '体态矫正与结构优化', desc: '物理层面的结构重组，彻底切断疼痛代偿。',
                 p1_name: '筋膜解绑与痛点清零', p1_w: 4,
                 p1_goal: '<strong>打破骨骼错误排列</strong>，恢复关节活动度。', p1_tech: '深层剥离胸小肌与髂腰肌。', p1_feel: '练完感觉<strong>肩颈彻底放松</strong>。',
@@ -355,15 +328,15 @@
                 p3_goal: '将正确排列<strong>刻入神经潜意识</strong>。', p3_tech: '复合抗阻结合生活轨迹二次重塑。', p3_feel: '不自觉地<strong>保持挺拔高姿态</strong>。',
                 p4_name: '全息体态终身维稳', p4_w: 48,
                 p4_goal: '<strong>重塑底层筋膜张力网络</strong>，告别代偿。', p4_tech: '高阶动态控制与全息稳定训练。', p4_feel: '<strong>气质产生肉眼可见的高级蜕变</strong>。',
-                // 明亮、优雅、舒展的体态图
-                img1: 'https://images.unsplash.com/photo-1552196563-55cd4e45efb3?auto=format&fit=crop&w=800&q=80', 
-                img2: 'https://images.unsplash.com/photo-1518310383802-640c2de311b2?auto=format&fit=crop&w=800&q=80', 
-                img3: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=800&q=80', 
+                // 阳光、舒展、优雅的女性体态图
+                img1: 'https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=800&q=80', 
+                img2: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=800&q=80', 
+                img3: 'https://images.unsplash.com/photo-1552196563-55cd4e45efb3?auto=format&fit=crop&w=800&q=80', 
                 img4: 'https://images.unsplash.com/photo-1607962837359-5da7858da5fb?auto=format&fit=crop&w=800&q=80',
                 txt1: '初期改善：异常张力释放，肩颈舒展', txt2: '进阶蜕变：核心建立，气质初显', txt3: '深度定型：脊柱完美中立，绝美背影', txt4: '年度维稳：从骨骼到气质的终极升华'
             },
             'fatloss': {
-                type: 'regular', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>',
+                type: 'regular', icon: '<img src="https://cdn-icons-png.flaticon.com/512/12805/12805546.png">',
                 title: '高效燃脂与代谢激活', desc: '重写身体基因，打造“24小时持续燃脂的火炉”。',
                 p1_name: '糖原排空与代谢唤醒', p1_w: 4,
                 p1_goal: '<strong>强行切入脂肪氧化通道</strong>。', p1_tech: '循环抗阻配合低GI饮食干预。', p1_feel: '迅速<strong>排干体内顽固水肿</strong>，体重掉秤快。',
@@ -373,7 +346,7 @@
                 p3_goal: '拉高基础代谢基数，让身体在<strong>睡眠中持续燃烧</strong>。', p3_tech: '肌肥大训练提升整体肌肉储备。', p3_feel: '<strong>偶尔放纵吃喝不再反弹</strong>。',
                 p4_name: '代谢基因终极重写', p4_w: 48,
                 p4_goal: '<strong>彻底终结反弹宿命</strong>，维持常态化低体脂。', p4_tech: '高阶碳水循环与全域能量消耗训练。', p4_feel: '体能炸裂，<strong>拥有清晰的腹肌线条</strong>。',
-                // 明亮、活力、阳光下的燃脂图
+                // 清晰、活力、汗水与阳光结合的女性燃脂图
                 img1: 'https://images.unsplash.com/photo-1483721310020-03333e577078?auto=format&fit=crop&w=800&q=80', 
                 img2: 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?auto=format&fit=crop&w=800&q=80', 
                 img3: 'https://images.unsplash.com/photo-1574680096145-d05b474e2155?auto=format&fit=crop&w=800&q=80', 
@@ -381,7 +354,7 @@
                 txt1: '初期效果：水肿排空，体能极速唤醒', txt2: '进阶效果：围度缩小，内脏脂肪大量剥离', txt3: '深度定型：体脂降至黄金点，马甲线显现', txt4: '年度维稳：常态化极低体脂，身材自由'
             },
             'shape': {
-                type: 'regular', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2"><path d="M5 22h14"/><path d="M5 2h14"/><path d="M17 22v-4.172a2 2 0 0 0-.586-1.414L12 12l-4.414 4.414A2 2 0 0 0 7 17.828V22"/><path d="M7 2v4.172a2 2 0 0 0 .586 1.414L12 12l4.414-4.414A2 2 0 0 0 17 6.172V2"/></svg>',
+                type: 'regular', icon: '<img src="https://cdn-icons-png.flaticon.com/512/3340/3340004.png">',
                 title: 'S型曲线精雕训练', desc: '物理剥离与3D填充，打造极具视觉杀伤力的身材比例。',
                 p1_name: '目标靶向极速激活', p1_w: 4,
                 p1_goal: '纠正错误发力，避免<strong>“练臀先粗腿”</strong>。', p1_tech: '孤立唤醒臀大肌上部与三角肌中束。', p1_feel: '体会到目标肌肉的<strong>深层酸胀泵感</strong>。',
@@ -391,7 +364,7 @@
                 p3_goal: '强行呈现出<strong>极致的漏斗形曲线</strong>。', p3_tech: '强化背部阔度，极致压缩腰围数据。', p3_feel: 'S曲线完全固化，<strong>拍照自带高级感</strong>。',
                 p4_name: '绝美比例终极锁死', p4_w: 48,
                 p4_goal: '<strong>精雕细琢每一寸肌肉走向</strong>，实现超模比例。', p4_tech: '高阶肌力微调与极致分离度训练。', p4_feel: '完美驾驭任何紧身衣物，<strong>气场全开</strong>。',
-                // 明亮、性感、线条若隐若现的S曲线图
+                // 若隐若现、高级性感、清晰马甲线与臀线的女性图
                 img1: 'https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?auto=format&fit=crop&w=800&q=80', 
                 img2: 'https://images.unsplash.com/photo-1518310383802-640c2de311b2?auto=format&fit=crop&w=800&q=80', 
                 img3: 'https://images.unsplash.com/photo-1605296867304-46d5465a13f1?auto=format&fit=crop&w=800&q=80', 
@@ -399,7 +372,7 @@
                 txt1: '初期唤醒：臀部肌肉苏醒，发力感建立', txt2: '进阶填充：局部饱满度提升，臀线拉高', txt3: '深度定型：绝美腰臀比，极具视觉杀伤力', txt4: '年度维稳：超模级曲线锁死，肌肉质感极致'
             },
             'postpartum': {
-                type: 'feature', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>',
+                type: 'feature', icon: '<img src="https://cdn-icons-png.flaticon.com/512/779/779980.png">',
                 title: '产后核心与体形恢复', desc: '无痛安全缝合腹直肌裂隙，助您重返少女级健康体态。',
                 p1_name: '盆底肌与内源安全修复', p1_w: 4,
                 p1_goal: '重建盆底功能，<strong>绝对禁止传统卷腹</strong>。', p1_tech: '横向呼吸法温和唤醒腹横肌。', p1_feel: '<strong>漏尿改善</strong>，核心脏器有明显归位感。',
@@ -409,15 +382,15 @@
                 p3_goal: '在安全前提下，<strong>剥离孕期囤积脂肪</strong>。', p3_tech: '无跳跃温和抗阻代谢组。', p3_feel: '逐步<strong>穿回孕前尺码衣服</strong>，皮肤恢复紧致。',
                 p4_name: '辣妈巅峰体态重铸', p4_w: 48,
                 p4_goal: '<strong>全面超越产前身体机能</strong>，打造极品辣妈。', p4_tech: '全域力量与体态精雕系统方案。', p4_feel: '不仅恢复如初，<strong>甚至比孕前更挺拔自信</strong>。',
-                // 明亮、温馨、充满希望的产后修复图
+                // 温馨、阳光、自信展示紧致核心的辣妈图
                 img1: 'https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=800&q=80', 
                 img2: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&w=800&q=80', 
                 img3: 'https://images.unsplash.com/photo-1559148540-047391cb730a?auto=format&fit=crop&w=800&q=80', 
-                img4: 'https://images.unsplash.com/photo-1599447292180-45fd84092ef0?auto=format&fit=crop&w=800&q=80',
+                img4: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=800&q=80',
                 txt1: '初期恢复：盆底激活，内源性功能重建', txt2: '进阶缝合：腹直肌闭合，核心力量回归', txt3: '深度定型：重返少女时代紧致身型', txt4: '年度维稳：机能全面超越孕前，顶级辣妈'
             },
             'rehab': {
-                type: 'feature', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>',
+                type: 'feature', icon: '<img src="https://cdn-icons-png.flaticon.com/512/2906/2906460.png">',
                 title: '运动功能提升与防护', desc: '精准神经肌肉调控，重建受损关节力学稳定性。',
                 p1_name: '炎症消除与代偿切断', p1_w: 4,
                 p1_goal: '找出引起疼痛的<strong>错误发力源</strong>。', p1_tech: '激痛点按压技术释放代偿关节。', p1_feel: '<strong>弹响明显减少</strong>，尖锐刺痛感消失。',
@@ -427,7 +400,7 @@
                 p3_goal: '重建本体感觉，<strong>适应复杂运动轨迹</strong>。', p3_tech: '闭链与不平衡介质高阶神经调控。', p3_feel: '能<strong>极其自信地完成复杂动作</strong>，无惧损伤。',
                 p4_name: '高阶护甲与运动表现', p4_w: 48,
                 p4_goal: '<strong>绝对消除二次损伤隐患</strong>，提升爆发力。', p4_tech: '超等长收缩与专项运动机能强化。', p4_feel: '享受运动带来的绝对快乐，<strong>机能登顶</strong>。',
-                // 明亮、专业、展示灵活性的康复图
+                // 展示灵活度、健康肌肉线条的女性康复图
                 img1: 'https://images.unsplash.com/photo-1588286840104-8957b019727f?auto=format&fit=crop&w=800&q=80', 
                 img2: 'https://images.unsplash.com/photo-1599058917212-d750089bc07e?auto=format&fit=crop&w=800&q=80', 
                 img3: 'https://images.unsplash.com/photo-1584735935682-2f2b69dff9d2?auto=format&fit=crop&w=800&q=80', 
@@ -435,7 +408,7 @@
                 txt1: '初期镇痛：软组织压力释放，疼痛消失', txt2: '进阶护甲：关节周围力量增强，建立保护', txt3: '满血重返：无惧任何发力，重返高强度', txt4: '年度维稳：绝对护甲锁定，巅峰运动表现'
             },
             'antiaging': {
-                type: 'regular', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>',
+                type: 'regular', icon: '<img src="https://cdn-icons-png.flaticon.com/512/8407/8407060.png">',
                 title: '活力体能与状态焕新', desc: '提升骨密度与肌肉储备，为您打造不老的肉体盔甲。',
                 p1_name: '机能唤醒与润滑系统', p1_w: 4,
                 p1_goal: '促进滑液分泌，<strong>全面恢复生锈卡顿的机能</strong>。', p1_tech: '关节活动度打磨与全身筋膜链拉伸。', p1_feel: '<strong>晨起僵硬感消失，深度睡眠延长</strong>。',
@@ -445,7 +418,7 @@
                 p3_goal: '提升最大摄氧量，由内而外焕发<strong>极致年轻态</strong>。', p3_tech: '稳态有氧配合心率变异率科学监控。', p3_feel: '爬楼梯不喘，<strong>气色红润，精力爆表</strong>。',
                 p4_name: '细胞级机能终身抗衰', p4_w: 48,
                 p4_goal: '<strong>真正实现生理年龄的逆转</strong>，常态化冻龄。', p4_tech: '全周期高阶体能与线粒体强化训练。', p4_feel: '由内而外散发活力，<strong>远超同龄人的巅峰状态</strong>。',
-                // 明亮、阳光、充满活力的抗衰图
+                // 阳光、自信、展现皮肤光泽与健康肌肉的女性图
                 img1: 'https://images.unsplash.com/photo-1579126031931-7911d74c291e?auto=format&fit=crop&w=800&q=80', 
                 img2: 'https://images.unsplash.com/photo-1518310383802-640c2de311b2?auto=format&fit=crop&w=800&q=80', 
                 img3: 'https://images.unsplash.com/photo-1508215885820-4585e5610ea0?auto=format&fit=crop&w=800&q=80', 
@@ -581,9 +554,9 @@
 
                 <div class="visual-feedback-section" id="visual-sec">
                     <div class="scanning-line"></div>
-                    <div class="fb-header">AI 目标形态视觉投射</div>
+                    <div class="fb-header">✦ AI 目标形态视觉投射 ✦</div>
                     <div class="visual-card">
-                        <img id="visual-img" class="visual-img" src="${data.img1}" alt="形态演变" style="filter: brightness(1) contrast(1.05) saturate(1.05);">
+                        <img id="visual-img" class="visual-img" src="${data.img1}" alt="形态演变" style="filter: brightness(0.2) grayscale(1);">
                         <div class="visual-overlay">
                             <div class="visual-title" id="visual-title">等待接入重塑网络...</div>
                             <div class="visual-desc" id="visual-desc">点选上方阶段，AI将为您投射巅峰形态</div>
@@ -717,11 +690,10 @@
             const vDesc = document.getElementById('visual-desc');
 
             if(maxPhaseSelected === 0) {
-                // 初始状态，明亮清晰
-                vImg.style.filter = 'brightness(1) contrast(1.05) saturate(1.05)';
+                vImg.style.filter = 'brightness(0.2) grayscale(1)';
                 vTitle.innerText = '等待接入重塑网络...';
                 vDesc.innerText = '点选上方阶段，AI将为您投射巅峰形态';
-                valDisplay.innerHTML = '<span style="color:#999; font-size:12px;">待选择目标阶段</span>';
+                valDisplay.innerHTML = '<span style="color:#666; font-size:12px;">待选择目标阶段</span>';
                 btn.classList.add('disabled');
             } else {
                 triggerAIScan();
@@ -765,7 +737,7 @@
             openSignature(selectedUpsell.name, selectedUpsell.sessions, selectedUpsell.price);
         }
 
-        // 🚨 弹窗重构：引入价格库同款仪表盘 UI 与散客锚定法 - 明亮版
+        // 🚨 弹窗重构：引入价格库同款仪表盘 UI 与散客锚定法
         function showUpsellModal() {
             if(globalTotalExact === 0) return;
             
@@ -826,21 +798,21 @@
 
                 let card2 = `
                     <div class="dash-card basic" id="card-scheme-2" onclick="selectUpPlan('card-scheme-2', '【原价启动】半程保留包', '${r2+f2}节+${m2}个月', '¥ ${formatMoney(totalNew2)}')">
-                        <div class="dc-title" style="color:#999;">方案二：【原价启动】半程保留包</div>
+                        <div class="dc-title" style="color:#aaa;">方案二：【原价启动】半程保留包</div>
                         <div class="dc-subtitle">先以原价启动半程，2周内补全差价即可追溯特权价</div>
                         <div class="dc-flex">
                             <div class="dc-left">
-                                <div class="dc-ses" style="color:#CCC;">${r2+f2}<span>节(+包月)</span></div>
+                                <div class="dc-ses" style="color:#fff;">${r2+f2}<span>节(+包月)</span></div>
                             </div>
                             <div class="dc-right">
-                                <div class="dc-new" style="color:#CCC;"><span>¥</span>${formatMoney(totalNew2)}</div>
+                                <div class="dc-new" style="color:#fff;"><span>¥</span>${formatMoney(totalNew2)}</div>
                             </div>
                         </div>
                         <div class="dc-footer">
                             <div class="dc-f-ori" style="text-decoration:none;">常规阶梯价计算</div>
-                            <div class="dc-f-new" style="color:#999;">暂不享特权底价</div>
+                            <div class="dc-f-new" style="color:#aaa;">暂不享特权底价</div>
                         </div>
-                        <div class="check-ribbon" style="background:#DDD; color:#999;">✓ 已优选</div>
+                        <div class="check-ribbon" style="background:#555; color:#fff;">✓ 已优选</div>
                     </div>
                 `;
 
@@ -898,21 +870,21 @@
 
                 let card2 = `
                     <div class="dash-card basic" id="card-scheme-2" onclick="selectUpPlan('card-scheme-2', '【原价启动】半程保留包', '${pkgEntry}节', '¥ ${formatMoney(totalNewC)}')">
-                        <div class="dc-title" style="color:#999;">方案二：【原价启动】半程保留包</div>
+                        <div class="dc-title" style="color:#aaa;">方案二：【原价启动】半程保留包</div>
                         <div class="dc-subtitle">先以原价启动半程，2周内补全差价即可追溯特权价</div>
                         <div class="dc-flex">
                             <div class="dc-left">
-                                <div class="dc-ses" style="color:#CCC;">${pkgEntry}<span>节</span></div>
+                                <div class="dc-ses" style="color:#fff;">${pkgEntry}<span>节</span></div>
                             </div>
                             <div class="dc-right">
-                                <div class="dc-new" style="color:#CCC;"><span>¥</span>${formatMoney(totalNewC)}</div>
+                                <div class="dc-new" style="color:#fff;"><span>¥</span>${formatMoney(totalNewC)}</div>
                             </div>
                         </div>
                         <div class="dc-footer">
                             <div class="dc-f-ori" style="text-decoration:none;">按原阶梯执行</div>
-                            <div class="dc-f-new" style="color:#999;">原价 ¥${unitC}/节</div>
+                            <div class="dc-f-new" style="color:#aaa;">原价 ¥${unitC}/节</div>
                         </div>
-                        <div class="check-ribbon" style="background:#DDD; color:#999;">✓ 已优选</div>
+                        <div class="check-ribbon" style="background:#555; color:#fff;">✓ 已优选</div>
                     </div>
                 `;
 
@@ -938,9 +910,9 @@
             document.getElementById('sig-pad-wrap').innerHTML = `
                 <div class="sig-summary" id="sig-summary-box">
                     <div class="sig-sum-title">即将为您锁定以下专属重塑方案：</div>
-                    <div style="font-size:12px; color:#666;">所属体系: <span style="color:#999;">${planData[currentPlanKey].title}</span></div>
+                    <div style="font-size:12px; color:#888;">所属体系: <span style="color:#ccc;">${planData[currentPlanKey].title}</span></div>
                     <div class="sig-sum-data">
-                        <div class="sig-sum-name">${pkgName} <span style="font-size:12px; color:#666;">(${sessions})</span></div>
+                        <div class="sig-sum-name">${pkgName} <span style="font-size:12px; color:#fff;">(${sessions})</span></div>
                         <div class="sig-sum-price">${price}</div>
                     </div>
                 </div>
@@ -952,7 +924,7 @@
                     <button class="btn-clear" onclick="clearCanvas()">重新签名</button>
                     <button class="btn-confirm-sig" onclick="generateContractImage()">确认保存并生成合同</button>
                 </div>
-                <div style="margin-top: 5px; font-size: 10px; color: #999; text-align: center;" id="sig-footer-note">
+                <div style="margin-top: 5px; font-size: 10px; color: #666; text-align: center;" id="sig-footer-note">
                     * 签署即代表您同意本门店之《课程有效期及场地使用规范》。
                 </div>
             `;
@@ -1020,8 +992,7 @@
             finalCanvas.height = 1100;
             const ctx = finalCanvas.getContext('2d');
 
-            // 白金合同背景
-            ctx.fillStyle = '#F8F8FA';
+            ctx.fillStyle = '#0D0D11';
             ctx.fillRect(0, 0, finalCanvas.width, finalCanvas.height);
 
             ctx.strokeStyle = '#D4AF37';
@@ -1033,12 +1004,12 @@
             ctx.textAlign = 'center';
             ctx.fillText('LUXIOU 尊享定制合约', 400, 120);
             
-            ctx.fillStyle = '#666';
+            ctx.fillStyle = '#444';
             ctx.font = '24px sans-serif';
             ctx.fillText('EXCLUSIVE CUSTOMIZED CONTRACT', 400, 165);
 
             ctx.textAlign = 'left';
-            ctx.fillStyle = '#1A1A1A';
+            ctx.fillStyle = '#FFFFFF';
             ctx.font = '32px sans-serif';
             
             const sysName = planData[currentPlanKey].title;
@@ -1054,12 +1025,12 @@
             ctx.font = 'bold 46px sans-serif';
             ctx.fillText('核算总价：' + pkgPrice, 80, 540);
 
-            ctx.fillStyle = '#999';
+            ctx.fillStyle = '#888888';
             ctx.font = '24px sans-serif';
             ctx.fillText('* 本合约包含门店常规课程有效期及场地使用权限', 80, 620);
             ctx.fillText('* 签字即代表认同《LUXIOU 门店会员健康管理规章》', 80, 660);
 
-            ctx.fillStyle = '#1A1A1A';
+            ctx.fillStyle = '#FFFFFF';
             ctx.font = 'bold 32px sans-serif';
             ctx.fillText('客户手写确认签名：', 80, 780);
 
@@ -1071,7 +1042,7 @@
 
             ctx.drawImage(sigCanvas, 80, 810, dw, dh);
             
-            ctx.strokeStyle = '#EEE';
+            ctx.strokeStyle = '#333';
             ctx.lineWidth = 2;
             ctx.beginPath();
             ctx.moveTo(80, 810 + dh + 10);
@@ -1083,9 +1054,9 @@
             document.getElementById('sig-pad-wrap').innerHTML = `
                 <div style="text-align:center; color:var(--primary); margin-bottom:15px; font-weight:bold; font-size:18px;">
                     ✦ 合同生成成功 ✦<br>
-                    <span style="font-size:12px; color:#999; font-weight:normal;">请长按下方图片，保存至手机相册留存</span>
+                    <span style="font-size:12px; color:#aaa; font-weight:normal;">请长按下方图片，保存至手机相册留存</span>
                 </div>
-                <div style="flex:1; overflow-y:auto; border-radius:12px; box-shadow: 0 10px 30px rgba(212,175,55,0.15); border: 1px solid rgba(212,175,55,0.3);">
+                <div style="flex:1; overflow-y:auto; border-radius:12px; box-shadow: 0 10px 40px rgba(212,175,55,0.25); border: 1px solid rgba(212,175,55,0.5);">
                     <img src="${dataURL}" style="width:100%; display:block;">
                 </div>
                 <div class="sig-actions" style="margin-top:20px;">
