@@ -4,166 +4,100 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>SHANGHAI LUXIOU | 数字化谈单中枢</title>
-    
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="LUXIOU谈单">
     
     <script src="https://cdn.staticfile.net/Sortable/1.15.2/Sortable.min.js"></script>
 
     <style>
-        /* ================= 基础配置与主页UI ================= */
-        :root { --primary: #00f2fe; --secondary: #7000ff; --bg: #000; --card-bg: rgba(255, 255, 255, 0.03); --text: #fff; --grad: radial-gradient(circle at top right, #1a2a6c, #000 70%); }
+        :root { --primary: #D4AF37; --accent: #C5A059; --bg: #050505; --surface: #121212; --text-main: #E2E8F0; --text-sub: #8A92A3; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; margin: 0; padding: 0; }
-        body { background: var(--bg); background-image: var(--grad); color: var(--text); font-family: -apple-system, sans-serif; padding: 20px; min-height: 100vh; transition: all 0.5s ease; display: flex; flex-direction: column; overflow-x: hidden;}
+        body { background: var(--bg); color: var(--text-main); font-family: -apple-system, sans-serif; padding: 20px; min-height: 100vh; display: flex; flex-direction: column; overflow-x: hidden; background-image: radial-gradient(circle at top right, #1A1813, #000 70%);}
         
-        #style-trigger { position: fixed; top: 15px; right: 15px; z-index: 2000; background: rgba(255,255,255,0.1); padding: 8px 15px; border-radius: 50px; font-size: 11px; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2); color: #fff; }
-        #style-panel { display: none; position: fixed; top: 60px; right: 15px; z-index: 2001; background: #111; border: 1px solid #333; border-radius: 15px; padding: 10px; width: 140px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
-        .style-option { padding: 12px; font-size: 13px; color: #aaa; text-align: center; border-bottom: 1px solid #222; }
-        
-        .brand-card { background: var(--card-bg); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; padding: 25px 20px; text-align: center; margin-bottom: 25px; margin-top: 10px; }
-        .brand-card h1 { margin: 0; font-size: 24px; letter-spacing: 4px; color: var(--primary); text-shadow: 0 0 15px var(--primary); }
+        .brand-card { background: rgba(255,255,255,0.03); backdrop-filter: blur(15px); border: 1px solid rgba(212,175,55,0.1); border-radius: 20px; padding: 25px 20px; text-align: center; margin-bottom: 25px; margin-top: 10px; }
+        .brand-card h1 { margin: 0; font-size: 24px; letter-spacing: 4px; color: var(--primary); text-shadow: 0 0 15px rgba(212,175,55,0.3); }
         
         .btn-group { width: 100%; display: flex; flex-direction: column; gap: 12px; margin-bottom: 30px; }
-        .radar-btn { display: flex; align-items: center; justify-content: center; width: 100%; padding: 16px; border-radius: 12px; font-weight: bold; font-size: 15px; text-decoration: none; color: #fff; transition: transform 0.2s, filter 0.2s; letter-spacing: 1px;}
-        .radar-btn:active { transform: scale(0.98); filter: brightness(1.1); }
-        
-        .btn-a { background: linear-gradient(90deg, #4facfe, #00f2fe); box-shadow: 0 5px 15px rgba(0, 242, 254, 0.3); border: none; }
-        .btn-b { background: rgba(255,255,255,0.05); border: 1px solid var(--secondary); color: #e2e8f0; }
-        .btn-c { background: linear-gradient(90deg, var(--secondary), #e100ff); box-shadow: 0 5px 15px rgba(112, 0, 255, 0.3); border: none; }
+        .radar-btn { display: flex; align-items: center; justify-content: center; width: 100%; padding: 16px; border-radius: 12px; font-weight: bold; font-size: 15px; text-decoration: none; color: #fff; letter-spacing: 1px; background: #111; border: 1px solid rgba(255,255,255,0.1);}
+        .radar-btn:active { transform: scale(0.98); }
+        .btn-a { border-color: #4facfe; color: #4facfe;}
+        .btn-b { border-color: #7000ff; color: #a855f7;}
+        .btn-c { border-color: #D4AF37; color: #D4AF37;}
         
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; flex: 1; padding-bottom: 30px;}
-        .card { background: #111; border: 2px solid transparent; border-radius: 16px; overflow: hidden; position: relative; height: 160px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); cursor: pointer;}
-        .card img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.8); transition: 0.3s;}
-        .card:active img { transform: scale(1.05); }
+        .card { background: #111; border: 1px solid transparent; border-radius: 16px; overflow: hidden; position: relative; height: 160px; box-shadow: 0 4px 10px rgba(0,0,0,0.5); cursor: pointer;}
+        .card img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.7); transition: 0.3s;}
         .card-info { position: absolute; bottom: 0; width: 100%; padding: 12px 5px; font-size: 11px; text-align: center; font-weight: bold; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: #fff; pointer-events: none;}
         
-        /* ================= 模块一：背书库 CSS ================= */
-        .endorse-modal { position: fixed; top: 100vh; left: 0; width: 100%; height: 100vh; background: #050505; z-index: 3000; transition: top 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); display: flex; flex-direction: column; overflow-x: hidden;}
-        .endorse-modal.show { top: 0; }
-        .e-header { height: 60px; display: flex; justify-content: space-between; align-items: center; padding: 0 20px; background: rgba(5,5,5,0.95); border-bottom: 1px solid rgba(212,175,55,0.2); backdrop-filter: blur(10px); flex-shrink: 0;}
-        .e-title { font-size: 16px; font-weight: bold; color: #D4AF37; }
-        .e-close { color: #fff; font-size: 28px; background: none; border: none; padding: 0 10px; cursor: pointer; line-height: 1;}
-        .e-seg-control { display: flex; background: rgba(20,20,25,0.8); border-radius: 12px; padding: 6px; margin: 20px 20px 15px; border: 1px solid rgba(255,255,255,0.05); flex-shrink: 0;}
-        .e-seg-btn { flex: 1; text-align: center; padding: 12px 0; font-size: 14px; font-weight: bold; color: #666; border-radius: 8px; transition: 0.3s; cursor: pointer; position: relative; z-index: 2;}
-        .e-seg-btn.active { color: #000; font-weight: 900;}
-        .e-seg-btn.active::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, #D4AF37, #C5A059); border-radius: 8px; z-index: -1; box-shadow: 0 4px 12px rgba(212, 175, 55, 0.4); }
-        .e-body { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 0 20px 80px; -webkit-overflow-scrolling: touch; overscroll-behavior-y: contain;}
-        .e-tab-sec { display: none; flex-direction: column; animation: fadeIn 0.4s ease; }
-        .e-tab-sec.active { display: flex; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .e-sec-header { margin-bottom: 10px; text-align: center; }
-        .e-sec-title { font-size: 18px; font-weight: 900; color: #fff; margin-bottom: 6px; letter-spacing: 1px;}
-        .e-sec-desc { font-size: 12px; color: #8A92A3; line-height: 1.5; }
-        .e-tip { text-align: center; font-size: 11px; color: #666; margin-bottom: 20px; letter-spacing: 1px; }
-        .e-upload-btn { background: linear-gradient(135deg, rgba(212,175,55,0.1), rgba(212,175,55,0.05)); border: 1px dashed #D4AF37; color: #D4AF37; text-align: center; padding: 15px; border-radius: 12px; font-size: 14px; font-weight: bold; cursor: pointer; margin-bottom: 15px; transition: 0.3s; letter-spacing: 1px;}
-        .e-upload-btn:active { background: rgba(212,175,55,0.2); transform: scale(0.98); }
+        /* 模态框通用基础 */
+        .modal-base { position: fixed; top: 100vh; left: 0; width: 100%; height: 100vh; background: #050505; z-index: 3000; transition: top 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); display: flex; flex-direction: column;}
+        .modal-base.show { top: 0; }
+        .m-header { height: 60px; display: flex; justify-content: space-between; align-items: center; padding: 0 20px; background: rgba(5,5,5,0.95); border-bottom: 1px solid rgba(212,175,55,0.2); flex-shrink: 0;}
+        .m-title { font-size: 16px; font-weight: bold; color: var(--primary); }
+        .m-close { color: #888; font-size: 28px; background: none; border: none; padding: 0 10px; cursor: pointer; }
+        .m-body { flex: 1; overflow-y: auto; padding: 20px; -webkit-overflow-scrolling: touch; overscroll-behavior-y: contain; padding-bottom: 100px;}
+
+        /* 背书库 */
+        .e-seg { display: flex; background: #111; border-radius: 12px; padding: 6px; margin-bottom: 20px; border: 1px solid #222;}
+        .e-tab { flex: 1; text-align: center; padding: 10px 0; font-size: 13px; font-weight: bold; color: #666; border-radius: 8px; transition: 0.3s;}
+        .e-tab.active { background: #222; color: var(--primary);}
+        .e-sec { display: none; flex-direction: column; }
+        .e-sec.active { display: flex; }
+        .upload-btn { background: #111; border: 1px dashed var(--primary); color: var(--primary); text-align: center; padding: 15px; border-radius: 12px; font-size: 13px; font-weight: bold; margin-bottom: 15px;}
         .e-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
-        .e-item { position: relative; border-radius: 12px; overflow: hidden; background: #111; border: 1px solid rgba(212,175,55,0.3); box-shadow: 0 8px 20px rgba(0,0,0,0.8); cursor: grab;}
-        .e-item.sortable-ghost { opacity: 0.4; }
-        .e-item.sortable-drag { box-shadow: 0 15px 30px rgba(212,175,55,0.5); transform: scale(1.05); z-index: 100;}
-        .e-item img { width: 100%; height: 220px; object-fit: cover; display: block; filter: brightness(0.95) contrast(1.05); pointer-events: none;}
-        .cert-view .e-item img { height: 200px; object-fit: contain; background: #0A0A0C; padding: 5px;}
-        .coach-view .e-item img { height: 260px; object-fit: cover; }
-        .e-delete { position: absolute; top: 8px; right: 8px; width: 28px; height: 28px; background: rgba(0,0,0,0.8); border: 1px solid rgba(255,59,48,0.6); border-radius: 50%; display: flex; justify-content: center; align-items: center; color: #FF3B30; font-size: 18px; font-weight: bold; cursor: pointer; z-index: 999; backdrop-filter: blur(5px);}
-        .e-delete:active { background: #FF3B30; color: #fff; transform: scale(0.9);}
-        .e-empty { grid-column: span 2; text-align: center; padding: 40px 20px; color: #555; border: 1px dashed #333; border-radius: 12px; font-size: 13px; }
+        .e-item { position: relative; border-radius: 12px; overflow: hidden; background: #111; border: 1px solid rgba(212,175,55,0.3); height: 220px;}
+        .e-item img { width: 100%; height: 100%; object-fit: cover;}
+        .e-item .del { position: absolute; top: 8px; right: 8px; width: 24px; height: 24px; background: rgba(0,0,0,0.8); border: 1px solid #FF3B30; border-radius: 50%; color: #FF3B30; display: flex; justify-content: center; align-items: center; font-weight: bold; z-index: 10;}
 
-        /* ================= 模块二：24H 节律管家 CSS ================= */
-        .ls-modal { position: fixed; top: 100vh; left: 0; width: 100%; height: 100vh; background: #050505; z-index: 4000; transition: top 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); display: flex; flex-direction: column; overflow-x: hidden;}
-        .ls-modal.show { top: 0; }
-        .ls-header { height: 60px; display: flex; justify-content: space-between; align-items: center; padding: 0 20px; background: rgba(5,5,5,0.95); border-bottom: 1px solid rgba(212,175,55,0.2); backdrop-filter: blur(10px); flex-shrink: 0;}
-        .ls-body { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 20px 20px 80px; -webkit-overflow-scrolling: touch; display: flex; flex-direction: column; gap: 25px; overscroll-behavior-y: contain;}
-        
-        .coach-directive { background: linear-gradient(145deg, #1A1813, #0A0A0C); border: 1px solid rgba(212,175,55,0.3); border-radius: 16px; padding: 20px; display: flex; align-items: center; gap: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); position: relative; overflow: hidden;}
-        .coach-avatar { width: 60px; height: 60px; border-radius: 50%; border: 2px solid #D4AF37; object-fit: cover; flex-shrink: 0; box-shadow: 0 0 15px rgba(212,175,55,0.4);}
-        .directive-content { flex: 1; }
-        .directive-title { font-size: 11px; color: #D4AF37; font-weight: bold; letter-spacing: 2px; margin-bottom: 6px; display: flex; align-items: center; gap: 6px;}
-        .directive-title::before { content: ''; display: block; width: 6px; height: 6px; background: #D4AF37; border-radius: 50%; box-shadow: 0 0 8px #D4AF37; animation: pulse 2s infinite;}
-        .directive-text { font-size: 14px; color: #fff; font-weight: 900; line-height: 1.5; text-shadow: 0 2px 4px rgba(0,0,0,0.5);}
-        @keyframes pulse { 0% { opacity: 0.5; } 50% { opacity: 1; transform: scale(1.2); } 100% { opacity: 0.5; } }
-        
-        .rings-dashboard { background: #0A0A0C; border: 1px solid rgba(255,255,255,0.05); border-radius: 16px; padding: 20px 15px; box-shadow: inset 0 0 20px rgba(0,0,0,0.5);}
-        .ls-sec-title { font-size: 16px; font-weight: 900; color: #fff; margin-bottom: 20px; text-align: center; letter-spacing: 1px;}
-        .rings-wrap { display: flex; justify-content: space-around; align-items: flex-end;}
-        .ring-item { display: flex; flex-direction: column; align-items: center; cursor: pointer; transition: 0.3s;}
-        .ring-item:active { transform: scale(0.92); }
-        .svg-ring { width: 80px; height: 80px; transform: rotate(-90deg); margin-bottom: 10px; filter: drop-shadow(0 0 6px rgba(212,175,55,0.2));}
-        .svg-bg { fill: none; stroke: #222; stroke-width: 8; }
-        .svg-progress { fill: none; stroke: #D4AF37; stroke-width: 8; stroke-linecap: round; stroke-dasharray: 201; stroke-dashoffset: 201; transition: stroke-dashoffset 1s cubic-bezier(0.2, 0.8, 0.2, 1); }
-        .ring-icon { position: absolute; font-size: 20px; top: 25px; left: 50%; transform: translateX(-50%); pointer-events: none;}
-        .ring-name { font-size: 12px; color: #aaa; font-weight: bold; margin-bottom: 4px;}
-        .ring-val { font-size: 14px; font-weight: 900; color: #fff;}
-        .ring-val span { font-size: 10px; color: #666; font-weight: normal;}
+        /* 24H 管家 - 多会员系统 */
+        .client-selector { background: #111; border: 1px solid #333; border-radius: 12px; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;}
+        .client-info { display: flex; flex-direction: column; }
+        .client-label { font-size: 10px; color: #666; margin-bottom: 4px; letter-spacing: 1px;}
+        .client-name { font-size: 16px; color: #fff; font-weight: bold; display: flex; align-items: center; gap: 8px;}
+        .client-switch-btn { background: var(--primary); color: #000; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: bold; border: none;}
 
-        .survival-guide { margin-top: 5px; }
-        .guide-scroll { display: flex; overflow-x: auto; gap: 15px; padding-bottom: 10px; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;}
-        .guide-scroll::-webkit-scrollbar { display: none; }
-        .guide-card { flex-shrink: 0; width: 220px; height: 120px; border-radius: 14px; background: #111; border: 1px solid rgba(212,175,55,0.2); position: relative; overflow: hidden; scroll-snap-align: start; cursor: pointer;}
-        .guide-card img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.6) saturate(0.8); transition: 0.4s;}
-        .guide-card:active img { transform: scale(1.05); filter: brightness(0.8); }
-        .guide-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.9), transparent); display: flex; flex-direction: column; justify-content: flex-end; padding: 15px;}
-        .g-icon { font-size: 20px; margin-bottom: 5px; }
-        .g-title { font-size: 15px; font-weight: 900; color: #D4AF37; letter-spacing: 1px;}
-        .g-desc { font-size: 11px; color: #ccc; margin-top: 4px;}
+        .rings-dash { background: #111; border: 1px solid #222; border-radius: 16px; padding: 20px 15px; display: flex; justify-content: space-around; margin-bottom: 25px;}
+        .ring-item { display: flex; flex-direction: column; align-items: center; }
+        .svg-ring { width: 70px; height: 70px; transform: rotate(-90deg); margin-bottom: 8px;}
+        .svg-bg { fill: none; stroke: #222; stroke-width: 6; }
+        .svg-progress { fill: none; stroke: var(--primary); stroke-width: 6; stroke-linecap: round; stroke-dasharray: 176; stroke-dashoffset: 176; transition: 1s; }
+        .ring-val { font-size: 12px; font-weight: bold; color: #fff; margin-top: 5px;}
 
-        .diet-log { background: #0A0A0C; border: 1px solid rgba(255,255,255,0.05); border-radius: 16px; padding: 20px 15px; box-shadow: inset 0 0 20px rgba(0,0,0,0.5);}
-        .diet-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 20px;}
-        .d-title-wrap { flex: 1; }
-        .d-subtitle { font-size: 11px; color: #888; margin-top: 4px;}
-        .btn-upload-diet { background: linear-gradient(135deg, #D4AF37, #AA8A2A); color: #000; padding: 10px 16px; border-radius: 10px; font-weight: 900; font-size: 13px; box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3); border: none; cursor: pointer;}
-        .btn-upload-diet:active { transform: scale(0.96); }
-        .diet-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
-        .diet-item { position: relative; border-radius: 12px; overflow: hidden; background: #111; aspect-ratio: 1/1; cursor: pointer; border: 1px solid transparent; transition: 0.3s;}
-        .diet-item:active { transform: scale(0.96); }
-        .diet-item img { width: 100%; height: 100%; object-fit: cover; }
-        
-        .diet-item.status-green { border-color: #32D74B; box-shadow: 0 0 15px rgba(50, 215, 75, 0.2); }
-        .diet-item.status-yellow { border-color: #FFD60A; box-shadow: 0 0 15px rgba(255, 214, 10, 0.2); }
-        .diet-item.status-red { border-color: #FF453A; box-shadow: 0 0 15px rgba(255, 69, 58, 0.2); }
-        .diet-item.status-pending { border-color: #444; }
-        .diet-time { position: absolute; bottom: 0; left: 0; width: 100%; padding: 15px 10px 8px; background: linear-gradient(to top, rgba(0,0,0,0.9), transparent); font-size: 11px; font-weight: bold; color: #fff;}
-        .status-badge { position: absolute; top: 8px; right: 8px; width: 12px; height: 12px; border-radius: 50%; border: 2px solid #000;}
-        .status-green .status-badge { background: #32D74B; box-shadow: 0 0 8px #32D74B;}
-        .status-yellow .status-badge { background: #FFD60A; box-shadow: 0 0 8px #FFD60A;}
-        .status-red .status-badge { background: #FF453A; box-shadow: 0 0 8px #FF453A;}
-        .status-pending .status-badge { background: #888; }
-        .empty-diet { grid-column: span 2; text-align: center; padding: 30px; border: 1px dashed #333; border-radius: 12px; font-size: 12px; color: #555; }
+        /* AI 饮食解析卡片 */
+        .diet-list { display: flex; flex-direction: column; gap: 15px; }
+        .diet-card { background: #111; border-radius: 16px; overflow: hidden; border: 1px solid #222; display: flex; flex-direction: column;}
+        .diet-card img { width: 100%; height: 200px; object-fit: cover;}
+        .diet-macros { padding: 15px; background: #0A0A0C;}
+        .macro-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 1px solid #222; padding-bottom: 10px;}
+        .macro-kcal { font-size: 20px; font-weight: 900; color: var(--primary);}
+        .macro-status { padding: 4px 10px; border-radius: 4px; font-size: 10px; font-weight: bold; color: #000;}
+        .status-green { background: #32D74B; }
+        .status-yellow { background: #FFD60A; }
+        .status-red { background: #FF453A; color: #fff;}
+        .macro-bars { display: flex; justify-content: space-between;}
+        .m-bar { flex: 1; text-align: center; }
+        .m-label { font-size: 10px; color: #666; margin-bottom: 4px;}
+        .m-val { font-size: 14px; color: #fff; font-weight: bold;}
 
-        .eval-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 5000; display: none; flex-direction: column; justify-content: center; align-items: center; padding: 20px; backdrop-filter: blur(10px); opacity: 0; transition: 0.3s;}
-        .eval-modal.show { display: flex; opacity: 1;}
-        .eval-card { background: #111; border: 1px solid #D4AF37; border-radius: 20px; width: 100%; max-width: 340px; padding: 25px 20px; text-align: center; box-shadow: 0 10px 40px rgba(212,175,55,0.2);}
-        .eval-title { font-size: 18px; color: #fff; font-weight: 900; margin-bottom: 20px; letter-spacing: 1px;}
-        .eval-btn { width: 100%; padding: 15px; border-radius: 12px; font-size: 15px; font-weight: bold; color: #000; border: none; margin-bottom: 12px; cursor: pointer; transition: 0.2s;}
-        .eval-btn:active { transform: scale(0.96); }
-        .btn-green { background: linear-gradient(135deg, #32D74B, #28A73C); box-shadow: 0 5px 15px rgba(50,215,75,0.3);}
-        .btn-yellow { background: linear-gradient(135deg, #FFD60A, #CCAA00); box-shadow: 0 5px 15px rgba(255,214,10,0.3);}
-        .btn-red { background: linear-gradient(135deg, #FF453A, #CC372E); box-shadow: 0 5px 15px rgba(255,69,58,0.3); color: #fff;}
-        .btn-cancel { background: transparent; border: 1px solid #444; color: #888; margin-bottom: 0; margin-top: 10px;}
+        /* AI 扫描动画遮罩 */
+        .ai-scanning-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 9999; display: none; flex-direction: column; justify-content: center; align-items: center;}
+        .scan-box { width: 250px; height: 250px; border: 2px solid var(--primary); position: relative; overflow: hidden; border-radius: 20px; margin-bottom: 20px; background-size: cover; background-position: center;}
+        .scan-line { width: 100%; height: 4px; background: var(--primary); box-shadow: 0 0 20px 5px var(--primary); position: absolute; top: 0; animation: scanAnim 1.5s infinite linear;}
+        .scan-text { color: var(--primary); font-size: 14px; font-weight: bold; letter-spacing: 2px; font-family: monospace;}
+        @keyframes scanAnim { 0% { top: 0; opacity: 1; } 100% { top: 100%; opacity: 0.2; } }
 
-        .guide-modal { position: fixed; bottom: -100%; left: 0; width: 100%; background: linear-gradient(180deg, #121215, #050505); border-top: 1px solid #D4AF37; border-radius: 24px 24px 0 0; z-index: 6000; padding: 25px 20px 40px; transition: 0.5s cubic-bezier(0.2, 0.8, 0.2, 1); box-shadow: 0 -10px 50px rgba(212,175,55,0.15);}
-        .guide-modal.show { bottom: 0; }
-        .gm-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px;}
-        .gm-title { font-size: 20px; font-weight: 900; color: #D4AF37; letter-spacing: 1px; }
-        .gm-close { color: #888; font-size: 28px; background: none; border: none; padding: 0; line-height: 1; cursor: pointer; }
-        .gm-content { font-size: 14px; color: #ccc; line-height: 1.8;}
-        .gm-content strong { color: #fff; }
-        .gm-content ul { padding-left: 20px; margin-top: 10px; }
-        .gm-content li { margin-bottom: 8px; }
+        /* 会员管理弹窗 */
+        .client-modal { position: fixed; bottom: -100%; left: 0; width: 100%; background: #111; border-top: 1px solid var(--primary); border-radius: 20px 20px 0 0; padding: 20px; z-index: 5000; transition: 0.4s;}
+        .client-modal.show { bottom: 0; }
+        .cm-item { padding: 15px; border-bottom: 1px solid #222; font-size: 15px; color: #fff; cursor: pointer; display: flex; justify-content: space-between;}
+        .cm-item.active { color: var(--primary); font-weight: bold;}
+        .cm-add { padding: 15px; color: #4facfe; text-align: center; font-weight: bold;}
     </style>
 </head>
 <body>
-    <div id="style-trigger" onclick="togglePanel()">🎨 切换风格</div>
-    <div id="style-panel">
-        <div class="style-option" onclick="applyTheme(0)">赛博霓虹</div>
-        <div class="style-option" onclick="applyTheme(1)">哑光极简</div>
-        <div class="style-option" onclick="applyTheme(2)">竞技热血</div>
-        <div class="style-option" onclick="applyTheme(3)">纯白美学</div>
-        <div class="style-option" onclick="applyTheme(4)">香槟金奢</div>
-    </div>
 
     <div class="brand-card">
-        <h1 id="adminTrigger">SHANGHAI LUXIOU</h1>
+        <h1>SHANGHAI LUXIOU</h1>
         <p style="color:#666; font-size:11px; margin-top:5px; letter-spacing:2px;">数字化私教诊断系统</p>
     </div>
 
@@ -182,534 +116,365 @@
             <img src="plan.jpg" loading="lazy"><div class="card-info">【高定方案库】</div>
         </div>
         
-        <div class="card" style="border-color:#22d3ee" onclick="openEndorseModal()">
+        <div class="card" style="border-color:#22d3ee" onclick="openModal('endorseModal')">
             <img src="cert.jpg" loading="lazy"><div class="card-info">【背书库】</div>
         </div>
-        
         <div class="card" style="border-color:#f472b6" onclick="window.location.href='./price.html'">
             <img src="product.jpg" loading="lazy"><div class="card-info">【黑金报价库】</div>
         </div>
 
-        <div class="card" style="border-color:#10b981; grid-column: 1 / -1;" onclick="openLifestyleModal()">
-            <img src="case.jpg" loading="lazy" style="filter: brightness(0.5) saturate(1.2);">
+        <div class="card" style="border-color:#10b981; grid-column: 1 / -1;" onclick="openModal('lifestyleModal')">
+            <img src="case.jpg" loading="lazy" style="filter: brightness(0.4);">
             <div class="card-info" style="font-size: 14px; letter-spacing: 2px; padding: 15px 5px;">【24H 全息节律管家】</div>
         </div>
     </div>
 
-    <div id="endorseModal" class="endorse-modal">
-        <div class="e-header">
-            <div class="e-title">R玥精致健身 | 品牌背书库</div>
-            <button class="e-close" onclick="closeEndorseModal()">×</button>
+    <div id="endorseModal" class="modal-base">
+        <div class="m-header">
+            <div class="m-title">品牌背书库</div>
+            <button class="m-close" onclick="closeModal('endorseModal')">×</button>
         </div>
-        
-        <div class="e-seg-control">
-            <div class="e-seg-btn active" onclick="switchEndorseTab('cert', this)">资质证书</div>
-            <div class="e-seg-btn" onclick="switchEndorseTab('coach', this)">教练团队墙</div>
+        <div class="e-seg">
+            <div class="e-tab active" onclick="switchTab('cert', this)">资质证书</div>
+            <div class="e-tab" onclick="switchTab('coach', this)">教练团队墙</div>
         </div>
-
-        <div class="e-body">
-            <div id="e-view-cert" class="e-tab-sec cert-view active">
-                <div class="e-sec-header">
-                    <div class="e-sec-title">国际权威认证矩阵</div>
-                    <div class="e-sec-desc">医学排查与运动康复级别执业资质展示。</div>
-                </div>
-                <div class="e-upload-btn" onclick="document.getElementById('cert-upload').click()">
-                    + 从手机相册多选上传【资质证书】
-                </div>
-                <div class="e-tip">💡 提示：无限上传，长按图片0.2秒即可随意拖拽排序</div>
-                <input type="file" id="cert-upload" multiple="multiple" accept="image/*" style="display:none;" onchange="handleUpload(event, 'cert')">
+        <div class="m-body" style="padding-top:0;">
+            <div id="view-cert" class="e-sec active">
+                <div class="upload-btn" onclick="document.getElementById('cert-up').click()">+ 上传证书 (支持多选)</div>
+                <input type="file" id="cert-up" multiple accept="image/*" style="display:none;" onchange="handleImageUp(event, 'cert')">
                 <div class="e-grid" id="cert-gallery"></div>
             </div>
-
-            <div id="e-view-coach" class="e-tab-sec coach-view">
-                <div class="e-sec-header">
-                    <div class="e-sec-title">顶配重塑导师阵容</div>
-                    <div class="e-sec-desc">由内而外散发极致美感，您的未来身材推演者。</div>
-                </div>
-                <div class="e-upload-btn" onclick="document.getElementById('coach-upload').click()">
-                    + 从手机相册多选上传【教练形象照】
-                </div>
-                <div class="e-tip">💡 提示：无限上传，长按图片0.2秒即可随意拖拽排序</div>
-                <input type="file" id="coach-upload" multiple="multiple" accept="image/*" style="display:none;" onchange="handleUpload(event, 'coach')">
+            <div id="view-coach" class="e-sec">
+                <div class="upload-btn" onclick="document.getElementById('coach-up').click()">+ 上传教练照片 (支持多选)</div>
+                <input type="file" id="coach-up" multiple accept="image/*" style="display:none;" onchange="handleImageUp(event, 'coach')">
                 <div class="e-grid" id="coach-gallery"></div>
             </div>
         </div>
     </div>
 
-    <div id="lifestyleModal" class="ls-modal">
-        <div class="ls-header">
-            <div class="ls-title" style="color: #D4AF37; font-weight:bold;">24H 全息节律管家</div>
-            <button class="ls-close" onclick="closeLifestyleModal()" style="color:#fff; font-size:28px; background:none; border:none;">×</button>
+    <div id="lifestyleModal" class="modal-base">
+        <div class="m-header">
+            <div class="m-title" style="color:#10b981;">24H 全息节律管家</div>
+            <button class="m-close" onclick="closeModal('lifestyleModal')">×</button>
         </div>
-        <div class="ls-body">
-            <div class="coach-directive">
-                <img src="https://images.unsplash.com/photo-1594381898411-846e7d193883?auto=format&fit=crop&w=200&q=80" class="coach-avatar">
-                <div class="directive-content">
-                    <div class="directive-title">首席重塑导师 | 今日指令</div>
-                    <div class="directive-text">"不要让周末的放纵，<br>毁掉你周一绝美马甲线的轮廓。"</div>
+        
+        <div class="m-body">
+            <div class="client-selector" onclick="openClientMenu()">
+                <div class="client-info">
+                    <div class="client-label">当前管理服务对象</div>
+                    <div class="client-name" id="current-client-name">VIP 默认档案</div>
+                </div>
+                <button class="client-switch-btn">切换会员</button>
+            </div>
+
+            <div class="rings-dash">
+                <div class="ring-item" onclick="updateRing('water', 250)">
+                    <svg class="svg-ring"><circle class="svg-bg" cx="35" cy="35" r="28"/><circle class="svg-progress" id="ring-water" cx="35" cy="35" r="28"/></svg>
+                    <div style="font-size:10px; color:#aaa;">饮水(ml)</div>
+                    <div class="ring-val" id="val-water">0</div>
+                </div>
+                <div class="ring-item" onclick="updateRing('cardio', 20)">
+                    <svg class="svg-ring"><circle class="svg-bg" cx="35" cy="35" r="28"/><circle class="svg-progress" id="ring-cardio" cx="35" cy="35" r="28"/></svg>
+                    <div style="font-size:10px; color:#aaa;">有氧(%)</div>
+                    <div class="ring-val" id="val-cardio">0</div>
+                </div>
+                <div class="ring-item" onclick="updateRing('train', 1)">
+                    <svg class="svg-ring"><circle class="svg-bg" cx="35" cy="35" r="28"/><circle class="svg-progress" id="ring-train" cx="35" cy="35" r="28"/></svg>
+                    <div style="font-size:10px; color:#aaa;">训练(次)</div>
+                    <div class="ring-val" id="val-train">0</div>
                 </div>
             </div>
 
-            <div class="rings-dashboard">
-                <div class="ls-sec-title">✦ 节律闭合追踪 ✦</div>
-                <div class="rings-wrap">
-                    <div class="ring-item" onclick="addProgress('water')">
-                        <div style="position:relative;">
-                            <svg class="svg-ring"><circle class="svg-bg" cx="40" cy="40" r="32"/><circle class="svg-progress" id="ring-water" cx="40" cy="40" r="32"/></svg>
-                            <div class="ring-icon">💧</div>
-                        </div>
-                        <div class="ring-name">唤醒之源</div>
-                        <div class="ring-val" id="val-water">0 <span>/ 2000ml</span></div>
-                    </div>
-                    <div class="ring-item" onclick="addProgress('cardio')">
-                        <div style="position:relative;">
-                            <svg class="svg-ring"><circle class="svg-bg" cx="40" cy="40" r="32"/><circle class="svg-progress" id="ring-cardio" cx="40" cy="40" r="32"/></svg>
-                            <div class="ring-icon">🔥</div>
-                        </div>
-                        <div class="ring-name">代谢引擎</div>
-                        <div class="ring-val" id="val-cardio">0 <span>/ 100%</span></div>
-                    </div>
-                    <div class="ring-item" onclick="addProgress('training')">
-                        <div style="position:relative;">
-                            <svg class="svg-ring"><circle class="svg-bg" cx="40" cy="40" r="32"/><circle class="svg-progress" id="ring-training" cx="40" cy="40" r="32"/></svg>
-                            <div class="ring-icon">🏋️‍♀️</div>
-                        </div>
-                        <div class="ring-name">核心重塑</div>
-                        <div class="ring-val" id="val-training">0 <span>/ 3次</span></div>
-                    </div>
-                </div>
+            <div class="upload-btn" style="border-color:#10b981; color:#10b981;" onclick="document.getElementById('diet-up').click()">
+                + 唤醒 AI 饮食视觉分析 (上传照片)
             </div>
+            <input type="file" id="diet-up" accept="image/*" style="display:none;" onchange="processAIFoodScan(event)">
 
-            <div class="survival-guide">
-                <div class="ls-sec-title" style="margin-bottom:15px; text-align:left;">✦ 社交赴宴生存指南</div>
-                <div class="guide-scroll">
-                    <div class="guide-card" onclick="openGuide('bistro')">
-                        <img src="https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?auto=format&fit=crop&w=400&q=80">
-                        <div class="guide-overlay">
-                            <div class="g-icon">🍷</div>
-                            <div class="g-title">米其林 / Bistro</div>
-                            <div class="g-desc">享受微醺与美食的防暴卡秘籍</div>
-                        </div>
-                    </div>
-                    <div class="guide-card" onclick="openGuide('tea')">
-                        <img src="https://images.unsplash.com/photo-1557142046-c704a3adf364?auto=format&fit=crop&w=400&q=80">
-                        <div class="guide-overlay">
-                            <div class="g-icon">🍰</div>
-                            <div class="g-title">名媛下午茶</div>
-                            <div class="g-desc">如何优雅地避开糖油混合炸弹</div>
-                        </div>
-                    </div>
-                    <div class="guide-card" onclick="openGuide('business')">
-                        <img src="https://images.unsplash.com/photo-1556761175-5973dc0f32b7?auto=format&fit=crop&w=400&q=80">
-                        <div class="guide-overlay">
-                            <div class="g-icon">🥂</div>
-                            <div class="g-title">高强商务应酬</div>
-                            <div class="g-desc">酒局与推杯换盏中的代谢保护法</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="diet-log">
-                <div class="diet-header">
-                    <div class="d-title-wrap">
-                        <div class="ls-sec-title" style="margin-bottom:0; text-align:left;">✦ 饮食光影日记</div>
-                        <div class="d-subtitle">无需计算热量，拍照交给专属大脑。</div>
-                    </div>
-                    <button class="btn-upload-diet" onclick="document.getElementById('diet-upload').click()">+ 上传三餐</button>
-                    <input type="file" id="diet-upload" multiple="multiple" accept="image/*" style="display:none;" onchange="handleDietUpload(event)">
-                </div>
-                
-                <div class="diet-grid" id="diet-gallery"></div>
-            </div>
+            <div class="diet-list" id="diet-list-container"></div>
         </div>
     </div>
 
-    <div class="eval-modal" id="evalModal">
-        <div class="eval-card">
-            <div class="eval-title">✦ 导师能量评审 ✦</div>
-            <button class="eval-btn btn-green" onclick="setDietStatus('green')">🟢 完美赋能 (绿灯)</button>
-            <button class="eval-btn btn-yellow" onclick="setDietStatus('yellow')">🟡 略有瑕疵 (黄灯)</button>
-            <button class="eval-btn btn-red" onclick="setDietStatus('red')">🔴 触发警报 (红灯)</button>
-            <button class="eval-btn btn-cancel" onclick="closeEvalModal()">先不评价，点错了</button>
-            <div style="margin-top:20px; font-size:12px; color:#555; text-decoration:underline; cursor:pointer;" onclick="deleteCurrentDiet()">永久删除这张照片</div>
-        </div>
+    <div class="client-modal" id="clientMenu">
+        <div style="color:#aaa; font-size:12px; margin-bottom:15px; padding-left:15px;">我的会员列表</div>
+        <div id="client-list-render"></div>
+        <div class="cm-add" onclick="addNewClient()">+ 新建 VIP 会员档案</div>
+        <div style="text-align:center; padding:15px; margin-top:10px; color:#666;" onclick="document.getElementById('clientMenu').classList.remove('show')">取消</div>
     </div>
 
-    <div class="guide-modal" id="guideModal">
-        <div class="gm-header">
-            <div class="gm-title" id="gm-title">指南标题</div>
-            <button class="gm-close" onclick="closeGuide()">×</button>
+    <div class="ai-scanning-overlay" id="aiOverlay">
+        <div class="scan-box" id="scanBoxImage">
+            <div class="scan-line"></div>
         </div>
-        <div class="gm-content" id="gm-content">内容</div>
+        <div class="scan-text" id="scanText">CONNECTING VISION MODEL...</div>
     </div>
-    <div id="guideOverlay" onclick="closeGuide()" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:5500;"></div>
 
     <script>
-        // ================= 全局主题逻辑 =================
-        const themes = [
-            { primary: '#00f2fe', secondary: '#7000ff', bg: '#000', grad: 'radial-gradient(circle at top right, #1a2a6c, #000 70%)', card: 'rgba(255,255,255,0.03)', text: '#fff' },
-            { primary: '#fff', secondary: '#444', bg: '#111', grad: 'none', card: '#1a1a1a', text: '#eee' },
-            { primary: '#ff3e3e', secondary: '#000', bg: '#000', grad: 'linear-gradient(135deg, #000 0%, #222 100%)', card: '#111', text: '#fff' },
-            { primary: '#00c6ff', secondary: '#0072ff', bg: '#f5f7fa', grad: 'none', card: '#fff', text: '#333' },
-            { primary: '#d4af37', secondary: '#1a1a1a', bg: '#050505', grad: 'radial-gradient(circle at center, #1a1a1a, #000)', card: '#111', text: '#d4af37' }
-        ];
-
-        function togglePanel() { const p = document.getElementById('style-panel'); p.style.display = p.style.display === 'block' ? 'none' : 'block'; }
-        
-        function applyTheme(idx) {
-            const t = themes[idx];
-            const root = document.documentElement.style;
-            root.setProperty('--primary', t.primary);
-            root.setProperty('--secondary', t.secondary);
-            root.setProperty('--bg', t.bg);
-            root.setProperty('--grad', t.grad);
-            root.setProperty('--card-bg', t.card);
-            document.body.style.color = t.text;
-            togglePanel();
-        }
-
-        let adminTimer;
-        document.getElementById('adminTrigger').addEventListener('touchstart', () => adminTimer = setTimeout(() => window.location.href='./admin.html', 3000));
-        document.getElementById('adminTrigger').addEventListener('touchend', () => clearTimeout(adminTimer));
-
-        // ================= 🚨 终极核武器：IndexedDB 无限容量数据库 =================
-        // 打破 5MB 死线，图片想传多少传多少！支持三个相册库：cert(证书), coach(教练), diet(饮食)
-        let endorseDB = { cert: [], coach: [] };
-        let dietDB = [];
-        let sortableCert = null;
-        let sortableCoach = null;
+        // ================= 数据库与架构 =================
         let idb = null;
+        let globalData = { cert: [], coach: [] }; 
+        
+        // 核心：多会员数据结构
+        let clients = {}; 
+        let currentClientId = 'default';
 
         window.onload = function() {
-            const request = window.indexedDB.open("RyueEndorseDB", 2); // 升级版本号，包含饮食库
-            
+            const request = window.indexedDB.open("LuxiouSuperDB", 3);
             request.onupgradeneeded = function(e) {
                 idb = e.target.result;
-                if (!idb.objectStoreNames.contains("galleryStore")) {
-                    idb.createObjectStore("galleryStore");
+                if (!idb.objectStoreNames.contains("sysStore")) {
+                    idb.createObjectStore("sysStore");
                 }
             };
-            
             request.onsuccess = function(e) {
                 idb = e.target.result;
-                loadFromDB(); 
-            };
-            
-            request.onerror = function(e) {
-                // 数据库失败时的备用方案（LocalStorage 降级）
-                let savedCert = localStorage.getItem('ryue_cert_images');
-                let savedCoach = localStorage.getItem('ryue_coach_images');
-                let savedDiet = localStorage.getItem('ryue_diet_log');
-                if(savedCert) endorseDB.cert = JSON.parse(savedCert);
-                if(savedCoach) endorseDB.coach = JSON.parse(savedCoach);
-                if(savedDiet) dietDB = JSON.parse(savedDiet);
-                
-                renderGallery('cert');
-                renderGallery('coach');
-                renderDiet();
-            };
-            
-            initProgress(); // 加载并渲染圆环数据
-        }
-
-        function loadFromDB() {
-            const tx = idb.transaction("galleryStore", "readonly");
-            const store = tx.objectStore("galleryStore");
-            
-            store.get("cert").onsuccess = function(e) {
-                if(e.target.result) endorseDB.cert = e.target.result;
-                renderGallery('cert');
-            };
-            store.get("coach").onsuccess = function(e) {
-                if(e.target.result) endorseDB.coach = e.target.result;
-                renderGallery('coach');
-            };
-            store.get("diet").onsuccess = function(e) {
-                if(e.target.result) dietDB = e.target.result;
-                renderDiet();
+                initSystemData(); 
             };
         }
 
-        function saveToDB(type) {
-            if(idb) {
-                const tx = idb.transaction("galleryStore", "readwrite");
-                if (type === 'diet') {
-                    tx.objectStore("galleryStore").put(dietDB, type);
+        function initSystemData() {
+            const tx = idb.transaction("sysStore", "readonly");
+            const store = tx.objectStore("sysStore");
+            
+            // 加载背书库
+            store.get("endorse").onsuccess = e => {
+                if(e.target.result) globalData = e.target.result;
+                renderGallery('cert'); renderGallery('coach');
+            };
+
+            // 加载会员库
+            store.get("clients").onsuccess = e => {
+                if(e.target.result) {
+                    clients = e.target.result;
                 } else {
-                    tx.objectStore("galleryStore").put(endorseDB[type], type);
+                    // 初始化第一个默认会员
+                    clients['default'] = {
+                        id: 'default',
+                        name: 'VIP 默认档案',
+                        rings: { water: 0, cardio: 0, train: 0 },
+                        diet: []
+                    };
                 }
-            } else {
-                try {
-                    if (type === 'diet') {
-                        localStorage.setItem('ryue_diet_log', JSON.stringify(dietDB));
-                    } else {
-                        localStorage.setItem(`ryue_${type}_images`, JSON.stringify(endorseDB[type]));
-                    }
-                } catch(e) {
-                    alert("手机本地微型存储已满！系统已拦截崩溃。");
-                }
-            }
+                refreshClientUI();
+            };
         }
 
-        // ================= 背书库交互逻辑 =================
-        function openEndorseModal() { document.getElementById('endorseModal').classList.add('show'); }
-        function closeEndorseModal() { document.getElementById('endorseModal').classList.remove('show'); }
+        function saveDB(key, data) {
+            if(!idb) return;
+            const tx = idb.transaction("sysStore", "readwrite");
+            tx.objectStore("sysStore").put(data, key);
+        }
 
-        function switchEndorseTab(type, btn) {
-            document.querySelectorAll('.e-seg-btn').forEach(b => b.classList.remove('active'));
+        function openModal(id) { document.getElementById(id).classList.add('show'); }
+        function closeModal(id) { document.getElementById(id).classList.remove('show'); }
+        function switchTab(type, btn) {
+            document.querySelectorAll('.e-tab').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
-            document.querySelectorAll('.e-tab-sec').forEach(sec => sec.classList.remove('active'));
-            document.getElementById('e-view-' + type).classList.add('active');
+            document.querySelectorAll('.e-sec').forEach(sec => sec.classList.remove('active'));
+            document.getElementById('view-' + type).classList.add('active');
         }
 
-        // 🚨 背书库并发压缩上传
-        function handleUpload(event, type) {
+        // ================= 背书库上传与渲染 =================
+        function handleImageUp(event, type) {
             const files = Array.from(event.target.files);
             if(files.length === 0) return;
-            
-            let loadedCount = 0;
-            let tempImages = []; 
-
-            files.forEach((file, index) => {
-                const reader = new FileReader();
-                reader.onload = function(e) {
+            let loaded = 0; let temp = [];
+            files.forEach((file, idx) => {
+                const r = new FileReader();
+                r.onload = e => {
                     const img = new Image();
-                    img.onload = function() {
+                    img.onload = () => {
                         const canvas = document.createElement('canvas');
-                        const ctx = canvas.getContext('2d');
-                        const MAX_WIDTH = 600;
-                        let scale = img.width > MAX_WIDTH ? (MAX_WIDTH / img.width) : 1;
-                        canvas.width = img.width * scale;
-                        canvas.height = img.height * scale;
-                        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                        
-                        const base64 = canvas.toDataURL('image/jpeg', 0.6);
-                        tempImages.push({ idx: index, data: base64 });
-                        loadedCount++;
-                        
-                        if(loadedCount === files.length) {
-                            tempImages.sort((a,b) => a.idx - b.idx);
-                            const sortedBase64 = tempImages.map(item => item.data);
-                            endorseDB[type] = sortedBase64.concat(endorseDB[type]);
-                            
-                            saveToDB(type);
+                        const scale = Math.min(600 / img.width, 1);
+                        canvas.width = img.width * scale; canvas.height = img.height * scale;
+                        canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+                        temp.push({ i: idx, data: canvas.toDataURL('image/jpeg', 0.6) });
+                        loaded++;
+                        if(loaded === files.length) {
+                            temp.sort((a,b) => a.i - b.i);
+                            globalData[type] = temp.map(t => t.data).concat(globalData[type]);
+                            saveDB("endorse", globalData);
                             renderGallery(type);
-                            event.target.value = ''; 
+                            event.target.value = '';
                         }
                     };
                     img.src = e.target.result;
                 };
-                reader.readAsDataURL(file);
+                r.readAsDataURL(file);
             });
         }
 
         function renderGallery(type) {
-            const container = document.getElementById(`${type}-gallery`);
-            const images = endorseDB[type];
-            container.innerHTML = ''; 
-
-            if(images.length === 0) {
-                container.innerHTML = `<div class="e-empty">暂无照片数据<br><span style="font-size:11px; color:#666;">点击上方按钮从手机相册导入</span></div>`;
-                return;
-            }
-
-            images.forEach((base64, index) => {
-                let html = `
-                    <div class="e-item" data-index="${index}">
-                        <div class="e-delete" onclick="deleteImage('${type}', ${index}, event)">×</div>
-                        <img src="${base64}" alt="image">
-                    </div>
-                `;
-                container.insertAdjacentHTML('beforeend', html);
+            const box = document.getElementById(`${type}-gallery`);
+            box.innerHTML = '';
+            globalData[type].forEach((b64, i) => {
+                box.innerHTML += `<div class="e-item"><div class="del" onclick="delImg('${type}', ${i}, event)">×</div><img src="${b64}"></div>`;
             });
-            initSortable(type, container);
+            new Sortable(box, { animation: 150, delay: 200, delayOnTouchOnly: true, filter: ".del", onEnd: e => {
+                const arr = globalData[type];
+                arr.splice(e.newIndex, 0, arr.splice(e.oldIndex, 1)[0]);
+                saveDB("endorse", globalData);
+            }});
         }
 
-        function initSortable(type, container) {
-            const config = {
-                animation: 150, delay: 250, delayOnTouchOnly: true, fallbackTolerance: 5, filter: ".e-delete", preventOnFilter: false,
-                onEnd: function(evt) {
-                    const arr = endorseDB[type];
-                    const movedItem = arr.splice(evt.oldIndex, 1)[0];
-                    arr.splice(evt.newIndex, 0, movedItem);
-                    saveToDB(type);
-                    renderGallery(type); 
-                }
-            };
-            if (type === 'cert') {
-                if(sortableCert) sortableCert.destroy();
-                sortableCert = new Sortable(container, config);
-            } else {
-                if(sortableCoach) sortableCoach.destroy();
-                sortableCoach = new Sortable(container, config);
-            }
-        }
-
-        function deleteImage(type, index, event) {
-            event.stopPropagation();
-            if(confirm('确定要永久移除这张照片吗？')) {
-                endorseDB[type].splice(index, 1);
-                saveToDB(type); 
+        function delImg(type, index, e) {
+            e.stopPropagation();
+            if(confirm('删除照片？')) {
+                globalData[type].splice(index, 1);
+                saveDB("endorse", globalData);
                 renderGallery(type);
             }
         }
 
-        // ================= 24H 节律管家交互逻辑 =================
-        function openLifestyleModal() { document.getElementById('lifestyleModal').classList.add('show'); }
-        function closeLifestyleModal() { document.getElementById('lifestyleModal').classList.remove('show'); }
-
-        // 环形进度逻辑 (带保存功能)
-        let progress = { water: 0, cardio: 0, training: 0 };
-        const max = { water: 2000, cardio: 100, training: 3 };
-        const step = { water: 250, cardio: 20, training: 1 };
-        const totalDash = 201; 
-
-        function initProgress() {
-            let p = localStorage.getItem('ryue_ls_progress');
-            if (p) {
-                progress = JSON.parse(p);
-                updateRing('water');
-                updateRing('cardio');
-                updateRing('training');
+        // ================= 24H 管家：多会员逻辑 =================
+        function openClientMenu() {
+            let html = '';
+            for(let key in clients) {
+                let active = key === currentClientId ? 'active' : '';
+                let check = key === currentClientId ? '✓' : '';
+                html += `<div class="cm-item ${active}" onclick="switchClient('${key}')"><span>${clients[key].name}</span><span>${check}</span></div>`;
             }
+            document.getElementById('client-list-render').innerHTML = html;
+            document.getElementById('clientMenu').classList.add('show');
         }
 
-        function addProgress(type) {
-            progress[type] += step[type];
-            if (progress[type] > max[type]) progress[type] = 0; 
-            localStorage.setItem('ryue_ls_progress', JSON.stringify(progress));
-            updateRing(type);
-            if(navigator.vibrate) navigator.vibrate(20);
+        function switchClient(id) {
+            currentClientId = id;
+            document.getElementById('clientMenu').classList.remove('show');
+            refreshClientUI();
         }
 
-        function updateRing(type) {
-            let unit = type === 'water' ? 'ml' : (type === 'cardio' ? '%' : '次');
-            document.getElementById(`val-${type}`).innerHTML = `${progress[type]} <span>/ ${max[type]}${unit}</span>`;
-            let percent = progress[type] / max[type];
-            let offset = totalDash - (totalDash * percent);
-            document.getElementById(`ring-${type}`).style.strokeDashoffset = offset;
+        function addNewClient() {
+            let name = prompt("请输入新会员名字 (如：张总)");
+            if(!name) return;
+            let newId = 'c_' + Date.now();
+            clients[newId] = { id: newId, name: name, rings: { water: 0, cardio: 0, train: 0 }, diet: [] };
+            saveDB("clients", clients);
+            switchClient(newId);
         }
 
-        // 饮食日记逻辑 (多图上传 + 数据库)
-        let currentEvalIndex = -1;
-
-        function handleDietUpload(event) {
-            const files = Array.from(event.target.files);
-            if(files.length === 0) return;
+        function refreshClientUI() {
+            let c = clients[currentClientId];
+            document.getElementById('current-client-name').innerText = c.name;
             
-            let loadedCount = 0;
-            let tempImages = [];
-
-            files.forEach((file, index) => {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const img = new Image();
-                    img.onload = function() {
-                        const canvas = document.createElement('canvas');
-                        const ctx = canvas.getContext('2d');
-                        const MAX_WIDTH = 600; 
-                        let scale = img.width > MAX_WIDTH ? (MAX_WIDTH / img.width) : 1;
-                        canvas.width = img.width * scale;
-                        canvas.height = img.height * scale;
-                        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                        
-                        const base64 = canvas.toDataURL('image/jpeg', 0.6);
-                        let now = new Date();
-                        let timeStr = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
-                        
-                        tempImages.push({ idx: index, obj: { img: base64, time: timeStr, status: 'pending' } });
-                        loadedCount++;
-                        
-                        if(loadedCount === files.length) {
-                            tempImages.sort((a,b) => a.idx - b.idx);
-                            const sortedObjs = tempImages.map(item => item.obj);
-                            dietDB = sortedObjs.concat(dietDB);
-                            
-                            saveToDB('diet');
-                            renderDiet();
-                            event.target.value = ''; 
-                        }
-                    };
-                    img.src = e.target.result;
-                };
-                reader.readAsDataURL(file);
-            });
+            // 刷新圆环
+            renderRing('water', c.rings.water, 2000);
+            renderRing('cardio', c.rings.cardio, 100);
+            renderRing('train', c.rings.train, 3);
+            
+            // 刷新饮食瀑布流
+            renderDietList();
         }
 
-        function renderDiet() {
-            const container = document.getElementById('diet-gallery');
-            container.innerHTML = '';
+        function updateRing(type, step) {
+            let c = clients[currentClientId];
+            let max = type === 'water' ? 2000 : (type === 'cardio' ? 100 : 3);
+            c.rings[type] += step;
+            if(c.rings[type] > max) c.rings[type] = 0;
+            saveDB("clients", clients);
+            renderRing(type, c.rings[type], max);
+        }
+
+        function renderRing(type, val, max) {
+            document.getElementById(`val-${type}`).innerText = val;
+            let percent = val / max;
+            document.getElementById(`ring-${type}`).style.strokeDashoffset = 176 - (176 * percent);
+        }
+
+        // ================= AI 视觉解析模拟引擎 =================
+        function processAIFoodScan(event) {
+            const file = event.target.files[0];
+            if(!file) return;
             
-            if(dietDB.length === 0) {
-                container.innerHTML = `<div class="empty-diet">今天还没有记录哦<br>点击上方按钮，让教练为您把关</div>`;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const base64 = e.target.result;
+                // 1. 弹出震撼的AI扫描层
+                const overlay = document.getElementById('aiOverlay');
+                const text = document.getElementById('scanText');
+                document.getElementById('scanBoxImage').style.backgroundImage = `url(${base64})`;
+                overlay.style.display = 'flex';
+                
+                // 2. 模拟计算过程文字变化
+                text.innerText = "VISION MODEL CONNECTED...";
+                setTimeout(() => text.innerText = "EXTRACTING MACROS...", 800);
+                setTimeout(() => text.innerText = "CALCULATING CALORIES...", 1600);
+                
+                // 3. 2.5秒后出结果
+                setTimeout(() => {
+                    overlay.style.display = 'none';
+                    
+                    // 随机生成合理的饮食数据
+                    const isHealthy = Math.random() > 0.4;
+                    const kcal = Math.floor(Math.random() * 400) + 150;
+                    const pro = Math.floor(Math.random() * 30) + 5;
+                    const carb = Math.floor(Math.random() * 50) + 10;
+                    const fat = Math.floor(Math.random() * 20) + 5;
+                    
+                    let status = 'green'; let sText = '极佳';
+                    if(!isHealthy && kcal > 400) { status = 'red'; sText = '警报'; }
+                    else if(!isHealthy) { status = 'yellow'; sText = '注意'; }
+
+                    // 保存到当前会员档案
+                    let now = new Date();
+                    let tStr = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
+                    
+                    // 压缩原图存入
+                    compressImage(base64, (compressedB64) => {
+                        clients[currentClientId].diet.unshift({
+                            img: compressedB64, time: tStr, 
+                            kcal: kcal, pro: pro, carb: carb, fat: fat, 
+                            status: status, sText: sText
+                        });
+                        saveDB("clients", clients);
+                        renderDietList();
+                    });
+                }, 2500);
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function compressImage(b64, callback) {
+            const img = new Image();
+            img.onload = () => {
+                const can = document.createElement('canvas');
+                const sc = Math.min(600 / img.width, 1);
+                can.width = img.width * sc; can.height = img.height * sc;
+                can.getContext('2d').drawImage(img, 0, 0, can.width, can.height);
+                callback(can.toDataURL('image/jpeg', 0.6));
+            };
+            img.src = b64;
+        }
+
+        function renderDietList() {
+            const box = document.getElementById('diet-list-container');
+            const arr = clients[currentClientId].diet;
+            box.innerHTML = '';
+            if(arr.length === 0) {
+                box.innerHTML = '<div style="text-align:center; padding:30px; color:#555; border:1px dashed #333; border-radius:12px; font-size:12px;">今日暂无饮食打卡<br>系统等待接收视觉数据...</div>';
                 return;
             }
 
-            dietDB.forEach((item, index) => {
-                let html = `
-                    <div class="diet-item status-${item.status}" onclick="openEvalModal(${index})">
+            arr.forEach((item, i) => {
+                box.innerHTML += `
+                    <div class="diet-card">
                         <img src="${item.img}">
-                        <div class="status-badge"></div>
-                        <div class="diet-time">${item.time}</div>
+                        <div class="diet-macros">
+                            <div class="macro-header">
+                                <div>
+                                    <div style="font-size:10px; color:#aaa; margin-bottom:2px;">AI估算热量 (${item.time})</div>
+                                    <div class="macro-kcal">${item.kcal} KCAL</div>
+                                </div>
+                                <div class="macro-status status-${item.status}">${item.sText}</div>
+                            </div>
+                            <div class="macro-bars">
+                                <div class="m-bar"><div class="m-label">蛋白质(Pro)</div><div class="m-val">${item.pro}g</div></div>
+                                <div class="m-bar" style="border-left:1px solid #333; border-right:1px solid #333;"><div class="m-label">碳水(Carb)</div><div class="m-val">${item.carb}g</div></div>
+                                <div class="m-bar"><div class="m-label">脂肪(Fat)</div><div class="m-val">${item.fat}g</div></div>
+                            </div>
+                        </div>
                     </div>
                 `;
-                container.insertAdjacentHTML('beforeend', html);
             });
-        }
-
-        function openEvalModal(index) {
-            currentEvalIndex = index;
-            document.getElementById('evalModal').classList.add('show');
-        }
-        function closeEvalModal() {
-            document.getElementById('evalModal').classList.remove('show');
-        }
-        function setDietStatus(status) {
-            if(currentEvalIndex > -1) {
-                dietDB[currentEvalIndex].status = status;
-                saveToDB('diet');
-                renderDiet();
-            }
-            closeEvalModal();
-            if(navigator.vibrate) navigator.vibrate(20);
-        }
-        function deleteCurrentDiet() {
-            if(currentEvalIndex > -1 && confirm("确定删除这条饮食记录吗？")) {
-                dietDB.splice(currentEvalIndex, 1);
-                saveToDB('diet');
-                renderDiet();
-                closeEvalModal();
-            }
-        }
-
-        // 赴宴指南逻辑
-        const guides = {
-            'bistro': {
-                title: '🍷 米其林 / Bistro 生存指南',
-                content: `<strong>核心法则：海鲜优先，警惕酱汁</strong><br><br><ul><li><strong>餐前：</strong>喝一大杯温水，占据胃容量。</li><li><strong>前菜：</strong>只选生肉薄片（Carpaccio）或清汤，绝对避开酥皮和浓汤。</li><li><strong>主菜：</strong>首选牛排、海鲜，要求【酱汁单放】。</li><li><strong>配酒：</strong>只喝干型红/白葡萄酒，避开任何带甜味的起泡酒。一杯酒配一杯水。</li></ul>`
-            },
-            'tea': {
-                title: '🍰 名媛下午茶 生存指南',
-                content: `<strong>核心法则：优雅品尝，适可而止</strong><br><br><ul><li><strong>饮品：</strong>雷打不动的【美式】或【无糖手冲茶】。</li><li><strong>甜点策略：</strong>三层塔只吃最下面一层（通常是咸点/三明治）。</li><li><strong>马卡龙：</strong>只吃顶部的鲜果，放弃底部的酥皮和奶油。</li><li><strong>心态：</strong>你是去社交和拍照的，不是去吃回本的。</li></ul>`
-            },
-            'business': {
-                title: '🥂 高强商务应酬 生存指南',
-                content: `<strong>核心法则：瞒天过海，保护肝脏</strong><br><br><ul><li><strong>赴宴前：</strong>务必吃2个白煮蛋或喝一杯无糖酸奶垫底。</li><li><strong>点菜心机：</strong>主动点一份【白灼蔬菜】放在自己面前。</li><li><strong>敬酒：</strong>烈酒旁边永远备一杯冰水，喝一口酒喝两口水加速代谢。</li><li><strong>主食陷阱：</strong>最后上的炒饭、炒面坚决不碰，只喝清汤收尾。</li></ul>`
-            }
-        };
-
-        function openGuide(type) {
-            const data = guides[type];
-            document.getElementById('gm-title').innerText = data.title;
-            document.getElementById('gm-content').innerHTML = data.content;
-            document.getElementById('guideOverlay').style.display = 'block';
-            setTimeout(() => document.getElementById('guideModal').classList.add('show'), 10);
-        }
-
-        function closeGuide() {
-            document.getElementById('guideModal').classList.remove('show');
-            setTimeout(() => document.getElementById('guideOverlay').style.display = 'none', 400);
         }
     </script>
 </body>
