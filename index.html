@@ -12,9 +12,10 @@
     <script src="https://cdn.staticfile.net/Sortable/1.15.2/Sortable.min.js"></script>
 
     <style>
+        /* ================= 基础配置与主页UI ================= */
         :root { --primary: #00f2fe; --secondary: #7000ff; --bg: #000; --card-bg: rgba(255, 255, 255, 0.03); --text: #fff; --grad: radial-gradient(circle at top right, #1a2a6c, #000 70%); }
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
-        body { background: var(--bg); background-image: var(--grad); color: var(--text); font-family: -apple-system, sans-serif; margin: 0; padding: 20px; min-height: 100vh; transition: all 0.5s ease; display: flex; flex-direction: column; overflow-x: hidden;}
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; margin: 0; padding: 0; }
+        body { background: var(--bg); background-image: var(--grad); color: var(--text); font-family: -apple-system, sans-serif; padding: 20px; min-height: 100vh; transition: all 0.5s ease; display: flex; flex-direction: column; overflow-x: hidden;}
         
         #style-trigger { position: fixed; top: 15px; right: 15px; z-index: 2000; background: rgba(255,255,255,0.1); padding: 8px 15px; border-radius: 50px; font-size: 11px; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2); color: #fff; }
         #style-panel { display: none; position: fixed; top: 60px; right: 15px; z-index: 2001; background: #111; border: 1px solid #333; border-radius: 15px; padding: 10px; width: 140px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
@@ -37,48 +38,118 @@
         .card:active img { transform: scale(1.05); }
         .card-info { position: absolute; bottom: 0; width: 100%; padding: 12px 5px; font-size: 11px; text-align: center; font-weight: bold; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: #fff; pointer-events: none;}
         
-        /* 🚨 背书库高级面板 */
+        /* ================= 背书库内嵌弹窗 CSS ================= */
         .endorse-modal { position: fixed; top: 100vh; left: 0; width: 100%; height: 100vh; background: #050505; z-index: 3000; transition: top 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); display: flex; flex-direction: column; overflow-x: hidden;}
         .endorse-modal.show { top: 0; }
-        
         .e-header { height: 60px; display: flex; justify-content: space-between; align-items: center; padding: 0 20px; background: rgba(5,5,5,0.95); border-bottom: 1px solid rgba(212,175,55,0.2); backdrop-filter: blur(10px); flex-shrink: 0;}
         .e-title { font-size: 16px; font-weight: bold; color: #D4AF37; }
         .e-close { color: #fff; font-size: 28px; background: none; border: none; padding: 0 10px; cursor: pointer; line-height: 1;}
-
         .e-seg-control { display: flex; background: rgba(20,20,25,0.8); border-radius: 12px; padding: 6px; margin: 20px 20px 15px; border: 1px solid rgba(255,255,255,0.05); flex-shrink: 0;}
         .e-seg-btn { flex: 1; text-align: center; padding: 12px 0; font-size: 14px; font-weight: bold; color: #666; border-radius: 8px; transition: 0.3s; cursor: pointer; position: relative; z-index: 2;}
         .e-seg-btn.active { color: #000; font-weight: 900;}
         .e-seg-btn.active::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, #D4AF37, #C5A059); border-radius: 8px; z-index: -1; box-shadow: 0 4px 12px rgba(212, 175, 55, 0.4); }
-
         .e-body { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 0 20px 80px; -webkit-overflow-scrolling: touch; overscroll-behavior-y: contain;}
-        
         .e-tab-sec { display: none; flex-direction: column; animation: fadeIn 0.4s ease; }
         .e-tab-sec.active { display: flex; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
         .e-sec-header { margin-bottom: 10px; text-align: center; }
         .e-sec-title { font-size: 18px; font-weight: 900; color: #fff; margin-bottom: 6px; letter-spacing: 1px;}
         .e-sec-desc { font-size: 12px; color: #8A92A3; line-height: 1.5; }
-        
         .e-tip { text-align: center; font-size: 11px; color: #666; margin-bottom: 20px; letter-spacing: 1px; }
-
         .e-upload-btn { background: linear-gradient(135deg, rgba(212,175,55,0.1), rgba(212,175,55,0.05)); border: 1px dashed #D4AF37; color: #D4AF37; text-align: center; padding: 15px; border-radius: 12px; font-size: 14px; font-weight: bold; cursor: pointer; margin-bottom: 15px; transition: 0.3s; letter-spacing: 1px;}
         .e-upload-btn:active { background: rgba(212,175,55,0.2); transform: scale(0.98); }
-
         .e-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
-        
         .e-item { position: relative; border-radius: 12px; overflow: hidden; background: #111; border: 1px solid rgba(212,175,55,0.3); box-shadow: 0 8px 20px rgba(0,0,0,0.8); cursor: grab;}
         .e-item.sortable-ghost { opacity: 0.4; }
         .e-item.sortable-drag { box-shadow: 0 15px 30px rgba(212,175,55,0.5); transform: scale(1.05); z-index: 100;}
-        
         .e-item img { width: 100%; height: 220px; object-fit: cover; display: block; filter: brightness(0.95) contrast(1.05); pointer-events: none;}
         .cert-view .e-item img { height: 200px; object-fit: contain; background: #0A0A0C; padding: 5px;}
         .coach-view .e-item img { height: 260px; object-fit: cover; }
-        
         .e-delete { position: absolute; top: 8px; right: 8px; width: 28px; height: 28px; background: rgba(0,0,0,0.8); border: 1px solid rgba(255,59,48,0.6); border-radius: 50%; display: flex; justify-content: center; align-items: center; color: #FF3B30; font-size: 18px; font-weight: bold; cursor: pointer; z-index: 999; backdrop-filter: blur(5px);}
         .e-delete:active { background: #FF3B30; color: #fff; transform: scale(0.9);}
-        
         .e-empty { grid-column: span 2; text-align: center; padding: 40px 20px; color: #555; border: 1px dashed #333; border-radius: 12px; font-size: 13px; }
+
+        /* ================= 24H 管家内嵌弹窗 CSS ================= */
+        .ls-modal { position: fixed; top: 100vh; left: 0; width: 100%; height: 100vh; background: #050505; z-index: 4000; transition: top 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); display: flex; flex-direction: column; overflow-x: hidden;}
+        .ls-modal.show { top: 0; }
+        .ls-header { height: 60px; display: flex; justify-content: space-between; align-items: center; padding: 0 20px; background: rgba(5,5,5,0.95); border-bottom: 1px solid rgba(212,175,55,0.2); backdrop-filter: blur(10px); flex-shrink: 0;}
+        .ls-body { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 20px 20px 80px; -webkit-overflow-scrolling: touch; display: flex; flex-direction: column; gap: 25px; overscroll-behavior-y: contain;}
+        
+        .coach-directive { background: linear-gradient(145deg, #1A1813, #0A0A0C); border: 1px solid rgba(212,175,55,0.3); border-radius: 16px; padding: 20px; display: flex; align-items: center; gap: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); position: relative; overflow: hidden;}
+        .coach-avatar { width: 60px; height: 60px; border-radius: 50%; border: 2px solid #D4AF37; object-fit: cover; flex-shrink: 0; box-shadow: 0 0 15px rgba(212,175,55,0.4);}
+        .directive-content { flex: 1; }
+        .directive-title { font-size: 11px; color: #D4AF37; font-weight: bold; letter-spacing: 2px; margin-bottom: 6px; display: flex; align-items: center; gap: 6px;}
+        .directive-title::before { content: ''; display: block; width: 6px; height: 6px; background: #D4AF37; border-radius: 50%; box-shadow: 0 0 8px #D4AF37; animation: pulse 2s infinite;}
+        .directive-text { font-size: 14px; color: #fff; font-weight: 900; line-height: 1.5; text-shadow: 0 2px 4px rgba(0,0,0,0.5);}
+        @keyframes pulse { 0% { opacity: 0.5; } 50% { opacity: 1; transform: scale(1.2); } 100% { opacity: 0.5; } }
+
+        .rings-dashboard { background: #0A0A0C; border: 1px solid rgba(255,255,255,0.05); border-radius: 16px; padding: 20px 15px; box-shadow: inset 0 0 20px rgba(0,0,0,0.5);}
+        .ls-sec-title { font-size: 16px; font-weight: 900; color: #fff; margin-bottom: 20px; text-align: center; letter-spacing: 1px;}
+        .rings-wrap { display: flex; justify-content: space-around; align-items: flex-end;}
+        .ring-item { display: flex; flex-direction: column; align-items: center; cursor: pointer; transition: 0.3s;}
+        .ring-item:active { transform: scale(0.92); }
+        .svg-ring { width: 80px; height: 80px; transform: rotate(-90deg); margin-bottom: 10px; filter: drop-shadow(0 0 6px rgba(212,175,55,0.2));}
+        .svg-bg { fill: none; stroke: #222; stroke-width: 8; }
+        .svg-progress { fill: none; stroke: #D4AF37; stroke-width: 8; stroke-linecap: round; stroke-dasharray: 201; stroke-dashoffset: 201; transition: stroke-dashoffset 1s cubic-bezier(0.2, 0.8, 0.2, 1); }
+        .ring-icon { position: absolute; font-size: 20px; top: 25px; left: 50%; transform: translateX(-50%); pointer-events: none;}
+        .ring-name { font-size: 12px; color: #aaa; font-weight: bold; margin-bottom: 4px;}
+        .ring-val { font-size: 14px; font-weight: 900; color: #fff;}
+        .ring-val span { font-size: 10px; color: #666; font-weight: normal;}
+
+        .survival-guide { margin-top: 5px; }
+        .guide-scroll { display: flex; overflow-x: auto; gap: 15px; padding-bottom: 10px; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;}
+        .guide-scroll::-webkit-scrollbar { display: none; }
+        .guide-card { flex-shrink: 0; width: 220px; height: 120px; border-radius: 14px; background: #111; border: 1px solid rgba(212,175,55,0.2); position: relative; overflow: hidden; scroll-snap-align: start; cursor: pointer;}
+        .guide-card img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.6) saturate(0.8); transition: 0.4s;}
+        .guide-card:active img { transform: scale(1.05); filter: brightness(0.8); }
+        .guide-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.9), transparent); display: flex; flex-direction: column; justify-content: flex-end; padding: 15px;}
+        .g-icon { font-size: 20px; margin-bottom: 5px; }
+        .g-title { font-size: 15px; font-weight: 900; color: #D4AF37; letter-spacing: 1px;}
+        .g-desc { font-size: 11px; color: #ccc; margin-top: 4px;}
+
+        .diet-log { background: #0A0A0C; border: 1px solid rgba(255,255,255,0.05); border-radius: 16px; padding: 20px 15px; box-shadow: inset 0 0 20px rgba(0,0,0,0.5);}
+        .diet-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 20px;}
+        .d-title-wrap { flex: 1; }
+        .d-subtitle { font-size: 11px; color: #888; margin-top: 4px;}
+        .btn-upload-diet { background: linear-gradient(135deg, #D4AF37, #AA8A2A); color: #000; padding: 10px 16px; border-radius: 10px; font-weight: 900; font-size: 13px; box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3); border: none; cursor: pointer;}
+        .btn-upload-diet:active { transform: scale(0.96); }
+        .diet-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+        .diet-item { position: relative; border-radius: 12px; overflow: hidden; background: #111; aspect-ratio: 1/1; cursor: pointer; border: 1px solid transparent; transition: 0.3s;}
+        .diet-item:active { transform: scale(0.96); }
+        .diet-item img { width: 100%; height: 100%; object-fit: cover; }
+        
+        .diet-item.status-green { border-color: #32D74B; box-shadow: 0 0 15px rgba(50, 215, 75, 0.2); }
+        .diet-item.status-yellow { border-color: #FFD60A; box-shadow: 0 0 15px rgba(255, 214, 10, 0.2); }
+        .diet-item.status-red { border-color: #FF453A; box-shadow: 0 0 15px rgba(255, 69, 58, 0.2); }
+        .diet-item.status-pending { border-color: #444; }
+        .diet-time { position: absolute; bottom: 0; left: 0; width: 100%; padding: 15px 10px 8px; background: linear-gradient(to top, rgba(0,0,0,0.9), transparent); font-size: 11px; font-weight: bold; color: #fff;}
+        .status-badge { position: absolute; top: 8px; right: 8px; width: 12px; height: 12px; border-radius: 50%; border: 2px solid #000;}
+        .status-green .status-badge { background: #32D74B; box-shadow: 0 0 8px #32D74B;}
+        .status-yellow .status-badge { background: #FFD60A; box-shadow: 0 0 8px #FFD60A;}
+        .status-red .status-badge { background: #FF453A; box-shadow: 0 0 8px #FF453A;}
+        .status-pending .status-badge { background: #888; }
+        .empty-diet { grid-column: span 2; text-align: center; padding: 30px; border: 1px dashed #333; border-radius: 12px; font-size: 12px; color: #555; }
+
+        .eval-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 5000; display: none; flex-direction: column; justify-content: center; align-items: center; padding: 20px; backdrop-filter: blur(10px); opacity: 0; transition: 0.3s;}
+        .eval-modal.show { display: flex; opacity: 1;}
+        .eval-card { background: #111; border: 1px solid #D4AF37; border-radius: 20px; width: 100%; max-width: 340px; padding: 25px 20px; text-align: center; box-shadow: 0 10px 40px rgba(212,175,55,0.2);}
+        .eval-title { font-size: 18px; color: #fff; font-weight: 900; margin-bottom: 20px; letter-spacing: 1px;}
+        .eval-btn { width: 100%; padding: 15px; border-radius: 12px; font-size: 15px; font-weight: bold; color: #000; border: none; margin-bottom: 12px; cursor: pointer; transition: 0.2s;}
+        .eval-btn:active { transform: scale(0.96); }
+        .btn-green { background: linear-gradient(135deg, #32D74B, #28A73C); box-shadow: 0 5px 15px rgba(50,215,75,0.3);}
+        .btn-yellow { background: linear-gradient(135deg, #FFD60A, #CCAA00); box-shadow: 0 5px 15px rgba(255,214,10,0.3);}
+        .btn-red { background: linear-gradient(135deg, #FF453A, #CC372E); box-shadow: 0 5px 15px rgba(255,69,58,0.3); color: #fff;}
+        .btn-cancel { background: transparent; border: 1px solid #444; color: #888; margin-bottom: 0; margin-top: 10px;}
+
+        .guide-modal { position: fixed; bottom: -100%; left: 0; width: 100%; background: linear-gradient(180deg, #121215, #050505); border-top: 1px solid #D4AF37; border-radius: 24px 24px 0 0; z-index: 6000; padding: 25px 20px 40px; transition: 0.5s cubic-bezier(0.2, 0.8, 0.2, 1); box-shadow: 0 -10px 50px rgba(212,175,55,0.15);}
+        .guide-modal.show { bottom: 0; }
+        .gm-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px;}
+        .gm-title { font-size: 20px; font-weight: 900; color: #D4AF37; letter-spacing: 1px; }
+        .gm-close { color: #888; font-size: 28px; background: none; border: none; padding: 0; line-height: 1; cursor: pointer; }
+        .gm-content { font-size: 14px; color: #ccc; line-height: 1.8;}
+        .gm-content strong { color: #fff; }
+        .gm-content ul { padding-left: 20px; margin-top: 10px; }
+        .gm-content li { margin-bottom: 8px; }
     </style>
 </head>
 <body>
@@ -119,7 +190,7 @@
             <img src="product.jpg" loading="lazy"><div class="card-info">【黑金报价库】</div>
         </div>
 
-        <div class="card" style="border-color:#10b981; grid-column: 1 / -1;" onclick="window.location.href='./管家.html'">
+        <div class="card" style="border-color:#10b981; grid-column: 1 / -1;" onclick="openLifestyleModal()">
             <img src="case.jpg" loading="lazy" style="filter: brightness(0.5) saturate(1.2);">
             <div class="card-info" style="font-size: 14px; letter-spacing: 2px; padding: 15px 5px;">【24H 全息节律管家】</div>
         </div>
@@ -165,7 +236,117 @@
         </div>
     </div>
 
+    <div id="lifestyleModal" class="ls-modal">
+        <div class="ls-header">
+            <div class="ls-title">24H 全息节律管家</div>
+            <button class="ls-close" onclick="closeLifestyleModal()">×</button>
+        </div>
+        <div class="ls-body">
+            <div class="coach-directive">
+                <img src="https://images.unsplash.com/photo-1594381898411-846e7d193883?auto=format&fit=crop&w=200&q=80" class="coach-avatar">
+                <div class="directive-content">
+                    <div class="directive-title">首席重塑导师 | 今日指令</div>
+                    <div class="directive-text">"不要让周末的放纵，<br>毁掉你周一绝美马甲线的轮廓。"</div>
+                </div>
+            </div>
+
+            <div class="rings-dashboard">
+                <div class="ls-sec-title">✦ 节律闭合追踪 ✦</div>
+                <div class="rings-wrap">
+                    <div class="ring-item" onclick="addProgress('water')">
+                        <div style="position:relative;">
+                            <svg class="svg-ring"><circle class="svg-bg" cx="40" cy="40" r="32"/><circle class="svg-progress" id="ring-water" cx="40" cy="40" r="32"/></svg>
+                            <div class="ring-icon">💧</div>
+                        </div>
+                        <div class="ring-name">唤醒之源</div>
+                        <div class="ring-val" id="val-water">0 <span>/ 2000ml</span></div>
+                    </div>
+                    <div class="ring-item" onclick="addProgress('cardio')">
+                        <div style="position:relative;">
+                            <svg class="svg-ring"><circle class="svg-bg" cx="40" cy="40" r="32"/><circle class="svg-progress" id="ring-cardio" cx="40" cy="40" r="32"/></svg>
+                            <div class="ring-icon">🔥</div>
+                        </div>
+                        <div class="ring-name">代谢引擎</div>
+                        <div class="ring-val" id="val-cardio">0 <span>/ 100%</span></div>
+                    </div>
+                    <div class="ring-item" onclick="addProgress('training')">
+                        <div style="position:relative;">
+                            <svg class="svg-ring"><circle class="svg-bg" cx="40" cy="40" r="32"/><circle class="svg-progress" id="ring-training" cx="40" cy="40" r="32"/></svg>
+                            <div class="ring-icon">🏋️‍♀️</div>
+                        </div>
+                        <div class="ring-name">核心重塑</div>
+                        <div class="ring-val" id="val-training">0 <span>/ 3次</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="survival-guide">
+                <div class="ls-sec-title" style="margin-bottom:15px; text-align:left;">✦ 社交赴宴生存指南</div>
+                <div class="guide-scroll">
+                    <div class="guide-card" onclick="openGuide('bistro')">
+                        <img src="https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?auto=format&fit=crop&w=400&q=80">
+                        <div class="guide-overlay">
+                            <div class="g-icon">🍷</div>
+                            <div class="g-title">米其林 / Bistro</div>
+                            <div class="g-desc">享受微醺与美食的防暴卡秘籍</div>
+                        </div>
+                    </div>
+                    <div class="guide-card" onclick="openGuide('tea')">
+                        <img src="https://images.unsplash.com/photo-1557142046-c704a3adf364?auto=format&fit=crop&w=400&q=80">
+                        <div class="guide-overlay">
+                            <div class="g-icon">🍰</div>
+                            <div class="g-title">名媛下午茶</div>
+                            <div class="g-desc">如何优雅地避开糖油混合炸弹</div>
+                        </div>
+                    </div>
+                    <div class="guide-card" onclick="openGuide('business')">
+                        <img src="https://images.unsplash.com/photo-1556761175-5973dc0f32b7?auto=format&fit=crop&w=400&q=80">
+                        <div class="guide-overlay">
+                            <div class="g-icon">🥂</div>
+                            <div class="g-title">高强商务应酬</div>
+                            <div class="g-desc">酒局与推杯换盏中的代谢保护法</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="diet-log">
+                <div class="diet-header">
+                    <div class="d-title-wrap">
+                        <div class="ls-sec-title" style="margin-bottom:0; text-align:left;">✦ 饮食光影日记</div>
+                        <div class="d-subtitle">无需计算热量，拍照交给专属大脑。</div>
+                    </div>
+                    <button class="btn-upload-diet" onclick="document.getElementById('diet-upload').click()">+ 上传三餐</button>
+                    <input type="file" id="diet-upload" multiple="multiple" accept="image/*" style="display:none;" onchange="handleDietUpload(event)">
+                </div>
+                
+                <div class="diet-grid" id="diet-gallery"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="eval-modal" id="evalModal">
+        <div class="eval-card">
+            <div class="eval-title">✦ 导师能量评审 ✦</div>
+            <button class="eval-btn btn-green" onclick="setDietStatus('green')">🟢 完美赋能 (绿灯)</button>
+            <button class="eval-btn btn-yellow" onclick="setDietStatus('yellow')">🟡 略有瑕疵 (黄灯)</button>
+            <button class="eval-btn btn-red" onclick="setDietStatus('red')">🔴 触发警报 (红灯)</button>
+            <button class="eval-btn btn-cancel" onclick="closeEvalModal()">先不评价，点错了</button>
+            <div style="margin-top:20px; font-size:12px; color:#555; text-decoration:underline; cursor:pointer;" onclick="deleteCurrentDiet()">永久删除这张照片</div>
+        </div>
+    </div>
+
+    <div class="guide-modal" id="guideModal">
+        <div class="gm-header">
+            <div class="gm-title" id="gm-title">指南标题</div>
+            <button class="gm-close" onclick="closeGuide()">×</button>
+        </div>
+        <div class="gm-content" id="gm-content">内容</div>
+    </div>
+    <div id="guideOverlay" onclick="closeGuide()" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:5500;"></div>
+
     <script>
+        // ================= 全局主题逻辑 =================
         const themes = [
             { primary: '#00f2fe', secondary: '#7000ff', bg: '#000', grad: 'radial-gradient(circle at top right, #1a2a6c, #000 70%)', card: 'rgba(255,255,255,0.03)', text: '#fff' },
             { primary: '#fff', secondary: '#444', bg: '#111', grad: 'none', card: '#1a1a1a', text: '#eee' },
@@ -188,14 +369,20 @@
             togglePanel();
         }
 
-        // ================= 数据库与数据管理 =================
+        let adminTimer;
+        document.getElementById('adminTrigger').addEventListener('touchstart', () => adminTimer = setTimeout(() => window.location.href='./admin.html', 3000));
+        document.getElementById('adminTrigger').addEventListener('touchend', () => clearTimeout(adminTimer));
+
+        // ================= 🚨 终极核武器：IndexedDB 无限容量数据库 =================
+        // 打破 5MB 死线，图片想传多少传多少！支持三个相册库：cert(证书), coach(教练), diet(饮食)
         let endorseDB = { cert: [], coach: [] };
+        let dietDB = [];
         let sortableCert = null;
         let sortableCoach = null;
         let idb = null;
 
         window.onload = function() {
-            const request = window.indexedDB.open("RyueEndorseDB", 1);
+            const request = window.indexedDB.open("RyueEndorseDB", 2); // 升级版本号，包含饮食库
             
             request.onupgradeneeded = function(e) {
                 idb = e.target.result;
@@ -210,13 +397,20 @@
             };
             
             request.onerror = function(e) {
+                // 数据库失败时的备用方案（LocalStorage 降级）
                 let savedCert = localStorage.getItem('ryue_cert_images');
                 let savedCoach = localStorage.getItem('ryue_coach_images');
+                let savedDiet = localStorage.getItem('ryue_diet_log');
                 if(savedCert) endorseDB.cert = JSON.parse(savedCert);
                 if(savedCoach) endorseDB.coach = JSON.parse(savedCoach);
+                if(savedDiet) dietDB = JSON.parse(savedDiet);
+                
                 renderGallery('cert');
                 renderGallery('coach');
+                renderDiet();
             };
+            
+            initProgress(); // 加载并渲染圆环数据
         }
 
         function loadFromDB() {
@@ -231,28 +425,36 @@
                 if(e.target.result) endorseDB.coach = e.target.result;
                 renderGallery('coach');
             };
+            store.get("diet").onsuccess = function(e) {
+                if(e.target.result) dietDB = e.target.result;
+                renderDiet();
+            };
         }
 
         function saveToDB(type) {
             if(idb) {
                 const tx = idb.transaction("galleryStore", "readwrite");
-                tx.objectStore("galleryStore").put(endorseDB[type], type);
+                if (type === 'diet') {
+                    tx.objectStore("galleryStore").put(dietDB, type);
+                } else {
+                    tx.objectStore("galleryStore").put(endorseDB[type], type);
+                }
             } else {
                 try {
-                    localStorage.setItem(`ryue_${type}_images`, JSON.stringify(endorseDB[type]));
+                    if (type === 'diet') {
+                        localStorage.setItem('ryue_diet_log', JSON.stringify(dietDB));
+                    } else {
+                        localStorage.setItem(`ryue_${type}_images`, JSON.stringify(endorseDB[type]));
+                    }
                 } catch(e) {
                     alert("手机本地微型存储已满！部分照片可能无法长期保存。");
                 }
             }
         }
 
-        function openEndorseModal() {
-            document.getElementById('endorseModal').classList.add('show');
-        }
-
-        function closeEndorseModal() {
-            document.getElementById('endorseModal').classList.remove('show');
-        }
+        // ================= 背书库交互逻辑 =================
+        function openEndorseModal() { document.getElementById('endorseModal').classList.add('show'); }
+        function closeEndorseModal() { document.getElementById('endorseModal').classList.remove('show'); }
 
         function switchEndorseTab(type, btn) {
             document.querySelectorAll('.e-seg-btn').forEach(b => b.classList.remove('active'));
@@ -261,6 +463,7 @@
             document.getElementById('e-view-' + type).classList.add('active');
         }
 
+        // 🚨 背书库并发压缩上传
         function handleUpload(event, type) {
             const files = Array.from(event.target.files);
             if(files.length === 0) return;
@@ -275,16 +478,13 @@
                     img.onload = function() {
                         const canvas = document.createElement('canvas');
                         const ctx = canvas.getContext('2d');
-                        
                         const MAX_WIDTH = 600;
                         let scale = img.width > MAX_WIDTH ? (MAX_WIDTH / img.width) : 1;
-                        
                         canvas.width = img.width * scale;
                         canvas.height = img.height * scale;
                         ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
                         
                         const base64 = canvas.toDataURL('image/jpeg', 0.6);
-                        
                         tempImages.push({ idx: index, data: base64 });
                         loadedCount++;
                         
@@ -323,28 +523,20 @@
                 `;
                 container.insertAdjacentHTML('beforeend', html);
             });
-            
             initSortable(type, container);
         }
 
         function initSortable(type, container) {
             const config = {
-                animation: 150,
-                delay: 250, 
-                delayOnTouchOnly: true,
-                fallbackTolerance: 5, 
-                filter: ".e-delete",
-                preventOnFilter: false,
+                animation: 150, delay: 250, delayOnTouchOnly: true, fallbackTolerance: 5, filter: ".e-delete", preventOnFilter: false,
                 onEnd: function(evt) {
                     const arr = endorseDB[type];
                     const movedItem = arr.splice(evt.oldIndex, 1)[0];
                     arr.splice(evt.newIndex, 0, movedItem);
-                    
                     saveToDB(type);
                     renderGallery(type); 
                 }
             };
-
             if (type === 'cert') {
                 if(sortableCert) sortableCert.destroy();
                 sortableCert = new Sortable(container, config);
@@ -363,9 +555,162 @@
             }
         }
 
-        let timer;
-        document.getElementById('adminTrigger').addEventListener('touchstart', () => timer = setTimeout(() => window.location.href='./admin.html', 3000));
-        document.getElementById('adminTrigger').addEventListener('touchend', () => clearTimeout(timer));
+        // ================= 24H 节律管家交互逻辑 =================
+        function openLifestyleModal() { document.getElementById('lifestyleModal').classList.add('show'); }
+        function closeLifestyleModal() { document.getElementById('lifestyleModal').classList.remove('show'); }
+
+        // 环形进度逻辑 (带保存功能)
+        let progress = { water: 0, cardio: 0, training: 0 };
+        const max = { water: 2000, cardio: 100, training: 3 };
+        const step = { water: 250, cardio: 20, training: 1 };
+        const totalDash = 201; 
+
+        function initProgress() {
+            let p = localStorage.getItem('ryue_ls_progress');
+            if (p) {
+                progress = JSON.parse(p);
+                updateRing('water');
+                updateRing('cardio');
+                updateRing('training');
+            }
+        }
+
+        function addProgress(type) {
+            progress[type] += step[type];
+            if (progress[type] > max[type]) progress[type] = 0; 
+            localStorage.setItem('ryue_ls_progress', JSON.stringify(progress));
+            updateRing(type);
+            if(navigator.vibrate) navigator.vibrate(20);
+        }
+
+        function updateRing(type) {
+            let unit = type === 'water' ? 'ml' : (type === 'cardio' ? '%' : '次');
+            document.getElementById(`val-${type}`).innerHTML = `${progress[type]} <span>/ ${max[type]}${unit}</span>`;
+            let percent = progress[type] / max[type];
+            let offset = totalDash - (totalDash * percent);
+            document.getElementById(`ring-${type}`).style.strokeDashoffset = offset;
+        }
+
+        // 饮食日记逻辑 (多图上传 + 数据库)
+        let currentEvalIndex = -1;
+
+        function handleDietUpload(event) {
+            const files = Array.from(event.target.files);
+            if(files.length === 0) return;
+            
+            let loadedCount = 0;
+            let tempImages = [];
+
+            files.forEach((file, index) => {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = new Image();
+                    img.onload = function() {
+                        const canvas = document.createElement('canvas');
+                        const ctx = canvas.getContext('2d');
+                        const MAX_WIDTH = 600; 
+                        let scale = img.width > MAX_WIDTH ? (MAX_WIDTH / img.width) : 1;
+                        canvas.width = img.width * scale;
+                        canvas.height = img.height * scale;
+                        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                        
+                        const base64 = canvas.toDataURL('image/jpeg', 0.6);
+                        let now = new Date();
+                        let timeStr = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
+                        
+                        tempImages.push({ idx: index, obj: { img: base64, time: timeStr, status: 'pending' } });
+                        loadedCount++;
+                        
+                        if(loadedCount === files.length) {
+                            tempImages.sort((a,b) => a.idx - b.idx);
+                            const sortedObjs = tempImages.map(item => item.obj);
+                            dietDB = sortedObjs.concat(dietDB);
+                            
+                            saveToDB('diet');
+                            renderDiet();
+                            event.target.value = ''; 
+                        }
+                    };
+                    img.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        function renderDiet() {
+            const container = document.getElementById('diet-gallery');
+            container.innerHTML = '';
+            
+            if(dietDB.length === 0) {
+                container.innerHTML = `<div class="empty-diet">今天还没有记录哦<br>点击上方按钮，让教练为您把关</div>`;
+                return;
+            }
+
+            dietDB.forEach((item, index) => {
+                let html = `
+                    <div class="diet-item status-${item.status}" onclick="openEvalModal(${index})">
+                        <img src="${item.img}">
+                        <div class="status-badge"></div>
+                        <div class="diet-time">${item.time}</div>
+                    </div>
+                `;
+                container.insertAdjacentHTML('beforeend', html);
+            });
+        }
+
+        function openEvalModal(index) {
+            currentEvalIndex = index;
+            document.getElementById('evalModal').classList.add('show');
+        }
+        function closeEvalModal() {
+            document.getElementById('evalModal').classList.remove('show');
+        }
+        function setDietStatus(status) {
+            if(currentEvalIndex > -1) {
+                dietDB[currentEvalIndex].status = status;
+                saveToDB('diet');
+                renderDiet();
+            }
+            closeEvalModal();
+            if(navigator.vibrate) navigator.vibrate(20);
+        }
+        function deleteCurrentDiet() {
+            if(currentEvalIndex > -1 && confirm("确定删除这条饮食记录吗？")) {
+                dietDB.splice(currentEvalIndex, 1);
+                saveToDB('diet');
+                renderDiet();
+                closeEvalModal();
+            }
+        }
+
+        // 赴宴指南逻辑
+        const guides = {
+            'bistro': {
+                title: '🍷 米其林 / Bistro 生存指南',
+                content: `<strong>核心法则：海鲜优先，警惕酱汁</strong><br><br><ul><li><strong>餐前：</strong>喝一大杯温水，占据胃容量。</li><li><strong>前菜：</strong>只选生肉薄片（Carpaccio）或清汤，绝对避开酥皮和浓汤。</li><li><strong>主菜：</strong>首选牛排、海鲜，要求【酱汁单放】。</li><li><strong>配酒：</strong>只喝干型红/白葡萄酒，避开任何带甜味的起泡酒。一杯酒配一杯水。</li></ul>`
+            },
+            'tea': {
+                title: '🍰 名媛下午茶 生存指南',
+                content: `<strong>核心法则：优雅品尝，适可而止</strong><br><br><ul><li><strong>饮品：</strong>雷打不动的【美式】或【无糖手冲茶】。</li><li><strong>甜点策略：</strong>三层塔只吃最下面一层（通常是咸点/三明治）。</li><li><strong>马卡龙：</strong>只吃顶部的鲜果，放弃底部的酥皮和奶油。</li><li><strong>心态：</strong>你是去社交和拍照的，不是去吃回本的。</li></ul>`
+            },
+            'business': {
+                title: '🥂 高强商务应酬 生存指南',
+                content: `<strong>核心法则：瞒天过海，保护肝脏</strong><br><br><ul><li><strong>赴宴前：</strong>务必吃2个白煮蛋或喝一杯无糖酸奶垫底。</li><li><strong>点菜心机：</strong>主动点一份【白灼蔬菜】放在自己面前。</li><li><strong>敬酒：</strong>烈酒旁边永远备一杯冰水，喝一口酒喝两口水加速代谢。</li><li><strong>主食陷阱：</strong>最后上的炒饭、炒面坚决不碰，只喝清汤收尾。</li></ul>`
+            }
+        };
+
+        function openGuide(type) {
+            const data = guides[type];
+            document.getElementById('gm-title').innerText = data.title;
+            document.getElementById('gm-content').innerHTML = data.content;
+            document.getElementById('guideOverlay').style.display = 'block';
+            setTimeout(() => document.getElementById('guideModal').classList.add('show'), 10);
+        }
+
+        function closeGuide() {
+            document.getElementById('guideModal').classList.remove('show');
+            setTimeout(() => document.getElementById('guideOverlay').style.display = 'none', 400);
+        }
     </script>
 </body>
 </html>
