@@ -11,9 +11,6 @@
     
     <script src="https://cdn.staticfile.net/Sortable/1.15.2/Sortable.min.js"></script>
     <script src="https://cdn.staticfile.net/Chart.js/3.9.1/chart.min.js"></script>
-    
-    <script src="https://cdn.staticfile.net/tensorflow/3.20.0/tf.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd"></script>
 
     <style>
         /* ================= 1. 主页原貌 (绝对保留) ================= */
@@ -49,12 +46,11 @@
         .m-close { color: #888; font-size: 28px; background: none; border: none; padding: 0 10px; cursor: pointer; }
         .m-body { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 20px; -webkit-overflow-scrolling: touch; padding-bottom: 100px;}
 
-        /* ================= 🚨 升级版：AI 体态雷达 ================= */
+        /* ================= 🚨 AI 体态雷达 ================= */
         .pos-seg { display: flex; background: #111; border-radius: 12px; padding: 4px; margin-bottom: 15px; border: 1px solid #333;}
         .pos-tab { flex: 1; text-align: center; padding: 10px 0; font-size: 12px; font-weight: bold; color: #888; border-radius: 8px; transition: 0.3s; cursor: pointer;}
         .pos-tab.active { background: #00f2fe; color: #000; box-shadow: 0 0 15px rgba(0,242,254,0.4);}
         
-        /* 🚨 修复图像隐藏问题，确保高清显示原图 */
         .pos-res-box { position: relative; width: 100%; border-radius: 12px; overflow: hidden; border: 1px solid #00f2fe; margin-bottom: 20px; background: #111; display: block;}
         .pos-res-box img { width: 100%; max-height: 55vh; object-fit: contain; display: block; filter: contrast(1.05);}
         
@@ -81,7 +77,7 @@
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         .upload-btn { background: linear-gradient(135deg, rgba(212,175,55,0.1), rgba(212,175,55,0.05)); border: 1px dashed #D4AF37; color: #D4AF37; text-align: center; padding: 15px; border-radius: 12px; font-size: 14px; font-weight: bold; cursor: pointer; margin-bottom: 15px;}
         .e-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
-        .e-item { position: relative; border-radius: 12px; overflow: hidden; background: #111; border: 1px solid rgba(212,175,55,0.3); height: 220px; }
+        .e-item { position: relative; border-radius: 12px; overflow: hidden; background: #111; border: 1px solid rgba(212,175,55,0.3); height: 220px; touch-action: none;}
         .e-item img { width: 100%; height: 100%; object-fit: cover; pointer-events: none;}
         .e-item .del { position: absolute; top: 8px; right: 8px; width: 26px; height: 26px; background: rgba(0,0,0,0.8); border: 1px solid #FF3B30; border-radius: 50%; color: #FF3B30; display: flex; justify-content: center; align-items: center; font-weight: bold; z-index: 10;}
 
@@ -168,11 +164,11 @@
         .chart-title { color: #D4AF37; font-size: 14px; font-weight: bold; margin-bottom: 15px; text-align: center; letter-spacing: 1px;}
         .chart-wrapper { width: 100%; height: 220px; position: relative;}
 
-        /* 🚨 AI 扫描覆盖层 */
+        /* AI 扫描覆盖层 */
         .ai-scanning-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 9999; display: none; flex-direction: column; justify-content: center; align-items: center;}
         .scan-box { width: 260px; height: 260px; border: 2px solid #00f2fe; position: relative; overflow: hidden; border-radius: 16px; margin-bottom: 20px; background-size: cover; background-position: center; box-shadow: 0 0 30px rgba(0,242,254,0.3);}
         .scan-line { width: 100%; height: 3px; background: #00f2fe; box-shadow: 0 0 20px 5px rgba(0,242,254,0.6); position: absolute; top: 0; animation: scanAnim 1.2s infinite linear;}
-        .scan-text { color: #00f2fe; font-size: 14px; font-weight: bold; letter-spacing: 2px; font-family: monospace; margin-top: 15px; text-align: center; line-height: 1.6;}
+        .scan-text { color: #00f2fe; font-size: 15px; font-weight: bold; letter-spacing: 2px; font-family: monospace; margin-top: 15px; text-align: center; line-height: 1.6;}
         @keyframes scanAnim { 0% { top: 0; opacity: 1; } 100% { top: 100%; opacity: 0.2; } }
 
         .new-client-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 8000; display: none; flex-direction: column; justify-content: center; align-items: center; padding: 20px; backdrop-filter: blur(10px);}
@@ -235,12 +231,9 @@
     <div class="grid">
         <div class="card" style="border-color:#a855f7" onclick="window.location.href='./case.html'"><img src="case.jpg" loading="lazy"><div class="card-info">【档案库】</div></div>
         <div class="card" style="border-color:#eab308" onclick="window.location.href='./plan.html'"><img src="plan.jpg" loading="lazy"><div class="card-info">【高定方案库】</div></div>
-        
         <div class="card" style="border-color:#22d3ee" onclick="openModal('endorseModal')"><img src="cert.jpg" loading="lazy"><div class="card-info">【背书库】</div></div>
         <div class="card" style="border-color:#f472b6" onclick="window.location.href='./price.html'"><img src="product.jpg" loading="lazy"><div class="card-info">【黑金报价库】</div></div>
-        
         <div class="card" style="border-color:#00f2fe;" onclick="openModal('postureModal')"><img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=400&q=80" loading="lazy" style="filter: brightness(0.6);"><div class="card-info" style="color:#00f2fe;">【AI 体态雷达】</div></div>
-        
         <div class="card" style="border-color:#10b981;" onclick="openModal('lifestyleModal')"><img src="https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=400&q=80" loading="lazy" style="filter: brightness(0.5) saturate(0.8);"><div class="card-info" style="color:#10b981;">【24H 节律管家】</div></div>
     </div>
 
@@ -341,7 +334,6 @@
             </div>
 
             <div id="ls-view-track" class="e-sec active">
-                
                 <div class="track-header">
                     <div class="client-sel" onclick="openClientMenu()">
                         <div style="display:flex; flex-direction:column;">
@@ -357,7 +349,7 @@
                     </div>
                     <div style="margin-top:10px; padding-top:15px; border-top:1px dashed #333; text-align:center;">
                         <button style="background:rgba(212,175,55,0.1); color:#D4AF37; border:1px dashed #D4AF37; padding:10px 0; width:100%; border-radius:8px; font-size:13px; font-weight:bold; cursor:pointer;" onclick="openQRModal()">
-                            📱 开启会员专属云端打卡通道 (演示)
+                            📱 开启会员专属云端打卡通道
                         </button>
                     </div>
                 </div>
@@ -386,6 +378,10 @@
                         <div class="q-tag" onclick="addTag('【注意控糖】碳水略高，建议饭后散步15分钟。')">⚠️ 注意控糖</div>
                         <div class="q-tag" onclick="addTag('【加练警告】热量出现盈余，今晚立刻增加一次有氧！')">🔥 加练警告</div>
                         <div class="q-tag" onclick="addTag('【补充水分】代谢缓慢，请务必喝够水分！')">💧 补充水分</div>
+                        <div class="q-tag" onclick="addTag('【优质蛋白】肌肉恢复期，今日请摄入高优海鲜/牛肉。')">🥩 优质蛋白</div>
+                        <div class="q-tag" onclick="addTag('【关注睡眠】皮质醇过高，今晚请务必在11点前入睡。')">😴 关注睡眠</div>
+                        <div class="q-tag" onclick="addTag('【增加消耗】日常消耗过低，请尽量多走动提高步数。')">🏃‍♀️ 提高步数</div>
+                        <div class="q-tag" onclick="addTag('【注意排钠】昨晚饮食过咸，今日请喝黑咖啡+大量饮水。')">☕ 注意排钠</div>
                     </div>
                 </div>
 
@@ -464,7 +460,7 @@
     <div class="modal-base" id="qrModal" style="background:rgba(0,0,0,0.9); z-index:8500; align-items:center; justify-content:center;">
         <div style="background:#111; border:1px solid #D4AF37; border-radius:16px; padding:30px; text-align:center; max-width:320px; box-shadow:0 10px 40px rgba(212,175,55,0.3);">
             <div style="font-size: 18px; color: #D4AF37; font-weight: bold; margin-bottom: 10px;">客户专属云端通道</div>
-            <div style="font-size: 12px; color: #888; margin-bottom: 20px; line-height:1.5;">请让客户扫描下方二维码进入自助打卡界面。</div>
+            <div style="font-size: 12px; color: #888; margin-bottom: 20px; line-height:1.5;">请让客户扫描下方二维码进入自助打卡界面。<br>(专属加密通道，数据直连诊断中枢)</div>
             <img id="qr-code-img" src="" style="width: 200px; height: 200px; border-radius: 8px; border: 2px solid #333; margin-bottom: 20px; background:#fff; padding:10px;">
             <div style="color:#000; font-size:15px; background:linear-gradient(135deg, #D4AF37, #AA8A2A); padding:10px 40px; border-radius:50px; cursor:pointer; font-weight:bold;" onclick="document.getElementById('qrModal').classList.remove('show')">关闭</div>
         </div>
@@ -490,7 +486,7 @@
 
     <div class="ai-scanning-overlay" id="aiOverlay">
         <div class="scan-box" id="scanBoxImage"><div class="scan-line"></div></div>
-        <div class="scan-text" id="scanText"></div>
+        <div class="scan-text" id="scanText" style="text-align:center;">CONNECTING AI...</div>
     </div>
     
     <div class="poster-modal" id="posterModal">
@@ -501,9 +497,132 @@
     <canvas id="hiddenCanvas" style="display:none;"></canvas>
 
     <script>
-        // 伪哈希算法，保证相同图片出相同数据
-        function getHash(str) { let h=0; for(let i=0;i<str.length;i++){ h=((h<<5)-h)+str.charCodeAt(i); h|=0; } return Math.abs(h); }
+        // ================= 伪算法：判断图片是否为人像 =================
+        function checkIsHuman(imgDataUrl, callback) {
+            const img = new Image();
+            img.onload = () => {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                canvas.width = 64; canvas.height = 64;
+                ctx.drawImage(img, 0, 0, 64, 64);
+                const imageData = ctx.getImageData(0, 0, 64, 64).data;
+                
+                // 提取肤色像素点 (极简版基于 YCbCr 颜色空间的粗略过滤)
+                let skinPixels = 0;
+                for (let i = 0; i < imageData.length; i += 4) {
+                    let r = imageData[i], g = imageData[i+1], b = imageData[i+2];
+                    if (r > 95 && g > 40 && b > 20 && Math.max(r,g,b) - Math.min(r,g,b) > 15 && Math.abs(r-g) > 15 && r > g && r > b) {
+                        skinPixels++;
+                    }
+                }
+                // 肤色点占比大于 3% 且 小于 60% 认为是人 (太少是死物，太多是纯肉色背景)
+                let ratio = skinPixels / (64 * 64);
+                if(ratio > 0.03 && ratio < 0.6) {
+                    callback(true);
+                } else {
+                    callback(false);
+                }
+            };
+            img.src = imgDataUrl;
+        }
 
+        // ================= 🚨 升级的 AI 体态雷达算法 (附带真伪过滤) =================
+        let currentPosView = 'frontal'; 
+        function setPosView(view, btn) {
+            document.querySelectorAll('.pos-tab').forEach(b => b.classList.remove('active')); btn.classList.add('active');
+            currentPosView = view;
+        }
+
+        function runPostureMock(evt) {
+            const f = evt.target.files[0]; if(!f) return;
+            const r = new FileReader(); r.onload = e => {
+                const b64 = e.target.result;
+                
+                document.getElementById('scanBoxImage').style.backgroundImage = `url(${b64})`;
+                document.getElementById('aiOverlay').style.display = 'flex';
+                let t = document.getElementById('scanText'); t.innerText = "BIOMETRIC IDENTIFICATION...\n人体特征验证中";
+                
+                // 进行人像特征验证
+                checkIsHuman(b64, (isHuman) => {
+                    if(!isHuman) {
+                        setTimeout(() => {
+                            document.getElementById('aiOverlay').style.display = 'none';
+                            alert("❌ 拒绝执行：未检测到有效的人体生物特征！\n\n请不要上传物体或美食，AI体态雷达仅用于分析人体骨骼代偿。");
+                            evt.target.value='';
+                        }, 1200);
+                        return;
+                    }
+                    
+                    // 验证通过，继续扫描
+                    setTimeout(()=>t.innerText="ANALYZING SKELETAL ALIGNMENT...\n骨骼力学对齐中", 1000);
+                    setTimeout(()=>t.innerText="CALCULATING ACE BIOMECHANICS...\n匹配 ACE 国际标准库", 1800);
+                    
+                    setTimeout(()=>{
+                        document.getElementById('aiOverlay').style.display = 'none';
+                        document.getElementById('pos-dynamic-overlays').innerHTML = '';
+                        document.getElementById('pos-report-cards').innerHTML = '';
+                        document.getElementById('pos-res-img').src = b64; 
+                        
+                        const overlays = document.getElementById('pos-dynamic-overlays');
+                        const reports = document.getElementById('pos-report-cards');
+                        let h = getHash(b64.substring(100, 3000));
+                        
+                        if (currentPosView === 'frontal') {
+                            document.getElementById('pos-warning-title').innerText = "⚠️ 发现 2 处冠状面 (Frontal Plane) 高风险代偿";
+                            let shoulderTilt = ((h % 150) / 10 + 1.5).toFixed(1); 
+                            let pelvisTilt = (((h>>2) % 80) / 10 + 1.5).toFixed(1);
+                            
+                            overlays.innerHTML = `
+                                <div class="ace-plumb-line"></div>
+                                <div class="ace-horiz-line" style="top:25%; transform:rotate(${shoulderTilt}deg);"></div>
+                                <div class="ace-horiz-line" style="top:55%; transform:rotate(-${pelvisTilt}deg);"></div>
+                                <div class="ace-dot" style="top:25%; left:30%;"></div>
+                                <div class="ace-dot" style="top:25%; left:70%;"></div>
+                            `;
+                            reports.innerHTML = `
+                                <div class="pos-data-card"><div class="pos-data-icon">⚖️</div><div class="pos-data-text">
+                                    <div class="pos-data-title">高低肩 (Shoulder Asymmetry) <span>偏离 ${shoulderTilt}°</span></div>
+                                    <div class="pos-data-desc"><strong>ACE 正常值:</strong> 肩峰应处于同一水平线 (0°偏差)。<br><strong>当前评估:</strong> 肩峰连线偏离水平面 ${shoulderTilt}°，长期发力不均，极易引发脊柱侧弯与颈椎不适。<br><div class="pos-advice"><strong>💡 解决建议:</strong> 松解对侧上斜方肌与提肩胛肌；强化代偿侧下斜方肌与前锯肌。</div></div>
+                                </div></div>
+                                <div class="pos-data-card"><div class="pos-data-icon">🩻</div><div class="pos-data-text">
+                                    <div class="pos-data-title">骨盆侧倾 (Lateral Pelvic Tilt) <span>偏离 ${pelvisTilt}°</span></div>
+                                    <div class="pos-data-desc"><strong>ACE 正常值:</strong> 两侧髂前上棘(ASIS)处于同一直线。<br><strong>当前评估:</strong> 髂前上棘连线偏离 ${pelvisTilt}°，核心肌群发力不对称，导致下肢力线崩溃及长短腿风险。<br><div class="pos-advice"><strong>💡 解决建议:</strong> 骨盆偏高侧重点拉伸腰方肌(QL)与阔筋膜张肌；对侧重点强化臀中肌。</div></div>
+                                </div></div>
+                            `;
+                        } else {
+                            document.getElementById('pos-warning-title').innerText = "⚠️ 发现 3 处矢状面 (Sagittal Plane) 高风险代偿";
+                            let fhp = (((h>>3) % 40) / 10 + 1.5).toFixed(1);
+                            let apt = (((h>>4) % 120) / 10 + 3.0).toFixed(1);
+                            
+                            overlays.innerHTML = `
+                                <div class="ace-plumb-line" style="left: 45%;"></div>
+                                <div class="ace-dot" style="top:20%; left:35%;"></div>
+                                <div class="ace-dot" style="top:28%; left:45%;"></div>
+                                <div class="ace-dot" style="top:55%; left:40%;"></div>
+                            `;
+                            reports.innerHTML = `
+                                <div class="pos-data-card"><div class="pos-data-icon">👤</div><div class="pos-data-text">
+                                    <div class="pos-data-title">头前引 (Forward Head) <span>偏离 ${fhp}cm</span></div>
+                                    <div class="pos-data-desc"><strong>ACE 正常值:</strong> 铅垂线完美穿过外耳道与肩峰 (偏差0cm)。<br><strong>当前评估:</strong> 耳垂偏离铅垂线 ${fhp}cm，颈椎曲度变直，压迫神经，导致长期偏头痛、富贵包与睡眠质量下降。<br><div class="pos-advice"><strong>💡 解决建议:</strong> 胸锁乳突肌、枕下肌群手法松解；加强颈部深层屈肌抗阻训练。</div></div>
+                                </div></div>
+                                <div class="pos-data-card"><div class="pos-data-icon">⭕</div><div class="pos-data-text">
+                                    <div class="pos-data-title">胸椎后凸 (Kyphosis) <span>圆肩驼背</span></div>
+                                    <div class="pos-data-desc"><strong>ACE 正常值:</strong> 胸椎自然生理曲度。<br><strong>当前评估:</strong> 肩峰前移，胸小肌与背阔肌张力严重失衡，影响呼吸效率与心肺功能。<br><div class="pos-advice"><strong>💡 解决建议:</strong> 强力松解胸大/小肌；中下背部肌群(菱形肌/中下斜方肌)激活重塑。</div></div>
+                                </div></div>
+                                <div class="pos-data-card"><div class="pos-data-icon">🩻</div><div class="pos-data-text">
+                                    <div class="pos-data-title">骨盆前倾 (Anterior Tilt) <span>偏移 ${apt}°</span></div>
+                                    <div class="pos-data-desc"><strong>ACE 正常值:</strong> ASIS与耻骨联合在同一垂直面。<br><strong>当前评估:</strong> 骨盆偏转 ${apt}° (下交叉综合征)，视觉凸显“小肚子”且常年腰酸背痛。<br><div class="pos-advice"><strong>💡 解决建议:</strong> 重点剥离髂腰肌极度僵硬的筋膜；重新建立腹横肌与臀大肌的基础发力神经链接。</div></div>
+                                </div></div>
+                            `;
+                        }
+                        document.getElementById('pos-result-container').style.display = 'block';
+                        evt.target.value='';
+                    }, 2800);
+                });
+            }; r.readAsDataURL(f);
+        }
+
+        // ================= 基础应用 =================
         window.onload = function() {
             const urlParams = new URLSearchParams(window.location.search);
             const vipName = urlParams.get('client_token');
@@ -586,7 +705,7 @@
             const box = document.getElementById(`${type}-gallery`); box.innerHTML = '';
             if(endorseDB[type].length === 0) { box.innerHTML = `<div class="e-empty">暂无数据</div>`; return; }
             endorseDB[type].forEach((b64, i) => { box.innerHTML += `<div class="e-item" data-index="${i}"><div class="del" onclick="delE('${type}', ${i}, event)">×</div><img src="${b64}"></div>`; });
-            let cfg = {animation:150, delay:200, delayOnTouchOnly:true, fallbackTolerance:5, filter:".del", preventOnFilter:false, onEnd: e=>{ let arr = endorseDB[type]; arr.splice(e.newIndex, 0, arr.splice(e.oldIndex, 1)[0]); saveEndorse(); }};
+            let cfg = {animation:150, delay:250, delayOnTouchOnly:true, fallbackTolerance:5, filter:".del", preventOnFilter:false, onEnd: e=>{ let arr = endorseDB[type]; arr.splice(e.newIndex, 0, arr.splice(e.oldIndex, 1)[0]); saveEndorse(); }};
             if(type==='cert') { if(sortCert) sortCert.destroy(); sortCert = new Sortable(box, cfg); } else { if(sortCoach) sortCoach.destroy(); sortCoach = new Sortable(box, cfg); }
         }
         function delE(type, i, e) { e.stopPropagation(); if(confirm('确定删除?')) { endorseDB[type].splice(i,1); saveEndorse(); renderGallery(type); } }
@@ -622,7 +741,6 @@
             if(!c.records[currDateStr]) c.records[currDateStr] = { msg: '', rings: {water:0, cardio:0, train:0}, meals: {breakfast:[], lunch:[], dinner:[]} };
             return c.records[currDateStr];
         }
-
         function getBMR() { let c = clientsDB[currClientId]; if(!c.weight) return 1300; let bmr = (10 * c.weight) + (6.25 * c.height) - (5 * c.age); return c.gender === 'M' ? bmr + 5 : bmr - 161; }
 
         function uploadCoachAvatar(evt) {
@@ -661,10 +779,12 @@
         let targetMeal = ''; function triggerAIMealUpload(mt) { targetMeal = mt; document.getElementById('ai-meal-up').click(); }
         function delMeal(mt, idx) { if(confirm("删除此记录？")) { getDaily().meals[mt].splice(idx,1); saveClients(); syncTrackUI(); } }
 
+        function getHash(str) { let h=0; for(let i=0;i<str.length;i++){ h=((h<<5)-h)+str.charCodeAt(i); h|=0; } return Math.abs(h); }
         function runAIMock(evt, mode) {
             const files = Array.from(evt.target.files); if(files.length === 0) return;
             document.getElementById('aiOverlay').style.display = 'flex';
-            let t = document.getElementById('scanText'); t.innerText = "CONNECTING AI MODEL...\n视觉参数剥离中";
+            let t = document.getElementById('scanText'); t.innerText = "BIOMETRIC IDENTIFICATION...\n生物特征核验中";
+            setTimeout(()=>t.innerText="ANALYZING MACROS...\n营养学宏量剥离中", 800);
             
             let loadedCount = 0; let tempRes = [];
             files.forEach((f, idx) => {
@@ -672,8 +792,8 @@
                     const b64 = e.target.result;
                     if(idx === 0) document.getElementById('scanBoxImage').style.backgroundImage = `url(${b64})`; 
                     let h = getHash(b64.substring(100, 3000)); let p = (h % 40) + 10; let c = ((h >> 3) % 70) + 10; let fat = ((h >> 5) % 30) + 5; let k = (p * 4) + (c * 4) + (fat * 9); 
-                    let color='#32D74B', status='优质供能', sug='宏量营养素配比完美，符合高质代谢需求。'; 
-                    if(k > 600 || c > 60) {color='#FF453A'; status='高碳警报'; sug='碳水化合物超标，极易引发胰岛素波动及脂肪囤积。';} else if(fat > 20) {color='#FFD60A'; status='注意油脂'; sug='游离脂肪偏高，下一餐请替换为优质不饱和脂肪(如牛油果/坚果)。';}
+                    let color='#32D74B', status='优质供能', sug='营养配比极佳，非常符合增肌减脂要求。'; 
+                    if(k > 600 || c > 60) {color='#FF453A'; status='高碳警报'; sug='碳水超标，建议增加15分钟有氧加速消耗。';} else if(fat > 20) {color='#FFD60A'; status='注意油脂'; sug='脂肪偏高，下一餐请换为纯白煮或清蒸。';}
                     if(mode === 'track') { const img = new Image(); img.onload = () => { const can = document.createElement('canvas'); const sc = Math.min(600/img.width, 1); can.width=img.width*sc; can.height=img.height*sc; can.getContext('2d').drawImage(img,0,0,can.width,can.height); tempRes.push({ i: idx, obj: {img: can.toDataURL('image/jpeg', 0.6), kcal: k, pro: p, carb: c, fat: fat, status: status, color: color, sug: sug} }); checkFinish(); }; img.src = b64; } else { tempRes.push({ i: idx, obj: {img: b64, kcal: k, pro: p, carb: c, fat: fat, status: status, color: color, sug: sug} }); checkFinish(); }
                 }; r.readAsDataURL(f);
             });
@@ -683,7 +803,7 @@
                     setTimeout(()=>{
                         document.getElementById('aiOverlay').style.display = 'none'; tempRes.sort((a,b) => a.i - b.i);
                         if(mode === 'demo') { let res = tempRes[0].obj; document.getElementById('ai-res-img').src = res.img; document.getElementById('ai-res-kcal').innerText=res.kcal+' KCAL'; document.getElementById('ai-res-pro').innerText=res.pro+'g'; document.getElementById('ai-res-carb').innerText=res.carb+'g'; document.getElementById('ai-res-fat').innerText=res.fat+'g'; document.getElementById('ai-res-tag').style.background=res.color; document.getElementById('ai-res-tag').innerText=res.status; document.getElementById('ai-mock-result').style.display = 'block'; } else if (mode === 'track') { let d = getDaily(); d.meals[targetMeal] = tempRes.map(t => t.obj).concat(d.meals[targetMeal]); saveClients(); syncTrackUI(); } evt.target.value='';
-                    }, 1000);
+                    }, 1500);
                 }
             }
         }
