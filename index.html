@@ -13,14 +13,15 @@
     <script src="https://cdn.staticfile.net/Chart.js/3.9.1/chart.min.js"></script>
 
     <style>
-        /* ================= 1. 主页原貌 (绝对保留) ================= */
+        /* ================= 主页原貌 (绝对保留) ================= */
         :root { --primary: #00f2fe; --secondary: #7000ff; --bg: #000; --card-bg: rgba(255, 255, 255, 0.03); --text: #fff; --grad: radial-gradient(circle at top right, #1a2a6c, #000 70%); }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; margin: 0; padding: 0; }
         body { background: var(--bg); background-image: var(--grad); color: var(--text); font-family: -apple-system, sans-serif; padding: 20px; min-height: 100vh; transition: all 0.5s ease; display: flex; flex-direction: column; overflow-x: hidden;}
         
         #style-trigger { position: fixed; top: 15px; right: 15px; z-index: 2000; background: rgba(255,255,255,0.1); padding: 8px 15px; border-radius: 50px; font-size: 11px; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2); color: #fff; }
-        #style-panel { display: none; position: fixed; top: 60px; right: 15px; z-index: 2001; background: #111; border: 1px solid #333; border-radius: 15px; padding: 10px; width: 140px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
+        #style-panel { display: none; position: fixed; top: 60px; right: 15px; z-index: 2001; background: #111; border: 1px solid #333; border-radius: 15px; padding: 10px; width: 150px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
         .style-option { padding: 12px; font-size: 13px; color: #aaa; text-align: center; border-bottom: 1px solid #222; }
+        .db-btn { color: #D4AF37; font-weight: bold; border-top: 1px dashed #444; margin-top: 5px; padding-top: 12px; cursor: pointer;}
         
         .brand-card { background: var(--card-bg); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; padding: 25px 20px; text-align: center; margin-bottom: 25px; margin-top: 10px; }
         .brand-card h1 { margin: 0; font-size: 24px; letter-spacing: 4px; color: var(--primary); text-shadow: 0 0 15px var(--primary); }
@@ -46,15 +47,23 @@
         .m-close { color: #888; font-size: 28px; background: none; border: none; padding: 0 10px; cursor: pointer; }
         .m-body { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 20px; -webkit-overflow-scrolling: touch; padding-bottom: 100px;}
 
-        /* ================= 身体资产雷达评估 UI ================= */
+        /* ================= 🚨 V3.0 新增：ACE 动力链矩阵与雷达 ================= */
         .asset-form-group { margin-bottom: 18px; }
         .asset-label { font-size: 13px; color: #D4AF37; margin-bottom: 8px; display: block; font-weight: bold;}
         .asset-select { width: 100%; background: #111; border: 1px solid #333; color: #fff; padding: 14px; border-radius: 8px; font-size: 14px; outline: none; appearance: none; line-height: 1.4;}
         .asset-select:focus { border-color: #FF453A; }
         
+        /* 动力链发光树节点 */
+        .kinetic-chain { display: flex; flex-direction: column; align-items: center; gap: 15px; position: relative; margin: 25px 0; padding: 10px 0;}
+        .kinetic-chain::before { content: ''; position: absolute; top: 20px; bottom: 20px; left: 50%; width: 2px; background: #333; z-index: 0; transform: translateX(-50%); }
+        .k-node { position: relative; z-index: 1; background: #111; border: 2px solid #D4AF37; color: #D4AF37; padding: 12px 20px; border-radius: 30px; font-weight: bold; font-size: 13px; cursor: pointer; transition: 0.3s; box-shadow: 0 0 10px rgba(212,175,55,0.1); width: 85%; display: flex; justify-content: space-between; align-items: center;}
+        .k-node.active { border-color: #FF453A; color: #fff; background: rgba(255,69,58,0.15); box-shadow: 0 0 25px rgba(255,69,58,0.5); text-shadow: 0 0 5px #FF453A;}
+        .k-node .k-warn { display: none; color: #FF453A; font-size: 11px; }
+        .k-node.active .k-warn { display: block; animation: blink 1s infinite;}
+
         .radar-chart-container { width: 100%; height: 300px; margin: 20px 0; display: none; background: radial-gradient(circle, #1a1a1a, #050505); border-radius: 16px; border: 1px solid #333; padding: 10px; position: relative;}
         
-        .pos-data-card { background: #111; border: 1px solid #333; border-radius: 12px; padding: 18px; margin-bottom: 12px; display: flex; align-items: flex-start; gap: 12px; display: none; animation: fadeIn 0.5s;}
+        .pos-data-card { background: #111; border: 1px solid #333; border-radius: 12px; padding: 18px; margin-bottom: 12px; display: flex; align-items: flex-start; gap: 12px; animation: fadeIn 0.5s;}
         .pos-data-icon { font-size: 28px; }
         .pos-data-text { flex: 1;}
         .pos-data-title { color: #fff; font-size: 16px; font-weight: bold; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center;}
@@ -62,6 +71,11 @@
         .pos-data-desc { color: #aaa; font-size: 13px; line-height: 1.6;}
         .pos-advice { margin-top: 12px; background: rgba(212,175,55,0.08); border-left: 3px solid #D4AF37; padding: 12px; font-size: 13px; color: #ddd; line-height:1.5;}
         .pos-advice strong { color: #D4AF37; }
+
+        /* ================= 🚨 V3.0 电子签署画板 ================= */
+        .sig-container { background: #111; border: 1px dashed #D4AF37; border-radius: 12px; height: 200px; width: 100%; position: relative; margin-top: 10px;}
+        #sig-canvas { width: 100%; height: 100%; touch-action: none; border-radius: 12px;}
+        .sig-placeholder { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #444; font-size: 20px; font-weight: bold; pointer-events: none;}
 
         /* ================= 背书库 ================= */
         .e-seg { display: flex; background: #111; border-radius: 12px; padding: 6px; margin-bottom: 20px; border: 1px solid #222;}
@@ -159,7 +173,7 @@
         .chart-title { color: #D4AF37; font-size: 14px; font-weight: bold; margin-bottom: 15px; text-align: center; letter-spacing: 1px;}
         .chart-wrapper { width: 100%; height: 220px; position: relative;}
 
-        /* 🚨 AI 扫描层 */
+        /* AI 扫描隔离层 */
         .ai-scanning-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 9999; display: none; flex-direction: column; justify-content: center; align-items: center;}
         .scan-box { width: 260px; height: 260px; position: relative; overflow: hidden; margin-bottom: 20px; display:flex; justify-content:center; align-items:center; background-size: cover; background-position: center;}
         .scan-circle { width: 100%; height: 100%; border: 4px dashed #D4AF37; border-radius: 50%; animation: spin 4s linear infinite; position: absolute; top:0; left:0;}
@@ -169,7 +183,7 @@
         @keyframes spin { 100% { transform: rotate(360deg); } }
         @keyframes scanAnim { 0% { top: 0; opacity: 1; } 100% { top: 100%; opacity: 0.2; } }
 
-        /* 左滑抽屉 */
+        /* 左滑抽屉与表单 */
         .new-client-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 8000; display: none; flex-direction: column; justify-content: center; align-items: center; padding: 20px; backdrop-filter: blur(10px);}
         .new-client-modal.show { display: flex; }
         .nc-card { background: #111; border: 1px solid #D4AF37; border-radius: 16px; width: 100%; max-width: 350px; padding: 25px;}
@@ -205,7 +219,7 @@
         .vp-title { color:#D4AF37; font-size:24px; font-weight:900; letter-spacing:4px; text-shadow:0 0 20px rgba(212,175,55,0.5);}
         .vp-btn { background:linear-gradient(135deg, #00f2fe, #4facfe); color:#000; padding:20px 50px; border-radius:50px; font-weight:900; font-size:18px; margin-top:60px; border:none; box-shadow:0 10px 30px rgba(0,242,254,0.4); cursor:pointer;}
 
-        /* ================= 🚨 门店资产绝对防御门禁 (密码隐身版) ================= */
+        /* ================= 🚨 门店资产绝对防御门禁 ================= */
         #auth-gate { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #050505; background-image: radial-gradient(circle at top right, #1a2a6c, #000 70%); z-index: 9999999; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; transition: opacity 0.5s;}
         .auth-card { background: rgba(255,255,255,0.03); backdrop-filter: blur(20px); border: 1px solid rgba(212,175,55,0.3); border-radius: 20px; padding: 40px 30px; width: 100%; max-width: 320px; text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,0.8);}
         .auth-title { color: #D4AF37; font-size: 22px; font-weight: 900; letter-spacing: 3px; margin-bottom: 10px;}
@@ -229,11 +243,14 @@
 
     <div class="toast" id="sysToast">操作成功</div>
 
-    <div id="style-trigger" onclick="togglePanel()">🎨 切换风格</div>
+    <div id="style-trigger" onclick="togglePanel()">🎨 门店控制面板</div>
     <div id="style-panel">
         <div class="style-option" onclick="applyTheme(0)">赛博霓虹</div>
         <div class="style-option" onclick="applyTheme(1)">哑光极简</div>
         <div class="style-option" onclick="applyTheme(4)">香槟金奢</div>
+        <div class="style-option db-btn" onclick="exportData()">💾 导出所有客户数据</div>
+        <div class="style-option db-btn" onclick="document.getElementById('import-file').click()">📂 恢复所有客户数据</div>
+        <input type="file" id="import-file" accept=".json" style="display:none;" onchange="importData(event)">
     </div>
 
     <div class="brand-card">
@@ -269,7 +286,7 @@
         <div class="m-body">
             <div style="text-align:center; color:#aaa; font-size:12px; margin-bottom:15px; line-height: 1.5;">
                 基于 ACE 运动科学数据中心。<br>
-                输入客户画像与临床表征，推演核心动力链折旧风险。
+                输入客户画像，并在动力链上标注痛点，推演折旧风险。
             </div>
             
             <div class="asset-form-group">
@@ -283,21 +300,19 @@
                     <option value="prof6">昼夜颠倒/严重缺觉者 (医疗/倒班人群)</option>
                 </select>
             </div>
-            <div class="asset-form-group">
-                <span class="asset-label">目标最明显的结构痛点</span>
-                <select id="asset-pain" class="asset-select">
-                    <option value="p1">颈肩重度僵硬，伴随偏头痛与富贵包前兆</option>
-                    <option value="p2">腰背持续性酸痛，久坐久站后痛感显著加剧</option>
-                    <option value="p3">核心极度松弛，顽固性下腹部脂肪无法消除</option>
-                    <option value="p4">膝踝关节频繁弹响，伴随下肢发沉与水肿</option>
-                    <option value="p5">严重圆肩驼背，经常感到胸闷气短、呼吸不畅</option>
-                    <option value="p6">骨盆前倾(假翘臀)，导致大腿前侧异常粗壮外翻</option>
-                    <option value="p7">上肢发力受限，肩峰频繁撞击或出现翼状肩胛</option>
-                    <option value="p8">慢性疲劳症候群，基础代谢彻底停滞，易胖难瘦</option>
-                </select>
+
+            <div style="margin-top: 25px;">
+                <span class="asset-label" style="text-align:center; font-size:14px;">请在下方动力链节点点选异常区域 (可多选)</span>
+                <div class="kinetic-chain">
+                    <div class="k-node" id="kn-neck" onclick="toggleNode('kn-neck')"><span>1. 颈肩复合体 (偏头痛/僵硬)</span><span class="k-warn">⚠️</span></div>
+                    <div class="k-node" id="kn-chest" onclick="toggleNode('kn-chest')"><span>2. 胸廓与呼吸总成 (圆肩/胸闷)</span><span class="k-warn">⚠️</span></div>
+                    <div class="k-node" id="kn-core" onclick="toggleNode('kn-core')"><span>3. 核心刚性与腰椎 (松弛/极易发胖)</span><span class="k-warn">⚠️</span></div>
+                    <div class="k-node" id="kn-pelvis" onclick="toggleNode('kn-pelvis')"><span>4. 骨盆与髋关节 (腰痛/假翘臀)</span><span class="k-warn">⚠️</span></div>
+                    <div class="k-node" id="kn-knee" onclick="toggleNode('kn-knee')"><span>5. 膝踝下肢力线 (关节弹响/水肿)</span><span class="k-warn">⚠️</span></div>
+                </div>
             </div>
 
-            <div class="upload-btn" style="border-color:#FF453A; color:#FF453A; background:rgba(255,69,58,0.1); margin-top:20px;" onclick="generateAssetRadar()">
+            <div class="upload-btn" style="border-color:#FF453A; color:#FF453A; background:rgba(255,69,58,0.1); margin-top:20px;" onclick="generateMatrixRadar()">
                 ◎ 启动全息结构雷达扫描
             </div>
 
@@ -305,13 +320,34 @@
                 <div class="radar-chart-container">
                     <canvas id="assetRadarChart"></canvas>
                 </div>
-                
                 <div id="asset-warning-title" style="font-size:16px; font-weight:bold; color:#FF453A; margin-bottom:15px; text-align:center;">⚠️ 动力链崩溃预警</div>
                 <div id="pos-report-cards"></div>
 
-                <div class="upload-btn" style="background:linear-gradient(90deg, #FF453A, #FFD60A); color:#000; border:none; margin-top:20px; text-shadow:0 1px 2px rgba(255,255,255,0.3);" onclick="closeModal('assetModal'); window.location.href='./plan.html'">
-                    ➔ 立即调取【结构优化与体态矫正】方案
+                <div class="upload-btn" style="background:linear-gradient(90deg, #FF453A, #FFD60A); color:#000; border:none; margin-top:20px; text-shadow:0 1px 2px rgba(255,255,255,0.3);" onclick="openSignatureBoard()">
+                    ➔ 签署《物理资产重塑委托协议》
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="sigModal" class="modal-base" style="z-index: 8600;">
+        <div class="m-header">
+            <div class="m-title" style="color:#D4AF37;">数字授权书签署</div>
+            <button class="m-close" onclick="closeModal('sigModal')">×</button>
+        </div>
+        <div class="m-body">
+            <div style="color:#fff; font-size:15px; font-weight:bold; text-align:center; margin-bottom:10px;">《LUXIOU 物理资产重塑委托协议》</div>
+            <div style="color:#888; font-size:12px; line-height:1.6; background:#111; padding:15px; border-radius:12px; margin-bottom:20px; border:1px solid #333;">
+                本人确认已清晰了解当前的身体动力链受限情况与物理资产折旧风险。兹全权委托 LUXIOU 专家团队，在未来周期内对本人的身体结构、神经募集及代谢节律进行系统性重塑与优化管理。
+            </div>
+            <div style="color:#D4AF37; font-size:13px; font-weight:bold; margin-bottom:5px;">请在下方黑色区域手写签名：</div>
+            <div class="sig-container">
+                <div class="sig-placeholder" id="sig-placeholder">在此处签名</div>
+                <canvas id="sig-canvas"></canvas>
+            </div>
+            <div style="display:flex; gap:10px; margin-top:20px;">
+                <div style="flex:1; padding:15px; text-align:center; background:#222; color:#fff; border-radius:8px; font-weight:bold; cursor:pointer;" onclick="clearSignature()">重签</div>
+                <div style="flex:2; padding:15px; text-align:center; background:linear-gradient(135deg, #D4AF37, #AA8A2A); color:#000; border-radius:8px; font-weight:bold; cursor:pointer;" onclick="saveSignature()">确认签署并生成协议图</div>
             </div>
         </div>
     </div>
@@ -396,7 +432,7 @@
                         <button class="date-btn" onclick="changeDate(1)">后天 ▶</button>
                     </div>
                     <div style="margin-top:10px; padding-top:15px; border-top:1px dashed #333; text-align:center;">
-                        <button style="background:rgba(212,175,55,0.1); color:#D4AF37; border:1px dashed #D4AF37; padding:10px 0; width:100%; border-radius:8px; font-size:13px; font-weight:bold; cursor:pointer;" onclick="openQRModal()">📱 开启会员专属云端打卡通道 (演示)</button>
+                        <button style="background:rgba(212,175,55,0.1); color:#D4AF37; border:1px dashed #D4AF37; padding:10px 0; width:100%; border-radius:8px; font-size:13px; font-weight:bold; cursor:pointer;" onclick="openQRModal()">📱 开启会员专属云端打卡通道</button>
                     </div>
                 </div>
                 <div class="energy-dash">
@@ -464,8 +500,8 @@
     <canvas id="hiddenCanvas" style="display:none;"></canvas>
 
     <script>
-        // ================= 🚨 门禁核心 JS =================
-        const MASTER_HASH = 'TFVYSU9VODg4'; // LUXIOU888 的 Base64
+        // ================= 🚨 绝对防御门禁校验逻辑 (LUXIOU888) =================
+        const MASTER_HASH = 'TFVYSU9VODg4'; 
         const AUTH_VALID_DAYS = 30;
 
         function checkAuth() {
@@ -501,13 +537,61 @@
             } catch(e) {}
         })();
 
-        // ================= 🚨 雷达算法：千人千面交叉计算引擎 =================
+        // ================= 🚨 V3.0 数据舱：备份与恢复引擎 =================
+        function exportData() {
+            let exportObj = { clients: clientsDB, endorse: endorseDB };
+            let dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportObj));
+            let dlAnchorElem = document.createElement('a');
+            dlAnchorElem.setAttribute("href", dataStr);
+            dlAnchorElem.setAttribute("download", "luxiou_backup_" + currDateStr + ".json");
+            dlAnchorElem.click();
+            togglePanel();
+            showToast("数据舱备份成功！");
+        }
+
+        function importData(evt) {
+            const file = evt.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    let imported = JSON.parse(e.target.result);
+                    if(imported.clients) { clientsDB = imported.clients; saveClients(); currClientId = Object.keys(clientsDB)[0]; syncTrackUI(); }
+                    if(imported.endorse) { endorseDB = imported.endorse; saveEndorse(); renderGallery('cert'); renderGallery('coach'); }
+                    togglePanel();
+                    showToast("数据舱恢复成功！");
+                } catch(err) {
+                    alert("文件格式错误，恢复失败。");
+                }
+            };
+            reader.readAsText(file);
+            evt.target.value = '';
+        }
+
+        // ================= 🚨 V3.0：全息肌筋膜矩阵雷达算法 (叠加型) =================
         let assetRadarInst = null;
+        let activeNodes = [];
+
+        function toggleNode(nodeId) {
+            const node = document.getElementById(nodeId);
+            if(node.classList.contains('active')) {
+                node.classList.remove('active');
+                activeNodes = activeNodes.filter(id => id !== nodeId);
+            } else {
+                node.classList.add('active');
+                activeNodes.push(nodeId);
+            }
+            document.getElementById('scanInnerIcon').style.display = 'none'; // hide placeholder
+        }
         
-        function generateAssetRadar() {
+        function generateMatrixRadar() {
             const prof = document.getElementById('asset-prof').value;
-            const pain = document.getElementById('asset-pain').value;
             
+            if(activeNodes.length === 0) {
+                alert("请先在动力链上点击选择客户的痛点区域！");
+                return;
+            }
+
             const box = document.getElementById('scanBoxImage');
             box.style.backgroundImage = 'none'; box.style.borderRadius = '50%';
             box.style.borderColor = '#FF453A'; box.style.boxShadow = '0 0 30px rgba(255,69,58,0.3)';
@@ -518,44 +602,43 @@
             document.getElementById('scanText').style.color = '#FF453A';
 
             document.getElementById('aiOverlay').style.display = 'flex';
-            let t = document.getElementById('scanText'); t.innerText = "LOADING ACE BIOMECHANICS...\n调取 ACE 运动力学数据库";
-            setTimeout(()=>t.innerText="ANALYZING DEPRECIATION RATE...\n交叉推演资产受限率", 800);
+            let t = document.getElementById('scanText'); t.innerText = "LOADING ACE BIOMECHANICS...\n调取 ACE 动力链模型";
+            setTimeout(()=>t.innerText="ANALYZING MATRIX DEPRECIATION...\n矩阵叠加推演资产受限率", 800);
             
             setTimeout(()=>{
                 document.getElementById('aiOverlay').style.display = 'none';
                 document.getElementById('radar-container').style.display = 'block';
                 
                 const idealData = [100, 100, 100, 100, 100, 100];
-                let baseData = [80, 80, 80, 80, 80, 80]; 
+                // 默认 95 分满分开局
+                let currentData = [95, 95, 95, 95, 95, 95]; 
                 let reportHtml = '';
 
-                if(pain === 'p1') {
-                    baseData = [35, 45, 60, 85, 75, 90];
-                    reportHtml = `<div class="pos-data-card" style="display:flex;"><div class="pos-data-icon">👤</div><div class="pos-data-text"><div class="pos-data-title">上交叉综合征 (Upper Crossed) <span>重度代偿</span></div><div class="pos-data-desc"><strong>力学评估:</strong> 颈椎曲度与肩带稳定性数据断崖式下跌。胸大肌过紧，斜方肌被动拉长，颈椎承受了3倍以上正常重力，这是引发偏头痛的直接原因。</div><div class="pos-advice"><strong>💡 结构优化建议:</strong> 立即启动胸锁乳突肌松解，重建深层颈屈肌力量，否则极易发展为颈椎生理曲度变直。</div></div></div>`;
-                } else if(pain === 'p2') {
-                    baseData = [80, 85, 70, 40, 35, 65];
-                    reportHtml = `<div class="pos-data-card" style="display:flex;"><div class="pos-data-icon">🩻</div><div class="pos-data-text"><div class="pos-data-title">下交叉综合征 (Lower Crossed) <span>重度代偿</span></div><div class="pos-data-desc"><strong>力学评估:</strong> 骨盆中立位与核心刚性全线崩溃。您的腰椎在替罢工的腹横肌和臀大肌代偿发力，导致严重的腰背酸痛。</div><div class="pos-advice"><strong>💡 结构优化建议:</strong> 必须停止盲目负重！首先剥离髂腰肌粘连筋膜，重新激活臀部神经募集。</div></div></div>`;
-                } else if(pain === 'p3') {
-                    baseData = [85, 80, 85, 55, 30, 75];
-                    reportHtml = `<div class="pos-data-card" style="display:flex;"><div class="pos-data-icon">🔥</div><div class="pos-data-text"><div class="pos-data-title">腹内压丧失 (Core Amnesia) <span>整体受限</span></div><div class="pos-data-desc"><strong>力学评估:</strong> 核心刚性降至冰点。腹横肌与盆底肌群陷入休眠，身体被迫囤积内脏脂肪作为腰椎的物理缓冲层。</div><div class="pos-advice"><strong>💡 结构优化建议:</strong> 仰卧起坐毫无意义！需通过 3D 呼吸法重塑腹内压，激活深层核心抗旋能力。</div></div></div>`;
-                } else if(pain === 'p4') {
-                    baseData = [90, 85, 85, 60, 65, 30];
-                    reportHtml = `<div class="pos-data-card" style="display:flex;"><div class="pos-data-icon">🦵</div><div class="pos-data-text"><div class="pos-data-title">下肢力线偏移 (Alignment Collapse) <span>重度代偿</span></div><div class="pos-data-desc"><strong>力学评估:</strong> 下肢力线分值极低。膝关节承受了本该由臀大肌吸收的巨大剪切力，半月板正在加速磨损。</div><div class="pos-advice"><strong>💡 结构优化建议:</strong> 纠正足弓塌陷，强化臀中肌以稳定股骨，严防软骨进一步损伤。</div></div></div>`;
-                } else if(pain === 'p5') {
-                    baseData = [50, 40, 30, 80, 70, 85];
-                    reportHtml = `<div class="pos-data-card" style="display:flex;"><div class="pos-data-icon">⭕</div><div class="pos-data-text"><div class="pos-data-title">严重胸椎后凸 (Thoracic Kyphosis) <span>重度代偿</span></div><div class="pos-data-desc"><strong>力学评估:</strong> 胸椎灵活性几近丧失。胸小肌极度挛缩，限制了膈肌的正常升降范围，从而引发缺氧式代偿呼吸与胸闷气短。</div><div class="pos-advice"><strong>💡 结构优化建议:</strong> 强力松解前侧筋膜链；中背部肌群(菱形肌/中下斜方肌)紧急激活重塑。</div></div></div>`;
-                } else if(pain === 'p6') {
-                    baseData = [85, 85, 75, 35, 45, 55];
-                    reportHtml = `<div class="pos-data-card" style="display:flex;"><div class="pos-data-icon">🩻</div><div class="pos-data-text"><div class="pos-data-title">骨盆重度前倾 (Anterior Pelvic Tilt) <span>结构偏转</span></div><div class="pos-data-desc"><strong>力学评估:</strong> 骨盆偏转导致重力线前移。股直肌被迫长期处于离心收缩状态，这是导致大腿前侧异常粗壮和假翘臀的根本原因。</div><div class="pos-advice"><strong>💡 结构优化建议:</strong> 重点剥离髂腰肌极度僵硬的筋膜；重新建立腹横肌与腘绳肌的拮抗发力。</div></div></div>`;
-                } else if(pain === 'p7') {
-                    baseData = [65, 30, 45, 85, 80, 90];
-                    reportHtml = `<div class="pos-data-card" style="display:flex;"><div class="pos-data-icon">⚖️</div><div class="pos-data-text"><div class="pos-data-title">肩胛骨运动障碍 (Scapular Dyskinesis) <span>重度代偿</span></div><div class="pos-data-desc"><strong>力学评估:</strong> 肩带稳定性彻底破坏。前锯肌无力导致肩胛骨无法贴合胸廓，盂肱关节节律失常，极易引发肩袖损伤。</div><div class="pos-advice"><strong>💡 结构优化建议:</strong> 严禁任何过头推举！立即进行前锯肌激活与肩袖肌群的静态等长收缩训练。</div></div></div>`;
-                } else if(pain === 'p8') {
-                    baseData = [70, 65, 60, 65, 55, 70];
-                    reportHtml = `<div class="pos-data-card" style="display:flex;"><div class="pos-data-icon">🔋</div><div class="pos-data-text"><div class="pos-data-title">神经内分泌失调 (CNS Dysfunction) <span>整体受限</span></div><div class="pos-data-desc"><strong>力学评估:</strong> 六大指标呈现系统性萎缩。长期的慢性疲劳导致皮质醇飙升，身体进入“应激囤脂模式”，基础代谢率彻底停滞。</div><div class="pos-advice"><strong>💡 结构优化建议:</strong> 严禁节食与高强度HIIT！初期需通过低心率有氧与筋膜放松，强行恢复副交感神经主导权。</div></div></div>`;
+                // 根据叠加的节点痛点扣除相应部位的健康资产分数
+                // 维度: ['颈椎曲度', '肩带稳定性', '胸椎灵活性', '骨盆中立位', '核心刚性', '下肢力线']
+                if(activeNodes.includes('kn-neck')) {
+                    currentData[0] -= 55; currentData[1] -= 45; currentData[2] -= 20;
+                    reportHtml += `<div class="pos-data-card" style="display:flex;"><div class="pos-data-icon">👤</div><div class="pos-data-text"><div class="pos-data-title">上交叉综合征 (Upper Crossed) <span>重度代偿</span></div><div class="pos-data-desc"><strong>力学评估:</strong> 颈椎承受超额剪切力，斜方肌被动拉长，极易引发偏头痛。</div><div class="pos-advice"><strong>💡 优化建议:</strong> 重建深层颈屈肌力量，预防颈椎生理曲度变直。</div></div></div>`;
+                }
+                if(activeNodes.includes('kn-chest')) {
+                    currentData[2] -= 50; currentData[1] -= 30; currentData[0] -= 15;
+                    reportHtml += `<div class="pos-data-card" style="display:flex;"><div class="pos-data-icon">⭕</div><div class="pos-data-text"><div class="pos-data-title">胸椎后凸 (Thoracic Kyphosis) <span>严重受限</span></div><div class="pos-data-desc"><strong>力学评估:</strong> 胸小肌挛缩限制膈肌升降，引发代偿呼吸与胸闷气短。</div><div class="pos-advice"><strong>💡 优化建议:</strong> 强力松解前侧筋膜链；紧急激活中下斜方肌。</div></div></div>`;
+                }
+                if(activeNodes.includes('kn-core')) {
+                    currentData[4] -= 60; currentData[3] -= 30; currentData[2] -= 10;
+                    reportHtml += `<div class="pos-data-card" style="display:flex;"><div class="pos-data-icon">🔥</div><div class="pos-data-text"><div class="pos-data-title">腹内压丧失 (Core Amnesia) <span>核心塌陷</span></div><div class="pos-data-desc"><strong>力学评估:</strong> 腹横肌休眠，身体被迫囤积内脏脂肪作为腰椎缓冲层。</div><div class="pos-advice"><strong>💡 优化建议:</strong> 停止卷腹！通过 3D 呼吸法重塑腹内压。</div></div></div>`;
+                }
+                if(activeNodes.includes('kn-pelvis')) {
+                    currentData[3] -= 55; currentData[4] -= 20; currentData[5] -= 20;
+                    reportHtml += `<div class="pos-data-card" style="display:flex;"><div class="pos-data-icon">🩻</div><div class="pos-data-text"><div class="pos-data-title">下交叉综合征 (Lower Crossed) <span>结构偏转</span></div><div class="pos-data-desc"><strong>力学评估:</strong> 腰椎替罢工的臀大肌代偿发力，导致严重腰背酸痛与假翘臀。</div><div class="pos-advice"><strong>💡 优化建议:</strong> 剥离髂腰肌粘连筋膜，重新激活臀部神经募集。</div></div></div>`;
+                }
+                if(activeNodes.includes('kn-knee')) {
+                    currentData[5] -= 60; currentData[3] -= 25;
+                    reportHtml += `<div class="pos-data-card" style="display:flex;"><div class="pos-data-icon">🦵</div><div class="pos-data-text"><div class="pos-data-title">下肢力线偏移 (Alignment Collapse) <span>高危磨损</span></div><div class="pos-data-desc"><strong>力学评估:</strong> 膝关节承受了巨大的剪切力，半月板正在加速磨损。</div><div class="pos-advice"><strong>💡 优化建议:</strong> 纠正足弓塌陷，强化臀中肌以稳定股骨。</div></div></div>`;
                 }
 
-                let currentData = baseData.map((val, index) => {
+                // 职业修正系数
+                currentData = currentData.map((val, index) => {
                     let modifier = 0;
                     if(prof === 'prof1') { if(index === 0 || index === 2) modifier -= 10; } 
                     else if(prof === 'prof3') { if(index === 3 || index === 4) modifier -= 15; } 
@@ -581,11 +664,89 @@
                     },
                     options: { responsive: true, maintainAspectRatio: false, scales: { r: { angleLines: { color: 'rgba(255, 255, 255, 0.1)' }, grid: { color: 'rgba(255, 255, 255, 0.1)' }, pointLabels: { color: '#ccc', font: { size: 12, weight: 'bold' } }, ticks: { display: false, min: 0, max: 100 } } }, plugins: { legend: { position: 'bottom', labels: { color: '#fff' } } } }
                 });
-            }, 1500);
+            }, 1800);
         }
 
-        // ================= 基础逻辑 (全套保留) =================
+        // ================= 🚨 V3.0 电子签署画板逻辑 =================
+        let sigCanvas, sigCtx, isDrawing = false;
+
+        function openSignatureBoard() {
+            closeModal('assetModal');
+            document.getElementById('sigModal').classList.add('show');
+            setTimeout(initSignature, 300); // Wait for modal to render
+        }
+
+        function initSignature() {
+            sigCanvas = document.getElementById('sig-canvas');
+            const rect = sigCanvas.parentElement.getBoundingClientRect();
+            sigCanvas.width = rect.width;
+            sigCanvas.height = rect.height;
+            sigCtx = sigCanvas.getContext('2d');
+            sigCtx.lineWidth = 3;
+            sigCtx.strokeStyle = '#D4AF37';
+            sigCtx.lineCap = 'round';
+            sigCtx.lineJoin = 'round';
+
+            sigCanvas.addEventListener('touchstart', startDraw, {passive: false});
+            sigCanvas.addEventListener('touchmove', drawing, {passive: false});
+            sigCanvas.addEventListener('touchend', stopDraw);
+            sigCanvas.addEventListener('mousedown', startDraw);
+            sigCanvas.addEventListener('mousemove', drawing);
+            sigCanvas.addEventListener('mouseup', stopDraw);
+            sigCanvas.addEventListener('mouseleave', stopDraw);
+        }
+
+        function startDraw(e) {
+            e.preventDefault(); isDrawing = true; document.getElementById('sig-placeholder').style.display = 'none';
+            let x = e.clientX || e.touches[0].clientX; let y = e.clientY || e.touches[0].clientY;
+            let rect = sigCanvas.getBoundingClientRect();
+            sigCtx.beginPath(); sigCtx.moveTo(x - rect.left, y - rect.top);
+        }
+        function drawing(e) {
+            if(!isDrawing) return; e.preventDefault();
+            let x = e.clientX || e.touches[0].clientX; let y = e.clientY || e.touches[0].clientY;
+            let rect = sigCanvas.getBoundingClientRect();
+            sigCtx.lineTo(x - rect.left, y - rect.top); sigCtx.stroke();
+        }
+        function stopDraw() { isDrawing = false; }
+        function clearSignature() { sigCtx.clearRect(0, 0, sigCanvas.width, sigCanvas.height); document.getElementById('sig-placeholder').style.display = 'block'; }
+
+        function saveSignature() {
+            const can = document.getElementById('hiddenCanvas'); can.width = 800; can.height = 1000; const ctx = can.getContext('2d');
+            ctx.fillStyle = '#050505'; ctx.fillRect(0,0,800,1000); ctx.strokeStyle = '#D4AF37'; ctx.lineWidth = 4; ctx.strokeRect(20,20,760,960);
+            
+            ctx.fillStyle = '#D4AF37'; ctx.font = 'bold 46px sans-serif'; ctx.textAlign = 'center'; ctx.fillText('物理资产重塑委托协议', 400, 120); 
+            ctx.fillStyle = '#888'; ctx.font = '24px sans-serif'; ctx.fillText('ASSET REMODELING PROTOCOL', 400, 160);
+            
+            ctx.textAlign = 'left'; ctx.fillStyle = '#fff'; ctx.font = '28px sans-serif';
+            let text = "基于 ACE 国际生物力学标准，检测到您的物理资产存在重度动力链代偿风险。为避免进一步的不可逆折旧，本中心将为您启动为期 3 个月的高定重塑计划。";
+            wrapText(ctx, text, 60, 260, 680, 45);
+
+            ctx.fillStyle = '#111'; ctx.fillRect(60, 500, 680, 350); ctx.strokeStyle = '#333'; ctx.strokeRect(60, 500, 680, 350);
+            ctx.fillStyle = '#888'; ctx.font = '24px sans-serif'; ctx.fillText('资产委托人签名：', 80, 550);
+            
+            // 贴上手写签名
+            ctx.drawImage(sigCanvas, 80, 580, sigCanvas.width * 1.5, sigCanvas.height * 1.5);
+            
+            // 贴上虚拟印章
+            ctx.strokeStyle = 'rgba(212,175,55,0.6)'; ctx.lineWidth = 8; ctx.beginPath(); ctx.arc(600, 750, 60, 0, Math.PI*2); ctx.stroke();
+            ctx.fillStyle = 'rgba(212,175,55,0.6)'; ctx.font = 'bold 22px sans-serif'; ctx.textAlign = 'center';
+            ctx.translate(600, 750); ctx.rotate(-Math.PI/6); ctx.fillText('LUXIOU', 0, -10); ctx.fillText('APPROVED', 0, 20); ctx.rotate(Math.PI/6); ctx.translate(-600, -750);
+
+            ctx.textAlign = 'left'; ctx.fillStyle = '#666'; ctx.font = '20px sans-serif'; ctx.fillText(`签署日期：${currDateStr}`, 60, 920);
+
+            document.getElementById('final-poster').src = can.toDataURL('image/png');
+            closeModal('sigModal'); document.getElementById('posterModal').classList.add('show');
+        }
+
+        // ================= 基础逻辑 =================
         window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const vipName = urlParams.get('client_token');
+            if(vipName) {
+                document.getElementById('vip-portal-name').innerText = decodeURIComponent(vipName);
+                document.getElementById('vip-portal').style.display = 'flex'; return; 
+            }
             document.getElementById('my-coach-avatar').src = globalCoachAvatar;
             const request = window.indexedDB.open("LuxiouMegaMatrix", 2); 
             request.onupgradeneeded = function(e) {
@@ -696,10 +857,11 @@
         function delMeal(mt, idx) { if(confirm("删除此记录？")) { getDaily().meals[mt].splice(idx,1); saveClients(); syncTrackUI(); } }
 
         function getHashFood(str) { let h=0; for(let i=0;i<str.length;i++){ h=((h<<5)-h)+str.charCodeAt(i); h|=0; } return Math.abs(h); }
+        
         function runFoodAIMock(evt, mode) {
             const files = Array.from(evt.target.files); if(files.length === 0) return;
             const box = document.getElementById('scanBoxImage');
-            box.style.borderRadius = '16px'; box.style.borderColor = '#D4AF37'; box.style.boxShadow = '0 0 30px rgba(212,175,55,0.3)';
+            box.style.backgroundImage = 'none'; box.style.borderRadius = '16px'; box.style.borderColor = '#D4AF37'; box.style.boxShadow = '0 0 30px rgba(212,175,55,0.3)';
             document.getElementById('scanInnerIcon').style.display = 'none'; document.getElementById('scanCircleAnim').style.display = 'none';
             const line = document.getElementById('scanLineAnim'); line.style.display = 'block'; line.style.background = '#D4AF37'; line.style.boxShadow = '0 0 20px 5px rgba(212,175,55,0.6)';
             document.getElementById('scanText').style.color = '#D4AF37';
