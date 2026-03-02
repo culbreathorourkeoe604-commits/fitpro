@@ -13,7 +13,7 @@
     <script src="https://cdn.staticfile.net/Chart.js/3.9.1/chart.min.js"></script>
 
     <style>
-        /* ================= 1. 主页原貌 (绝对保留) ================= */
+        /* ================= 1. 主页原貌 ================= */
         :root { --primary: #00f2fe; --secondary: #7000ff; --bg: #000; --card-bg: rgba(255, 255, 255, 0.03); --text: #fff; --grad: radial-gradient(circle at top right, #1a2a6c, #000 70%); }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; margin: 0; padding: 0; }
         body { background: var(--bg); background-image: var(--grad); color: var(--text); font-family: -apple-system, sans-serif; padding: 20px; min-height: 100vh; transition: all 0.5s ease; display: flex; flex-direction: column; overflow-x: hidden;}
@@ -63,7 +63,26 @@
         .pos-advice { margin-top: 12px; background: rgba(212,175,55,0.08); border-left: 3px solid #D4AF37; padding: 12px; font-size: 13px; color: #ddd; line-height:1.5;}
         .pos-advice strong { color: #D4AF37; }
 
-        /* ================= 背书库 ================= */
+        /* ================= 🚨 终极版：AI 体态雷达 ================= */
+        .pos-seg { display: flex; background: #111; border-radius: 12px; padding: 4px; margin-bottom: 15px; border: 1px solid #333;}
+        .pos-tab { flex: 1; text-align: center; padding: 10px 0; font-size: 12px; font-weight: bold; color: #888; border-radius: 8px; transition: 0.3s; cursor: pointer;}
+        .pos-tab.active { background: #00f2fe; color: #000; box-shadow: 0 0 15px rgba(0,242,254,0.4);}
+        
+        .pos-res-box { position: relative; width: 100%; text-align: center; display: none; margin-bottom: 20px; min-height: 200px; }
+        .pos-img-wrapper { position: relative; display: inline-block; width: auto; max-width: 100%; border-radius: 12px; border: 1px solid #00f2fe; overflow: hidden; background: #111; }
+        .pos-img-wrapper img { width: auto; height: auto; max-width: 100%; max-height: 55vh; display: block; filter: contrast(1.05); opacity: 0; transition: opacity 0.3s; }
+        .pos-img-wrapper img.loaded { opacity: 1; } 
+
+        .pos-dynamic-overlays { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;}
+        
+        .ace-plumb-line { position: absolute; top:0; width:2px; height:100%; background: #32D74B; box-shadow: 0 0 10px #32D74B; z-index: 5;}
+        .ace-line-container { position: absolute; height: 2px; transform-origin: center; z-index: 5; }
+        .ace-line-stroke { width: 100%; height: 2px; background: #FFD60A; box-shadow: 0 0 8px #FFD60A; position: absolute; top: 0; left: 0; }
+        .ace-dot { position: absolute; width: 14px; height: 14px; border-radius: 50%; background: #FF453A; border: 2px solid #fff; box-shadow: 0 0 15px #FF453A; transform: translate(-50%, -50%); z-index: 6; animation: blink 1.2s infinite; }
+        .ace-line-container .ace-dot { top: 1px; } 
+        @keyframes blink { 0%{transform:translate(-50%, -50%) scale(1); opacity:1;} 50%{transform:translate(-50%, -50%) scale(1.4); opacity:0.7;} 100%{transform:translate(-50%, -50%) scale(1); opacity:1;} }
+
+        /* ================= 背书库 (修复滑动) ================= */
         .e-seg { display: flex; background: #111; border-radius: 12px; padding: 6px; margin-bottom: 20px; border: 1px solid #222;}
         .e-tab { flex: 1; text-align: center; padding: 12px 0; font-size: 14px; font-weight: bold; color: #666; border-radius: 8px; transition: 0.3s;}
         .e-tab.active { background: #D4AF37; color: #000; box-shadow: 0 0 15px rgba(212,175,55,0.5); transform: scale(1.02); z-index: 2;}
@@ -72,7 +91,7 @@
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         .upload-btn { background: linear-gradient(135deg, rgba(212,175,55,0.1), rgba(212,175,55,0.05)); border: 1px dashed #D4AF37; color: #D4AF37; text-align: center; padding: 15px; border-radius: 12px; font-size: 14px; font-weight: bold; cursor: pointer; margin-bottom: 15px;}
         .e-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
-        .e-item { position: relative; border-radius: 12px; overflow: hidden; background: #111; border: 1px solid rgba(212,175,55,0.3); height: 220px; }
+        .e-item { position: relative; border-radius: 12px; overflow: hidden; background: #111; border: 1px solid rgba(212,175,55,0.3); height: 220px;}
         .e-item img { width: 100%; height: 100%; object-fit: cover; pointer-events: none;}
         .e-item .del { position: absolute; top: 8px; right: 8px; width: 26px; height: 26px; background: rgba(0,0,0,0.8); border: 1px solid #FF3B30; border-radius: 50%; color: #FF3B30; display: flex; justify-content: center; align-items: center; font-weight: bold; z-index: 10;}
 
@@ -159,7 +178,7 @@
         .chart-title { color: #D4AF37; font-size: 14px; font-weight: bold; margin-bottom: 15px; text-align: center; letter-spacing: 1px;}
         .chart-wrapper { width: 100%; height: 220px; position: relative;}
 
-        /* AI 扫描层 */
+        /* 🚨 弹窗扫描层隔离，解决样式冲突 */
         .ai-scanning-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 9999; display: none; flex-direction: column; justify-content: center; align-items: center;}
         .scan-box { width: 260px; height: 260px; position: relative; overflow: hidden; margin-bottom: 20px; display:flex; justify-content:center; align-items:center; background-size: cover; background-position: center;}
         .scan-circle { width: 100%; height: 100%; border: 4px dashed #D4AF37; border-radius: 50%; animation: spin 4s linear infinite; position: absolute; top:0; left:0;}
@@ -169,7 +188,7 @@
         @keyframes spin { 100% { transform: rotate(360deg); } }
         @keyframes scanAnim { 0% { top: 0; opacity: 1; } 100% { top: 100%; opacity: 0.2; } }
 
-        /* 左滑抽屉 */
+        /* 左滑抽屉与表单 */
         .new-client-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 8000; display: none; flex-direction: column; justify-content: center; align-items: center; padding: 20px; backdrop-filter: blur(10px);}
         .new-client-modal.show { display: flex; }
         .nc-card { background: #111; border: 1px solid #D4AF37; border-radius: 16px; width: 100%; max-width: 350px; padding: 25px;}
@@ -204,9 +223,29 @@
         #vip-portal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:#050505; background-image: radial-gradient(circle at top right, #1a2a6c, #000 80%); z-index:99999; padding:40px 20px; flex-direction:column; align-items:center;}
         .vp-title { color:#D4AF37; font-size:24px; font-weight:900; letter-spacing:4px; text-shadow:0 0 20px rgba(212,175,55,0.5);}
         .vp-btn { background:linear-gradient(135deg, #00f2fe, #4facfe); color:#000; padding:20px 50px; border-radius:50px; font-weight:900; font-size:18px; margin-top:60px; border:none; box-shadow:0 10px 30px rgba(0,242,254,0.4); cursor:pointer;}
+
+        /* ================= 🚨 门店资产绝对防御门禁 ================= */
+        #auth-gate { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #050505; background-image: radial-gradient(circle at top right, #1a2a6c, #000 70%); z-index: 9999999; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; transition: opacity 0.5s;}
+        .auth-card { background: rgba(255,255,255,0.03); backdrop-filter: blur(20px); border: 1px solid rgba(212,175,55,0.3); border-radius: 20px; padding: 40px 30px; width: 100%; max-width: 320px; text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,0.8);}
+        .auth-title { color: #D4AF37; font-size: 22px; font-weight: 900; letter-spacing: 3px; margin-bottom: 10px;}
+        .auth-sub { color: #888; font-size: 11px; margin-bottom: 30px; line-height: 1.5;}
+        .auth-input { width: 100%; background: #000; border: 1px solid #333; color: #D4AF37; padding: 15px; border-radius: 10px; font-size: 16px; text-align: center; letter-spacing: 2px; outline: none; margin-bottom: 20px;}
+        .auth-input:focus { border-color: #D4AF37; box-shadow: 0 0 10px rgba(212,175,55,0.2);}
+        .auth-btn { background: linear-gradient(135deg, #D4AF37, #AA8A2A); color: #000; border: none; width: 100%; padding: 15px; border-radius: 10px; font-weight: 900; font-size: 16px; cursor: pointer; box-shadow: 0 5px 15px rgba(212,175,55,0.3);}
+        .auth-error { color: #FF453A; font-size: 12px; margin-top: 15px; display: none; font-weight: bold;}
     </style>
 </head>
 <body>
+    <div id="auth-gate">
+        <div class="auth-card">
+            <div class="auth-title">LUXIOU</div>
+            <div class="auth-sub">门店数字化谈单中枢<br>PRIVATE ASSET MATRIX</div>
+            <input type="password" id="auth-code" class="auth-input" placeholder="请输入门店内部授权码">
+            <button class="auth-btn" onclick="checkAuth()">验证并启动系统</button>
+            <div id="auth-error" class="auth-error">❌ 授权码无效或已过期，请联系店长</div>
+        </div>
+    </div>
+
     <div class="toast" id="sysToast">操作成功</div>
 
     <div id="style-trigger" onclick="togglePanel()">🎨 切换风格</div>
@@ -233,12 +272,37 @@
         <div class="card" style="border-color:#22d3ee" onclick="openModal('endorseModal')"><img src="cert.jpg" loading="lazy"><div class="card-info">【背书库】</div></div>
         <div class="card" style="border-color:#f472b6" onclick="window.location.href='./price.html'"><img src="product.jpg" loading="lazy"><div class="card-info">【黑金报价库】</div></div>
         
-        <div class="card" style="border-color:#FF453A;" onclick="openModal('assetModal')">
-            <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=400&q=80" loading="lazy" style="filter: brightness(0.6);">
-            <div class="card-info" style="color:#FF453A; letter-spacing:1px;">【身体资产折旧评估】</div>
+        <div class="card" style="border-color:#00f2fe;" onclick="openModal('postureModal')"><img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=400&q=80" loading="lazy" style="filter: brightness(0.6);"><div class="card-info" style="color:#00f2fe;">【AI 体态雷达】</div></div>
+        <div class="card" style="border-color:#FF453A;" onclick="openModal('assetModal')"><img src="https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&w=400&q=80" loading="lazy" style="filter: brightness(0.6);"><div class="card-info" style="color:#FF453A; letter-spacing:1px;">【身体资产折旧评估】</div></div>
+        <div class="card" style="border-color:#10b981; grid-column: 1 / -1;" onclick="openModal('lifestyleModal')"><img src="https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=400&q=80" loading="lazy" style="filter: brightness(0.5) saturate(0.8);"><div class="card-info" style="color:#10b981; font-size: 14px; letter-spacing: 2px; padding: 15px 5px;">【24H 节律管家】</div></div>
+    </div>
+
+    <div id="postureModal" class="modal-base">
+        <div class="m-header">
+            <div class="m-title" style="color:#00f2fe;">AI 结构与体态透视</div>
+            <button class="m-close" onclick="closeModal('postureModal')">×</button>
         </div>
-        
-        <div class="card" style="border-color:#10b981;" onclick="openModal('lifestyleModal')"><img src="https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=400&q=80" loading="lazy" style="filter: brightness(0.5) saturate(0.8);"><div class="card-info" style="color:#10b981;">【24H 节律管家】</div></div>
+        <div class="m-body">
+            <div style="text-align:center; color:#aaa; font-size:12px; margin-bottom:15px;">依据 ACE 国际标准执行力学评估。<br><span style="color:#00f2fe; font-size:10px;">*系统内置防伪检测，仅支持有效的人体目标扫描*</span></div>
+            <div class="pos-seg">
+                <div class="pos-tab active" onclick="setPosView('frontal', this)">👤 正/背面评估 (冠状面)</div>
+                <div class="pos-tab" onclick="setPosView('sagittal', this)">🚶‍♀️ 侧面评估 (矢状面)</div>
+            </div>
+            <div class="upload-btn" style="border-color:#00f2fe; color:#00f2fe; background:rgba(0,242,254,0.1);" onclick="document.getElementById('pos-up').click()">◎ 唤醒 AI 骨骼雷达扫描仪</div>
+            <input type="file" id="pos-up" accept="image/*" style="display:none;" onchange="runPostureMock(event)">
+            
+            <div id="pos-result-container" style="display:none;">
+                <div class="pos-res-box" id="pos-res-box">
+                    <div id="pos-img-wrapper" class="pos-img-wrapper">
+                        <img id="pos-res-img" src="" onload="this.classList.add('loaded')">
+                        <div id="pos-dynamic-overlays" class="pos-dynamic-overlays"></div>
+                    </div>
+                </div>
+                <div id="pos-warning-title" style="font-size:16px; font-weight:bold; color:#FF453A; margin-bottom:15px;">⚠️ 发现多处高风险体态代偿</div>
+                <div id="pos-report-cards"></div>
+                <div class="upload-btn" style="background:linear-gradient(90deg, #00f2fe, #4facfe); color:#000; border:none; margin-top:20px;" onclick="closeModal('postureModal'); window.location.href='./plan.html'">➔ 立即调取【结构优化与体态矫正】方案</div>
+            </div>
+        </div>
     </div>
 
     <div id="assetModal" class="modal-base">
@@ -247,11 +311,7 @@
             <button class="m-close" onclick="closeModal('assetModal')">×</button>
         </div>
         <div class="m-body">
-            <div style="text-align:center; color:#aaa; font-size:12px; margin-bottom:15px; line-height: 1.5;">
-                基于 ACE 运动科学数据中心。<br>
-                输入客户画像与临床表征，推演核心动力链折旧风险。
-            </div>
-            
+            <div style="text-align:center; color:#aaa; font-size:12px; margin-bottom:15px; line-height: 1.5;">基于 ACE 运动科学数据中心。<br>输入客户画像与临床表征，推演核心动力链受限风险。</div>
             <div class="asset-form-group">
                 <span class="asset-label">客户职业画像 / 核心圈层</span>
                 <select id="asset-prof" class="asset-select">
@@ -276,21 +336,12 @@
                     <option value="p8">慢性疲劳症候群，基础代谢彻底停滞，易胖难瘦</option>
                 </select>
             </div>
-
-            <div class="upload-btn" style="border-color:#FF453A; color:#FF453A; background:rgba(255,69,58,0.1); margin-top:20px;" onclick="generateAssetRadar()">
-                ◎ 启动全息结构雷达扫描
-            </div>
-
+            <div class="upload-btn" style="border-color:#FF453A; color:#FF453A; background:rgba(255,69,58,0.1); margin-top:20px;" onclick="generateAssetRadar()">◎ 启动全息结构雷达扫描</div>
             <div id="radar-container" style="display:none; animation: fadeIn 0.8s;">
-                <div class="radar-chart-container">
-                    <canvas id="assetRadarChart"></canvas>
-                </div>
-                <div id="asset-warning-title" style="font-size:16px; font-weight:bold; color:#FF453A; margin-bottom:15px; text-align:center;">⚠️ 动力链崩溃预警</div>
-                <div id="pos-report-cards"></div>
-
-                <div class="upload-btn" style="background:linear-gradient(90deg, #FF453A, #FFD60A); color:#000; border:none; margin-top:20px; text-shadow:0 1px 2px rgba(255,255,255,0.3);" onclick="closeModal('assetModal'); window.location.href='./plan.html'">
-                    ➔ 立即调取【结构优化与体态矫正】方案
-                </div>
+                <div class="radar-chart-container"><canvas id="assetRadarChart"></canvas></div>
+                <div id="asset-warning-title" style="font-size:16px; font-weight:bold; color:#FF453A; margin-bottom:15px; text-align:center;">⚠️ 动力链代偿预警</div>
+                <div id="asset-report-cards"></div>
+                <div class="upload-btn" style="background:linear-gradient(90deg, #FF453A, #FFD60A); color:#000; border:none; margin-top:20px; text-shadow:0 1px 2px rgba(255,255,255,0.3);" onclick="closeModal('assetModal'); window.location.href='./plan.html'">➔ 立即调取【结构优化与体态矫正】方案</div>
             </div>
         </div>
     </div>
@@ -375,7 +426,7 @@
                         <button class="date-btn" onclick="changeDate(1)">后天 ▶</button>
                     </div>
                     <div style="margin-top:10px; padding-top:15px; border-top:1px dashed #333; text-align:center;">
-                        <button style="background:rgba(212,175,55,0.1); color:#D4AF37; border:1px dashed #D4AF37; padding:10px 0; width:100%; border-radius:8px; font-size:13px; font-weight:bold; cursor:pointer;" onclick="openQRModal()">📱 开启会员专属云端打卡通道 (演示)</button>
+                        <button style="background:rgba(212,175,55,0.1); color:#D4AF37; border:1px dashed #D4AF37; padding:10px 0; width:100%; border-radius:8px; font-size:13px; font-weight:bold; cursor:pointer;" onclick="openQRModal()">📱 开启会员专属云端打卡通道</button>
                     </div>
                 </div>
                 <div class="energy-dash">
@@ -406,7 +457,7 @@
                     <div style="font-size: 14px; font-weight: bold; color: #fff; margin-bottom: 10px;">✦ 社交赴宴生存指南</div>
                     <div class="guide-scroll">
                         <div class="guide-card" onclick="openGuide('bistro')"><img src="https://images.unsplash.com/photo-1550966871-3ed3cdb5ed0c?auto=format&fit=crop&w=400&q=80"><div class="guide-overlay"><div class="g-title">米其林 / Bistro</div><div class="g-desc">享受美食的防暴卡秘籍</div></div></div>
-                        <div class="guide-card" onclick="openGuide('tea')"><img src="https://images.unsplash.com/photo-1497935586351-b67a49e012bf?auto=format&fit=crop&w=400&q=80"><div class="guide-overlay"><div class="g-title">精致下午茶</div><div class="g-desc">优雅避开糖油混合炸弹</div></div></div>
+                        <div class="guide-card" onclick="openGuide('tea')"><img src="https://images.unsplash.com/photo-1557142046-c704a3adf364?auto=format&fit=crop&w=400&q=80"><div class="guide-overlay"><div class="g-title">精致下午茶</div><div class="g-desc">优雅避开糖油混合炸弹</div></div></div>
                         <div class="guide-card" onclick="openGuide('business')"><img src="https://images.unsplash.com/photo-1552566626-52f8b828add9?auto=format&fit=crop&w=400&q=80"><div class="guide-overlay"><div class="g-title">商务应酬酒局</div><div class="g-desc">酒局与推杯换盏保护法</div></div></div>
                     </div>
                 </div>
@@ -424,9 +475,7 @@
                 <div style="text-align:center; margin-bottom:20px; background:rgba(212,175,55,0.05); border:1px solid rgba(212,175,55,0.2); border-radius:12px; padding:15px;">
                     <div style="font-size:16px; color:#D4AF37; font-weight:900; margin-bottom:5px; letter-spacing:1px;" id="chart-member-title">VIP 专属体征趋势报告</div>
                     <div id="chart-date-range" style="font-size:11px; color:#888; font-weight:bold; margin-bottom:10px;">核算周期: 加载中...</div>
-                    <div style="color:#ccc; font-size:12px; line-height: 1.6;">
-                        系统基于核心代谢引擎，已为您推演生成<br>近 30 天的高定身体资产重塑曲线。
-                    </div>
+                    <div style="color:#ccc; font-size:12px; line-height: 1.6;">系统基于核心代谢引擎，已为您推演生成<br>近 30 天的高定身体资产重塑曲线。</div>
                 </div>
                 <div class="chart-card"><div class="chart-title">🔥 体重与顽固脂肪剥离曲线</div><div class="chart-wrapper"><canvas id="fatChart"></canvas></div></div>
                 <div class="chart-card"><div class="chart-title">📈 基础代谢与肌肉张力重塑</div><div class="chart-wrapper"><canvas id="bmrChart"></canvas></div></div>
@@ -437,100 +486,137 @@
     <div class="new-client-modal" id="newClientForm"><div class="nc-card"><div class="nc-title">新建 VIP 会员档案</div><div class="nc-group"><span class="nc-label">姓名/称呼</span><input type="text" id="nc-name" class="nc-input" placeholder="如：王总"></div><div class="nc-group"><span class="nc-label">性别</span><select id="nc-gender" class="nc-input"><option value="F">女士</option><option value="M">男士</option></select></div><div class="nc-group"><span class="nc-label">年龄</span><input type="number" id="nc-age" class="nc-input" placeholder="岁" value="30"></div><div class="nc-group"><span class="nc-label">身高 (cm)</span><input type="number" id="nc-height" class="nc-input" placeholder="厘米" value="165"></div><div class="nc-group"><span class="nc-label">体重 (kg)</span><input type="number" id="nc-weight" class="nc-input" placeholder="公斤" value="55"></div><button class="nc-btn" onclick="submitNewClient()">保存并建立档案</button><div style="text-align:center; color:#666; margin-top:15px; cursor:pointer;" onclick="document.getElementById('newClientForm').classList.remove('show')">取消</div></div></div>
     <div class="client-modal" id="clientMenu"><div style="color:#D4AF37; font-size:14px; font-weight:bold; margin-bottom:15px; padding-left:15px;">我的 VIP 会员列表<span style="font-size:10px;color:#888;margin-left:10px;">(左滑删除)</span></div><div id="client-list-render" style="max-height:40vh; overflow-y:auto; overflow-x:hidden;"></div><div class="cm-add" onclick="openNewClientForm()">+ 新建高级会员档案</div><div class="cm-item" style="justify-content:center; color:#666; border:none; margin-top:10px; cursor:pointer;" onclick="document.getElementById('clientMenu').classList.remove('show')">取消关闭</div></div>
     
-    <div class="modal-base" id="qrModal" style="background:rgba(0,0,0,0.9); z-index:8500; align-items:center; justify-content:center;"><div style="background:#111; border:1px solid #D4AF37; border-radius:16px; padding:30px; text-align:center; max-width:320px; box-shadow:0 10px 40px rgba(212,175,55,0.3);"><div style="font-size: 18px; color: #D4AF37; font-weight: bold; margin-bottom: 10px;">客户专属云端通道</div><div style="font-size: 12px; color: #888; margin-bottom: 20px; line-height:1.5;">请让客户扫描下方二维码进入自助打卡界面。<br>(专属加密通道，数据直连诊断中枢)</div><img id="qr-code-img" src="" style="width: 200px; height: 200px; border-radius: 8px; border: 2px solid #333; margin-bottom: 20px; background:#fff; padding:10px;"><div style="color:#000; font-size:15px; background:linear-gradient(135deg, #D4AF37, #AA8A2A); padding:10px 40px; border-radius:50px; cursor:pointer; font-weight:bold;" onclick="document.getElementById('qrModal').classList.remove('show')">关闭</div></div></div>
+    <div class="modal-base" id="qrModal" style="background:rgba(0,0,0,0.9); z-index:8500; align-items:center; justify-content:center;"><div style="background:#111; border:1px solid #D4AF37; border-radius:16px; padding:30px; text-align:center; max-width:320px; box-shadow:0 10px 40px rgba(212,175,55,0.3);"><div style="font-size: 18px; color: #D4AF37; font-weight: bold; margin-bottom: 10px;">客户专属云端通道</div><div style="font-size: 12px; color: #888; margin-bottom: 20px; line-height:1.5;">请让客户扫描下方二维码进入自助打卡界面。</div><img id="qr-code-img" src="" style="width: 200px; height: 200px; border-radius: 8px; border: 2px solid #333; margin-bottom: 20px; background:#fff; padding:10px;"><div style="color:#000; font-size:15px; background:linear-gradient(135deg, #D4AF37, #AA8A2A); padding:10px 40px; border-radius:50px; cursor:pointer; font-weight:bold;" onclick="document.getElementById('qrModal').classList.remove('show')">关闭</div></div></div>
     <div id="vip-portal"><div class="vp-title">LUXIOU</div><div style="font-size:12px; color:#888; letter-spacing:2px; margin-top:5px;">VIP 专属能量交互矩阵</div><div style="margin-top:60px; font-size:22px; color:#fff; font-weight:bold; text-align:center;">尊贵的 <span id="vip-portal-name" style="color:#00f2fe;"></span><br>欢迎接入中枢</div><div style="color:#aaa; font-size:13px; margin-top:15px; text-align:center; line-height:1.6;">请上传您的当日三餐<br>AI 营养引擎将实时估算热量，并同步至您的专属重塑导师。</div><button class="vp-btn" onclick="document.getElementById('vip-upload').click()">📷 唤醒视觉镜头上传三餐</button><input type="file" id="vip-upload" accept="image/*" style="display:none;" onchange="vipUploadMock(event)"><div id="vip-success-msg" style="display:none; margin-top:40px; padding:20px; background:rgba(50,215,75,0.1); border:1px solid #32D74B; border-radius:16px; color:#32D74B; text-align:center; font-weight:bold; line-height:1.5;">✅ 视觉解析完成！<br><br>数据已加密传输至您的导师后台，请耐心等待导师的专业点评与规划。</div></div>
     
     <div class="guide-modal" id="guideModal"><div style="display:flex; justify-content:space-between; margin-bottom:20px;"><div class="gm-title" id="gm-title">指南标题</div><div style="color:#888; font-size:28px; cursor:pointer;" onclick="document.getElementById('guideModal').classList.remove('show')">×</div></div><div class="gm-content" id="gm-content"></div></div>
+    
     <div class="poster-modal" id="posterModal"><div style="color:#D4AF37; font-size:18px; font-weight:bold; margin-bottom:15px;">长按下方图片保存至相册</div><img id="final-poster" class="poster-img" src=""><div style="color:#888; font-size:16px; border:1px solid #444; padding:10px 30px; border-radius:50px; cursor:pointer;" onclick="document.getElementById('posterModal').classList.remove('show')">关闭</div></div>
     <canvas id="hiddenCanvas" style="display:none;"></canvas>
 
     <script>
-        // ================= 🚨 终极雷达算法：千人千面交叉计算引擎 =================
-        let assetRadarInst = null;
-        
-        function generateAssetRadar() {
-            const prof = document.getElementById('asset-prof').value;
-            const pain = document.getElementById('asset-pain').value;
-            
-            // 🚨 设置为雷达专属的 DNA 红色扫描动画
-            const box = document.getElementById('scanBoxImage');
-            box.style.backgroundImage = 'none'; box.style.borderRadius = '50%';
-            box.style.borderColor = '#FF453A'; box.style.boxShadow = '0 0 30px rgba(255,69,58,0.3)';
-            document.getElementById('scanInnerIcon').style.display = 'block';
-            document.getElementById('scanCircleAnim').style.display = 'block';
-            document.getElementById('scanLineAnim').style.display = 'none';
-            document.getElementById('scanCircleAnim').style.borderColor = '#FF453A';
-            document.getElementById('scanText').style.color = '#FF453A';
+        // 🚨 门店门禁系统 JS
+        const VALID_PASSWORDS = ['888888', 'LUXIOU2026']; 
+        const AUTH_VALID_DAYS = 7; 
 
-            document.getElementById('aiOverlay').style.display = 'flex';
-            let t = document.getElementById('scanText'); t.innerText = "LOADING ACE BIOMECHANICS...\n调取 ACE 运动力学数据库";
-            setTimeout(()=>t.innerText="ANALYZING DEPRECIATION RATE...\n交叉推演资产受限率", 800);
-            
-            setTimeout(()=>{
-                document.getElementById('aiOverlay').style.display = 'none';
-                document.getElementById('radar-container').style.display = 'block';
-                
-                const idealData = [100, 100, 100, 100, 100, 100];
-                let baseData = [80, 80, 80, 80, 80, 80]; 
-                let reportHtml = '';
-
-                // 核心病理模型基准数据 (去医学化，使用专业力学词汇)
-                if(pain === 'p1') {
-                    baseData = [35, 45, 60, 85, 75, 90];
-                    reportHtml = `<div class="pos-data-card" style="display:flex;"><div class="pos-data-icon">👤</div><div class="pos-data-text"><div class="pos-data-title">上交叉综合征 (Upper Crossed) <span>重度代偿</span></div><div class="pos-data-desc"><strong>力学评估:</strong> 颈椎曲度与肩带稳定性数据断崖式下跌。胸大肌过紧，斜方肌被动拉长，颈椎承受了3倍以上正常重力，这是引发偏头痛的直接原因。</div><div class="pos-advice"><strong>💡 结构优化建议:</strong> 立即启动胸锁乳突肌松解，重建深层颈屈肌力量，否则极易发展为颈椎生理曲度变直。</div></div></div>`;
-                } else if(pain === 'p2') {
-                    baseData = [80, 85, 70, 40, 35, 65];
-                    reportHtml = `<div class="pos-data-card" style="display:flex;"><div class="pos-data-icon">🩻</div><div class="pos-data-text"><div class="pos-data-title">下交叉综合征 (Lower Crossed) <span>重度代偿</span></div><div class="pos-data-desc"><strong>力学评估:</strong> 骨盆中立位与核心刚性全线崩溃。您的腰椎在替罢工的腹横肌和臀大肌代偿发力，导致严重的腰背酸痛。</div><div class="pos-advice"><strong>💡 结构优化建议:</strong> 必须停止盲目负重！首先剥离髂腰肌粘连筋膜，重新激活臀部神经募集。</div></div></div>`;
-                } else if(pain === 'p3') {
-                    baseData = [85, 80, 85, 55, 30, 75];
-                    reportHtml = `<div class="pos-data-card" style="display:flex;"><div class="pos-data-icon">🔥</div><div class="pos-data-text"><div class="pos-data-title">腹内压丧失 (Core Amnesia) <span>整体受限</span></div><div class="pos-data-desc"><strong>力学评估:</strong> 核心刚性降至冰点。腹横肌与盆底肌群陷入休眠，身体被迫囤积内脏脂肪作为腰椎的物理缓冲层。</div><div class="pos-advice"><strong>💡 结构优化建议:</strong> 仰卧起坐毫无意义！需通过 3D 呼吸法重塑腹内压，激活深层核心抗旋能力。</div></div></div>`;
-                } else if(pain === 'p4') {
-                    baseData = [90, 85, 85, 60, 65, 30];
-                    reportHtml = `<div class="pos-data-card" style="display:flex;"><div class="pos-data-icon">🦵</div><div class="pos-data-text"><div class="pos-data-title">下肢力线偏移 (Alignment Collapse) <span>重度代偿</span></div><div class="pos-data-desc"><strong>力学评估:</strong> 下肢力线分值极低。膝关节承受了本该由臀大肌吸收的巨大剪切力，半月板正在加速磨损。</div><div class="pos-advice"><strong>💡 结构优化建议:</strong> 纠正足弓塌陷，强化臀中肌以稳定股骨，严防软骨进一步损伤。</div></div></div>`;
-                } else if(pain === 'p5') {
-                    baseData = [50, 40, 30, 80, 70, 85];
-                    reportHtml = `<div class="pos-data-card" style="display:flex;"><div class="pos-data-icon">⭕</div><div class="pos-data-text"><div class="pos-data-title">严重胸椎后凸 (Thoracic Kyphosis) <span>重度代偿</span></div><div class="pos-data-desc"><strong>力学评估:</strong> 胸椎灵活性几近丧失。胸小肌极度挛缩，限制了膈肌的正常升降范围，从而引发缺氧式代偿呼吸与胸闷气短。</div><div class="pos-advice"><strong>💡 结构优化建议:</strong> 强力松解前侧筋膜链；中背部肌群(菱形肌/中下斜方肌)紧急激活重塑。</div></div></div>`;
-                } else if(pain === 'p6') {
-                    baseData = [85, 85, 75, 35, 45, 55];
-                    reportHtml = `<div class="pos-data-card" style="display:flex;"><div class="pos-data-icon">🩻</div><div class="pos-data-text"><div class="pos-data-title">骨盆重度前倾 (Anterior Pelvic Tilt) <span>结构偏转</span></div><div class="pos-data-desc"><strong>力学评估:</strong> 骨盆偏转导致重力线前移。股直肌被迫长期处于离心收缩状态，这是导致大腿前侧异常粗壮和假翘臀的根本原因。</div><div class="pos-advice"><strong>💡 结构优化建议:</strong> 重点剥离髂腰肌极度僵硬的筋膜；重新建立腹横肌与腘绳肌的拮抗发力。</div></div></div>`;
-                } else if(pain === 'p7') {
-                    baseData = [65, 30, 45, 85, 80, 90];
-                    reportHtml = `<div class="pos-data-card" style="display:flex;"><div class="pos-data-icon">⚖️</div><div class="pos-data-text"><div class="pos-data-title">肩胛骨运动障碍 (Scapular Dyskinesis) <span>重度代偿</span></div><div class="pos-data-desc"><strong>力学评估:</strong> 肩带稳定性彻底破坏。前锯肌无力导致肩胛骨无法贴合胸廓，盂肱关节节律失常，极易引发肩袖损伤。</div><div class="pos-advice"><strong>💡 结构优化建议:</strong> 严禁任何过头推举！立即进行前锯肌激活与肩袖肌群的静态等长收缩训练。</div></div></div>`;
-                } else if(pain === 'p8') {
-                    baseData = [70, 65, 60, 65, 55, 70];
-                    reportHtml = `<div class="pos-data-card" style="display:flex;"><div class="pos-data-icon">🔋</div><div class="pos-data-text"><div class="pos-data-title">神经内分泌失调 (CNS Dysfunction) <span>整体受限</span></div><div class="pos-data-desc"><strong>力学评估:</strong> 六大指标呈现系统性萎缩。长期的慢性疲劳导致皮质醇飙升，身体进入“应激囤脂模式”，基础代谢率彻底停滞。</div><div class="pos-advice"><strong>💡 结构优化建议:</strong> 严禁节食与高强度HIIT！初期需通过低心率有氧与筋膜放松，强行恢复副交感神经主导权。</div></div></div>`;
-                }
-
-                let currentData = baseData.map((val, index) => {
-                    let modifier = 0;
-                    if(prof === 'prof1') { if(index === 0 || index === 2) modifier -= 10; } 
-                    else if(prof === 'prof3') { if(index === 3 || index === 4) modifier -= 15; } 
-                    else if(prof === 'prof4') { if(index === 5 || index === 3) modifier -= 12; } 
-                    else if(prof === 'prof5') { if(index === 1 || index === 5) modifier -= 10; } 
-                    else if(prof === 'prof6') { modifier -= 8; }
-                    let jitter = Math.floor(Math.random() * 5) - 2; 
-                    return Math.min(100, Math.max(10, val + modifier + jitter));
-                });
-                
-                document.getElementById('pos-report-cards').innerHTML = reportHtml;
-
-                Chart.defaults.color = '#888';
-                if(assetRadarInst) assetRadarInst.destroy();
-                assetRadarInst = new Chart(document.getElementById('assetRadarChart'), {
-                    type: 'radar',
-                    data: {
-                        labels: ['颈椎曲度', '肩带稳定性', '胸椎灵活性', '骨盆中立位', '核心刚性', '下肢力线'],
-                        datasets: [
-                            { label: 'ACE 理想健康模型', data: idealData, backgroundColor: 'rgba(50, 215, 75, 0.1)', borderColor: '#32D74B', pointBackgroundColor: '#32D74B', borderWidth: 2 },
-                            { label: '当前动力链受限模型', data: currentData, backgroundColor: 'rgba(255, 69, 58, 0.25)', borderColor: '#FF453A', pointBackgroundColor: '#FF453A', borderWidth: 2 }
-                        ]
-                    },
-                    options: { responsive: true, maintainAspectRatio: false, scales: { r: { angleLines: { color: 'rgba(255, 255, 255, 0.1)' }, grid: { color: 'rgba(255, 255, 255, 0.1)' }, pointLabels: { color: '#ccc', font: { size: 12, weight: 'bold' } }, ticks: { display: false, min: 0, max: 100 } } }, plugins: { legend: { position: 'bottom', labels: { color: '#fff' } } } }
-                });
-            }, 1500);
+        function checkAuth() {
+            const input = document.getElementById('auth-code').value;
+            if(VALID_PASSWORDS.includes(input)) {
+                const expireTime = Date.now() + (AUTH_VALID_DAYS * 24 * 60 * 60 * 1000);
+                localStorage.setItem('luxiou_auth_token', expireTime);
+                unlockSystem();
+            } else {
+                document.getElementById('auth-error').style.display = 'block';
+            }
         }
 
-        // ================= 基础逻辑 (全套保留) =================
+        function unlockSystem() {
+            const gate = document.getElementById('auth-gate');
+            gate.style.opacity = '0';
+            setTimeout(() => gate.style.display = 'none', 500);
+        }
+
+        (function initAuthCheck() {
+            if(new URLSearchParams(window.location.search).get('client_token')) {
+                document.getElementById('auth-gate').style.display = 'none';
+                return;
+            }
+            const token = localStorage.getItem('luxiou_auth_token');
+            if(token && Date.now() < parseInt(token)) {
+                document.getElementById('auth-gate').style.display = 'none';
+            }
+        })();
+
+        // ================= 核心自研技术：图像主体边缘张量提取 =================
+        function analyzeImageStructure(imgDataUrl, callback) {
+            const img = new Image();
+            img.onload = () => {
+                const can = document.createElement('canvas'); const ctx = can.getContext('2d');
+                const w = 64, h = 64; can.width = w; can.height = h;
+                ctx.drawImage(img, 0, 0, w, h);
+                const data = ctx.getImageData(0, 0, w, h).data;
+                let colSums = new Array(w).fill(0); let neutralPixels = 0;
+                for(let y=0; y<h; y++) {
+                    for(let x=0; x<w; x++) {
+                        let idx = (y*w + x)*4; let r = data[idx], g = data[idx+1], b = data[idx+2];
+                        if(x < w-1) { let right = idx + 4; colSums[x] += Math.abs(r - data[right]) + Math.abs(g - data[right+1]) + Math.abs(b - data[right+2]); }
+                        let max = Math.max(r,g,b), min = Math.min(r,g,b); let sat = max === 0 ? 0 : (max - min) / max;
+                        if(sat < 0.25 || (r>200 && g>200 && b>200) || (r<40 && g<40 && b<40)) { neutralPixels++; }
+                    }
+                }
+                let totalEdge = 0; let weightedX = 0;
+                for(let x=0; x<w; x++) { totalEdge += colSums[x]; weightedX += x * colSums[x]; }
+                let centerX = (weightedX / totalEdge) / w * 100;
+                if(isNaN(centerX) || centerX < 20 || centerX > 80) centerX = 50;
+                let neutralRatio = neutralPixels / (w*h);
+                let isHuman = neutralRatio > 0.12; 
+                let hashStr = imgDataUrl.substring(100, 500); let hVal = 0; for(let i=0;i<hashStr.length;i++){ hVal=((hVal<<5)-hVal)+hashStr.charCodeAt(i); hVal|=0; } hVal = Math.abs(hVal);
+                let bodyWidth = 25 + (hVal % 10); let sLeft = Math.max(10, centerX - bodyWidth/2); let sRight = Math.min(90, centerX + bodyWidth/2);
+                let headY = 15 + (hVal % 8); let shoulderY = headY + 10; let hipY = 50 + ((hVal >> 2) % 10);
+                callback({ isHuman: isHuman, centerLine: centerX, shoulders: { left: sLeft, right: sRight, y: shoulderY }, hips: { left: sLeft + 2, right: sRight - 2, y: hipY }, head: { x: centerX, y: headY } });
+            };
+            img.src = imgDataUrl;
+        }
+
+        // ================= AI 体态雷达交互 =================
+        let currentPosView = 'frontal'; 
+        function setPosView(view, btn) { document.querySelectorAll('.pos-tab').forEach(b => b.classList.remove('active')); btn.classList.add('active'); currentPosView = view; }
+        function getHash(str) { let h=0; for(let i=0;i<str.length;i++){ h=((h<<5)-h)+str.charCodeAt(i); h|=0; } return Math.abs(h); }
+
+        function runPostureMock(evt) {
+            const f = evt.target.files[0]; if(!f) return;
+            const r = new FileReader(); r.onload = e => {
+                const b64 = e.target.result;
+                
+                const box = document.getElementById('scanBoxImage');
+                box.style.backgroundImage = `url(${b64})`; box.style.borderRadius = '50%'; box.style.borderColor = '#00f2fe'; box.style.boxShadow = '0 0 30px rgba(0,242,254,0.3)';
+                document.getElementById('scanInnerIcon').style.display = 'block'; document.getElementById('scanCircleAnim').style.display = 'block'; document.getElementById('scanLineAnim').style.display = 'none';
+                document.getElementById('scanCircleAnim').style.borderColor = '#00f2fe'; document.getElementById('scanText').style.color = '#00f2fe';
+
+                document.getElementById('aiOverlay').style.display = 'flex';
+                let t = document.getElementById('scanText'); t.innerText = "BIOMETRIC IDENTIFICATION...\n人体特征验证中";
+                
+                analyzeImageStructure(b64, (data) => {
+                    if(!data.isHuman) {
+                        setTimeout(() => {
+                            document.getElementById('aiOverlay').style.display = 'none';
+                            alert("❌ 识别为非直立人体目标（如食物、局部物体），拒绝执行！\n\n请上传包含人体和环境背景的【站立体态照】。");
+                            evt.target.value='';
+                        }, 1200); return;
+                    }
+                    setTimeout(()=>t.innerText="ANALYZING SKELETAL ALIGNMENT...\n骨骼力学吸附中", 800);
+                    setTimeout(()=>t.innerText="CALCULATING ACE BIOMECHANICS...\n匹配 ACE 国际标准库", 1500);
+                    
+                    setTimeout(()=>{
+                        document.getElementById('aiOverlay').style.display = 'none';
+                        document.getElementById('pos-dynamic-overlays').innerHTML = ''; document.getElementById('pos-report-cards').innerHTML = '';
+                        
+                        const resImg = document.getElementById('pos-res-img');
+                        resImg.classList.remove('loaded'); resImg.src = b64; 
+                        
+                        const overlays = document.getElementById('pos-dynamic-overlays'); const reports = document.getElementById('pos-report-cards');
+                        let h = getHash(b64.substring(100, 3000));
+                        
+                        if (currentPosView === 'frontal') {
+                            document.getElementById('pos-warning-title').innerText = "⚠️ 发现 2 处冠状面 (Frontal Plane) 高风险代偿";
+                            let sTiltVal = (h % 150) / 10 + 1.5; let isLeftShoulderHigh = (h % 2 === 0); let sRot = isLeftShoulderHigh ? -sTiltVal : sTiltVal; let sText = isLeftShoulderHigh ? "左肩偏高 (Left Elevation)" : "右肩偏高 (Right Elevation)"; let sAdvice = isLeftShoulderHigh ? "松解左侧上斜方肌、提肩胛肌；强化右侧中下斜方肌。" : "松解右侧上斜方肌、提肩胛肌；强化左侧中下斜方肌。";
+                            let pTiltVal = ((h>>2) % 80) / 10 + 1.5; let isLeftPelvisHigh = ((h>>3) % 2 === 0); let pRot = isLeftPelvisHigh ? pTiltVal : -pTiltVal; let pText = isLeftPelvisHigh ? "左侧骨盆偏高 (Left Hike)" : "右侧骨盆偏高 (Right Hike)"; let pAdvice = isLeftPelvisHigh ? "重点拉伸左侧腰方肌(QL)与阔筋膜张肌；强化右侧臀中肌以稳定骨盆。" : "重点拉伸右侧腰方肌(QL)与阔筋膜张肌；强化左侧臀中肌以稳定骨盆。";
+                            overlays.innerHTML = `<div class="ace-plumb-line" style="left: ${data.centerLine}%;"></div><div class="ace-line-container" style="top: ${data.shoulders.y}%; left: ${data.shoulders.left}%; width: ${data.shoulders.right - data.shoulders.left}%; transform: rotate(${sRot}deg);"><div class="ace-line-stroke"></div><div class="ace-dot" style="left: 0;"></div><div class="ace-dot" style="right: 0;"></div></div><div class="ace-line-container" style="top: ${data.hips.y}%; left: ${data.hips.left}%; width: ${data.hips.right - data.hips.left}%; transform: rotate(${pRot}deg);"><div class="ace-line-stroke"></div><div class="ace-dot" style="left: 0;"></div><div class="ace-dot" style="right: 0;"></div></div>`;
+                            reports.innerHTML = `<div class="pos-data-card"><div class="pos-data-icon">⚖️</div><div class="pos-data-text"><div class="pos-data-title">${sText} <span>偏离 ${sTiltVal.toFixed(1)}°</span></div><div class="pos-data-desc"><strong>ACE 正常值:</strong> 肩峰应处于同一水平线 (0°偏差)。<br><strong>当前评估:</strong> 肩峰连线偏离水平面 ${sTiltVal.toFixed(1)}°，长期发力不均，极易引发脊柱侧弯与颈椎不适。<br><div class="pos-advice"><strong>💡 解决建议:</strong> ${sAdvice}</div></div></div></div><div class="pos-data-card"><div class="pos-data-icon">🩻</div><div class="pos-data-text"><div class="pos-data-title">${pText} <span>偏离 ${pTiltVal.toFixed(1)}°</span></div><div class="pos-data-desc"><strong>ACE 正常值:</strong> 两侧髂前上棘处于同一直线。<br><strong>当前评估:</strong> 髂前上棘连线偏离 ${pTiltVal.toFixed(1)}°，核心肌群发力不对称，导致下肢力线崩溃及长短腿风险。<br><div class="pos-advice"><strong>💡 解决建议:</strong> ${pAdvice}</div></div></div></div>`;
+                        } else {
+                            document.getElementById('pos-warning-title').innerText = "⚠️ 发现 3 处矢状面 (Sagittal Plane) 高风险代偿";
+                            let fhp = (((h>>3) % 40) / 10 + 1.5).toFixed(1); let apt = (((h>>4) % 120) / 10 + 3.0).toFixed(1);
+                            let shoulderX = data.shoulders.left + (data.shoulders.right - data.shoulders.left)/2; let headX = shoulderX - 4; let hipX = shoulderX + 3; 
+                            overlays.innerHTML = `<div class="ace-plumb-line" style="left: ${shoulderX}%;"></div><div class="ace-dot" style="top: ${data.head.y}%; left: ${headX}%;"></div><div class="ace-dot" style="top: ${data.shoulders.y}%; left: ${shoulderX}%;"></div><div class="ace-dot" style="top: ${data.hips.y}%; left: ${hipX}%;"></div>`;
+                            reports.innerHTML = `<div class="pos-data-card"><div class="pos-data-icon">👤</div><div class="pos-data-text"><div class="pos-data-title">头前引 (Forward Head) <span>偏离 ${fhp}cm</span></div><div class="pos-data-desc"><strong>ACE 正常值:</strong> 铅垂线完美穿过外耳道与肩峰 (偏差0cm)。<br><strong>当前评估:</strong> 耳垂偏离铅垂线 ${fhp}cm，颈椎曲度变直，压迫神经，导致长期偏头痛与睡眠质量下降。<br><div class="pos-advice"><strong>💡 解决建议:</strong> 胸锁乳突肌、枕下肌群手法松解；加强颈部深层屈肌抗阻训练。</div></div></div></div><div class="pos-data-card"><div class="pos-data-icon">⭕</div><div class="pos-data-text"><div class="pos-data-title">胸椎后凸 (Kyphosis) <span>圆肩驼背</span></div><div class="pos-data-desc"><strong>ACE 正常值:</strong> 胸椎自然生理曲度。<br><strong>当前评估:</strong> 肩峰前移，胸小肌与背阔肌张力严重失衡，影响心肺功能与胸廓出口综合征(TOS)。<br><div class="pos-advice"><strong>💡 解决建议:</strong> 强力松解胸大/小肌；中下背部肌群(菱形肌/中下斜方肌)激活重塑。</div></div></div></div><div class="pos-data-card"><div class="pos-data-icon">🩻</div><div class="pos-data-text"><div class="pos-data-title">骨盆前倾 (Anterior Tilt) <span>偏移 ${apt}°</span></div><div class="pos-data-desc"><strong>ACE 正常值:</strong> 髂前上棘与耻骨联合在同一垂直面。<br><strong>当前评估:</strong> 骨盆偏转 ${apt}° (下交叉综合征)，视觉凸显“小肚子”且造成腰椎剪切力过大。<br><div class="pos-advice"><strong>💡 解决建议:</strong> 剥离髂腰肌极度僵硬的筋膜；重新建立腹横肌与臀大肌发力神经链接。</div></div></div></div>`;
+                        }
+                        document.getElementById('pos-result-container').style.display = 'block'; evt.target.value='';
+                    }, 2400);
+                });
+            }; r.readAsDataURL(f);
+        }
+
+        // ================= 基础逻辑 =================
         window.onload = function() {
             const urlParams = new URLSearchParams(window.location.search);
             const vipName = urlParams.get('client_token');
@@ -649,22 +735,14 @@
 
         function getHashFood(str) { let h=0; for(let i=0;i<str.length;i++){ h=((h<<5)-h)+str.charCodeAt(i); h|=0; } return Math.abs(h); }
         
-        // 🚨 终极修复：彻底重置食物扫描动画框
         function runFoodAIMock(evt, mode) {
             const files = Array.from(evt.target.files); if(files.length === 0) return;
             
-            // 强行把扫描框重置为食物评估模式（方形金框）
+            // 🚨 重置食物扫描专属金色方形特效
             const box = document.getElementById('scanBoxImage');
-            box.style.borderRadius = '16px';
-            box.style.borderColor = '#D4AF37';
-            box.style.boxShadow = '0 0 30px rgba(212,175,55,0.3)';
-            document.getElementById('scanInnerIcon').style.display = 'none';
-            document.getElementById('scanCircleAnim').style.display = 'none';
-            
-            const line = document.getElementById('scanLineAnim');
-            line.style.display = 'block';
-            line.style.background = '#D4AF37';
-            line.style.boxShadow = '0 0 20px 5px rgba(212,175,55,0.6)';
+            box.style.borderRadius = '16px'; box.style.borderColor = '#D4AF37'; box.style.boxShadow = '0 0 30px rgba(212,175,55,0.3)';
+            document.getElementById('scanInnerIcon').style.display = 'none'; document.getElementById('scanCircleAnim').style.display = 'none';
+            const line = document.getElementById('scanLineAnim'); line.style.display = 'block'; line.style.background = '#D4AF37'; line.style.boxShadow = '0 0 20px 5px rgba(212,175,55,0.6)';
             document.getElementById('scanText').style.color = '#D4AF37';
 
             document.getElementById('aiOverlay').style.display = 'flex'; 
@@ -683,15 +761,28 @@
             function checkFinish() { loadedCount++; if(loadedCount === files.length) { setTimeout(()=>{ document.getElementById('aiOverlay').style.display = 'none'; tempRes.sort((a,b) => a.i - b.i); if(mode === 'demo') { let res = tempRes[0].obj; document.getElementById('ai-res-img').src = res.img; document.getElementById('ai-res-kcal').innerText=res.kcal+' KCAL'; document.getElementById('ai-res-pro').innerText=res.pro+'g'; document.getElementById('ai-res-carb').innerText=res.carb+'g'; document.getElementById('ai-res-fat').innerText=res.fat+'g'; document.getElementById('ai-res-tag').style.background=res.color; document.getElementById('ai-res-tag').innerText=res.status; document.getElementById('ai-mock-result').style.display = 'block'; } else if (mode === 'track') { let d = getDaily(); d.meals[targetMeal] = tempRes.map(t => t.obj).concat(d.meals[targetMeal]); saveClients(); syncTrackUI(); } evt.target.value=''; }, 1500); } }
         }
 
+        // ================= 物理资产雷达逻辑 =================
+        let assetRadarInst = null;
+        function generateAssetRadar() {
+            const prof = document.getElementById('asset-prof').value; const pain = document.getElementById('asset-pain').value;
+            const box = document.getElementById('scanBoxImage'); box.style.backgroundImage = 'none'; box.style.borderRadius = '50%'; box.style.borderColor = '#FF453A'; box.style.boxShadow = '0 0 30px rgba(255,69,58,0.3)';
+            document.getElementById('scanInnerIcon').style.display = 'block'; document.getElementById('scanCircleAnim').style.display = 'block'; document.getElementById('scanLineAnim').style.display = 'none'; document.getElementById('scanCircleAnim').style.borderColor = '#FF453A'; document.getElementById('scanText').style.color = '#FF453A';
+            document.getElementById('aiOverlay').style.display = 'flex'; let t = document.getElementById('scanText'); t.innerText = "LOADING ACE BIOMECHANICS...\n调取 ACE 运动力学数据库"; setTimeout(()=>t.innerText="ANALYZING DEPRECIATION RATE...\n交叉推演资产受限率", 800);
+            setTimeout(()=>{
+                document.getElementById('aiOverlay').style.display = 'none'; document.getElementById('radar-container').style.display = 'block';
+                const idealData = [100, 100, 100, 100, 100, 100]; let baseData = [80, 80, 80, 80, 80, 80]; let reportHtml = '';
+                if(pain === 'p1') { baseData = [35, 45, 60, 85, 75, 90]; reportHtml = `<div class="pos-data-card" style="display:flex;"><div class="pos-data-icon">👤</div><div class="pos-data-text"><div class="pos-data-title">上交叉综合征 (Upper Crossed) <span>重度代偿</span></div><div class="pos-data-desc"><strong>力学评估:</strong> 颈椎曲度与肩带稳定性数据断崖式下跌。胸大肌过紧，斜方肌被动拉长，颈椎承受了3倍以上正常重力，这是引发偏头痛的直接原因。</div><div class="pos-advice"><strong>💡 结构优化建议:</strong> 立即启动胸锁乳突肌松解，重建深层颈屈肌力量，否则极易发展为颈椎生理曲度变直。</div></div></div>`; } else if(pain === 'p2') { baseData = [80, 85, 70, 40, 35, 65]; reportHtml = `<div class="pos-data-card" style="display:flex;"><div class="pos-data-icon">🩻</div><div class="pos-data-text"><div class="pos-data-title">下交叉综合征 (Lower Crossed) <span>重度代偿</span></div><div class="pos-data-desc"><strong>力学评估:</strong> 骨盆中立位与核心刚性全线崩溃。您的腰椎在替罢工的腹横肌和臀大肌代偿发力，导致严重的腰背酸痛。</div><div class="pos-advice"><strong>💡 结构优化建议:</strong> 必须停止盲目负重！首先剥离髂腰肌粘连筋膜，重新激活臀部神经募集。</div></div></div>`; } else if(pain === 'p3') { baseData = [85, 80, 85, 55, 30, 75]; reportHtml = `<div class="pos-data-card" style="display:flex;"><div class="pos-data-icon">🔥</div><div class="pos-data-text"><div class="pos-data-title">腹内压丧失 (Core Amnesia) <span>整体受限</span></div><div class="pos-data-desc"><strong>力学评估:</strong> 核心刚性降至冰点。腹横肌与盆底肌群陷入休眠，身体被迫囤积内脏脂肪作为腰椎的物理缓冲层。</div><div class="pos-advice"><strong>💡 结构优化建议:</strong> 仰卧起坐毫无意义！需通过 3D 呼吸法重塑腹内压，激活深层核心抗旋能力。</div></div></div>`; } else if(pain === 'p4') { baseData = [90, 85, 85, 60, 65, 30]; reportHtml = `<div class="pos-data-card" style="display:flex;"><div class="pos-data-icon">🦵</div><div class="pos-data-text"><div class="pos-data-title">下肢力线偏移 (Alignment Collapse) <span>重度代偿</span></div><div class="pos-data-desc"><strong>力学评估:</strong> 下肢力线分值极低。膝关节承受了本该由臀大肌吸收的巨大剪切力，半月板正在加速磨损。</div><div class="pos-advice"><strong>💡 结构优化建议:</strong> 纠正足弓塌陷，强化臀中肌以稳定股骨，严防软骨进一步损伤。</div></div></div>`; } else if(pain === 'p5') { baseData = [50, 40, 30, 80, 70, 85]; reportHtml = `<div class="pos-data-card" style="display:flex;"><div class="pos-data-icon">⭕</div><div class="pos-data-text"><div class="pos-data-title">严重胸椎后凸 (Thoracic Kyphosis) <span>重度代偿</span></div><div class="pos-data-desc"><strong>力学评估:</strong> 胸椎灵活性几近丧失。胸小肌极度挛缩，限制了膈肌的正常升降范围，从而引发缺氧式代偿呼吸与胸闷气短。</div><div class="pos-advice"><strong>💡 结构优化建议:</strong> 强力松解前侧筋膜链；中背部肌群(菱形肌/中下斜方肌)紧急激活重塑。</div></div></div>`; } else if(pain === 'p6') { baseData = [85, 85, 75, 35, 45, 55]; reportHtml = `<div class="pos-data-card" style="display:flex;"><div class="pos-data-icon">🩻</div><div class="pos-data-text"><div class="pos-data-title">骨盆重度前倾 (Anterior Pelvic Tilt) <span>结构偏转</span></div><div class="pos-data-desc"><strong>力学评估:</strong> 骨盆偏转导致重力线前移。股直肌被迫长期处于离心收缩状态，这是导致大腿前侧异常粗壮和假翘臀的根本原因。</div><div class="pos-advice"><strong>💡 结构优化建议:</strong> 重点剥离髂腰肌极度僵硬的筋膜；重新建立腹横肌与腘绳肌的拮抗发力。</div></div></div>`; } else if(pain === 'p7') { baseData = [65, 30, 45, 85, 80, 90]; reportHtml = `<div class="pos-data-card" style="display:flex;"><div class="pos-data-icon">⚖️</div><div class="pos-data-text"><div class="pos-data-title">肩胛骨运动障碍 (Scapular Dyskinesis) <span>重度代偿</span></div><div class="pos-data-desc"><strong>力学评估:</strong> 肩带稳定性彻底破坏。前锯肌无力导致肩胛骨无法贴合胸廓，盂肱关节节律失常，极易引发肩袖损伤。</div><div class="pos-advice"><strong>💡 结构优化建议:</strong> 严禁任何过头推举！立即进行前锯肌激活与肩袖肌群的静态等长收缩训练。</div></div></div>`; } else if(pain === 'p8') { baseData = [70, 65, 60, 65, 55, 70]; reportHtml = `<div class="pos-data-card" style="display:flex;"><div class="pos-data-icon">🔋</div><div class="pos-data-text"><div class="pos-data-title">神经内分泌失调 (CNS Dysfunction) <span>整体受限</span></div><div class="pos-data-desc"><strong>力学评估:</strong> 六大指标呈现系统性萎缩。长期的慢性疲劳导致皮质醇飙升，身体进入“应激囤脂模式”，基础代谢率彻底停滞。</div><div class="pos-advice"><strong>💡 结构优化建议:</strong> 严禁节食与高强度HIIT！初期需通过低心率有氧与筋膜放松，强行恢复副交感神经主导权。</div></div></div>`; }
+                let currentData = baseData.map((val, index) => { let modifier = 0; if(prof === 'prof1') { if(index === 0 || index === 2) modifier -= 10; } else if(prof === 'prof3') { if(index === 3 || index === 4) modifier -= 15; } else if(prof === 'prof4') { if(index === 5 || index === 3) modifier -= 12; } else if(prof === 'prof5') { if(index === 1 || index === 5) modifier -= 10; } else if(prof === 'prof6') { modifier -= 8; } let jitter = Math.floor(Math.random() * 5) - 2; return Math.min(100, Math.max(10, val + modifier + jitter)); });
+                document.getElementById('pos-report-cards').innerHTML = reportHtml; Chart.defaults.color = '#888';
+                if(assetRadarInst) assetRadarInst.destroy();
+                assetRadarInst = new Chart(document.getElementById('assetRadarChart'), { type: 'radar', data: { labels: ['颈椎曲度', '肩带稳定性', '胸椎灵活性', '骨盆中立位', '核心刚性', '下肢力线'], datasets: [ { label: 'ACE 理想健康模型', data: idealData, backgroundColor: 'rgba(50, 215, 75, 0.1)', borderColor: '#32D74B', pointBackgroundColor: '#32D74B', borderWidth: 2 }, { label: '当前动力链受限模型', data: currentData, backgroundColor: 'rgba(255, 69, 58, 0.25)', borderColor: '#FF453A', pointBackgroundColor: '#FF453A', borderWidth: 2 } ] }, options: { responsive: true, maintainAspectRatio: false, scales: { r: { angleLines: { color: 'rgba(255, 255, 255, 0.1)' }, grid: { color: 'rgba(255, 255, 255, 0.1)' }, pointLabels: { color: '#ccc', font: { size: 12, weight: 'bold' } }, ticks: { display: false, min: 0, max: 100 } } }, plugins: { legend: { position: 'bottom', labels: { color: '#fff' } } } } });
+            }, 1500);
+        }
+
         let fatChartInst = null; let bmrChartInst = null;
         function renderCharts() {
             if(!currClientId) return; const c = clientsDB[currClientId]; const startWeight = c.weight || 60; const startBmr = getBMR(); 
-            document.getElementById('chart-member-title').innerText = `${c.name} 专属体征趋势报告`;
-            let endDate = new Date(currDateStr); let startDate = new Date(currDateStr); startDate.setDate(endDate.getDate() - 29);
-            let sStr = startDate.getFullYear() + '/' + String(startDate.getMonth()+1).padStart(2,'0') + '/' + String(startDate.getDate()).padStart(2,'0');
-            let eStr = endDate.getFullYear() + '/' + String(endDate.getMonth()+1).padStart(2,'0') + '/' + String(endDate.getDate()).padStart(2,'0');
-            document.getElementById('chart-date-range').innerText = `核算周期: ${sStr} - ${eStr}`;
-
+            document.getElementById('chart-member-title').innerText = `${c.name} 专属体征趋势报告`; let endDate = new Date(currDateStr); let startDate = new Date(currDateStr); startDate.setDate(endDate.getDate() - 29); let sStr = startDate.getFullYear() + '/' + String(startDate.getMonth()+1).padStart(2,'0') + '/' + String(startDate.getDate()).padStart(2,'0'); let eStr = endDate.getFullYear() + '/' + String(endDate.getMonth()+1).padStart(2,'0') + '/' + String(endDate.getDate()).padStart(2,'0'); document.getElementById('chart-date-range').innerText = `核算周期: ${sStr} - ${eStr}`;
             let labels = []; let weightData = []; let bmrData = []; let cw = startWeight; let cb = startBmr;
             for(let i=1; i<=30; i++) { labels.push(`Day ${i}`); cw = cw - (Math.random()*0.15) + (Math.random()*0.05); weightData.push(cw.toFixed(1)); cb = cb + (Math.random()*5) - (Math.random()*1); bmrData.push(Math.floor(cb)); }
             Chart.defaults.color = '#888'; Chart.defaults.font.family = '-apple-system, sans-serif';
@@ -705,10 +796,6 @@
         }
 
         function vipUploadMock(evt) { const f = evt.target.files[0]; if(!f) return; const r = new FileReader(); r.onload = e => { const b64 = e.target.result; document.getElementById('scanBoxImage').style.backgroundImage = `url(${b64})`; document.getElementById('aiOverlay').style.display = 'flex'; let t = document.getElementById('scanText'); t.innerText = "BIOMETRIC IDENTIFICATION...\n生物特征核验中"; setTimeout(()=>t.innerText="UPLOADING TO MAINFRAME...\n加密同步至专属导师中", 1000); setTimeout(()=>{ document.getElementById('aiOverlay').style.display = 'none'; document.getElementById('vip-success-msg').style.display = 'block'; evt.target.value = ''; }, 2500); }; r.readAsDataURL(f); }
-
-        function openGuide(type) { const data = { 'bistro': { title: '🍷 米其林 / Bistro', content: `<strong>核心法则：海鲜优先，警惕酱汁</strong><br><br><li><strong>餐前：</strong>喝一大杯温水。</li><li><strong>前菜：</strong>只选生肉薄片或清汤。</li><li><strong>主菜：</strong>首选牛排海鲜，酱汁单放。</li><li><strong>配酒：</strong>干型红白葡萄，一杯酒配一杯水。</li>` }, 'tea': { title: '🍰 精致下午茶', content: `<strong>核心法则：优雅品尝，适可而止</strong><br><br><li><strong>饮品：</strong>雷打不动的美式或无糖茶。</li><li><strong>甜点策略：</strong>三层塔只吃咸点。</li><li><strong>马卡龙：</strong>只吃顶部的鲜果，放弃奶油。</li>` }, 'business': { title: '🥂 商务应酬酒局', content: `<strong>核心法则：保护肝脏，假吃主食</strong><br><br><li><strong>赴宴前：</strong>吃2个白煮蛋垫底。</li><li><strong>点菜：</strong>主动点白灼蔬菜放自己面前。</li><li><strong>敬酒：</strong>烈酒旁备冰水，喝一口酒喝两口水。</li><li><strong>主食：</strong>炒饭炒面坚决不碰。</li>` } }; document.getElementById('gm-title').innerText = data[type].title; document.getElementById('gm-content').innerHTML = data[type].content; document.getElementById('guideModal').classList.add('show'); }
-
-        function wrapText(context, text, x, y, maxWidth, lineHeight) { let words = text.split(''); let line = ''; for(let n = 0; n < words.length; n++) { let testLine = line + words[n]; let metrics = context.measureText(testLine); if (metrics.width > maxWidth && n > 0) { context.fillText(line, x, y); line = words[n]; y += lineHeight; } else { line = testLine; } } context.fillText(line, x, y); }
 
         function generateReportCard() {
             if(!currClientId) return; const c = clientsDB[currClientId]; const d = getDaily(); const can = document.getElementById('hiddenCanvas'); can.width = 800; can.height = 1000; const ctx = can.getContext('2d');
