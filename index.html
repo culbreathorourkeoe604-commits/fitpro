@@ -46,7 +46,7 @@
         .m-close { color: #888; font-size: 28px; background: none; border: none; padding: 0 10px; cursor: pointer; }
         .m-body { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 20px; -webkit-overflow-scrolling: touch; padding-bottom: 100px;}
 
-        /* ================= 🚨 升级：身体资产雷达评估 UI ================= */
+        /* ================= 身体资产雷达评估 UI ================= */
         .asset-form-group { margin-bottom: 18px; }
         .asset-label { font-size: 13px; color: #D4AF37; margin-bottom: 8px; display: block; font-weight: bold;}
         .asset-select { width: 100%; background: #111; border: 1px solid #333; color: #fff; padding: 14px; border-radius: 8px; font-size: 14px; outline: none; appearance: none; line-height: 1.4;}
@@ -63,7 +63,7 @@
         .pos-advice { margin-top: 12px; background: rgba(212,175,55,0.08); border-left: 3px solid #D4AF37; padding: 12px; font-size: 13px; color: #ddd; line-height:1.5;}
         .pos-advice strong { color: #D4AF37; }
 
-        /* ================= 背书库 ================= */
+        /* ================= 背书库 (修复滑动) ================= */
         .e-seg { display: flex; background: #111; border-radius: 12px; padding: 6px; margin-bottom: 20px; border: 1px solid #222;}
         .e-tab { flex: 1; text-align: center; padding: 12px 0; font-size: 14px; font-weight: bold; color: #666; border-radius: 8px; transition: 0.3s;}
         .e-tab.active { background: #D4AF37; color: #000; box-shadow: 0 0 15px rgba(212,175,55,0.5); transform: scale(1.02); z-index: 2;}
@@ -72,7 +72,9 @@
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         .upload-btn { background: linear-gradient(135deg, rgba(212,175,55,0.1), rgba(212,175,55,0.05)); border: 1px dashed #D4AF37; color: #D4AF37; text-align: center; padding: 15px; border-radius: 12px; font-size: 14px; font-weight: bold; cursor: pointer; margin-bottom: 15px;}
         .e-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
-        .e-item { position: relative; border-radius: 12px; overflow: hidden; background: #111; border: 1px solid rgba(212,175,55,0.3); height: 220px; touch-action: none;}
+        
+        /* 🚨 修复点：移除了 touch-action: none; 彻底恢复原生上下滑动 */
+        .e-item { position: relative; border-radius: 12px; overflow: hidden; background: #111; border: 1px solid rgba(212,175,55,0.3); height: 220px;}
         .e-item img { width: 100%; height: 100%; object-fit: cover; pointer-events: none;}
         .e-item .del { position: absolute; top: 8px; right: 8px; width: 26px; height: 26px; background: rgba(0,0,0,0.8); border: 1px solid #FF3B30; border-radius: 50%; color: #FF3B30; display: flex; justify-content: center; align-items: center; font-weight: bold; z-index: 10;}
 
@@ -159,15 +161,12 @@
         .chart-title { color: #D4AF37; font-size: 14px; font-weight: bold; margin-bottom: 15px; text-align: center; letter-spacing: 1px;}
         .chart-wrapper { width: 100%; height: 220px; position: relative;}
 
-        /* 🚨 极简双模态通用扫描覆盖层 (解决塌陷与UI冲突) */
         .ai-scanning-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 9999; display: none; flex-direction: column; justify-content: center; align-items: center;}
-        .scan-box { width: 260px; height: 260px; position: relative; overflow: hidden; margin-bottom: 20px; display:flex; justify-content:center; align-items:center; background-size: cover; background-position: center;}
-        .scan-circle { width: 100%; height: 100%; border: 4px dashed #D4AF37; border-radius: 50%; animation: spin 4s linear infinite; position: absolute; top:0; left:0;}
-        .scan-inner { font-size: 50px; z-index: 2; position: absolute;}
-        .scan-line { width: 100%; height: 3px; background: #D4AF37; box-shadow: 0 0 20px 5px rgba(212,175,55,0.6); position: absolute; top: 0; left: 0; animation: scanAnim 1.2s infinite linear; z-index: 3;}
-        .scan-text { color: #D4AF37; font-size: 15px; font-weight: bold; letter-spacing: 2px; font-family: monospace; margin-top: 15px; text-align: center; line-height: 1.6;}
+        .scan-box { width: 260px; height: 260px; border: 2px solid #FF453A; position: relative; overflow: hidden; border-radius: 50%; margin-bottom: 20px; display:flex; justify-content:center; align-items:center; box-shadow: 0 0 30px rgba(255,69,58,0.3);}
+        .scan-circle { width: 100%; height: 100%; border: 4px dashed #FF453A; border-radius: 50%; animation: spin 4s linear infinite;}
+        .scan-inner { position: absolute; font-size: 50px; }
+        .scan-text { color: #FF453A; font-size: 15px; font-weight: bold; letter-spacing: 2px; font-family: monospace; margin-top: 15px; text-align: center; line-height: 1.6;}
         @keyframes spin { 100% { transform: rotate(360deg); } }
-        @keyframes scanAnim { 0% { top: 0; opacity: 1; } 100% { top: 100%; opacity: 0.2; } }
 
         /* 左滑删除专属会员抽屉 */
         .new-client-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 8000; display: none; flex-direction: column; justify-content: center; align-items: center; padding: 20px; backdrop-filter: blur(10px);}
@@ -297,10 +296,9 @@
     </div>
 
     <div class="ai-scanning-overlay" id="aiOverlay">
-        <div class="scan-box" id="scanBoxImage">
-            <div class="scan-inner" id="scanInnerIcon" style="display:none;">🧬</div>
-            <div class="scan-circle" id="scanCircleAnim" style="display:none;"></div>
-            <div class="scan-line" id="scanLineAnim" style="display:none;"></div>
+        <div class="scan-box">
+            <div class="scan-inner">🧬</div>
+            <div class="scan-circle"></div>
         </div>
         <div class="scan-text" id="scanText" style="white-space:pre-wrap;"></div>
     </div>
@@ -315,11 +313,13 @@
                 <div class="e-tab active" onclick="switchEndorseTab('cert', this)">资质证书</div>
                 <div class="e-tab" onclick="switchEndorseTab('coach', this)">教练团队墙</div>
             </div>
+            
             <div id="e-view-cert" class="e-sec active">
                 <div class="upload-btn" onclick="document.getElementById('cert-up').click()">+ 上传资质证书</div>
                 <input type="file" id="cert-up" multiple accept="image/*" style="display:none;" onchange="handleEndorseUp(event, 'cert')">
                 <div class="e-grid" id="cert-gallery"></div>
             </div>
+
             <div id="e-view-coach" class="e-sec">
                 <div class="upload-btn" onclick="document.getElementById('coach-up').click()">+ 上传教练照片</div>
                 <input type="file" id="coach-up" multiple accept="image/*" style="display:none;" onchange="handleEndorseUp(event, 'coach')">
@@ -334,7 +334,6 @@
             <button class="m-close" onclick="closeModal('lifestyleModal')">×</button>
         </div>
         <div class="m-body">
-            
             <div class="ls-seg">
                 <div class="ls-tab" onclick="switchLsTab('demo', this)">AI 估算 (谈单)</div>
                 <div class="ls-tab active" onclick="switchLsTab('track', this)">三餐纪要 (交付)</div>
@@ -426,9 +425,7 @@
                 <div style="text-align:center; margin-bottom:20px; background:rgba(212,175,55,0.05); border:1px solid rgba(212,175,55,0.2); border-radius:12px; padding:15px;">
                     <div style="font-size:16px; color:#D4AF37; font-weight:900; margin-bottom:5px; letter-spacing:1px;" id="chart-member-title">VIP 专属体征趋势报告</div>
                     <div id="chart-date-range" style="font-size:11px; color:#888; font-weight:bold; margin-bottom:10px;">核算周期: 加载中...</div>
-                    <div style="color:#ccc; font-size:12px; line-height: 1.6;">
-                        系统基于核心代谢引擎，已为您推演生成<br>近 30 天的高定身体资产重塑曲线。
-                    </div>
+                    <div style="color:#ccc; font-size:12px; line-height: 1.6;">系统基于核心代谢引擎，已为您推演生成<br>近 30 天的高定身体资产重塑曲线。</div>
                 </div>
                 <div class="chart-card"><div class="chart-title">🔥 体重与顽固脂肪剥离曲线</div><div class="chart-wrapper"><canvas id="fatChart"></canvas></div></div>
                 <div class="chart-card"><div class="chart-title">📈 基础代谢与肌肉张力重塑</div><div class="chart-wrapper"><canvas id="bmrChart"></canvas></div></div>
@@ -454,15 +451,6 @@
             const prof = document.getElementById('asset-prof').value;
             const pain = document.getElementById('asset-pain').value;
             
-            // 展示圆形 DNA 动画
-            const box = document.getElementById('scanBoxImage');
-            box.style.backgroundImage = 'none'; box.style.borderRadius = '50%';
-            document.getElementById('scanInnerIcon').style.display = 'block';
-            document.getElementById('scanCircleAnim').style.display = 'block';
-            document.getElementById('scanLineAnim').style.display = 'none';
-            document.getElementById('scanCircleAnim').style.borderColor = '#FF453A';
-            document.getElementById('scanText').style.color = '#FF453A';
-
             document.getElementById('aiOverlay').style.display = 'flex';
             let t = document.getElementById('scanText'); t.innerText = "LOADING ACE BIOMECHANICS...\n调取 ACE 运动力学数据库";
             setTimeout(()=>t.innerText="ANALYZING DEPRECIATION RATE...\n交叉推演资产受限率", 800);
@@ -475,7 +463,6 @@
                 let baseData = [80, 80, 80, 80, 80, 80]; 
                 let reportHtml = '';
 
-                // 核心病理模型基准数据 (去医学化，使用专业力学词汇)
                 if(pain === 'p1') {
                     baseData = [35, 45, 60, 85, 75, 90];
                     reportHtml = `<div class="pos-data-card" style="display:flex;"><div class="pos-data-icon">👤</div><div class="pos-data-text"><div class="pos-data-title">上交叉综合征 (Upper Crossed) <span>重度代偿</span></div><div class="pos-data-desc"><strong>力学评估:</strong> 颈椎曲度与肩带稳定性数据断崖式下跌。胸大肌过紧，斜方肌被动拉长，颈椎承受了3倍以上正常重力，这是引发偏头痛的直接原因。</div><div class="pos-advice"><strong>💡 结构优化建议:</strong> 立即启动胸锁乳突肌松解，重建深层颈屈肌力量，否则极易发展为颈椎生理曲度变直。</div></div></div>`;
@@ -531,7 +518,7 @@
             }, 1500);
         }
 
-        // ================= 基础逻辑 =================
+        // ================= 基础逻辑 (全套保留) =================
         window.onload = function() {
             const urlParams = new URLSearchParams(window.location.search);
             const vipName = urlParams.get('client_token');
@@ -627,7 +614,9 @@
         function addTag(txt) { document.getElementById('val-directive').value = txt; saveDailyData(); showToast("已应用指令"); }
 
         function syncTrackUI() {
-            if(!currClientId) return; let c = clientsDB[currClientId]; document.getElementById('current-client-name').innerText = c.name; document.getElementById('current-client-tags').innerText = `${c.gender==='M'?'男士':'女士'} | ${c.age}岁 | ${c.height}cm | ${c.weight}kg`; document.getElementById('date-picker').value = currDateStr;
+            if(!currClientId) return; let c = clientsDB[currClientId]; document.getElementById('current-client-name').innerText = c.name;
+            document.getElementById('current-client-tags').innerText = `${c.gender==='M'?'男士':'女士'} | ${c.age}岁 | ${c.height}cm | ${c.weight}kg`;
+            document.getElementById('date-picker').value = currDateStr;
             let d = getDaily(); document.getElementById('val-directive').value = d.msg || ''; drawRing('water', d.rings.water, 4000, 'ml'); drawRing('cardio', d.rings.cardio, 120, '分'); drawRing('train', d.rings.train, 3, '次');
             ['breakfast', 'lunch', 'dinner'].forEach(mt => { let box = document.getElementById(`m-${mt}`); box.innerHTML = ''; if(d.meals[mt].length === 0) box.innerHTML = `<div class="empty-meal">暂无记录</div>`; else { d.meals[mt].forEach((m, i) => { box.innerHTML += `<div class="meal-row"><img src="${m.img}"><div class="meal-info"><div class="m-row-kcal">${m.kcal} KCAL</div><div class="m-row-tags"><span class="m-tag" style="background:${m.color}">${m.status}</span><span class="m-tag" style="background:#222;color:#aaa">P:${m.pro} C:${m.carb} F:${m.fat}</span></div><div class="m-sug">${m.sug}</div></div><div class="meal-del" onclick="delMeal('${mt}', ${i})">×</div></div>`; }); } }); calcEnergy(); 
         }
@@ -651,25 +640,11 @@
         function getHashFood(str) { let h=0; for(let i=0;i<str.length;i++){ h=((h<<5)-h)+str.charCodeAt(i); h|=0; } return Math.abs(h); }
         function runFoodAIMock(evt, mode) {
             const files = Array.from(evt.target.files); if(files.length === 0) return;
-            
-            let box = document.getElementById('scanBoxImage');
-            box.style.backgroundImage = 'none'; box.style.borderRadius = '16px';
-            document.getElementById('scanInnerIcon').style.display = 'none';
-            document.getElementById('scanCircleAnim').style.display = 'none';
-            document.getElementById('scanLineAnim').style.display = 'block';
-            document.getElementById('scanText').style.color = '#D4AF37';
-            document.getElementById('scanLineAnim').style.background = '#D4AF37';
-            document.getElementById('scanLineAnim').style.boxShadow = '0 0 20px 5px rgba(212,175,55,0.6)';
-            box.style.borderColor = '#D4AF37';
-
-            document.getElementById('aiOverlay').style.display = 'flex'; 
-            let t = document.getElementById('scanText'); t.innerText = "BIOMETRIC IDENTIFICATION...\n生物特征核验中"; 
-            setTimeout(()=>t.innerText="ANALYZING MACROS...\n营养学宏量剥离中", 800);
-            
+            document.getElementById('aiOverlay').style.display = 'flex'; let t = document.getElementById('scanText'); t.innerText = "BIOMETRIC IDENTIFICATION...\n生物特征核验中"; setTimeout(()=>t.innerText="ANALYZING MACROS...\n营养学宏量剥离中", 800);
             let loadedCount = 0; let tempRes = [];
             files.forEach((f, idx) => {
                 const r = new FileReader(); r.onload = e => {
-                    const b64 = e.target.result; if(idx === 0) box.style.backgroundImage = `url(${b64})`; 
+                    const b64 = e.target.result; if(idx === 0) document.getElementById('scanBoxImage').style.backgroundImage = `url(${b64})`; 
                     let h = getHashFood(b64.substring(100, 3000)); let p = (h % 40) + 10; let c = ((h >> 3) % 70) + 10; let fat = ((h >> 5) % 30) + 5; let k = (p * 4) + (c * 4) + (fat * 9); 
                     let color='#32D74B', status='优质供能', sug='营养配比极佳，非常符合增肌减脂要求。'; 
                     if(k > 600 || c > 60) {color='#FF453A'; status='高碳警报'; sug='碳水超标，建议增加15分钟有氧加速消耗。';} else if(fat > 20) {color='#FFD60A'; status='注意油脂'; sug='脂肪偏高，下一餐请换为纯白煮或清蒸。';}
@@ -682,12 +657,11 @@
         let fatChartInst = null; let bmrChartInst = null;
         function renderCharts() {
             if(!currClientId) return; const c = clientsDB[currClientId]; const startWeight = c.weight || 60; const startBmr = getBMR(); 
-            
             document.getElementById('chart-member-title').innerText = `${c.name} 专属体征趋势报告`;
             let endDate = new Date(currDateStr); let startDate = new Date(currDateStr); startDate.setDate(endDate.getDate() - 29);
             let sStr = startDate.getFullYear() + '/' + String(startDate.getMonth()+1).padStart(2,'0') + '/' + String(startDate.getDate()).padStart(2,'0');
             let eStr = endDate.getFullYear() + '/' + String(endDate.getMonth()+1).padStart(2,'0') + '/' + String(endDate.getDate()).padStart(2,'0');
-            document.getElementById('chart-date-range').innerText = `数据核算周期: ${sStr} - ${eStr}`;
+            document.getElementById('chart-date-range').innerText = `核算周期: ${sStr} - ${eStr}`;
 
             let labels = []; let weightData = []; let bmrData = []; let cw = startWeight; let cb = startBmr;
             for(let i=1; i<=30; i++) { labels.push(`Day ${i}`); cw = cw - (Math.random()*0.15) + (Math.random()*0.05); weightData.push(cw.toFixed(1)); cb = cb + (Math.random()*5) - (Math.random()*1); bmrData.push(Math.floor(cb)); }
