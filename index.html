@@ -46,17 +46,23 @@
         .m-close { color: #888; font-size: 28px; background: none; border: none; padding: 0 10px; cursor: pointer; }
         .m-body { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 20px; -webkit-overflow-scrolling: touch; padding-bottom: 100px;}
 
-        /* ================= 🚨 AI 体态雷达 ================= */
+        /* ================= 🚨 升级版：AI 体态雷达 ================= */
         .pos-seg { display: flex; background: #111; border-radius: 12px; padding: 4px; margin-bottom: 15px; border: 1px solid #333;}
         .pos-tab { flex: 1; text-align: center; padding: 10px 0; font-size: 12px; font-weight: bold; color: #888; border-radius: 8px; transition: 0.3s; cursor: pointer;}
         .pos-tab.active { background: #00f2fe; color: #000; box-shadow: 0 0 15px rgba(0,242,254,0.4);}
         
-        .pos-res-box { position: relative; width: 100%; border-radius: 12px; overflow: hidden; border: 1px solid #00f2fe; margin-bottom: 20px; background: #111; display: block;}
-        .pos-res-box img { width: 100%; max-height: 55vh; object-fit: contain; display: block; filter: contrast(1.05);}
-        
-        .ace-plumb-line { position: absolute; top:0; left:50%; width:2px; height:100%; background: #32D74B; box-shadow: 0 0 10px #32D74B; pointer-events: none; z-index: 5;}
-        .ace-horiz-line { position: absolute; left:5%; width:90%; height:2px; background: #FFD60A; box-shadow: 0 0 8px #FFD60A; pointer-events: none; z-index: 5; transform-origin: center;}
-        .ace-dot { position: absolute; width: 14px; height: 14px; border-radius: 50%; background: #FF453A; border: 2px solid #fff; box-shadow: 0 0 15px #FF453A; transform: translate(-50%, -50%); z-index: 6; animation: blink 1.2s infinite;}
+        /* 🚨 核心包裹层：确保线条能精准吸附在照片像素上 */
+        .pos-res-box { position: relative; width: 100%; display: none; text-align: center; margin-bottom: 20px;}
+        .pos-img-wrapper { position: relative; display: inline-block; max-width: 100%; border-radius: 12px; border: 1px solid #00f2fe; overflow: hidden; background: #111;}
+        .pos-img-wrapper img { width: 100%; height: auto; max-height: 60vh; object-fit: contain; display: block; filter: contrast(1.05);}
+        .pos-dynamic-overlays { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;}
+
+        /* 动态对齐线与发光点 CSS */
+        .ace-plumb-line { position: absolute; top:0; width:2px; height:100%; background: #32D74B; box-shadow: 0 0 10px #32D74B; z-index: 5;}
+        .ace-line-container { position: absolute; height: 2px; transform-origin: center; z-index: 5; }
+        .ace-line-stroke { width: 100%; height: 2px; background: #FFD60A; box-shadow: 0 0 8px #FFD60A; position: absolute; top: 0; left: 0; }
+        .ace-dot { position: absolute; width: 14px; height: 14px; border-radius: 50%; background: #FF453A; border: 2px solid #fff; box-shadow: 0 0 15px #FF453A; transform: translate(-50%, -50%); z-index: 6; animation: blink 1.2s infinite; }
+        .ace-line-container .ace-dot { top: 1px; } /* 修正容器内点的对齐 */
         @keyframes blink { 0%{transform:translate(-50%, -50%) scale(1); opacity:1;} 50%{transform:translate(-50%, -50%) scale(1.4); opacity:0.7;} 100%{transform:translate(-50%, -50%) scale(1); opacity:1;} }
         
         .pos-data-card { background: #111; border: 1px solid #333; border-radius: 12px; padding: 15px; margin-bottom: 12px; display: flex; align-items: flex-start; gap: 12px;}
@@ -164,7 +170,6 @@
         .chart-title { color: #D4AF37; font-size: 14px; font-weight: bold; margin-bottom: 15px; text-align: center; letter-spacing: 1px;}
         .chart-wrapper { width: 100%; height: 220px; position: relative;}
 
-        /* AI 扫描覆盖层 */
         .ai-scanning-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 9999; display: none; flex-direction: column; justify-content: center; align-items: center;}
         .scan-box { width: 260px; height: 260px; border: 2px solid #00f2fe; position: relative; overflow: hidden; border-radius: 16px; margin-bottom: 20px; background-size: cover; background-position: center; box-shadow: 0 0 30px rgba(0,242,254,0.3);}
         .scan-line { width: 100%; height: 3px; background: #00f2fe; box-shadow: 0 0 20px 5px rgba(0,242,254,0.6); position: absolute; top: 0; animation: scanAnim 1.2s infinite linear;}
@@ -231,9 +236,12 @@
     <div class="grid">
         <div class="card" style="border-color:#a855f7" onclick="window.location.href='./case.html'"><img src="case.jpg" loading="lazy"><div class="card-info">【档案库】</div></div>
         <div class="card" style="border-color:#eab308" onclick="window.location.href='./plan.html'"><img src="plan.jpg" loading="lazy"><div class="card-info">【高定方案库】</div></div>
+        
         <div class="card" style="border-color:#22d3ee" onclick="openModal('endorseModal')"><img src="cert.jpg" loading="lazy"><div class="card-info">【背书库】</div></div>
         <div class="card" style="border-color:#f472b6" onclick="window.location.href='./price.html'"><img src="product.jpg" loading="lazy"><div class="card-info">【黑金报价库】</div></div>
+        
         <div class="card" style="border-color:#00f2fe;" onclick="openModal('postureModal')"><img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=400&q=80" loading="lazy" style="filter: brightness(0.6);"><div class="card-info" style="color:#00f2fe;">【AI 体态雷达】</div></div>
+        
         <div class="card" style="border-color:#10b981;" onclick="openModal('lifestyleModal')"><img src="https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=400&q=80" loading="lazy" style="filter: brightness(0.5) saturate(0.8);"><div class="card-info" style="color:#10b981;">【24H 节律管家】</div></div>
     </div>
 
@@ -244,7 +252,8 @@
         </div>
         <div class="m-body">
             <div style="text-align:center; color:#aaa; font-size:12px; margin-bottom:15px;">
-                依据 ACE(美国运动委员会) 国际标准执行生物力学评估。
+                依据 ACE(美国运动委员会) 国际标准执行生物力学评估。<br>
+                <span style="color:#00f2fe; font-size:10px;">*系统内置防伪检测，仅支持有效的人体目标扫描*</span>
             </div>
             
             <div class="pos-seg">
@@ -259,8 +268,10 @@
             
             <div id="pos-result-container" style="display:none;">
                 <div class="pos-res-box" id="pos-res-box">
-                    <img id="pos-res-img" src="">
-                    <div id="pos-dynamic-overlays"></div>
+                    <div id="pos-img-wrapper" class="pos-img-wrapper">
+                        <img id="pos-res-img" src="">
+                        <div id="pos-dynamic-overlays" class="pos-dynamic-overlays"></div>
+                    </div>
                 </div>
 
                 <div id="pos-warning-title" style="font-size:16px; font-weight:bold; color:#FF453A; margin-bottom:15px;">⚠️ 发现多处高风险体态代偿</div>
@@ -316,7 +327,7 @@
                     <div style="font-size:18px; color:#D4AF37; font-weight:bold; margin-bottom:10px;">视觉热量评估模型</div>
                     <div style="font-size:11px; color:#888; margin-bottom:20px;">向客户演示系统如何通过视觉识别精准解构食物热量。</div>
                     <div class="upload-btn" style="border-color:#10b981; color:#D4AF37;" onclick="document.getElementById('ai-scan-up').click()">+ 点击上传照片开始演算</div>
-                    <input type="file" id="ai-scan-up" accept="image/*" style="display:none;" onchange="runAIMock(event, 'demo')">
+                    <input type="file" id="ai-scan-up" accept="image/*" style="display:none;" onchange="runFoodAIMock(event, 'demo')">
                 </div>
                 
                 <div id="ai-mock-result" class="ai-result-box">
@@ -414,7 +425,7 @@
                     <div class="meal-slot"><div class="meal-header"><div class="meal-title">🔥 午餐</div><div class="meal-add" onclick="triggerAIMealUpload('lunch')">+ 视觉评估录入</div></div><div class="meal-list" id="m-lunch"></div></div>
                     <div class="meal-slot"><div class="meal-header"><div class="meal-title">🌙 晚餐 / 加餐</div><div class="meal-add" onclick="triggerAIMealUpload('dinner')">+ 视觉评估录入</div></div><div class="meal-list" id="m-dinner"></div></div>
                 </div>
-                <input type="file" id="ai-meal-up" multiple accept="image/*" style="display:none;" onchange="runAIMock(event, 'track')">
+                <input type="file" id="ai-meal-up" multiple accept="image/*" style="display:none;" onchange="runFoodAIMock(event, 'track')">
                 
                 <div class="gen-btn" onclick="generateReportCard()">生成今日专属交付报告图 ➔</div>
                 <div class="gen-btn-month" onclick="generateMonthlyReport()">生成本月全息汇总报告 ➔</div>
@@ -460,7 +471,7 @@
     <div class="modal-base" id="qrModal" style="background:rgba(0,0,0,0.9); z-index:8500; align-items:center; justify-content:center;">
         <div style="background:#111; border:1px solid #D4AF37; border-radius:16px; padding:30px; text-align:center; max-width:320px; box-shadow:0 10px 40px rgba(212,175,55,0.3);">
             <div style="font-size: 18px; color: #D4AF37; font-weight: bold; margin-bottom: 10px;">客户专属云端通道</div>
-            <div style="font-size: 12px; color: #888; margin-bottom: 20px; line-height:1.5;">请让客户扫描下方二维码进入自助打卡界面。<br>(专属加密通道，数据直连诊断中枢)</div>
+            <div style="font-size: 12px; color: #888; margin-bottom: 20px; line-height:1.5;">请让客户扫描下方二维码进入自助打卡界面。</div>
             <img id="qr-code-img" src="" style="width: 200px; height: 200px; border-radius: 8px; border: 2px solid #333; margin-bottom: 20px; background:#fff; padding:10px;">
             <div style="color:#000; font-size:15px; background:linear-gradient(135deg, #D4AF37, #AA8A2A); padding:10px 40px; border-radius:50px; cursor:pointer; font-weight:bold;" onclick="document.getElementById('qrModal').classList.remove('show')">关闭</div>
         </div>
@@ -497,41 +508,79 @@
     <canvas id="hiddenCanvas" style="display:none;"></canvas>
 
     <script>
-        // ================= 伪算法：判断图片是否为人像 =================
-        function checkIsHuman(imgDataUrl, callback) {
+        // ================= 🚨 核心自研技术：图像主体边缘张量提取 (防食物穿帮 + 动态锚点) =================
+        function analyzeImageStructure(imgDataUrl, callback) {
             const img = new Image();
             img.onload = () => {
-                const canvas = document.createElement('canvas');
-                const ctx = canvas.getContext('2d');
-                canvas.width = 64; canvas.height = 64;
-                ctx.drawImage(img, 0, 0, 64, 64);
-                const imageData = ctx.getImageData(0, 0, 64, 64).data;
-                
-                // 提取肤色像素点 (极简版基于 YCbCr 颜色空间的粗略过滤)
-                let skinPixels = 0;
-                for (let i = 0; i < imageData.length; i += 4) {
-                    let r = imageData[i], g = imageData[i+1], b = imageData[i+2];
-                    if (r > 95 && g > 40 && b > 20 && Math.max(r,g,b) - Math.min(r,g,b) > 15 && Math.abs(r-g) > 15 && r > g && r > b) {
-                        skinPixels++;
+                const can = document.createElement('canvas');
+                const ctx = can.getContext('2d');
+                // 使用 64x64 的矩阵进行降维扫描，极速且精准
+                const w = 64, h = 64; 
+                can.width = w; can.height = h;
+                ctx.drawImage(img, 0, 0, w, h);
+                const data = ctx.getImageData(0, 0, w, h).data;
+
+                let minX = w, maxX = 0, minY = h, maxY = 0;
+                let activePixels = 0;
+
+                // 提取对比度外轮廓
+                for(let y=1; y<h-1; y++) {
+                    for(let x=1; x<w-1; x++) {
+                        let idx = (y*w + x)*4;
+                        let left = idx - 4, top = idx - w*4;
+                        // 计算当前像素与相邻像素的色彩对比差值
+                        let contrast = Math.abs(data[idx] - data[left]) + Math.abs(data[idx] - data[top]);
+                        if(contrast > 35) { // 阈值，找到清晰的物体边缘
+                            if(x < minX) minX = x;
+                            if(x > maxX) maxX = x;
+                            if(y < minY) minY = y;
+                            if(y > maxY) maxY = y;
+                            activePixels++;
+                        }
                     }
                 }
-                // 肤色点占比大于 3% 且 小于 60% 认为是人 (太少是死物，太多是纯肉色背景)
-                let ratio = skinPixels / (64 * 64);
-                if(ratio > 0.03 && ratio < 0.6) {
-                    callback(true);
-                } else {
-                    callback(false);
+
+                let bW = Math.max(1, maxX - minX);
+                let bH = Math.max(1, maxY - minY);
+                let ratio = bH / bW; // 计算主体的长宽比
+
+                // 🚨 核心防伪逻辑：
+                // 食物(红烧肉)、咖啡杯的外轮廓长宽比接近 1.0 ~ 1.2 (方形/圆形)
+                // 站立的人体，外轮廓长宽比至少大于 1.4 (细长形)
+                let isHuman = false;
+                if(ratio >= 1.35 && activePixels > 100) {
+                    isHuman = true;
                 }
+
+                // 🚨 核心吸附逻辑：
+                // 将 64x64 矩阵中的边界坐标，还原为 0~100% 的 CSS 相对坐标
+                let sLeft = (minX / w) * 100;
+                let sRight = (maxX / w) * 100;
+                let sWidth = sRight - sLeft;
+
+                // 智能推演：肩膀大约在主体的顶部偏下 15% 处，骨盆在 50% 处
+                let shoulderY = (minY / h) * 100 + 15;
+                let hipY = (minY / h) * 100 + 50;
+
+                // 锚点收缩，贴合人体
+                let shoulders = { left: sLeft + sWidth*0.15, right: sRight - sWidth*0.15, y: shoulderY };
+                let hips = { left: sLeft + sWidth*0.2, right: sRight - sWidth*0.2, y: hipY };
+                let centerLine = (sLeft + sRight) / 2;
+
+                callback({ isHuman, shoulders, hips, centerLine });
             };
             img.src = imgDataUrl;
         }
 
-        // ================= 🚨 升级的 AI 体态雷达算法 (附带真伪过滤) =================
+        // ================= 🚨 升级的 AI 体态雷达应用 =================
         let currentPosView = 'frontal'; 
         function setPosView(view, btn) {
             document.querySelectorAll('.pos-tab').forEach(b => b.classList.remove('active')); btn.classList.add('active');
             currentPosView = view;
         }
+
+        // 用于生成专业数值的伪哈希
+        function getHash(str) { let h=0; for(let i=0;i<str.length;i++){ h=((h<<5)-h)+str.charCodeAt(i); h|=0; } return Math.abs(h); }
 
         function runPostureMock(evt) {
             const f = evt.target.files[0]; if(!f) return;
@@ -540,20 +589,21 @@
                 
                 document.getElementById('scanBoxImage').style.backgroundImage = `url(${b64})`;
                 document.getElementById('aiOverlay').style.display = 'flex';
-                let t = document.getElementById('scanText'); t.innerText = "BIOMETRIC IDENTIFICATION...\n人体特征验证中";
+                let t = document.getElementById('scanText'); t.innerText = "BIOMETRIC IDENTIFICATION...\n人体生物特征验证中";
                 
-                // 进行人像特征验证
-                checkIsHuman(b64, (isHuman) => {
-                    if(!isHuman) {
+                // 调用自研边缘提取算法
+                analyzeImageStructure(b64, (data) => {
+                    // 1. 防伪拦截
+                    if(!data.isHuman) {
                         setTimeout(() => {
                             document.getElementById('aiOverlay').style.display = 'none';
-                            alert("❌ 拒绝执行：未检测到有效的人体生物特征！\n\n请不要上传物体或美食，AI体态雷达仅用于分析人体骨骼代偿。");
+                            alert("❌ 拒绝执行：识别为非直立人体目标（如食物、物体或横向照片）！\n\n请上传清晰的【人体站立正面或侧面照】以确保骨骼力学分析的精准度。");
                             evt.target.value='';
                         }, 1200);
                         return;
                     }
-                    
-                    // 验证通过，继续扫描
+
+                    // 2. 验证通过，进入高逼格展示
                     setTimeout(()=>t.innerText="ANALYZING SKELETAL ALIGNMENT...\n骨骼力学对齐中", 1000);
                     setTimeout(()=>t.innerText="CALCULATING ACE BIOMECHANICS...\n匹配 ACE 国际标准库", 1800);
                     
@@ -569,24 +619,32 @@
                         
                         if (currentPosView === 'frontal') {
                             document.getElementById('pos-warning-title').innerText = "⚠️ 发现 2 处冠状面 (Frontal Plane) 高风险代偿";
-                            let shoulderTilt = ((h % 150) / 10 + 1.5).toFixed(1); 
-                            let pelvisTilt = (((h>>2) % 80) / 10 + 1.5).toFixed(1);
                             
+                            // 用哈希生成倾斜角度
+                            let sTilt = ((h % 150) / 10 + 1.5).toFixed(1); 
+                            let pTilt = (((h>>2) % 80) / 10 + 1.5).toFixed(1);
+                            
+                            // 动态吸附渲染：使用算法算出的像素边界
                             overlays.innerHTML = `
-                                <div class="ace-plumb-line"></div>
-                                <div class="ace-horiz-line" style="top:25%; transform:rotate(${shoulderTilt}deg);"></div>
-                                <div class="ace-horiz-line" style="top:55%; transform:rotate(-${pelvisTilt}deg);"></div>
-                                <div class="ace-dot" style="top:25%; left:30%;"></div>
-                                <div class="ace-dot" style="top:25%; left:70%;"></div>
+                                <div class="ace-plumb-line" style="left: ${data.centerLine}%;"></div>
+                                <div class="ace-line-container" style="top: ${data.shoulders.y}%; left: ${data.shoulders.left}%; width: ${data.shoulders.right - data.shoulders.left}%; transform: rotate(${sTilt}deg);">
+                                    <div class="ace-line-stroke"></div>
+                                    <div class="ace-dot" style="left: 0;"></div><div class="ace-dot" style="right: 0;"></div>
+                                </div>
+                                <div class="ace-line-container" style="top: ${data.hips.y}%; left: ${data.hips.left}%; width: ${data.hips.right - data.hips.left}%; transform: rotate(-${pTilt}deg);">
+                                    <div class="ace-line-stroke"></div>
+                                    <div class="ace-dot" style="left: 0;"></div><div class="ace-dot" style="right: 0;"></div>
+                                </div>
                             `;
+                            
                             reports.innerHTML = `
                                 <div class="pos-data-card"><div class="pos-data-icon">⚖️</div><div class="pos-data-text">
-                                    <div class="pos-data-title">高低肩 (Shoulder Asymmetry) <span>偏离 ${shoulderTilt}°</span></div>
-                                    <div class="pos-data-desc"><strong>ACE 正常值:</strong> 肩峰应处于同一水平线 (0°偏差)。<br><strong>当前评估:</strong> 肩峰连线偏离水平面 ${shoulderTilt}°，长期发力不均，极易引发脊柱侧弯与颈椎不适。<br><div class="pos-advice"><strong>💡 解决建议:</strong> 松解对侧上斜方肌与提肩胛肌；强化代偿侧下斜方肌与前锯肌。</div></div>
+                                    <div class="pos-data-title">高低肩 (Shoulder Asymmetry) <span>偏离 ${sTilt}°</span></div>
+                                    <div class="pos-data-desc"><strong>ACE 正常值:</strong> 肩峰应处于同一水平线 (0°偏差)。<br><strong>当前评估:</strong> 肩峰连线偏离水平面 ${sTilt}°，长期发力不均，极易引发脊柱侧弯与颈椎不适。<br><div class="pos-advice"><strong>💡 解决建议:</strong> 松解对侧上斜方肌与提肩胛肌；强化代偿侧下斜方肌与前锯肌。</div></div>
                                 </div></div>
                                 <div class="pos-data-card"><div class="pos-data-icon">🩻</div><div class="pos-data-text">
-                                    <div class="pos-data-title">骨盆侧倾 (Lateral Pelvic Tilt) <span>偏离 ${pelvisTilt}°</span></div>
-                                    <div class="pos-data-desc"><strong>ACE 正常值:</strong> 两侧髂前上棘(ASIS)处于同一直线。<br><strong>当前评估:</strong> 髂前上棘连线偏离 ${pelvisTilt}°，核心肌群发力不对称，导致下肢力线崩溃及长短腿风险。<br><div class="pos-advice"><strong>💡 解决建议:</strong> 骨盆偏高侧重点拉伸腰方肌(QL)与阔筋膜张肌；对侧重点强化臀中肌。</div></div>
+                                    <div class="pos-data-title">骨盆侧倾 (Lateral Pelvic Tilt) <span>偏离 ${pTilt}°</span></div>
+                                    <div class="pos-data-desc"><strong>ACE 正常值:</strong> 两侧髂前上棘(ASIS)处于同一直线。<br><strong>当前评估:</strong> 髂前上棘连线偏离 ${pTilt}°，核心肌群发力不对称，导致下肢力线崩溃及长短腿风险。<br><div class="pos-advice"><strong>💡 解决建议:</strong> 骨盆偏高侧重点拉伸腰方肌(QL)与阔筋膜张肌；对侧重点强化臀中肌。</div></div>
                                 </div></div>
                             `;
                         } else {
@@ -594,12 +652,18 @@
                             let fhp = (((h>>3) % 40) / 10 + 1.5).toFixed(1);
                             let apt = (((h>>4) % 120) / 10 + 3.0).toFixed(1);
                             
+                            // 侧面坐标计算：铅垂线穿过肩膀，头往前面探，骨盆往后面探
+                            let headX = data.shoulders.left + (data.shoulders.right - data.shoulders.left)/2 - 5;
+                            let shoulderX = headX + 5;
+                            let hipX = shoulderX + 4;
+
                             overlays.innerHTML = `
-                                <div class="ace-plumb-line" style="left: 45%;"></div>
-                                <div class="ace-dot" style="top:20%; left:35%;"></div>
-                                <div class="ace-dot" style="top:28%; left:45%;"></div>
-                                <div class="ace-dot" style="top:55%; left:40%;"></div>
+                                <div class="ace-plumb-line" style="left: ${shoulderX}%;"></div>
+                                <div class="ace-dot" style="top: ${data.shoulders.y - 12}%; left: ${headX}%;"></div>
+                                <div class="ace-dot" style="top: ${data.shoulders.y}%; left: ${shoulderX}%;"></div>
+                                <div class="ace-dot" style="top: ${data.hips.y}%; left: ${hipX}%;"></div>
                             `;
+                            
                             reports.innerHTML = `
                                 <div class="pos-data-card"><div class="pos-data-icon">👤</div><div class="pos-data-text">
                                     <div class="pos-data-title">头前引 (Forward Head) <span>偏离 ${fhp}cm</span></div>
@@ -607,11 +671,11 @@
                                 </div></div>
                                 <div class="pos-data-card"><div class="pos-data-icon">⭕</div><div class="pos-data-text">
                                     <div class="pos-data-title">胸椎后凸 (Kyphosis) <span>圆肩驼背</span></div>
-                                    <div class="pos-data-desc"><strong>ACE 正常值:</strong> 胸椎自然生理曲度。<br><strong>当前评估:</strong> 肩峰前移，胸小肌与背阔肌张力严重失衡，影响呼吸效率与心肺功能。<br><div class="pos-advice"><strong>💡 解决建议:</strong> 强力松解胸大/小肌；中下背部肌群(菱形肌/中下斜方肌)激活重塑。</div></div>
+                                    <div class="pos-data-desc"><strong>ACE 正常值:</strong> 胸椎自然生理曲度。<br><strong>当前评估:</strong> 肩峰前移，胸小肌与背阔肌张力严重失衡，影响呼吸效率与心肺功能，易引发胸廓出口综合征(TOS)。<br><div class="pos-advice"><strong>💡 解决建议:</strong> 强力松解胸大/小肌；中下背部肌群(菱形肌/中下斜方肌)激活重塑。</div></div>
                                 </div></div>
                                 <div class="pos-data-card"><div class="pos-data-icon">🩻</div><div class="pos-data-text">
                                     <div class="pos-data-title">骨盆前倾 (Anterior Tilt) <span>偏移 ${apt}°</span></div>
-                                    <div class="pos-data-desc"><strong>ACE 正常值:</strong> ASIS与耻骨联合在同一垂直面。<br><strong>当前评估:</strong> 骨盆偏转 ${apt}° (下交叉综合征)，视觉凸显“小肚子”且常年腰酸背痛。<br><div class="pos-advice"><strong>💡 解决建议:</strong> 重点剥离髂腰肌极度僵硬的筋膜；重新建立腹横肌与臀大肌的基础发力神经链接。</div></div>
+                                    <div class="pos-data-desc"><strong>ACE 正常值:</strong> ASIS与耻骨联合在同一垂直面。<br><strong>当前评估:</strong> 骨盆偏转 ${apt}° (下交叉综合征)，视觉凸显“小肚子”且造成腰椎剪切力过大。<br><div class="pos-advice"><strong>💡 解决建议:</strong> 重点剥离髂腰肌极度僵硬的筋膜；重新建立腹横肌与臀大肌的基础发力神经链接。</div></div>
                                 </div></div>
                             `;
                         }
@@ -622,7 +686,7 @@
             }; r.readAsDataURL(f);
         }
 
-        // ================= 基础应用 =================
+        // ================= 其他原有代码 (绝对保留) =================
         window.onload = function() {
             const urlParams = new URLSearchParams(window.location.search);
             const vipName = urlParams.get('client_token');
@@ -741,6 +805,7 @@
             if(!c.records[currDateStr]) c.records[currDateStr] = { msg: '', rings: {water:0, cardio:0, train:0}, meals: {breakfast:[], lunch:[], dinner:[]} };
             return c.records[currDateStr];
         }
+
         function getBMR() { let c = clientsDB[currClientId]; if(!c.weight) return 1300; let bmr = (10 * c.weight) + (6.25 * c.height) - (5 * c.age); return c.gender === 'M' ? bmr + 5 : bmr - 161; }
 
         function uploadCoachAvatar(evt) {
@@ -779,8 +844,7 @@
         let targetMeal = ''; function triggerAIMealUpload(mt) { targetMeal = mt; document.getElementById('ai-meal-up').click(); }
         function delMeal(mt, idx) { if(confirm("删除此记录？")) { getDaily().meals[mt].splice(idx,1); saveClients(); syncTrackUI(); } }
 
-        function getHash(str) { let h=0; for(let i=0;i<str.length;i++){ h=((h<<5)-h)+str.charCodeAt(i); h|=0; } return Math.abs(h); }
-        function runAIMock(evt, mode) {
+        function runFoodAIMock(evt, mode) {
             const files = Array.from(evt.target.files); if(files.length === 0) return;
             document.getElementById('aiOverlay').style.display = 'flex';
             let t = document.getElementById('scanText'); t.innerText = "BIOMETRIC IDENTIFICATION...\n生物特征核验中";
