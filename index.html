@@ -13,15 +13,15 @@
     <script src="https://cdn.staticfile.net/Chart.js/3.9.1/chart.min.js"></script>
 
     <style>
-        /* ================= 主页原貌 (绝对保留) ================= */
+        /* ================= 1. 主页原貌 (绝对保留) ================= */
         :root { --primary: #00f2fe; --secondary: #7000ff; --bg: #000; --card-bg: rgba(255, 255, 255, 0.03); --text: #fff; --grad: radial-gradient(circle at top right, #1a2a6c, #000 70%); }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; margin: 0; padding: 0; }
         body { background: var(--bg); background-image: var(--grad); color: var(--text); font-family: -apple-system, sans-serif; padding: 20px; min-height: 100vh; transition: all 0.5s ease; display: flex; flex-direction: column; overflow-x: hidden;}
         
         #style-trigger { position: fixed; top: 15px; right: 15px; z-index: 2000; background: rgba(255,255,255,0.1); padding: 8px 15px; border-radius: 50px; font-size: 11px; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2); color: #fff; }
-        #style-panel { display: none; position: fixed; top: 60px; right: 15px; z-index: 2001; background: #111; border: 1px solid #333; border-radius: 15px; padding: 10px; width: 150px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
-        .style-option { padding: 12px; font-size: 13px; color: #aaa; text-align: center; border-bottom: 1px solid #222; }
-        .db-btn { color: #D4AF37; font-weight: bold; border-top: 1px dashed #444; margin-top: 5px; padding-top: 12px; cursor: pointer;}
+        #style-panel { display: none; position: fixed; top: 60px; right: 15px; z-index: 2001; background: #111; border: 1px solid #333; border-radius: 15px; padding: 10px; width: 140px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
+        .style-option { padding: 12px; font-size: 13px; color: #aaa; text-align: center; border-bottom: 1px solid #222; cursor: pointer; }
+        .db-btn { color: #D4AF37; font-weight: bold; border-top: 1px dashed #444; margin-top: 5px; padding-top: 12px; }
         
         .brand-card { background: var(--card-bg); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; padding: 25px 20px; text-align: center; margin-bottom: 25px; margin-top: 10px; }
         .brand-card h1 { margin: 0; font-size: 24px; letter-spacing: 4px; color: var(--primary); text-shadow: 0 0 15px var(--primary); }
@@ -47,7 +47,7 @@
         .m-close { color: #888; font-size: 28px; background: none; border: none; padding: 0 10px; cursor: pointer; }
         .m-body { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 20px; -webkit-overflow-scrolling: touch; padding-bottom: 100px;}
 
-        /* ================= 🚨 V3.0 新增：ACE 动力链矩阵与雷达 ================= */
+        /* ================= 身体资产雷达评估 UI ================= */
         .asset-form-group { margin-bottom: 18px; }
         .asset-label { font-size: 13px; color: #D4AF37; margin-bottom: 8px; display: block; font-weight: bold;}
         .asset-select { width: 100%; background: #111; border: 1px solid #333; color: #fff; padding: 14px; border-radius: 8px; font-size: 14px; outline: none; appearance: none; line-height: 1.4;}
@@ -72,7 +72,7 @@
         .pos-advice { margin-top: 12px; background: rgba(212,175,55,0.08); border-left: 3px solid #D4AF37; padding: 12px; font-size: 13px; color: #ddd; line-height:1.5;}
         .pos-advice strong { color: #D4AF37; }
 
-        /* ================= 🚨 V3.0 电子签署画板 ================= */
+        /* ================= 电子签署画板 ================= */
         .sig-container { background: #111; border: 1px dashed #D4AF37; border-radius: 12px; height: 200px; width: 100%; position: relative; margin-top: 10px;}
         #sig-canvas { width: 100%; height: 100%; touch-action: none; border-radius: 12px;}
         .sig-placeholder { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #444; font-size: 20px; font-weight: bold; pointer-events: none;}
@@ -173,7 +173,7 @@
         .chart-title { color: #D4AF37; font-size: 14px; font-weight: bold; margin-bottom: 15px; text-align: center; letter-spacing: 1px;}
         .chart-wrapper { width: 100%; height: 220px; position: relative;}
 
-        /* AI 扫描隔离层 */
+        /* AI 弹窗扫描层 */
         .ai-scanning-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 9999; display: none; flex-direction: column; justify-content: center; align-items: center;}
         .scan-box { width: 260px; height: 260px; position: relative; overflow: hidden; margin-bottom: 20px; display:flex; justify-content:center; align-items:center; background-size: cover; background-position: center;}
         .scan-circle { width: 100%; height: 100%; border: 4px dashed #D4AF37; border-radius: 50%; animation: spin 4s linear infinite; position: absolute; top:0; left:0;}
@@ -219,7 +219,7 @@
         .vp-title { color:#D4AF37; font-size:24px; font-weight:900; letter-spacing:4px; text-shadow:0 0 20px rgba(212,175,55,0.5);}
         .vp-btn { background:linear-gradient(135deg, #00f2fe, #4facfe); color:#000; padding:20px 50px; border-radius:50px; font-weight:900; font-size:18px; margin-top:60px; border:none; box-shadow:0 10px 30px rgba(0,242,254,0.4); cursor:pointer;}
 
-        /* ================= 🚨 门店资产绝对防御门禁 ================= */
+        /* ================= 🚨 门店绝对防御门禁 ================= */
         #auth-gate { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #050505; background-image: radial-gradient(circle at top right, #1a2a6c, #000 70%); z-index: 9999999; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; transition: opacity 0.5s;}
         .auth-card { background: rgba(255,255,255,0.03); backdrop-filter: blur(20px); border: 1px solid rgba(212,175,55,0.3); border-radius: 20px; padding: 40px 30px; width: 100%; max-width: 320px; text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,0.8);}
         .auth-title { color: #D4AF37; font-size: 22px; font-weight: 900; letter-spacing: 3px; margin-bottom: 10px;}
@@ -248,8 +248,9 @@
         <div class="style-option" onclick="applyTheme(0)">赛博霓虹</div>
         <div class="style-option" onclick="applyTheme(1)">哑光极简</div>
         <div class="style-option" onclick="applyTheme(4)">香槟金奢</div>
-        <div class="style-option db-btn" onclick="exportData()">💾 导出所有客户数据</div>
-        <div class="style-option db-btn" onclick="document.getElementById('import-file').click()">📂 恢复所有客户数据</div>
+        <div class="style-option db-btn" onclick="secureExport()">💾 导出所有客户数据</div>
+        <div class="style-option db-btn" style="border-top:none; margin-top:0; padding-top:12px;" onclick="secureImport()">📂 恢复所有客户数据</div>
+        <div class="style-option db-btn" style="border-top:none; margin-top:0; padding-top:12px; color:#FF453A;" onclick="secureEditAgreement()">📝 修改协议文本</div>
         <input type="file" id="import-file" accept=".json" style="display:none;" onchange="importData(event)">
     </div>
 
@@ -272,7 +273,7 @@
         
         <div class="card" style="border-color:#FF453A;" onclick="openModal('assetModal')">
             <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=400&q=80" loading="lazy" style="filter: brightness(0.6);">
-            <div class="card-info" style="color:#FF453A; letter-spacing:1px;">【身体资产折旧评估】</div>
+            <div class="card-info" style="color:#FF453A; letter-spacing:1px;">【身体结构代偿评估】</div>
         </div>
         
         <div class="card" style="border-color:#10b981;" onclick="openModal('lifestyleModal')"><img src="https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=400&q=80" loading="lazy" style="filter: brightness(0.5) saturate(0.8);"><div class="card-info" style="color:#10b981;">【24H 节律管家】</div></div>
@@ -280,13 +281,13 @@
 
     <div id="assetModal" class="modal-base">
         <div class="m-header">
-            <div class="m-title" style="color:#FF453A;">动力链与物理资产侦测</div>
+            <div class="m-title" style="color:#FF453A;">动力链结构侦测</div>
             <button class="m-close" onclick="closeModal('assetModal')">×</button>
         </div>
         <div class="m-body">
             <div style="text-align:center; color:#aaa; font-size:12px; margin-bottom:15px; line-height: 1.5;">
                 基于 ACE 运动科学数据中心。<br>
-                输入客户画像，并在动力链上标注痛点，推演折旧风险。
+                输入客户画像，并在动力链上标注痛点，推演代偿风险。
             </div>
             
             <div class="asset-form-group">
@@ -320,11 +321,11 @@
                 <div class="radar-chart-container">
                     <canvas id="assetRadarChart"></canvas>
                 </div>
-                <div id="asset-warning-title" style="font-size:16px; font-weight:bold; color:#FF453A; margin-bottom:15px; text-align:center;">⚠️ 动力链崩溃预警</div>
+                <div id="asset-warning-title" style="font-size:16px; font-weight:bold; color:#FF453A; margin-bottom:15px; text-align:center;">⚠️ 动力链代偿预警</div>
                 <div id="pos-report-cards"></div>
 
                 <div class="upload-btn" style="background:linear-gradient(90deg, #FF453A, #FFD60A); color:#000; border:none; margin-top:20px; text-shadow:0 1px 2px rgba(255,255,255,0.3);" onclick="openSignatureBoard()">
-                    ➔ 签署《物理资产重塑委托协议》
+                    ➔ 签署《身体结构重塑委托协议》
                 </div>
             </div>
         </div>
@@ -336,9 +337,9 @@
             <button class="m-close" onclick="closeModal('sigModal')">×</button>
         </div>
         <div class="m-body">
-            <div style="color:#fff; font-size:15px; font-weight:bold; text-align:center; margin-bottom:10px;">《LUXIOU 物理资产重塑委托协议》</div>
-            <div style="color:#888; font-size:12px; line-height:1.6; background:#111; padding:15px; border-radius:12px; margin-bottom:20px; border:1px solid #333;">
-                本人确认已清晰了解当前的身体动力链受限情况与物理资产折旧风险。兹全权委托 LUXIOU 专家团队，在未来周期内对本人的身体结构、神经募集及代谢节律进行系统性重塑与优化管理。
+            <div style="color:#fff; font-size:15px; font-weight:bold; text-align:center; margin-bottom:10px;">《LUXIOU 身体结构重塑委托协议》</div>
+            <div id="sig-agreement-text" style="color:#888; font-size:12px; line-height:1.6; background:#111; padding:15px; border-radius:12px; margin-bottom:20px; border:1px solid #333;">
+                加载中...
             </div>
             <div style="color:#D4AF37; font-size:13px; font-weight:bold; margin-bottom:5px;">请在下方黑色区域手写签名：</div>
             <div class="sig-container">
@@ -481,7 +482,7 @@
                 <div style="text-align:center; margin-bottom:20px; background:rgba(212,175,55,0.05); border:1px solid rgba(212,175,55,0.2); border-radius:12px; padding:15px;">
                     <div style="font-size:16px; color:#D4AF37; font-weight:900; margin-bottom:5px; letter-spacing:1px;" id="chart-member-title">VIP 专属体征趋势报告</div>
                     <div id="chart-date-range" style="font-size:11px; color:#888; font-weight:bold; margin-bottom:10px;">核算周期: 加载中...</div>
-                    <div style="color:#ccc; font-size:12px; line-height: 1.6;">系统基于核心代谢引擎，已为您推演生成<br>近 30 天的高定身体资产重塑曲线。</div>
+                    <div style="color:#ccc; font-size:12px; line-height: 1.6;">系统基于核心代谢引擎，已为您推演生成<br>近 30 天的高定身体重塑曲线。</div>
                 </div>
                 <div class="chart-card"><div class="chart-title">🔥 体重与顽固脂肪剥离曲线</div><div class="chart-wrapper"><canvas id="fatChart"></canvas></div></div>
                 <div class="chart-card"><div class="chart-title">📈 基础代谢与肌肉张力重塑</div><div class="chart-wrapper"><canvas id="bmrChart"></canvas></div></div>
@@ -537,16 +538,57 @@
             } catch(e) {}
         })();
 
-        // ================= 🚨 V3.0 数据舱：备份与恢复引擎 =================
-        function exportData() {
-            let exportObj = { clients: clientsDB, endorse: endorseDB };
-            let dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportObj));
-            let dlAnchorElem = document.createElement('a');
-            dlAnchorElem.setAttribute("href", dataStr);
-            dlAnchorElem.setAttribute("download", "luxiou_backup_" + currDateStr + ".json");
-            dlAnchorElem.click();
-            togglePanel();
-            showToast("数据舱备份成功！");
+        // ================= 🚨 V3.0 数据舱与协议专属配置引擎 =================
+        const defaultAgreement = "本人确认已清晰了解当前的身体动力链受限情况。兹全权委托 LUXIOU 专属私教团队，在未来周期内对本人的身体结构、神经募集及代谢节律进行系统性重塑与优化管理。";
+        
+        window.addEventListener('DOMContentLoaded', (event) => {
+            const savedText = localStorage.getItem('luxiou_custom_agreement');
+            if(savedText) {
+                const textEl = document.getElementById('sig-agreement-text');
+                if(textEl) textEl.innerText = savedText;
+            } else {
+                document.getElementById('sig-agreement-text').innerText = defaultAgreement;
+            }
+        });
+
+        function secureEditAgreement() {
+            let pwd = prompt("⚠️ 仅限店长：请输入高级密钥修改协议文本");
+            if(btoa(pwd) === MASTER_HASH) {
+                let current = localStorage.getItem('luxiou_custom_agreement') || defaultAgreement;
+                let updated = prompt("请粘贴您的新协议条款（支持长段落）：", current);
+                if(updated !== null && updated.trim() !== '') {
+                    localStorage.setItem('luxiou_custom_agreement', updated.trim());
+                    document.getElementById('sig-agreement-text').innerText = updated.trim();
+                    showToast("协议内容更新成功！");
+                }
+            } else if(pwd !== null) {
+                alert("❌ 密钥错误，无权修改！");
+            }
+        }
+
+        function secureExport() {
+            let pwd = prompt("⚠️ 仅限店长：请输入高级密钥导出数据");
+            if(btoa(pwd) === MASTER_HASH) {
+                let exportObj = { clients: clientsDB, endorse: endorseDB };
+                let dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportObj));
+                let dlAnchorElem = document.createElement('a');
+                dlAnchorElem.setAttribute("href", dataStr);
+                dlAnchorElem.setAttribute("download", "luxiou_backup_" + currDateStr + ".json");
+                dlAnchorElem.click();
+                togglePanel();
+                showToast("数据舱备份成功！");
+            } else if(pwd !== null) {
+                alert("❌ 密钥错误，无权导出！");
+            }
+        }
+
+        function secureImport() {
+            let pwd = prompt("⚠️ 仅限店长：请输入高级密钥恢复数据");
+            if(btoa(pwd) === MASTER_HASH) {
+                document.getElementById('import-file').click();
+            } else if(pwd !== null) {
+                alert("❌ 密钥错误，无权恢复！");
+            }
         }
 
         function importData(evt) {
@@ -568,7 +610,7 @@
             evt.target.value = '';
         }
 
-        // ================= 🚨 V3.0：全息肌筋膜矩阵雷达算法 (叠加型) =================
+        // ================= 🚨 V3.0：全息肌筋膜矩阵雷达算法 =================
         let assetRadarInst = null;
         let activeNodes = [];
 
@@ -581,7 +623,7 @@
                 node.classList.add('active');
                 activeNodes.push(nodeId);
             }
-            document.getElementById('scanInnerIcon').style.display = 'none'; // hide placeholder
+            document.getElementById('scanInnerIcon').style.display = 'none';
         }
         
         function generateMatrixRadar() {
@@ -603,19 +645,16 @@
 
             document.getElementById('aiOverlay').style.display = 'flex';
             let t = document.getElementById('scanText'); t.innerText = "LOADING ACE BIOMECHANICS...\n调取 ACE 动力链模型";
-            setTimeout(()=>t.innerText="ANALYZING MATRIX DEPRECIATION...\n矩阵叠加推演资产受限率", 800);
+            setTimeout(()=>t.innerText="ANALYZING MATRIX DEPRECIATION...\n矩阵叠加推演受限率", 800);
             
             setTimeout(()=>{
                 document.getElementById('aiOverlay').style.display = 'none';
                 document.getElementById('radar-container').style.display = 'block';
                 
                 const idealData = [100, 100, 100, 100, 100, 100];
-                // 默认 95 分满分开局
                 let currentData = [95, 95, 95, 95, 95, 95]; 
                 let reportHtml = '';
 
-                // 根据叠加的节点痛点扣除相应部位的健康资产分数
-                // 维度: ['颈椎曲度', '肩带稳定性', '胸椎灵活性', '骨盆中立位', '核心刚性', '下肢力线']
                 if(activeNodes.includes('kn-neck')) {
                     currentData[0] -= 55; currentData[1] -= 45; currentData[2] -= 20;
                     reportHtml += `<div class="pos-data-card" style="display:flex;"><div class="pos-data-icon">👤</div><div class="pos-data-text"><div class="pos-data-title">上交叉综合征 (Upper Crossed) <span>重度代偿</span></div><div class="pos-data-desc"><strong>力学评估:</strong> 颈椎承受超额剪切力，斜方肌被动拉长，极易引发偏头痛。</div><div class="pos-advice"><strong>💡 优化建议:</strong> 重建深层颈屈肌力量，预防颈椎生理曲度变直。</div></div></div>`;
@@ -637,7 +676,6 @@
                     reportHtml += `<div class="pos-data-card" style="display:flex;"><div class="pos-data-icon">🦵</div><div class="pos-data-text"><div class="pos-data-title">下肢力线偏移 (Alignment Collapse) <span>高危磨损</span></div><div class="pos-data-desc"><strong>力学评估:</strong> 膝关节承受了巨大的剪切力，半月板正在加速磨损。</div><div class="pos-advice"><strong>💡 优化建议:</strong> 纠正足弓塌陷，强化臀中肌以稳定股骨。</div></div></div>`;
                 }
 
-                // 职业修正系数
                 currentData = currentData.map((val, index) => {
                     let modifier = 0;
                     if(prof === 'prof1') { if(index === 0 || index === 2) modifier -= 10; } 
@@ -673,7 +711,9 @@
         function openSignatureBoard() {
             closeModal('assetModal');
             document.getElementById('sigModal').classList.add('show');
-            setTimeout(initSignature, 300); // Wait for modal to render
+            let customText = localStorage.getItem('luxiou_custom_agreement') || defaultAgreement;
+            document.getElementById('sig-agreement-text').innerText = customText;
+            setTimeout(initSignature, 300);
         }
 
         function initSignature() {
@@ -715,20 +755,18 @@
             const can = document.getElementById('hiddenCanvas'); can.width = 800; can.height = 1000; const ctx = can.getContext('2d');
             ctx.fillStyle = '#050505'; ctx.fillRect(0,0,800,1000); ctx.strokeStyle = '#D4AF37'; ctx.lineWidth = 4; ctx.strokeRect(20,20,760,960);
             
-            ctx.fillStyle = '#D4AF37'; ctx.font = 'bold 46px sans-serif'; ctx.textAlign = 'center'; ctx.fillText('物理资产重塑委托协议', 400, 120); 
-            ctx.fillStyle = '#888'; ctx.font = '24px sans-serif'; ctx.fillText('ASSET REMODELING PROTOCOL', 400, 160);
+            ctx.fillStyle = '#D4AF37'; ctx.font = 'bold 46px sans-serif'; ctx.textAlign = 'center'; ctx.fillText('身体结构重塑委托协议', 400, 120); 
+            ctx.fillStyle = '#888'; ctx.font = '24px sans-serif'; ctx.fillText('BODY REMODELING PROTOCOL', 400, 160);
             
-            ctx.textAlign = 'left'; ctx.fillStyle = '#fff'; ctx.font = '28px sans-serif';
-            let text = "基于 ACE 国际生物力学标准，检测到您的物理资产存在重度动力链代偿风险。为避免进一步的不可逆折旧，本中心将为您启动为期 3 个月的高定重塑计划。";
-            wrapText(ctx, text, 60, 260, 680, 45);
+            ctx.textAlign = 'left'; ctx.fillStyle = '#fff'; ctx.font = '26px sans-serif';
+            let customText = localStorage.getItem('luxiou_custom_agreement') || defaultAgreement;
+            wrapText(ctx, customText, 60, 260, 680, 40);
 
             ctx.fillStyle = '#111'; ctx.fillRect(60, 500, 680, 350); ctx.strokeStyle = '#333'; ctx.strokeRect(60, 500, 680, 350);
-            ctx.fillStyle = '#888'; ctx.font = '24px sans-serif'; ctx.fillText('资产委托人签名：', 80, 550);
+            ctx.fillStyle = '#888'; ctx.font = '24px sans-serif'; ctx.fillText('委托人签名：', 80, 550);
             
-            // 贴上手写签名
             ctx.drawImage(sigCanvas, 80, 580, sigCanvas.width * 1.5, sigCanvas.height * 1.5);
             
-            // 贴上虚拟印章
             ctx.strokeStyle = 'rgba(212,175,55,0.6)'; ctx.lineWidth = 8; ctx.beginPath(); ctx.arc(600, 750, 60, 0, Math.PI*2); ctx.stroke();
             ctx.fillStyle = 'rgba(212,175,55,0.6)'; ctx.font = 'bold 22px sans-serif'; ctx.textAlign = 'center';
             ctx.translate(600, 750); ctx.rotate(-Math.PI/6); ctx.fillText('LUXIOU', 0, -10); ctx.fillText('APPROVED', 0, 20); ctx.rotate(Math.PI/6); ctx.translate(-600, -750);
@@ -739,24 +777,7 @@
             closeModal('sigModal'); document.getElementById('posterModal').classList.add('show');
         }
 
-        // ================= 基础逻辑 =================
-        window.onload = function() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const vipName = urlParams.get('client_token');
-            if(vipName) {
-                document.getElementById('vip-portal-name').innerText = decodeURIComponent(vipName);
-                document.getElementById('vip-portal').style.display = 'flex'; return; 
-            }
-            document.getElementById('my-coach-avatar').src = globalCoachAvatar;
-            const request = window.indexedDB.open("LuxiouMegaMatrix", 2); 
-            request.onupgradeneeded = function(e) {
-                idb = e.target.result;
-                if (!idb.objectStoreNames.contains("base")) idb.createObjectStore("base");
-                if (!idb.objectStoreNames.contains("clients")) idb.createObjectStore("clients");
-            };
-            request.onsuccess = function(e) { idb = e.target.result; loadSysData(); };
-        };
-
+        // ================= 基础核心引擎 =================
         function togglePanel() { const p = document.getElementById('style-panel'); p.style.display = p.style.display === 'block' ? 'none' : 'block'; }
         function applyTheme(idx) {
             const themes = [
@@ -857,11 +878,10 @@
         function delMeal(mt, idx) { if(confirm("删除此记录？")) { getDaily().meals[mt].splice(idx,1); saveClients(); syncTrackUI(); } }
 
         function getHashFood(str) { let h=0; for(let i=0;i<str.length;i++){ h=((h<<5)-h)+str.charCodeAt(i); h|=0; } return Math.abs(h); }
-        
         function runFoodAIMock(evt, mode) {
             const files = Array.from(evt.target.files); if(files.length === 0) return;
             const box = document.getElementById('scanBoxImage');
-            box.style.backgroundImage = 'none'; box.style.borderRadius = '16px'; box.style.borderColor = '#D4AF37'; box.style.boxShadow = '0 0 30px rgba(212,175,55,0.3)';
+            box.style.borderRadius = '16px'; box.style.borderColor = '#D4AF37'; box.style.boxShadow = '0 0 30px rgba(212,175,55,0.3)';
             document.getElementById('scanInnerIcon').style.display = 'none'; document.getElementById('scanCircleAnim').style.display = 'none';
             const line = document.getElementById('scanLineAnim'); line.style.display = 'block'; line.style.background = '#D4AF37'; line.style.boxShadow = '0 0 20px 5px rgba(212,175,55,0.6)';
             document.getElementById('scanText').style.color = '#D4AF37';
