@@ -63,7 +63,7 @@
         .pos-advice { margin-top: 12px; background: rgba(212,175,55,0.08); border-left: 3px solid #D4AF37; padding: 12px; font-size: 13px; color: #ddd; line-height:1.5;}
         .pos-advice strong { color: #D4AF37; }
 
-        /* ================= 背书库 (修复滑动) ================= */
+        /* ================= 背书库 ================= */
         .e-seg { display: flex; background: #111; border-radius: 12px; padding: 6px; margin-bottom: 20px; border: 1px solid #222;}
         .e-tab { flex: 1; text-align: center; padding: 12px 0; font-size: 14px; font-weight: bold; color: #666; border-radius: 8px; transition: 0.3s;}
         .e-tab.active { background: #D4AF37; color: #000; box-shadow: 0 0 15px rgba(212,175,55,0.5); transform: scale(1.02); z-index: 2;}
@@ -72,9 +72,7 @@
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         .upload-btn { background: linear-gradient(135deg, rgba(212,175,55,0.1), rgba(212,175,55,0.05)); border: 1px dashed #D4AF37; color: #D4AF37; text-align: center; padding: 15px; border-radius: 12px; font-size: 14px; font-weight: bold; cursor: pointer; margin-bottom: 15px;}
         .e-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
-        
-        /* 🚨 修复点：移除了 touch-action: none; 彻底恢复原生上下滑动 */
-        .e-item { position: relative; border-radius: 12px; overflow: hidden; background: #111; border: 1px solid rgba(212,175,55,0.3); height: 220px;}
+        .e-item { position: relative; border-radius: 12px; overflow: hidden; background: #111; border: 1px solid rgba(212,175,55,0.3); height: 220px; }
         .e-item img { width: 100%; height: 100%; object-fit: cover; pointer-events: none;}
         .e-item .del { position: absolute; top: 8px; right: 8px; width: 26px; height: 26px; background: rgba(0,0,0,0.8); border: 1px solid #FF3B30; border-radius: 50%; color: #FF3B30; display: flex; justify-content: center; align-items: center; font-weight: bold; z-index: 10;}
 
@@ -161,14 +159,17 @@
         .chart-title { color: #D4AF37; font-size: 14px; font-weight: bold; margin-bottom: 15px; text-align: center; letter-spacing: 1px;}
         .chart-wrapper { width: 100%; height: 220px; position: relative;}
 
+        /* AI 扫描层 */
         .ai-scanning-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 9999; display: none; flex-direction: column; justify-content: center; align-items: center;}
-        .scan-box { width: 260px; height: 260px; border: 2px solid #FF453A; position: relative; overflow: hidden; border-radius: 50%; margin-bottom: 20px; display:flex; justify-content:center; align-items:center; box-shadow: 0 0 30px rgba(255,69,58,0.3);}
-        .scan-circle { width: 100%; height: 100%; border: 4px dashed #FF453A; border-radius: 50%; animation: spin 4s linear infinite;}
-        .scan-inner { position: absolute; font-size: 50px; }
-        .scan-text { color: #FF453A; font-size: 15px; font-weight: bold; letter-spacing: 2px; font-family: monospace; margin-top: 15px; text-align: center; line-height: 1.6;}
+        .scan-box { width: 260px; height: 260px; position: relative; overflow: hidden; margin-bottom: 20px; display:flex; justify-content:center; align-items:center; background-size: cover; background-position: center;}
+        .scan-circle { width: 100%; height: 100%; border: 4px dashed #D4AF37; border-radius: 50%; animation: spin 4s linear infinite; position: absolute; top:0; left:0;}
+        .scan-inner { font-size: 50px; z-index: 2; position: absolute;}
+        .scan-line { width: 100%; height: 3px; background: #D4AF37; box-shadow: 0 0 20px 5px rgba(212,175,55,0.6); position: absolute; top: 0; left: 0; animation: scanAnim 1.2s infinite linear; z-index: 3;}
+        .scan-text { color: #D4AF37; font-size: 15px; font-weight: bold; letter-spacing: 2px; font-family: monospace; margin-top: 15px; text-align: center; line-height: 1.6;}
         @keyframes spin { 100% { transform: rotate(360deg); } }
+        @keyframes scanAnim { 0% { top: 0; opacity: 1; } 100% { top: 100%; opacity: 0.2; } }
 
-        /* 左滑删除专属会员抽屉 */
+        /* 左滑抽屉 */
         .new-client-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 8000; display: none; flex-direction: column; justify-content: center; align-items: center; padding: 20px; backdrop-filter: blur(10px);}
         .new-client-modal.show { display: flex; }
         .nc-card { background: #111; border: 1px solid #D4AF37; border-radius: 16px; width: 100%; max-width: 350px; padding: 25px;}
@@ -284,7 +285,6 @@
                 <div class="radar-chart-container">
                     <canvas id="assetRadarChart"></canvas>
                 </div>
-                
                 <div id="asset-warning-title" style="font-size:16px; font-weight:bold; color:#FF453A; margin-bottom:15px; text-align:center;">⚠️ 动力链崩溃预警</div>
                 <div id="pos-report-cards"></div>
 
@@ -296,9 +296,10 @@
     </div>
 
     <div class="ai-scanning-overlay" id="aiOverlay">
-        <div class="scan-box">
-            <div class="scan-inner">🧬</div>
-            <div class="scan-circle"></div>
+        <div class="scan-box" id="scanBoxImage">
+            <div class="scan-inner" id="scanInnerIcon" style="display:none;">🧬</div>
+            <div class="scan-circle" id="scanCircleAnim" style="display:none;"></div>
+            <div class="scan-line" id="scanLineAnim" style="display:none;"></div>
         </div>
         <div class="scan-text" id="scanText" style="white-space:pre-wrap;"></div>
     </div>
@@ -313,13 +314,11 @@
                 <div class="e-tab active" onclick="switchEndorseTab('cert', this)">资质证书</div>
                 <div class="e-tab" onclick="switchEndorseTab('coach', this)">教练团队墙</div>
             </div>
-            
             <div id="e-view-cert" class="e-sec active">
                 <div class="upload-btn" onclick="document.getElementById('cert-up').click()">+ 上传资质证书</div>
                 <input type="file" id="cert-up" multiple accept="image/*" style="display:none;" onchange="handleEndorseUp(event, 'cert')">
                 <div class="e-grid" id="cert-gallery"></div>
             </div>
-
             <div id="e-view-coach" class="e-sec">
                 <div class="upload-btn" onclick="document.getElementById('coach-up').click()">+ 上传教练照片</div>
                 <input type="file" id="coach-up" multiple accept="image/*" style="display:none;" onchange="handleEndorseUp(event, 'coach')">
@@ -407,7 +406,7 @@
                     <div style="font-size: 14px; font-weight: bold; color: #fff; margin-bottom: 10px;">✦ 社交赴宴生存指南</div>
                     <div class="guide-scroll">
                         <div class="guide-card" onclick="openGuide('bistro')"><img src="https://images.unsplash.com/photo-1550966871-3ed3cdb5ed0c?auto=format&fit=crop&w=400&q=80"><div class="guide-overlay"><div class="g-title">米其林 / Bistro</div><div class="g-desc">享受美食的防暴卡秘籍</div></div></div>
-                        <div class="guide-card" onclick="openGuide('tea')"><img src="https://images.unsplash.com/photo-1495147466023-e6a925cd3155?auto=format&fit=crop&w=400&q=80"><div class="guide-overlay"><div class="g-title">精致下午茶</div><div class="g-desc">优雅避开糖油混合炸弹</div></div></div>
+                        <div class="guide-card" onclick="openGuide('tea')"><img src="https://images.unsplash.com/photo-1497935586351-b67a49e012bf?auto=format&fit=crop&w=400&q=80"><div class="guide-overlay"><div class="g-title">精致下午茶</div><div class="g-desc">优雅避开糖油混合炸弹</div></div></div>
                         <div class="guide-card" onclick="openGuide('business')"><img src="https://images.unsplash.com/photo-1552566626-52f8b828add9?auto=format&fit=crop&w=400&q=80"><div class="guide-overlay"><div class="g-title">商务应酬酒局</div><div class="g-desc">酒局与推杯换盏保护法</div></div></div>
                     </div>
                 </div>
@@ -425,7 +424,9 @@
                 <div style="text-align:center; margin-bottom:20px; background:rgba(212,175,55,0.05); border:1px solid rgba(212,175,55,0.2); border-radius:12px; padding:15px;">
                     <div style="font-size:16px; color:#D4AF37; font-weight:900; margin-bottom:5px; letter-spacing:1px;" id="chart-member-title">VIP 专属体征趋势报告</div>
                     <div id="chart-date-range" style="font-size:11px; color:#888; font-weight:bold; margin-bottom:10px;">核算周期: 加载中...</div>
-                    <div style="color:#ccc; font-size:12px; line-height: 1.6;">系统基于核心代谢引擎，已为您推演生成<br>近 30 天的高定身体资产重塑曲线。</div>
+                    <div style="color:#ccc; font-size:12px; line-height: 1.6;">
+                        系统基于核心代谢引擎，已为您推演生成<br>近 30 天的高定身体资产重塑曲线。
+                    </div>
                 </div>
                 <div class="chart-card"><div class="chart-title">🔥 体重与顽固脂肪剥离曲线</div><div class="chart-wrapper"><canvas id="fatChart"></canvas></div></div>
                 <div class="chart-card"><div class="chart-title">📈 基础代谢与肌肉张力重塑</div><div class="chart-wrapper"><canvas id="bmrChart"></canvas></div></div>
@@ -436,7 +437,7 @@
     <div class="new-client-modal" id="newClientForm"><div class="nc-card"><div class="nc-title">新建 VIP 会员档案</div><div class="nc-group"><span class="nc-label">姓名/称呼</span><input type="text" id="nc-name" class="nc-input" placeholder="如：王总"></div><div class="nc-group"><span class="nc-label">性别</span><select id="nc-gender" class="nc-input"><option value="F">女士</option><option value="M">男士</option></select></div><div class="nc-group"><span class="nc-label">年龄</span><input type="number" id="nc-age" class="nc-input" placeholder="岁" value="30"></div><div class="nc-group"><span class="nc-label">身高 (cm)</span><input type="number" id="nc-height" class="nc-input" placeholder="厘米" value="165"></div><div class="nc-group"><span class="nc-label">体重 (kg)</span><input type="number" id="nc-weight" class="nc-input" placeholder="公斤" value="55"></div><button class="nc-btn" onclick="submitNewClient()">保存并建立档案</button><div style="text-align:center; color:#666; margin-top:15px; cursor:pointer;" onclick="document.getElementById('newClientForm').classList.remove('show')">取消</div></div></div>
     <div class="client-modal" id="clientMenu"><div style="color:#D4AF37; font-size:14px; font-weight:bold; margin-bottom:15px; padding-left:15px;">我的 VIP 会员列表<span style="font-size:10px;color:#888;margin-left:10px;">(左滑删除)</span></div><div id="client-list-render" style="max-height:40vh; overflow-y:auto; overflow-x:hidden;"></div><div class="cm-add" onclick="openNewClientForm()">+ 新建高级会员档案</div><div class="cm-item" style="justify-content:center; color:#666; border:none; margin-top:10px; cursor:pointer;" onclick="document.getElementById('clientMenu').classList.remove('show')">取消关闭</div></div>
     
-    <div class="modal-base" id="qrModal" style="background:rgba(0,0,0,0.9); z-index:8500; align-items:center; justify-content:center;"><div style="background:#111; border:1px solid #D4AF37; border-radius:16px; padding:30px; text-align:center; max-width:320px; box-shadow:0 10px 40px rgba(212,175,55,0.3);"><div style="font-size: 18px; color: #D4AF37; font-weight: bold; margin-bottom: 10px;">客户专属云端通道</div><div style="font-size: 12px; color: #888; margin-bottom: 20px; line-height:1.5;">请让客户扫描下方二维码进入自助打卡界面。</div><img id="qr-code-img" src="" style="width: 200px; height: 200px; border-radius: 8px; border: 2px solid #333; margin-bottom: 20px; background:#fff; padding:10px;"><div style="color:#000; font-size:15px; background:linear-gradient(135deg, #D4AF37, #AA8A2A); padding:10px 40px; border-radius:50px; cursor:pointer; font-weight:bold;" onclick="document.getElementById('qrModal').classList.remove('show')">关闭</div></div></div>
+    <div class="modal-base" id="qrModal" style="background:rgba(0,0,0,0.9); z-index:8500; align-items:center; justify-content:center;"><div style="background:#111; border:1px solid #D4AF37; border-radius:16px; padding:30px; text-align:center; max-width:320px; box-shadow:0 10px 40px rgba(212,175,55,0.3);"><div style="font-size: 18px; color: #D4AF37; font-weight: bold; margin-bottom: 10px;">客户专属云端通道</div><div style="font-size: 12px; color: #888; margin-bottom: 20px; line-height:1.5;">请让客户扫描下方二维码进入自助打卡界面。<br>(专属加密通道，数据直连诊断中枢)</div><img id="qr-code-img" src="" style="width: 200px; height: 200px; border-radius: 8px; border: 2px solid #333; margin-bottom: 20px; background:#fff; padding:10px;"><div style="color:#000; font-size:15px; background:linear-gradient(135deg, #D4AF37, #AA8A2A); padding:10px 40px; border-radius:50px; cursor:pointer; font-weight:bold;" onclick="document.getElementById('qrModal').classList.remove('show')">关闭</div></div></div>
     <div id="vip-portal"><div class="vp-title">LUXIOU</div><div style="font-size:12px; color:#888; letter-spacing:2px; margin-top:5px;">VIP 专属能量交互矩阵</div><div style="margin-top:60px; font-size:22px; color:#fff; font-weight:bold; text-align:center;">尊贵的 <span id="vip-portal-name" style="color:#00f2fe;"></span><br>欢迎接入中枢</div><div style="color:#aaa; font-size:13px; margin-top:15px; text-align:center; line-height:1.6;">请上传您的当日三餐<br>AI 营养引擎将实时估算热量，并同步至您的专属重塑导师。</div><button class="vp-btn" onclick="document.getElementById('vip-upload').click()">📷 唤醒视觉镜头上传三餐</button><input type="file" id="vip-upload" accept="image/*" style="display:none;" onchange="vipUploadMock(event)"><div id="vip-success-msg" style="display:none; margin-top:40px; padding:20px; background:rgba(50,215,75,0.1); border:1px solid #32D74B; border-radius:16px; color:#32D74B; text-align:center; font-weight:bold; line-height:1.5;">✅ 视觉解析完成！<br><br>数据已加密传输至您的导师后台，请耐心等待导师的专业点评与规划。</div></div>
     
     <div class="guide-modal" id="guideModal"><div style="display:flex; justify-content:space-between; margin-bottom:20px;"><div class="gm-title" id="gm-title">指南标题</div><div style="color:#888; font-size:28px; cursor:pointer;" onclick="document.getElementById('guideModal').classList.remove('show')">×</div></div><div class="gm-content" id="gm-content"></div></div>
@@ -451,6 +452,16 @@
             const prof = document.getElementById('asset-prof').value;
             const pain = document.getElementById('asset-pain').value;
             
+            // 🚨 设置为雷达专属的 DNA 红色扫描动画
+            const box = document.getElementById('scanBoxImage');
+            box.style.backgroundImage = 'none'; box.style.borderRadius = '50%';
+            box.style.borderColor = '#FF453A'; box.style.boxShadow = '0 0 30px rgba(255,69,58,0.3)';
+            document.getElementById('scanInnerIcon').style.display = 'block';
+            document.getElementById('scanCircleAnim').style.display = 'block';
+            document.getElementById('scanLineAnim').style.display = 'none';
+            document.getElementById('scanCircleAnim').style.borderColor = '#FF453A';
+            document.getElementById('scanText').style.color = '#FF453A';
+
             document.getElementById('aiOverlay').style.display = 'flex';
             let t = document.getElementById('scanText'); t.innerText = "LOADING ACE BIOMECHANICS...\n调取 ACE 运动力学数据库";
             setTimeout(()=>t.innerText="ANALYZING DEPRECIATION RATE...\n交叉推演资产受限率", 800);
@@ -463,6 +474,7 @@
                 let baseData = [80, 80, 80, 80, 80, 80]; 
                 let reportHtml = '';
 
+                // 核心病理模型基准数据 (去医学化，使用专业力学词汇)
                 if(pain === 'p1') {
                     baseData = [35, 45, 60, 85, 75, 90];
                     reportHtml = `<div class="pos-data-card" style="display:flex;"><div class="pos-data-icon">👤</div><div class="pos-data-text"><div class="pos-data-title">上交叉综合征 (Upper Crossed) <span>重度代偿</span></div><div class="pos-data-desc"><strong>力学评估:</strong> 颈椎曲度与肩带稳定性数据断崖式下跌。胸大肌过紧，斜方肌被动拉长，颈椎承受了3倍以上正常重力，这是引发偏头痛的直接原因。</div><div class="pos-advice"><strong>💡 结构优化建议:</strong> 立即启动胸锁乳突肌松解，重建深层颈屈肌力量，否则极易发展为颈椎生理曲度变直。</div></div></div>`;
@@ -614,9 +626,7 @@
         function addTag(txt) { document.getElementById('val-directive').value = txt; saveDailyData(); showToast("已应用指令"); }
 
         function syncTrackUI() {
-            if(!currClientId) return; let c = clientsDB[currClientId]; document.getElementById('current-client-name').innerText = c.name;
-            document.getElementById('current-client-tags').innerText = `${c.gender==='M'?'男士':'女士'} | ${c.age}岁 | ${c.height}cm | ${c.weight}kg`;
-            document.getElementById('date-picker').value = currDateStr;
+            if(!currClientId) return; let c = clientsDB[currClientId]; document.getElementById('current-client-name').innerText = c.name; document.getElementById('current-client-tags').innerText = `${c.gender==='M'?'男士':'女士'} | ${c.age}岁 | ${c.height}cm | ${c.weight}kg`; document.getElementById('date-picker').value = currDateStr;
             let d = getDaily(); document.getElementById('val-directive').value = d.msg || ''; drawRing('water', d.rings.water, 4000, 'ml'); drawRing('cardio', d.rings.cardio, 120, '分'); drawRing('train', d.rings.train, 3, '次');
             ['breakfast', 'lunch', 'dinner'].forEach(mt => { let box = document.getElementById(`m-${mt}`); box.innerHTML = ''; if(d.meals[mt].length === 0) box.innerHTML = `<div class="empty-meal">暂无记录</div>`; else { d.meals[mt].forEach((m, i) => { box.innerHTML += `<div class="meal-row"><img src="${m.img}"><div class="meal-info"><div class="m-row-kcal">${m.kcal} KCAL</div><div class="m-row-tags"><span class="m-tag" style="background:${m.color}">${m.status}</span><span class="m-tag" style="background:#222;color:#aaa">P:${m.pro} C:${m.carb} F:${m.fat}</span></div><div class="m-sug">${m.sug}</div></div><div class="meal-del" onclick="delMeal('${mt}', ${i})">×</div></div>`; }); } }); calcEnergy(); 
         }
@@ -638,16 +648,35 @@
         function delMeal(mt, idx) { if(confirm("删除此记录？")) { getDaily().meals[mt].splice(idx,1); saveClients(); syncTrackUI(); } }
 
         function getHashFood(str) { let h=0; for(let i=0;i<str.length;i++){ h=((h<<5)-h)+str.charCodeAt(i); h|=0; } return Math.abs(h); }
+        
+        // 🚨 终极修复：彻底重置食物扫描动画框
         function runFoodAIMock(evt, mode) {
             const files = Array.from(evt.target.files); if(files.length === 0) return;
-            document.getElementById('aiOverlay').style.display = 'flex'; let t = document.getElementById('scanText'); t.innerText = "BIOMETRIC IDENTIFICATION...\n生物特征核验中"; setTimeout(()=>t.innerText="ANALYZING MACROS...\n营养学宏量剥离中", 800);
+            
+            // 强行把扫描框重置为食物评估模式（方形金框）
+            const box = document.getElementById('scanBoxImage');
+            box.style.borderRadius = '16px';
+            box.style.borderColor = '#D4AF37';
+            box.style.boxShadow = '0 0 30px rgba(212,175,55,0.3)';
+            document.getElementById('scanInnerIcon').style.display = 'none';
+            document.getElementById('scanCircleAnim').style.display = 'none';
+            
+            const line = document.getElementById('scanLineAnim');
+            line.style.display = 'block';
+            line.style.background = '#D4AF37';
+            line.style.boxShadow = '0 0 20px 5px rgba(212,175,55,0.6)';
+            document.getElementById('scanText').style.color = '#D4AF37';
+
+            document.getElementById('aiOverlay').style.display = 'flex'; 
+            let t = document.getElementById('scanText'); t.innerText = "CONNECTING AI MODEL...\n视觉参数剥离中"; setTimeout(()=>t.innerText="ANALYZING MACROS...\n营养学宏量解析中", 800);
+            
             let loadedCount = 0; let tempRes = [];
             files.forEach((f, idx) => {
                 const r = new FileReader(); r.onload = e => {
-                    const b64 = e.target.result; if(idx === 0) document.getElementById('scanBoxImage').style.backgroundImage = `url(${b64})`; 
+                    const b64 = e.target.result; if(idx === 0) box.style.backgroundImage = `url(${b64})`; 
                     let h = getHashFood(b64.substring(100, 3000)); let p = (h % 40) + 10; let c = ((h >> 3) % 70) + 10; let fat = ((h >> 5) % 30) + 5; let k = (p * 4) + (c * 4) + (fat * 9); 
                     let color='#32D74B', status='优质供能', sug='营养配比极佳，非常符合增肌减脂要求。'; 
-                    if(k > 600 || c > 60) {color='#FF453A'; status='高碳警报'; sug='碳水超标，建议增加15分钟有氧加速消耗。';} else if(fat > 20) {color='#FFD60A'; status='注意油脂'; sug='脂肪偏高，下一餐请换为纯白煮或清蒸。';}
+                    if(k > 600 || c > 60) {color='#FF453A'; status='高碳警报'; sug='碳水超标，建议增加15分钟有氧加速消耗。';} else if(fat > 20) {color='#FFD60A'; status='注意油脂'; sug='游离脂肪偏高，下一餐请换为纯白煮或清蒸。';}
                     if(mode === 'track') { const img = new Image(); img.onload = () => { const can = document.createElement('canvas'); const sc = Math.min(600/img.width, 1); can.width=img.width*sc; can.height=img.height*sc; can.getContext('2d').drawImage(img,0,0,can.width,can.height); tempRes.push({ i: idx, obj: {img: can.toDataURL('image/jpeg', 0.6), kcal: k, pro: p, carb: c, fat: fat, status: status, color: color, sug: sug} }); checkFinish(); }; img.src = b64; } else { tempRes.push({ i: idx, obj: {img: b64, kcal: k, pro: p, carb: c, fat: fat, status: status, color: color, sug: sug} }); checkFinish(); }
                 }; r.readAsDataURL(f);
             });
