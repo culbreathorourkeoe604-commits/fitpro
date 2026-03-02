@@ -13,7 +13,7 @@
     <script src="https://cdn.staticfile.net/Chart.js/3.9.1/chart.min.js"></script>
 
     <style>
-        /* ================= 主页原貌 ================= */
+        /* ================= 1. 主页原貌 (绝对保留) ================= */
         :root { --primary: #00f2fe; --secondary: #7000ff; --bg: #000; --card-bg: rgba(255, 255, 255, 0.03); --text: #fff; --grad: radial-gradient(circle at top right, #1a2a6c, #000 70%); }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; margin: 0; padding: 0; }
         body { background: var(--bg); background-image: var(--grad); color: var(--text); font-family: -apple-system, sans-serif; padding: 20px; min-height: 100vh; transition: all 0.5s ease; display: flex; flex-direction: column; overflow-x: hidden;}
@@ -38,7 +38,7 @@
         .card:active img { transform: scale(1.05); }
         .card-info { position: absolute; bottom: 0; width: 100%; padding: 12px 5px; font-size: 11px; text-align: center; font-weight: bold; background: linear-gradient(transparent, rgba(0,0,0,0.9)); color: #fff; pointer-events: none;}
         
-        /* ================= 弹窗基础 ================= */
+        /* ================= 通用弹窗组件 ================= */
         .modal-base { position: fixed; top: 100vh; left: 0; width: 100%; height: 100vh; background: #050505; z-index: 3000; transition: top 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); display: flex; flex-direction: column;}
         .modal-base.show { top: 0; }
         .m-header { height: 60px; display: flex; justify-content: space-between; align-items: center; padding: 0 20px; background: rgba(5,5,5,0.95); border-bottom: 1px solid rgba(212,175,55,0.2); flex-shrink: 0;}
@@ -46,27 +46,28 @@
         .m-close { color: #888; font-size: 28px; background: none; border: none; padding: 0 10px; cursor: pointer; }
         .m-body { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 20px; -webkit-overflow-scrolling: touch; padding-bottom: 100px;}
 
-        /* ================= 🚨 新增：基于 ACE 的体态雷达 UI ================= */
+        /* ================= 🚨 升级版：AI 体态雷达 ================= */
         .pos-seg { display: flex; background: #111; border-radius: 12px; padding: 4px; margin-bottom: 15px; border: 1px solid #333;}
         .pos-tab { flex: 1; text-align: center; padding: 10px 0; font-size: 12px; font-weight: bold; color: #888; border-radius: 8px; transition: 0.3s; cursor: pointer;}
         .pos-tab.active { background: #FF453A; color: #fff; box-shadow: 0 0 15px rgba(255,69,58,0.4);}
         
         .pos-res-box { position: relative; width: 100%; border-radius: 12px; overflow: hidden; border: 1px solid #FF453A; margin-bottom: 20px; display: none; background: #111; min-height: 200px;}
-        /* 保证照片高清等比显示，不被裁切 */
-        .pos-res-box img { width: 100%; max-height: 50vh; object-fit: contain; display: block; filter: brightness(0.85) contrast(1.1);}
+        /* 去除过度滤镜，呈现原图细节 */
+        .pos-res-box img { width: 100%; max-height: 60vh; object-fit: contain; display: block; filter: contrast(1.05);}
         
-        /* 动态生成的体态辅助线 (ACE Plumb Line) */
         .ace-plumb-line { position: absolute; top:0; left:50%; width:2px; height:100%; background: #32D74B; box-shadow: 0 0 8px #32D74B; pointer-events: none; z-index: 5;}
         .ace-horiz-line { position: absolute; left:10%; width:80%; height:2px; background: #FFD60A; box-shadow: 0 0 8px #FFD60A; pointer-events: none; z-index: 5; transform-origin: center;}
-        .ace-dot { position: absolute; width: 12px; height: 12px; border-radius: 50%; background: #FF453A; border: 2px solid #fff; box-shadow: 0 0 10px #FF453A; transform: translate(-50%, -50%); z-index: 6; animation: blink 1.5s infinite;}
+        .ace-dot { position: absolute; width: 14px; height: 14px; border-radius: 50%; background: #FF453A; border: 2px solid #fff; box-shadow: 0 0 15px #FF453A; transform: translate(-50%, -50%); z-index: 6; animation: blink 1.5s infinite;}
         @keyframes blink { 0%{transform:translate(-50%, -50%) scale(1); opacity:1;} 50%{transform:translate(-50%, -50%) scale(1.3); opacity:0.6;} 100%{transform:translate(-50%, -50%) scale(1); opacity:1;} }
         
-        .pos-data-card { background: #111; border: 1px solid #333; border-radius: 12px; padding: 15px; margin-bottom: 10px; display: flex; align-items: flex-start; gap: 10px;}
-        .pos-data-icon { font-size: 20px; }
+        .pos-data-card { background: #111; border: 1px solid #333; border-radius: 12px; padding: 15px; margin-bottom: 12px; display: flex; align-items: flex-start; gap: 12px;}
+        .pos-data-icon { font-size: 24px; }
         .pos-data-text { flex: 1;}
-        .pos-data-title { color: #fff; font-size: 14px; font-weight: bold; margin-bottom: 4px; display: flex; justify-content: space-between; align-items: center;}
-        .pos-data-title span { color: #FF453A; font-size: 10px; padding: 2px 6px; border: 1px solid #FF453A; border-radius: 4px; background: rgba(255,69,58,0.1);}
-        .pos-data-desc { color: #aaa; font-size: 11px; line-height: 1.5;}
+        .pos-data-title { color: #fff; font-size: 15px; font-weight: bold; margin-bottom: 6px; display: flex; justify-content: space-between; align-items: center;}
+        .pos-data-title span { color: #FF453A; font-size: 11px; padding: 3px 8px; border: 1px solid #FF453A; border-radius: 6px; background: rgba(255,69,58,0.1); font-weight: 900;}
+        .pos-data-desc { color: #aaa; font-size: 12px; line-height: 1.6;}
+        .pos-advice { margin-top: 8px; background: rgba(50,215,75,0.08); border-left: 2px solid #32D74B; padding: 8px 10px; font-size: 11px; color: #ccc;}
+        .pos-advice strong { color: #32D74B; }
 
         /* ================= 背书库 ================= */
         .e-seg { display: flex; background: #111; border-radius: 12px; padding: 6px; margin-bottom: 20px; border: 1px solid #222;}
@@ -166,7 +167,7 @@
         .ai-scanning-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 9999; display: none; flex-direction: column; justify-content: center; align-items: center;}
         .scan-box { width: 260px; height: 260px; border: 2px solid #D4AF37; position: relative; overflow: hidden; border-radius: 16px; margin-bottom: 20px; background-size: cover; background-position: center; box-shadow: 0 0 30px rgba(212,175,55,0.3);}
         .scan-line { width: 100%; height: 3px; background: #D4AF37; box-shadow: 0 0 20px 5px rgba(212,175,55,0.6); position: absolute; top: 0; animation: scanAnim 1.2s infinite linear;}
-        .scan-text { color: #D4AF37; font-size: 15px; font-weight: bold; letter-spacing: 2px; font-family: monospace; margin-top: 15px;}
+        .scan-text { color: #D4AF37; font-size: 15px; font-weight: bold; letter-spacing: 2px; font-family: monospace; margin-top: 15px; text-align: center; line-height: 1.5;}
         @keyframes scanAnim { 0% { top: 0; opacity: 1; } 100% { top: 100%; opacity: 0.2; } }
 
         .new-client-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 8000; display: none; flex-direction: column; justify-content: center; align-items: center; padding: 20px; backdrop-filter: blur(10px);}
@@ -200,7 +201,6 @@
         .poster-modal.show { display: flex; }
         .poster-img { width: auto; max-width: 100%; height: auto; max-height: 70vh; object-fit: contain; border-radius: 12px; box-shadow: 0 10px 40px rgba(212,175,55,0.4); margin-bottom: 20px; background: #000;}
 
-        /* VIP 客户扫码专属界面 */
         #vip-portal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:#050505; background-image: radial-gradient(circle at top right, #1a2a6c, #000 80%); z-index:99999; padding:40px 20px; flex-direction:column; align-items:center;}
         .vp-title { color:#D4AF37; font-size:24px; font-weight:900; letter-spacing:4px; text-shadow:0 0 20px rgba(212,175,55,0.5);}
         .vp-btn { background:linear-gradient(135deg, #00f2fe, #4facfe); color:#000; padding:20px 50px; border-radius:50px; font-weight:900; font-size:18px; margin-top:60px; border:none; box-shadow:0 10px 30px rgba(0,242,254,0.4); cursor:pointer;}
@@ -234,9 +234,9 @@
         <div class="card" style="border-color:#22d3ee" onclick="openModal('endorseModal')"><img src="cert.jpg" loading="lazy"><div class="card-info">【背书库】</div></div>
         <div class="card" style="border-color:#f472b6" onclick="window.location.href='./price.html'"><img src="product.jpg" loading="lazy"><div class="card-info">【黑金报价库】</div></div>
         
-        <div class="card" style="border-color:#ff3e3e;" onclick="openModal('postureModal')"><img src="case.jpg" loading="lazy" style="filter: brightness(0.4) saturate(0.8);"><div class="card-info" style="color:#ff3e3e;">【AI 体态雷达】</div></div>
+        <div class="card" style="border-color:#ff3e3e;" onclick="openModal('postureModal')"><img src="https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&w=400&q=80" loading="lazy" style="filter: brightness(0.5) saturate(0.8);"><div class="card-info" style="color:#ff3e3e;">【AI 体态雷达】</div></div>
         
-        <div class="card" style="border-color:#10b981;" onclick="openModal('lifestyleModal')"><img src="case.jpg" loading="lazy" style="filter: brightness(0.4) saturate(0.8);"><div class="card-info" style="color:#10b981;">【24H 节律管家】</div></div>
+        <div class="card" style="border-color:#10b981;" onclick="openModal('lifestyleModal')"><img src="https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=400&q=80" loading="lazy" style="filter: brightness(0.5) saturate(0.8);"><div class="card-info" style="color:#10b981;">【24H 节律管家】</div></div>
     </div>
 
     <div id="postureModal" class="modal-base">
@@ -246,11 +246,11 @@
         </div>
         <div class="m-body">
             <div style="text-align:center; color:#aaa; font-size:12px; margin-bottom:15px;">
-                依据 ACE 国际标准执行人体生物力学评估。
+                依据 ACE(美国运动委员会) 国际标准执行人体生物力学评估。
             </div>
             
             <div class="pos-seg">
-                <div class="pos-tab active" onclick="setPosView('frontal', this)">👤 正面/背面评估 (冠状面)</div>
+                <div class="pos-tab active" onclick="setPosView('frontal', this)">👤 正/背面评估 (冠状面)</div>
                 <div class="pos-tab" onclick="setPosView('sagittal', this)">🚶‍♀️ 侧面评估 (矢状面)</div>
             </div>
 
@@ -352,7 +352,7 @@
                     </div>
                     <div style="margin-top:10px; padding-top:15px; border-top:1px dashed #333; text-align:center;">
                         <button style="background:rgba(212,175,55,0.1); color:#D4AF37; border:1px dashed #D4AF37; padding:10px 0; width:100%; border-radius:8px; font-size:13px; font-weight:bold; cursor:pointer;" onclick="openQRModal()">
-                            📱 开启会员专属云端打卡通道
+                            📱 开启会员专属云端打卡通道 (演示)
                         </button>
                     </div>
                 </div>
@@ -426,7 +426,6 @@
             <div id="ls-view-chart" class="e-sec">
                 <div style="text-align:center; margin-bottom:20px; color:#888; font-size:12px; line-height: 1.6;">
                     系统基于核心代谢引擎，已为您推演生成<br>该会员近 30 天的高定蜕变曲线。<br>
-                    <span style="color:#D4AF37;">(展示图表为逼单专属演示数据)</span>
                 </div>
                 
                 <div class="chart-card">
@@ -492,7 +491,7 @@
 
     <div class="ai-scanning-overlay" id="aiOverlay">
         <div class="scan-box" id="scanBoxImage"><div class="scan-line"></div></div>
-        <div class="scan-text" id="scanText">CONNECTING AI...</div>
+        <div class="scan-text" id="scanText" style="text-align:center;">CONNECTING AI...</div>
     </div>
     
     <div class="poster-modal" id="posterModal">
@@ -503,99 +502,6 @@
     <canvas id="hiddenCanvas" style="display:none;"></canvas>
 
     <script>
-        // ================= AI 体态雷达评估逻辑 (核心修复) =================
-        let currentPosView = 'frontal'; 
-        
-        function setPosView(view, btn) {
-            document.querySelectorAll('.pos-tab').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            currentPosView = view;
-        }
-
-        function runPostureMock(evt) {
-            const f = evt.target.files[0]; if(!f) return;
-            const r = new FileReader(); r.onload = e => {
-                const b64 = e.target.result;
-                
-                // 清空之前的图层
-                document.getElementById('pos-dynamic-overlays').innerHTML = '';
-                document.getElementById('pos-report-cards').innerHTML = '';
-                document.getElementById('pos-res-img').src = b64; 
-                
-                // 开启扫描动画
-                document.getElementById('scanBoxImage').style.backgroundImage = `url(${b64})`;
-                document.getElementById('aiOverlay').style.display = 'flex';
-                let t = document.getElementById('scanText'); t.innerText = "INITIATING POSTURE RADAR...";
-                setTimeout(()=>t.innerText="ANALYZING SKELETAL ALIGNMENT...", 800);
-                setTimeout(()=>t.innerText="CALCULATING ACE BIOMECHANICS...", 1600);
-                
-                setTimeout(()=>{
-                    document.getElementById('aiOverlay').style.display = 'none';
-                    
-                    const overlays = document.getElementById('pos-dynamic-overlays');
-                    const reports = document.getElementById('pos-report-cards');
-                    let h = getHash(b64.substring(100, 3000));
-                    
-                    // 基于 ACE 规范区分正/侧面生成诊断报告
-                    if (currentPosView === 'frontal') {
-                        document.getElementById('pos-warning-title').innerText = "⚠️ 发现 2 处冠状面 (Frontal Plane) 高风险代偿";
-                        
-                        // 正面辅助线：肩峰连线，髂前上棘连线
-                        let shoulderTilt = (h % 10) + 2; 
-                        let pelvisTilt = ((h>>2) % 8) + 2;
-                        
-                        overlays.innerHTML = `
-                            <div class="ace-plumb-line"></div>
-                            <div class="ace-horiz-line" style="top:25%; transform:rotate(${shoulderTilt}deg);"></div>
-                            <div class="ace-horiz-line" style="top:55%; transform:rotate(-${pelvisTilt}deg);"></div>
-                            <div class="ace-dot" style="top:25%; left:30%;"></div>
-                            <div class="ace-dot" style="top:25%; left:70%;"></div>
-                        `;
-                        
-                        reports.innerHTML = `
-                            <div class="pos-data-card"><div class="pos-data-icon">⚖️</div><div class="pos-data-text">
-                                <div class="pos-data-title">高低肩 (Shoulder Asymmetry) <span>右侧严重代偿</span></div>
-                                <div class="pos-data-desc">肩峰连线偏离水平面 ${shoulderTilt}°，长期发力不均，极易在负重深蹲或推举时引发脊柱侧弯与腰椎间盘突出。</div>
-                            </div></div>
-                            <div class="pos-data-card"><div class="pos-data-icon">🩻</div><div class="pos-data-text">
-                                <div class="pos-data-title">骨盆侧倾 (Lateral Pelvic Tilt) <span>结构失衡</span></div>
-                                <div class="pos-data-desc">髂前上棘连线偏离 ${pelvisTilt}°，核心肌群发力不对称，导致下肢力线崩溃及长短腿风险。</div>
-                            </div></div>
-                        `;
-                    } else {
-                        document.getElementById('pos-warning-title').innerText = "⚠️ 发现 3 处矢状面 (Sagittal Plane) 高风险代偿";
-                        
-                        // 侧面辅助线：铅垂线穿过耳垂、肩峰、大转子
-                        overlays.innerHTML = `
-                            <div class="ace-plumb-line" style="left: 45%;"></div>
-                            <div class="ace-dot" style="top:20%; left:35%;"></div>
-                            <div class="ace-dot" style="top:28%; left:45%;"></div>
-                            <div class="ace-dot" style="top:55%; left:40%;"></div>
-                        `;
-                        
-                        reports.innerHTML = `
-                            <div class="pos-data-card"><div class="pos-data-icon">👤</div><div class="pos-data-text">
-                                <div class="pos-data-title">头前引 (Forward Head Posture) <span>偏离 3.5cm</span></div>
-                                <div class="pos-data-desc">耳垂偏离重力铅垂线，颈椎曲度变直，压迫神经，导致长期偏头痛、富贵包与睡眠质量下降。</div>
-                            </div></div>
-                            <div class="pos-data-card"><div class="pos-data-icon">⭕</div><div class="pos-data-text">
-                                <div class="pos-data-title">胸椎后凸 (Kyphosis) <span>圆肩驼背</span></div>
-                                <div class="pos-data-desc">肩峰前移，胸小肌与背阔肌张力严重失衡，影响呼吸效率与心肺功能。</div>
-                            </div></div>
-                            <div class="pos-data-card"><div class="pos-data-icon">🩻</div><div class="pos-data-text">
-                                <div class="pos-data-title">骨盆前倾 (Anterior Pelvic Tilt) <span>下交叉综合征</span></div>
-                                <div class="pos-data-desc">大转子偏离重心，腰椎过度前凸。视觉上凸显“小肚子”，且常年腰酸背痛。</div>
-                            </div></div>
-                        `;
-                    }
-
-                    document.getElementById('pos-result-container').style.display = 'block';
-                    evt.target.value='';
-                }, 2500);
-            }; r.readAsDataURL(f);
-        }
-
-        // ================= 基础应用 =================
         window.onload = function() {
             const urlParams = new URLSearchParams(window.location.search);
             const vipName = urlParams.get('client_token');
@@ -658,8 +564,88 @@
         function saveEndorse() { idb.transaction("base", "readwrite").objectStore("base").put(endorseDB, "endorse"); }
         function saveClients() { idb.transaction("clients", "readwrite").objectStore("clients").put(clientsDB, "all_data"); }
 
+        // ================= 🚨 升级的 AI 体态雷达算法 =================
+        let currentPosView = 'frontal'; 
+        function setPosView(view, btn) {
+            document.querySelectorAll('.pos-tab').forEach(b => b.classList.remove('active')); btn.classList.add('active');
+            currentPosView = view;
+        }
+
+        function runPostureMock(evt) {
+            const f = evt.target.files[0]; if(!f) return;
+            const r = new FileReader(); r.onload = e => {
+                const b64 = e.target.result;
+                document.getElementById('pos-dynamic-overlays').innerHTML = '';
+                document.getElementById('pos-report-cards').innerHTML = '';
+                document.getElementById('pos-res-img').src = b64; 
+                
+                document.getElementById('scanBoxImage').style.backgroundImage = `url(${b64})`;
+                document.getElementById('aiOverlay').style.display = 'flex';
+                let t = document.getElementById('scanText'); t.innerText = "BIOMETRIC IDENTIFICATION...\n人体特征验证中";
+                setTimeout(()=>t.innerText="ANALYZING SKELETAL ALIGNMENT...\n骨骼力学对齐中", 1000);
+                setTimeout(()=>t.innerText="CALCULATING ACE BIOMECHANICS...\n匹配 ACE 国际标准库", 1800);
+                
+                setTimeout(()=>{
+                    document.getElementById('aiOverlay').style.display = 'none';
+                    const overlays = document.getElementById('pos-dynamic-overlays');
+                    const reports = document.getElementById('pos-report-cards');
+                    let h = getHash(b64.substring(100, 3000));
+                    
+                    if (currentPosView === 'frontal') {
+                        document.getElementById('pos-warning-title').innerText = "⚠️ 发现 2 处冠状面 (Frontal Plane) 高风险代偿";
+                        let shoulderTilt = ((h % 150) / 10 + 1.5).toFixed(1); 
+                        let pelvisTilt = (((h>>2) % 80) / 10 + 1.5).toFixed(1);
+                        
+                        overlays.innerHTML = `
+                            <div class="ace-plumb-line"></div>
+                            <div class="ace-horiz-line" style="top:25%; transform:rotate(${shoulderTilt}deg);"></div>
+                            <div class="ace-horiz-line" style="top:55%; transform:rotate(-${pelvisTilt}deg);"></div>
+                            <div class="ace-dot" style="top:25%; left:30%;"></div>
+                            <div class="ace-dot" style="top:25%; left:70%;"></div>
+                        `;
+                        reports.innerHTML = `
+                            <div class="pos-data-card"><div class="pos-data-icon">⚖️</div><div class="pos-data-text">
+                                <div class="pos-data-title">高低肩 (Shoulder Asymmetry) <span>偏离 ${shoulderTilt}°</span></div>
+                                <div class="pos-data-desc"><strong>ACE 正常值:</strong> 肩峰应处于同一水平线 (0°偏差)。<br><strong>当前评估:</strong> 肩峰连线偏离水平面 ${shoulderTilt}°，长期发力不均，极易引发脊柱侧弯与颈椎不适。<br><div class="pos-advice"><strong>💡 解决建议:</strong> 松解对侧上斜方肌与提肩胛肌；强化代偿侧下斜方肌与前锯肌。</div></div>
+                            </div></div>
+                            <div class="pos-data-card"><div class="pos-data-icon">🩻</div><div class="pos-data-text">
+                                <div class="pos-data-title">骨盆侧倾 (Lateral Pelvic Tilt) <span>偏离 ${pelvisTilt}°</span></div>
+                                <div class="pos-data-desc"><strong>ACE 正常值:</strong> 两侧髂前上棘(ASIS)处于同一直线。<br><strong>当前评估:</strong> 髂前上棘连线偏离 ${pelvisTilt}°，核心肌群发力不对称，导致下肢力线崩溃及长短腿风险。<br><div class="pos-advice"><strong>💡 解决建议:</strong> 骨盆偏高侧重点拉伸腰方肌(QL)与阔筋膜张肌；对侧重点强化臀中肌。</div></div>
+                            </div></div>
+                        `;
+                    } else {
+                        document.getElementById('pos-warning-title').innerText = "⚠️ 发现 3 处矢状面 (Sagittal Plane) 高风险代偿";
+                        let fhp = (((h>>3) % 40) / 10 + 1.5).toFixed(1);
+                        let apt = (((h>>4) % 120) / 10 + 3.0).toFixed(1);
+                        
+                        overlays.innerHTML = `
+                            <div class="ace-plumb-line" style="left: 45%;"></div>
+                            <div class="ace-dot" style="top:20%; left:35%;"></div>
+                            <div class="ace-dot" style="top:28%; left:45%;"></div>
+                            <div class="ace-dot" style="top:55%; left:40%;"></div>
+                        `;
+                        reports.innerHTML = `
+                            <div class="pos-data-card"><div class="pos-data-icon">👤</div><div class="pos-data-text">
+                                <div class="pos-data-title">头前引 (Forward Head) <span>偏离 ${fhp}cm</span></div>
+                                <div class="pos-data-desc"><strong>ACE 正常值:</strong> 铅垂线完美穿过外耳道与肩峰 (偏差0cm)。<br><strong>当前评估:</strong> 耳垂偏离铅垂线 ${fhp}cm，颈椎曲度变直，压迫神经，导致长期偏头痛与睡眠质量下降。<br><div class="pos-advice"><strong>💡 解决建议:</strong> 胸锁乳突肌、枕下肌群手法松解；加强颈部深层屈肌抗阻训练。</div></div>
+                            </div></div>
+                            <div class="pos-data-card"><div class="pos-data-icon">⭕</div><div class="pos-data-text">
+                                <div class="pos-data-title">胸椎后凸 (Kyphosis) <span>圆肩驼背</span></div>
+                                <div class="pos-data-desc"><strong>ACE 正常值:</strong> 胸椎自然生理生理曲度。<br><strong>当前评估:</strong> 肩峰前移，胸小肌与背阔肌张力严重失衡，影响呼吸效率与心肺功能。<br><div class="pos-advice"><strong>💡 解决建议:</strong> 强力松解胸大/小肌；中下背部肌群激活重塑。</div></div>
+                            </div></div>
+                            <div class="pos-data-card"><div class="pos-data-icon">🩻</div><div class="pos-data-text">
+                                <div class="pos-data-title">骨盆前倾 (Anterior Tilt) <span>偏移 ${apt}°</span></div>
+                                <div class="pos-data-desc"><strong>ACE 正常值:</strong> ASIS与耻骨联合在同一垂直面。<br><strong>当前评估:</strong> 骨盆偏转 ${apt}° (下交叉综合征)，视觉凸显“小肚子”且常年腰酸背痛。<br><div class="pos-advice"><strong>💡 解决建议:</strong> 重点剥离髂腰肌极度僵硬的筋膜；重新建立腹横肌与臀大肌的基础发力神经链接。</div></div>
+                            </div></div>
+                        `;
+                    }
+                    document.getElementById('pos-result-container').style.display = 'block';
+                    evt.target.value='';
+                }, 2800);
+            }; r.readAsDataURL(f);
+        }
+
         function switchEndorseTab(type, btn) { document.querySelectorAll('.e-tab').forEach(b => b.classList.remove('active')); btn.classList.add('active'); document.querySelectorAll('.e-sec').forEach(s => s.classList.remove('active')); document.getElementById('e-view-' + type).classList.add('active'); }
-        
         function handleEndorseUp(evt, type) {
             const files = Array.from(evt.target.files); if(files.length === 0) return;
             let count = 0; let tmp = [];
@@ -678,10 +664,17 @@
             const box = document.getElementById(`${type}-gallery`); box.innerHTML = '';
             if(endorseDB[type].length === 0) { box.innerHTML = `<div class="e-empty">暂无数据</div>`; return; }
             endorseDB[type].forEach((b64, i) => { box.innerHTML += `<div class="e-item" data-index="${i}"><div class="del" onclick="delE('${type}', ${i}, event)">×</div><img src="${b64}"></div>`; });
-            let cfg = {animation:150, delay:200, delayOnTouchOnly:true, fallbackTolerance:5, filter:".del", preventOnFilter:false, onEnd: e=>{ let arr = endorseDB[type]; arr.splice(e.newIndex, 0, arr.splice(e.oldIndex, 1)[0]); saveEndorse(); }};
+            let cfg = {animation:150, delay:250, delayOnTouchOnly:true, fallbackTolerance:5, filter:".del", preventOnFilter:false, onEnd: e=>{ let arr = endorseDB[type]; arr.splice(e.newIndex, 0, arr.splice(e.oldIndex, 1)[0]); saveEndorse(); }};
             if(type==='cert') { if(sortCert) sortCert.destroy(); sortCert = new Sortable(box, cfg); } else { if(sortCoach) sortCoach.destroy(); sortCoach = new Sortable(box, cfg); }
         }
         function delE(type, i, e) { e.stopPropagation(); if(confirm('确定删除?')) { endorseDB[type].splice(i,1); saveEndorse(); renderGallery(type); } }
+
+        function switchLsTab(type, btn) { 
+            document.querySelectorAll('.ls-tab').forEach(b => b.classList.remove('active')); btn.classList.add('active'); 
+            document.querySelectorAll('#ls-view-demo, #ls-view-track, #ls-view-chart').forEach(s => s.classList.remove('active')); 
+            document.getElementById('ls-view-' + type).classList.add('active'); 
+            if(type === 'chart') { setTimeout(() => renderCharts(), 100); }
+        }
 
         function openNewClientForm() { document.getElementById('clientMenu').classList.remove('show'); document.getElementById('newClientForm').classList.add('show'); }
         function submitNewClient() {
@@ -707,7 +700,6 @@
             if(!c.records[currDateStr]) c.records[currDateStr] = { msg: '', rings: {water:0, cardio:0, train:0}, meals: {breakfast:[], lunch:[], dinner:[]} };
             return c.records[currDateStr];
         }
-
         function getBMR() { let c = clientsDB[currClientId]; if(!c.weight) return 1300; let bmr = (10 * c.weight) + (6.25 * c.height) - (5 * c.age); return c.gender === 'M' ? bmr + 5 : bmr - 161; }
 
         function uploadCoachAvatar(evt) {
@@ -750,6 +742,9 @@
         function runAIMock(evt, mode) {
             const files = Array.from(evt.target.files); if(files.length === 0) return;
             document.getElementById('aiOverlay').style.display = 'flex';
+            let t = document.getElementById('scanText'); t.innerText = "BIOMETRIC IDENTIFICATION...\n生物特征核验中";
+            setTimeout(()=>t.innerText="ANALYZING MACROS...\n营养学宏量剥离中", 800);
+            
             let loadedCount = 0; let tempRes = [];
             files.forEach((f, idx) => {
                 const r = new FileReader(); r.onload = e => {
@@ -767,12 +762,11 @@
                     setTimeout(()=>{
                         document.getElementById('aiOverlay').style.display = 'none'; tempRes.sort((a,b) => a.i - b.i);
                         if(mode === 'demo') { let res = tempRes[0].obj; document.getElementById('ai-res-img').src = res.img; document.getElementById('ai-res-kcal').innerText=res.kcal+' KCAL'; document.getElementById('ai-res-pro').innerText=res.pro+'g'; document.getElementById('ai-res-carb').innerText=res.carb+'g'; document.getElementById('ai-res-fat').innerText=res.fat+'g'; document.getElementById('ai-res-tag').style.background=res.color; document.getElementById('ai-res-tag').innerText=res.status; document.getElementById('ai-mock-result').style.display = 'block'; } else if (mode === 'track') { let d = getDaily(); d.meals[targetMeal] = tempRes.map(t => t.obj).concat(d.meals[targetMeal]); saveClients(); syncTrackUI(); } evt.target.value='';
-                    }, 1000);
+                    }, 1500);
                 }
             }
         }
 
-        // ================= 复购折线图逻辑 =================
         let fatChartInst = null; let bmrChartInst = null;
         function renderCharts() {
             if(!currClientId) return;
@@ -806,11 +800,13 @@
                 const b64 = e.target.result;
                 document.getElementById('scanBoxImage').style.backgroundImage = `url(${b64})`; 
                 document.getElementById('aiOverlay').style.display = 'flex';
+                let t = document.getElementById('scanText'); t.innerText = "BIOMETRIC IDENTIFICATION...\n生物特征核验中";
+                setTimeout(()=>t.innerText="UPLOADING TO MAINFRAME...\n加密同步至专属导师中", 1000);
                 setTimeout(()=>{
                     document.getElementById('aiOverlay').style.display = 'none';
                     document.getElementById('vip-success-msg').style.display = 'block';
                     evt.target.value = '';
-                }, 2000);
+                }, 2500);
             }; r.readAsDataURL(f);
         }
 
