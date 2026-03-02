@@ -13,7 +13,7 @@
     <script src="https://cdn.staticfile.net/Chart.js/3.9.1/chart.min.js"></script>
 
     <style>
-        /* ================= 1. 主页原貌 ================= */
+        /* ================= 1. 主页原貌 (绝对保留) ================= */
         :root { --primary: #00f2fe; --secondary: #7000ff; --bg: #000; --card-bg: rgba(255, 255, 255, 0.03); --text: #fff; --grad: radial-gradient(circle at top right, #1a2a6c, #000 70%); }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; margin: 0; padding: 0; }
         body { background: var(--bg); background-image: var(--grad); color: var(--text); font-family: -apple-system, sans-serif; padding: 20px; min-height: 100vh; transition: all 0.5s ease; display: flex; flex-direction: column; overflow-x: hidden;}
@@ -46,7 +46,7 @@
         .m-close { color: #888; font-size: 28px; background: none; border: none; padding: 0 10px; cursor: pointer; }
         .m-body { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 20px; -webkit-overflow-scrolling: touch; padding-bottom: 100px;}
 
-        /* ================= 🚨 完美保留：身体资产雷达评估 UI ================= */
+        /* ================= 身体资产雷达评估 UI ================= */
         .asset-form-group { margin-bottom: 18px; }
         .asset-label { font-size: 13px; color: #D4AF37; margin-bottom: 8px; display: block; font-weight: bold;}
         .asset-select { width: 100%; background: #111; border: 1px solid #333; color: #fff; padding: 14px; border-radius: 8px; font-size: 14px; outline: none; appearance: none; line-height: 1.4;}
@@ -159,7 +159,7 @@
         .chart-title { color: #D4AF37; font-size: 14px; font-weight: bold; margin-bottom: 15px; text-align: center; letter-spacing: 1px;}
         .chart-wrapper { width: 100%; height: 220px; position: relative;}
 
-        /* AI 扫描隔离层 */
+        /* 🚨 AI 扫描层 */
         .ai-scanning-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 9999; display: none; flex-direction: column; justify-content: center; align-items: center;}
         .scan-box { width: 260px; height: 260px; position: relative; overflow: hidden; margin-bottom: 20px; display:flex; justify-content:center; align-items:center; background-size: cover; background-position: center;}
         .scan-circle { width: 100%; height: 100%; border: 4px dashed #D4AF37; border-radius: 50%; animation: spin 4s linear infinite; position: absolute; top:0; left:0;}
@@ -205,7 +205,7 @@
         .vp-title { color:#D4AF37; font-size:24px; font-weight:900; letter-spacing:4px; text-shadow:0 0 20px rgba(212,175,55,0.5);}
         .vp-btn { background:linear-gradient(135deg, #00f2fe, #4facfe); color:#000; padding:20px 50px; border-radius:50px; font-weight:900; font-size:18px; margin-top:60px; border:none; box-shadow:0 10px 30px rgba(0,242,254,0.4); cursor:pointer;}
 
-        /* ================= 🚨 门店资产绝对防御门禁 (密码瞬踢机制) ================= */
+        /* ================= 🚨 门店资产绝对防御门禁 (密码隐身版) ================= */
         #auth-gate { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #050505; background-image: radial-gradient(circle at top right, #1a2a6c, #000 70%); z-index: 9999999; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; transition: opacity 0.5s;}
         .auth-card { background: rgba(255,255,255,0.03); backdrop-filter: blur(20px); border: 1px solid rgba(212,175,55,0.3); border-radius: 20px; padding: 40px 30px; width: 100%; max-width: 320px; text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,0.8);}
         .auth-title { color: #D4AF37; font-size: 22px; font-weight: 900; letter-spacing: 3px; margin-bottom: 10px;}
@@ -250,7 +250,6 @@
     <div class="grid">
         <div class="card" style="border-color:#a855f7" onclick="window.location.href='./case.html'"><img src="case.jpg" loading="lazy"><div class="card-info">【档案库】</div></div>
         <div class="card" style="border-color:#eab308" onclick="window.location.href='./plan.html'"><img src="plan.jpg" loading="lazy"><div class="card-info">【高定方案库】</div></div>
-        
         <div class="card" style="border-color:#22d3ee" onclick="openModal('endorseModal')"><img src="cert.jpg" loading="lazy"><div class="card-info">【背书库】</div></div>
         <div class="card" style="border-color:#f472b6" onclick="window.location.href='./price.html'"><img src="product.jpg" loading="lazy"><div class="card-info">【黑金报价库】</div></div>
         
@@ -336,13 +335,11 @@
                 <div class="e-tab active" onclick="switchEndorseTab('cert', this)">资质证书</div>
                 <div class="e-tab" onclick="switchEndorseTab('coach', this)">教练团队墙</div>
             </div>
-            
             <div id="e-view-cert" class="e-sec active">
                 <div class="upload-btn" onclick="document.getElementById('cert-up').click()">+ 上传资质证书</div>
                 <input type="file" id="cert-up" multiple accept="image/*" style="display:none;" onchange="handleEndorseUp(event, 'cert')">
                 <div class="e-grid" id="cert-gallery"></div>
             </div>
-
             <div id="e-view-coach" class="e-sec">
                 <div class="upload-btn" onclick="document.getElementById('coach-up').click()">+ 上传教练照片</div>
                 <input type="file" id="coach-up" multiple accept="image/*" style="display:none;" onchange="handleEndorseUp(event, 'coach')">
@@ -357,7 +354,6 @@
             <button class="m-close" onclick="closeModal('lifestyleModal')">×</button>
         </div>
         <div class="m-body">
-            
             <div class="ls-seg">
                 <div class="ls-tab" onclick="switchLsTab('demo', this)">AI 估算 (谈单)</div>
                 <div class="ls-tab active" onclick="switchLsTab('track', this)">三餐纪要 (交付)</div>
@@ -449,9 +445,7 @@
                 <div style="text-align:center; margin-bottom:20px; background:rgba(212,175,55,0.05); border:1px solid rgba(212,175,55,0.2); border-radius:12px; padding:15px;">
                     <div style="font-size:16px; color:#D4AF37; font-weight:900; margin-bottom:5px; letter-spacing:1px;" id="chart-member-title">VIP 专属体征趋势报告</div>
                     <div id="chart-date-range" style="font-size:11px; color:#888; font-weight:bold; margin-bottom:10px;">核算周期: 加载中...</div>
-                    <div style="color:#ccc; font-size:12px; line-height: 1.6;">
-                        系统基于核心代谢引擎，已为您推演生成<br>近 30 天的高定身体资产重塑曲线。
-                    </div>
+                    <div style="color:#ccc; font-size:12px; line-height: 1.6;">系统基于核心代谢引擎，已为您推演生成<br>近 30 天的高定身体资产重塑曲线。</div>
                 </div>
                 <div class="chart-card"><div class="chart-title">🔥 体重与顽固脂肪剥离曲线</div><div class="chart-wrapper"><canvas id="fatChart"></canvas></div></div>
                 <div class="chart-card"><div class="chart-title">📈 基础代谢与肌肉张力重塑</div><div class="chart-wrapper"><canvas id="bmrChart"></canvas></div></div>
@@ -463,7 +457,6 @@
     <div class="client-modal" id="clientMenu"><div style="color:#D4AF37; font-size:14px; font-weight:bold; margin-bottom:15px; padding-left:15px;">我的 VIP 会员列表<span style="font-size:10px;color:#888;margin-left:10px;">(左滑删除)</span></div><div id="client-list-render" style="max-height:40vh; overflow-y:auto; overflow-x:hidden;"></div><div class="cm-add" onclick="openNewClientForm()">+ 新建高级会员档案</div><div class="cm-item" style="justify-content:center; color:#666; border:none; margin-top:10px; cursor:pointer;" onclick="document.getElementById('clientMenu').classList.remove('show')">取消关闭</div></div>
     
     <div class="modal-base" id="qrModal" style="background:rgba(0,0,0,0.9); z-index:8500; align-items:center; justify-content:center;"><div style="background:#111; border:1px solid #D4AF37; border-radius:16px; padding:30px; text-align:center; max-width:320px; box-shadow:0 10px 40px rgba(212,175,55,0.3);"><div style="font-size: 18px; color: #D4AF37; font-weight: bold; margin-bottom: 10px;">客户专属云端通道</div><div style="font-size: 12px; color: #888; margin-bottom: 20px; line-height:1.5;">请让客户扫描下方二维码进入自助打卡界面。<br>(专属加密通道，数据直连诊断中枢)</div><img id="qr-code-img" src="" style="width: 200px; height: 200px; border-radius: 8px; border: 2px solid #333; margin-bottom: 20px; background:#fff; padding:10px;"><div style="color:#000; font-size:15px; background:linear-gradient(135deg, #D4AF37, #AA8A2A); padding:10px 40px; border-radius:50px; cursor:pointer; font-weight:bold;" onclick="document.getElementById('qrModal').classList.remove('show')">关闭</div></div></div>
-    
     <div id="vip-portal"><div class="vp-title">LUXIOU</div><div style="font-size:12px; color:#888; letter-spacing:2px; margin-top:5px;">VIP 专属能量交互矩阵</div><div style="margin-top:60px; font-size:22px; color:#fff; font-weight:bold; text-align:center;">尊贵的 <span id="vip-portal-name" style="color:#00f2fe;"></span><br>欢迎接入中枢</div><div style="color:#aaa; font-size:13px; margin-top:15px; text-align:center; line-height:1.6;">请上传您的当日三餐<br>AI 营养引擎将实时估算热量，并同步至您的专属重塑导师。</div><button class="vp-btn" onclick="document.getElementById('vip-upload').click()">📷 唤醒视觉镜头上传三餐</button><input type="file" id="vip-upload" accept="image/*" style="display:none;" onchange="vipUploadMock(event)"><div id="vip-success-msg" style="display:none; margin-top:40px; padding:20px; background:rgba(50,215,75,0.1); border:1px solid #32D74B; border-radius:16px; color:#32D74B; text-align:center; font-weight:bold; line-height:1.5;">✅ 视觉解析完成！<br><br>数据已加密传输至您的导师后台，请耐心等待导师的专业点评与规划。</div></div>
     
     <div class="guide-modal" id="guideModal"><div style="display:flex; justify-content:space-between; margin-bottom:20px;"><div class="gm-title" id="gm-title">指南标题</div><div style="color:#888; font-size:28px; cursor:pointer;" onclick="document.getElementById('guideModal').classList.remove('show')">×</div></div><div class="gm-content" id="gm-content"></div></div>
@@ -471,17 +464,14 @@
     <canvas id="hiddenCanvas" style="display:none;"></canvas>
 
     <script>
-        // 🚨 绝对防御门禁校验逻辑
-        // 老板，如果要改密码，就把新密码放在 btoa('您的新密码') 里。
-        // 目前 LUXIOU888 的 Base64 是 'TFVYSU9VODg4'
-        const MASTER_HASH = 'TFVYSU9VODg4'; 
-        const AUTH_VALID_DAYS = 30; 
+        // ================= 🚨 门禁核心 JS =================
+        const MASTER_HASH = 'TFVYSU9VODg4'; // LUXIOU888 的 Base64
+        const AUTH_VALID_DAYS = 30;
 
         function checkAuth() {
             const input = document.getElementById('auth-code').value;
             if(btoa(input) === MASTER_HASH) {
                 const expireTime = Date.now() + (AUTH_VALID_DAYS * 24 * 60 * 60 * 1000);
-                // 将 Hash 值和过期时间一起存入，这样一旦您改了代码里的 MASTER_HASH，旧设备的 Hash 就对不上了，瞬间被踢！
                 localStorage.setItem('luxiou_auth_token', JSON.stringify({ hash: MASTER_HASH, exp: expireTime }));
                 unlockSystem();
             } else {
@@ -496,14 +486,14 @@
         }
 
         (function initAuthCheck() {
-            if(newSearchParams(window.location.search).get('client_token')) {
+            const urlParams = new URLSearchParams(window.location.search);
+            if(urlParams.get('client_token')) {
                 document.getElementById('auth-gate').style.display = 'none'; return;
             }
             try {
                 const tokenStr = localStorage.getItem('luxiou_auth_token');
                 if(tokenStr) {
                     const tokenData = JSON.parse(tokenStr);
-                    // 🚨 核心防御：只有没过期，并且储存在手机里的 Hash 跟当前代码里的 Hash 完全一致，才允许进入！
                     if (tokenData.exp && Date.now() < tokenData.exp && tokenData.hash === MASTER_HASH) {
                         document.getElementById('auth-gate').style.display = 'none';
                     }
@@ -511,7 +501,7 @@
             } catch(e) {}
         })();
 
-        // ================= 🚨 终极雷达算法：全息身体资产折旧评估 =================
+        // ================= 🚨 雷达算法：千人千面交叉计算引擎 =================
         let assetRadarInst = null;
         
         function generateAssetRadar() {
@@ -519,9 +509,13 @@
             const pain = document.getElementById('asset-pain').value;
             
             const box = document.getElementById('scanBoxImage');
-            box.style.backgroundImage = 'none'; box.style.borderRadius = '50%'; box.style.borderColor = '#FF453A'; box.style.boxShadow = '0 0 30px rgba(255,69,58,0.3)';
-            document.getElementById('scanInnerIcon').style.display = 'block'; document.getElementById('scanCircleAnim').style.display = 'block'; document.getElementById('scanLineAnim').style.display = 'none';
-            document.getElementById('scanCircleAnim').style.borderColor = '#FF453A'; document.getElementById('scanText').style.color = '#FF453A';
+            box.style.backgroundImage = 'none'; box.style.borderRadius = '50%';
+            box.style.borderColor = '#FF453A'; box.style.boxShadow = '0 0 30px rgba(255,69,58,0.3)';
+            document.getElementById('scanInnerIcon').style.display = 'block';
+            document.getElementById('scanCircleAnim').style.display = 'block';
+            document.getElementById('scanLineAnim').style.display = 'none';
+            document.getElementById('scanCircleAnim').style.borderColor = '#FF453A';
+            document.getElementById('scanText').style.color = '#FF453A';
 
             document.getElementById('aiOverlay').style.display = 'flex';
             let t = document.getElementById('scanText'); t.innerText = "LOADING ACE BIOMECHANICS...\n调取 ACE 运动力学数据库";
@@ -590,7 +584,18 @@
             }, 1500);
         }
 
-        // ================= 基础逻辑 =================
+        // ================= 基础逻辑 (全套保留) =================
+        window.onload = function() {
+            document.getElementById('my-coach-avatar').src = globalCoachAvatar;
+            const request = window.indexedDB.open("LuxiouMegaMatrix", 2); 
+            request.onupgradeneeded = function(e) {
+                idb = e.target.result;
+                if (!idb.objectStoreNames.contains("base")) idb.createObjectStore("base");
+                if (!idb.objectStoreNames.contains("clients")) idb.createObjectStore("clients");
+            };
+            request.onsuccess = function(e) { idb = e.target.result; loadSysData(); };
+        };
+
         function togglePanel() { const p = document.getElementById('style-panel'); p.style.display = p.style.display === 'block' ? 'none' : 'block'; }
         function applyTheme(idx) {
             const themes = [
