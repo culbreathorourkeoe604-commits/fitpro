@@ -46,33 +46,19 @@
         .m-close { color: #888; font-size: 28px; background: none; border: none; padding: 0 10px; cursor: pointer; }
         .m-body { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 20px; -webkit-overflow-scrolling: touch; padding-bottom: 100px;}
 
-        /* ================= 🚨 终极修复版：AI 体态雷达 ================= */
-        .pos-seg { display: flex; background: #111; border-radius: 12px; padding: 4px; margin-bottom: 15px; border: 1px solid #333;}
-        .pos-tab { flex: 1; text-align: center; padding: 10px 0; font-size: 12px; font-weight: bold; color: #888; border-radius: 8px; transition: 0.3s; cursor: pointer;}
-        .pos-tab.active { background: #00f2fe; color: #000; box-shadow: 0 0 15px rgba(0,242,254,0.4);}
+        /* ================= 🚨 新增：身体资产雷达评估 UI ================= */
+        .asset-form-group { margin-bottom: 15px; }
+        .asset-label { font-size: 12px; color: #888; margin-bottom: 6px; display: block; font-weight: bold;}
+        .asset-select { width: 100%; background: #111; border: 1px solid #333; color: #fff; padding: 12px; border-radius: 8px; font-size: 14px; outline: none; appearance: none;}
+        .asset-select:focus { border-color: #FF453A; }
         
-        /* 核心修复：确保图片容器有最小高度，且图片加载后再显示，防止塌陷 */
-        .pos-res-box { position: relative; width: 100%; text-align: center; display: none; margin-bottom: 20px; min-height: 200px; }
-        .pos-img-wrapper { position: relative; display: inline-block; width: auto; max-width: 100%; border-radius: 12px; border: 1px solid #00f2fe; overflow: hidden; background: #111; }
-        /* 确保图片按比例显示且不超出屏幕 */
-        .pos-img-wrapper img { width: auto; height: auto; max-width: 100%; max-height: 55vh; display: block; filter: contrast(1.05); opacity: 0; transition: opacity 0.3s; }
-        .pos-img-wrapper img.loaded { opacity: 1; } /* 图片加载完成后才显示 */
-
-        .pos-dynamic-overlays { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;}
+        .radar-chart-container { width: 100%; height: 280px; margin: 20px 0; display: none; background: radial-gradient(circle, #1a1a1a, #050505); border-radius: 16px; border: 1px solid #333; padding: 10px; position: relative;}
         
-        /* 动态对齐线与发光点 CSS */
-        .ace-plumb-line { position: absolute; top:0; width:2px; height:100%; background: #32D74B; box-shadow: 0 0 10px #32D74B; z-index: 5;}
-        .ace-line-container { position: absolute; height: 2px; transform-origin: center; z-index: 5; }
-        .ace-line-stroke { width: 100%; height: 2px; background: #FFD60A; box-shadow: 0 0 8px #FFD60A; position: absolute; top: 0; left: 0; }
-        .ace-dot { position: absolute; width: 14px; height: 14px; border-radius: 50%; background: #FF453A; border: 2px solid #fff; box-shadow: 0 0 15px #FF453A; transform: translate(-50%, -50%); z-index: 6; animation: blink 1.2s infinite; }
-        .ace-line-container .ace-dot { top: 1px; } 
-        @keyframes blink { 0%{transform:translate(-50%, -50%) scale(1); opacity:1;} 50%{transform:translate(-50%, -50%) scale(1.4); opacity:0.7;} 100%{transform:translate(-50%, -50%) scale(1); opacity:1;} }
-        
-        .pos-data-card { background: #111; border: 1px solid #333; border-radius: 12px; padding: 15px; margin-bottom: 12px; display: flex; align-items: flex-start; gap: 12px;}
+        .pos-data-card { background: #111; border: 1px solid #333; border-radius: 12px; padding: 15px; margin-bottom: 12px; display: flex; align-items: flex-start; gap: 12px; display: none; animation: fadeIn 0.5s;}
         .pos-data-icon { font-size: 24px; }
         .pos-data-text { flex: 1;}
         .pos-data-title { color: #fff; font-size: 15px; font-weight: bold; margin-bottom: 6px; display: flex; justify-content: space-between; align-items: center;}
-        .pos-data-title span { color: #00f2fe; font-size: 11px; padding: 3px 8px; border: 1px solid #00f2fe; border-radius: 6px; background: rgba(0,242,254,0.1); font-weight: 900;}
+        .pos-data-title span { color: #FF453A; font-size: 11px; padding: 3px 8px; border: 1px solid #FF453A; border-radius: 6px; background: rgba(255,69,58,0.1); font-weight: 900;}
         .pos-data-desc { color: #aaa; font-size: 12px; line-height: 1.6;}
         .pos-advice { margin-top: 10px; background: rgba(212,175,55,0.08); border-left: 3px solid #D4AF37; padding: 10px; font-size: 12px; color: #ddd; line-height:1.5;}
         .pos-advice strong { color: #D4AF37; }
@@ -173,11 +159,13 @@
         .chart-title { color: #D4AF37; font-size: 14px; font-weight: bold; margin-bottom: 15px; text-align: center; letter-spacing: 1px;}
         .chart-wrapper { width: 100%; height: 220px; position: relative;}
 
+        /* AI 进度层 */
         .ai-scanning-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 9999; display: none; flex-direction: column; justify-content: center; align-items: center;}
-        .scan-box { width: 260px; height: 260px; border: 2px solid #00f2fe; position: relative; overflow: hidden; border-radius: 16px; margin-bottom: 20px; background-size: cover; background-position: center; box-shadow: 0 0 30px rgba(0,242,254,0.3);}
-        .scan-line { width: 100%; height: 3px; background: #00f2fe; box-shadow: 0 0 20px 5px rgba(0,242,254,0.6); position: absolute; top: 0; animation: scanAnim 1.2s infinite linear;}
-        .scan-text { color: #00f2fe; font-size: 15px; font-weight: bold; letter-spacing: 2px; font-family: monospace; margin-top: 15px; text-align: center; line-height: 1.6;}
-        @keyframes scanAnim { 0% { top: 0; opacity: 1; } 100% { top: 100%; opacity: 0.2; } }
+        .scan-box { width: 260px; height: 260px; border: 2px solid #FF453A; position: relative; overflow: hidden; border-radius: 50%; margin-bottom: 20px; display:flex; justify-content:center; align-items:center; box-shadow: 0 0 30px rgba(255,69,58,0.3);}
+        .scan-circle { width: 100%; height: 100%; border: 4px dashed #FF453A; border-radius: 50%; animation: spin 4s linear infinite;}
+        .scan-inner { position: absolute; font-size: 40px; }
+        .scan-text { color: #FF453A; font-size: 15px; font-weight: bold; letter-spacing: 2px; font-family: monospace; margin-top: 15px; text-align: center; line-height: 1.6;}
+        @keyframes spin { 100% { transform: rotate(360deg); } }
 
         .new-client-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 8000; display: none; flex-direction: column; justify-content: center; align-items: center; padding: 20px; backdrop-filter: blur(10px);}
         .new-client-modal.show { display: flex; }
@@ -239,49 +227,73 @@
     <div class="grid">
         <div class="card" style="border-color:#a855f7" onclick="window.location.href='./case.html'"><img src="case.jpg" loading="lazy"><div class="card-info">【档案库】</div></div>
         <div class="card" style="border-color:#eab308" onclick="window.location.href='./plan.html'"><img src="plan.jpg" loading="lazy"><div class="card-info">【高定方案库】</div></div>
+        
         <div class="card" style="border-color:#22d3ee" onclick="openModal('endorseModal')"><img src="cert.jpg" loading="lazy"><div class="card-info">【背书库】</div></div>
         <div class="card" style="border-color:#f472b6" onclick="window.location.href='./price.html'"><img src="product.jpg" loading="lazy"><div class="card-info">【黑金报价库】</div></div>
-        <div class="card" style="border-color:#00f2fe;" onclick="openModal('postureModal')"><img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=400&q=80" loading="lazy" style="filter: brightness(0.6);"><div class="card-info" style="color:#00f2fe;">【AI 体态雷达】</div></div>
+        
+        <div class="card" style="border-color:#FF453A;" onclick="openModal('assetModal')">
+            <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=400&q=80" loading="lazy" style="filter: brightness(0.6);">
+            <div class="card-info" style="color:#FF453A; letter-spacing:1px;">【身体资产折旧评估】</div>
+        </div>
+        
         <div class="card" style="border-color:#10b981;" onclick="openModal('lifestyleModal')"><img src="https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=400&q=80" loading="lazy" style="filter: brightness(0.5) saturate(0.8);"><div class="card-info" style="color:#10b981;">【24H 节律管家】</div></div>
     </div>
 
-    <div id="postureModal" class="modal-base">
+    <div id="assetModal" class="modal-base">
         <div class="m-header">
-            <div class="m-title" style="color:#00f2fe;">AI 结构与体态透视</div>
-            <button class="m-close" onclick="closeModal('postureModal')">×</button>
+            <div class="m-title" style="color:#FF453A;">动力链与物理资产侦测</div>
+            <button class="m-close" onclick="closeModal('assetModal')">×</button>
         </div>
         <div class="m-body">
-            <div style="text-align:center; color:#aaa; font-size:12px; margin-bottom:15px;">
-                依据 ACE 国际标准执行生物力学评估。<br>
-                <span style="color:#00f2fe; font-size:10px;">*系统内置防伪检测，仅支持有效的人体目标扫描*</span>
+            <div style="text-align:center; color:#aaa; font-size:12px; margin-bottom:15px; line-height: 1.5;">
+                基于 ACE 运动科学数据中心。<br>
+                输入客户画像，推演核心动力链折旧风险。
             </div>
             
-            <div class="pos-seg">
-                <div class="pos-tab active" onclick="setPosView('frontal', this)">👤 正/背面评估 (冠状面)</div>
-                <div class="pos-tab" onclick="setPosView('sagittal', this)">🚶‍♀️ 侧面评估 (矢状面)</div>
+            <div class="asset-form-group">
+                <span class="asset-label">客户职业画像 / 日常状态</span>
+                <select id="asset-prof" class="asset-select">
+                    <option value="1">重度久坐 (金融/IT/文案)</option>
+                    <option value="2">产后恢复 (腹直肌分离/盆底肌松弛)</option>
+                    <option value="3">频繁应酬 (高管/销售/高脂饮食)</option>
+                    <option value="4">长期穿高跟鞋 (空乘/名媛/模特)</option>
+                </select>
+            </div>
+            <div class="asset-form-group">
+                <span class="asset-label">目前最明显的结构痛点</span>
+                <select id="asset-pain" class="asset-select">
+                    <option value="a">颈肩僵硬，偶发偏头痛 (富贵包)</option>
+                    <option value="b">腰背酸痛，久站久坐易累</option>
+                    <option value="c">体态臃肿，核心松弛无力</option>
+                    <option value="d">膝盖弹响，下肢发沉/水肿</option>
+                </select>
             </div>
 
-            <div class="upload-btn" style="border-color:#00f2fe; color:#00f2fe; background:rgba(0,242,254,0.1);" onclick="document.getElementById('pos-up').click()">
-                ◎ 唤醒 AI 骨骼雷达扫描仪
+            <div class="upload-btn" style="border-color:#FF453A; color:#FF453A; background:rgba(255,69,58,0.1); margin-top:20px;" onclick="generateAssetRadar()">
+                ◎ 启动全息结构雷达扫描
             </div>
-            <input type="file" id="pos-up" accept="image/*" style="display:none;" onchange="runPostureMock(event)">
-            
-            <div id="pos-result-container" style="display:none;">
-                <div class="pos-res-box" id="pos-res-box">
-                    <div id="pos-img-wrapper" class="pos-img-wrapper">
-                        <img id="pos-res-img" src="" onload="this.classList.add('loaded')">
-                        <div id="pos-dynamic-overlays" class="pos-dynamic-overlays"></div>
-                    </div>
+
+            <div id="radar-container" style="display:none; animation: fadeIn 0.8s;">
+                <div class="radar-chart-container">
+                    <canvas id="assetRadarChart"></canvas>
                 </div>
-
-                <div id="pos-warning-title" style="font-size:16px; font-weight:bold; color:#FF453A; margin-bottom:15px;">⚠️ 发现多处高风险体态代偿</div>
+                
+                <div id="asset-warning-title" style="font-size:16px; font-weight:bold; color:#FF453A; margin-bottom:15px; text-align:center;">⚠️ 动力链崩溃预警</div>
                 <div id="pos-report-cards"></div>
 
-                <div class="upload-btn" style="background:linear-gradient(90deg, #00f2fe, #4facfe); color:#000; border:none; margin-top:20px;" onclick="closeModal('postureModal'); window.location.href='./plan.html'">
+                <div class="upload-btn" style="background:linear-gradient(90deg, #FF453A, #FFD60A); color:#000; border:none; margin-top:20px; text-shadow:0 1px 2px rgba(255,255,255,0.3);" onclick="closeModal('assetModal'); window.location.href='./plan.html'">
                     ➔ 立即调取【结构优化与体态矫正】方案
                 </div>
             </div>
         </div>
+    </div>
+
+    <div class="ai-scanning-overlay" id="aiOverlay">
+        <div class="scan-box">
+            <div class="scan-inner">🧬</div>
+            <div class="scan-circle"></div>
+        </div>
+        <div class="scan-text" id="scanText"></div>
     </div>
 
     <div id="endorseModal" class="modal-base">
@@ -294,11 +306,13 @@
                 <div class="e-tab active" onclick="switchEndorseTab('cert', this)">资质证书</div>
                 <div class="e-tab" onclick="switchEndorseTab('coach', this)">教练团队墙</div>
             </div>
+            
             <div id="e-view-cert" class="e-sec active">
                 <div class="upload-btn" onclick="document.getElementById('cert-up').click()">+ 上传资质证书</div>
                 <input type="file" id="cert-up" multiple accept="image/*" style="display:none;" onchange="handleEndorseUp(event, 'cert')">
                 <div class="e-grid" id="cert-gallery"></div>
             </div>
+
             <div id="e-view-coach" class="e-sec">
                 <div class="upload-btn" onclick="document.getElementById('coach-up').click()">+ 上传教练照片</div>
                 <input type="file" id="coach-up" multiple accept="image/*" style="display:none;" onchange="handleEndorseUp(event, 'coach')">
@@ -313,6 +327,7 @@
             <button class="m-close" onclick="closeModal('lifestyleModal')">×</button>
         </div>
         <div class="m-body">
+            
             <div class="ls-seg">
                 <div class="ls-tab" onclick="switchLsTab('demo', this)">AI 估算 (谈单)</div>
                 <div class="ls-tab active" onclick="switchLsTab('track', this)">三餐纪要 (交付)</div>
@@ -326,6 +341,7 @@
                     <div class="upload-btn" style="border-color:#10b981; color:#D4AF37;" onclick="document.getElementById('ai-scan-up').click()">+ 点击上传照片开始演算</div>
                     <input type="file" id="ai-scan-up" accept="image/*" style="display:none;" onchange="runFoodAIMock(event, 'demo')">
                 </div>
+                
                 <div id="ai-mock-result" class="ai-result-box">
                     <img id="ai-res-img" src="" class="ai-res-img">
                     <div style="display:flex; justify-content:space-between; margin-bottom:15px; border-bottom:1px solid #333; padding-bottom:10px;">
@@ -355,20 +371,30 @@
                         <button class="date-btn" onclick="changeDate(1)">后天 ▶</button>
                     </div>
                     <div style="margin-top:10px; padding-top:15px; border-top:1px dashed #333; text-align:center;">
-                        <button style="background:rgba(212,175,55,0.1); color:#D4AF37; border:1px dashed #D4AF37; padding:10px 0; width:100%; border-radius:8px; font-size:13px; font-weight:bold; cursor:pointer;" onclick="openQRModal()">📱 开启会员专属云端打卡通道 (演示)</button>
+                        <button style="background:rgba(212,175,55,0.1); color:#D4AF37; border:1px dashed #D4AF37; padding:10px 0; width:100%; border-radius:8px; font-size:13px; font-weight:bold; cursor:pointer;" onclick="openQRModal()">
+                            📱 开启会员专属云端打卡通道
+                        </button>
                     </div>
                 </div>
+
                 <div class="energy-dash">
                     <div class="e-box"><div class="e-label">基础代谢 BMR</div><div class="e-val bmr" id="val-bmr">0</div></div>
                     <div class="e-box"><div class="e-label">运动消耗 (Kcal)</div><div class="e-val burn" id="val-burn">0</div></div>
                     <div class="e-box"><div class="e-label">今日摄入 (Kcal)</div><div class="e-val intake" id="val-intake">0</div></div>
                     <div class="e-box" style="background: linear-gradient(145deg, #1A1813, #0A0A0C); border-color:#D4AF37;"><div class="e-label" id="net-label" style="color:#D4AF37; font-weight:bold;">热量缺口</div><div class="e-val net" id="val-net">0</div></div>
                 </div>
+
                 <div class="coach-directive">
                     <div class="cd-top">
-                        <div class="coach-avatar-box" onclick="document.getElementById('ca-up').click()"><img id="my-coach-avatar" src="https://images.unsplash.com/photo-1594381898411-846e7d193883?auto=format&fit=crop&w=200&q=80" class="coach-avatar"><div class="ca-edit">更换</div></div>
+                        <div class="coach-avatar-box" onclick="document.getElementById('ca-up').click()">
+                            <img id="my-coach-avatar" src="https://images.unsplash.com/photo-1594381898411-846e7d193883?auto=format&fit=crop&w=200&q=80" class="coach-avatar">
+                            <div class="ca-edit">更换</div>
+                        </div>
                         <input type="file" id="ca-up" accept="image/*" style="display:none;" onchange="uploadCoachAvatar(event)">
-                        <div class="directive-content"><div class="directive-title">导师专属督促指令 ✎</div><textarea id="val-directive" class="d-input" rows="3" placeholder="点击手写今日点评..." onblur="saveDailyData()"></textarea></div>
+                        <div class="directive-content">
+                            <div class="directive-title">导师专属督促指令 ✎</div>
+                            <textarea id="val-directive" class="d-input" rows="3" placeholder="点击手写今日点评..." onblur="saveDailyData()"></textarea>
+                        </div>
                     </div>
                     <div class="quick-tags">
                         <div class="q-tag" onclick="addTag('【执行完美】请继续保持当前饮食与代谢结构！')">👏 完美执行</div>
@@ -377,11 +403,22 @@
                         <div class="q-tag" onclick="addTag('【补充水分】代谢缓慢，请务必喝够水分！')">💧 补充水分</div>
                     </div>
                 </div>
+
                 <div class="rings-dash">
-                    <div class="ring-item"><div class="ring-svg-box" onclick="addRing('water')"><svg class="svg-ring"><circle class="svg-bg" cx="35" cy="35" r="28"/><circle class="svg-progress" id="r-water" cx="35" cy="35" r="28"/></svg><div class="ring-icon">💧</div></div><div class="ring-title">饮水 (+500)</div><div class="ring-val" id="t-water">0<br><span class="ring-sub">/ 4000ml</span></div><div class="manual-edit-btn" onclick="editRing('water')">✎ 修改</div></div>
-                    <div class="ring-item"><div class="ring-svg-box" onclick="addRing('cardio')"><svg class="svg-ring"><circle class="svg-bg" cx="35" cy="35" r="28"/><circle class="svg-progress" id="r-cardio" cx="35" cy="35" r="28"/></svg><div class="ring-icon">🔥</div></div><div class="ring-title">有氧 (+10分)</div><div class="ring-val" id="t-cardio">0<br><span class="ring-sub">/ 120分</span></div><div class="manual-edit-btn" onclick="editRing('cardio')">✎ 修改</div></div>
-                    <div class="ring-item"><div class="ring-svg-box" onclick="addRing('train')"><svg class="svg-ring"><circle class="svg-bg" cx="35" cy="35" r="28"/><circle class="svg-progress" id="r-train" cx="35" cy="35" r="28"/></svg><div class="ring-icon">🏋️‍♀️</div></div><div class="ring-title">抗阻 (+1次)</div><div class="ring-val" id="t-train">0<br><span class="ring-sub">/ 3次</span></div><div class="manual-edit-btn" onclick="editRing('train')">✎ 修改</div></div>
+                    <div class="ring-item">
+                        <div class="ring-svg-box" onclick="addRing('water')"><svg class="svg-ring"><circle class="svg-bg" cx="35" cy="35" r="28"/><circle class="svg-progress" id="r-water" cx="35" cy="35" r="28"/></svg><div class="ring-icon">💧</div></div>
+                        <div class="ring-title">饮水 (+500)</div><div class="ring-val" id="t-water">0<br><span class="ring-sub">/ 4000ml</span></div><div class="manual-edit-btn" onclick="editRing('water')">✎ 修改</div>
+                    </div>
+                    <div class="ring-item">
+                        <div class="ring-svg-box" onclick="addRing('cardio')"><svg class="svg-ring"><circle class="svg-bg" cx="35" cy="35" r="28"/><circle class="svg-progress" id="r-cardio" cx="35" cy="35" r="28"/></svg><div class="ring-icon">🔥</div></div>
+                        <div class="ring-title">有氧 (+10分)</div><div class="ring-val" id="t-cardio">0<br><span class="ring-sub">/ 120分</span></div><div class="manual-edit-btn" onclick="editRing('cardio')">✎ 修改</div>
+                    </div>
+                    <div class="ring-item">
+                        <div class="ring-svg-box" onclick="addRing('train')"><svg class="svg-ring"><circle class="svg-bg" cx="35" cy="35" r="28"/><circle class="svg-progress" id="r-train" cx="35" cy="35" r="28"/></svg><div class="ring-icon">🏋️‍♀️</div></div>
+                        <div class="ring-title">抗阻 (+1次)</div><div class="ring-val" id="t-train">0<br><span class="ring-sub">/ 3次</span></div><div class="manual-edit-btn" onclick="editRing('train')">✎ 修改</div>
+                    </div>
                 </div>
+
                 <div class="survival-guide">
                     <div style="font-size: 14px; font-weight: bold; color: #fff; margin-bottom: 10px;">✦ 社交赴宴生存指南</div>
                     <div class="guide-scroll">
@@ -390,12 +427,14 @@
                         <div class="guide-card" onclick="openGuide('business')"><img src="https://images.unsplash.com/photo-1552566626-52f8b828add9?auto=format&fit=crop&w=400&q=80"><div class="guide-overlay"><div class="g-title">商务应酬酒局</div><div class="g-desc">酒局与推杯换盏保护法</div></div></div>
                     </div>
                 </div>
+
                 <div class="timeline-box">
                     <div class="meal-slot"><div class="meal-header"><div class="meal-title">☀️ 早餐</div><div class="meal-add" onclick="triggerAIMealUpload('breakfast')">+ 视觉评估录入</div></div><div class="meal-list" id="m-breakfast"></div></div>
                     <div class="meal-slot"><div class="meal-header"><div class="meal-title">🔥 午餐</div><div class="meal-add" onclick="triggerAIMealUpload('lunch')">+ 视觉评估录入</div></div><div class="meal-list" id="m-lunch"></div></div>
                     <div class="meal-slot"><div class="meal-header"><div class="meal-title">🌙 晚餐 / 加餐</div><div class="meal-add" onclick="triggerAIMealUpload('dinner')">+ 视觉评估录入</div></div><div class="meal-list" id="m-dinner"></div></div>
                 </div>
                 <input type="file" id="ai-meal-up" multiple accept="image/*" style="display:none;" onchange="runFoodAIMock(event, 'track')">
+                
                 <div class="gen-btn" onclick="generateReportCard()">生成今日专属交付报告图 ➔</div>
                 <div class="gen-btn-month" onclick="generateMonthlyReport()">生成本月全息汇总报告 ➔</div>
             </div>
@@ -415,198 +454,111 @@
     <div id="vip-portal"><div class="vp-title">LUXIOU</div><div style="font-size:12px; color:#888; letter-spacing:2px; margin-top:5px;">VIP 专属能量交互矩阵</div><div style="margin-top:60px; font-size:22px; color:#fff; font-weight:bold; text-align:center;">尊贵的 <span id="vip-portal-name" style="color:#00f2fe;"></span><br>欢迎接入中枢</div><div style="color:#aaa; font-size:13px; margin-top:15px; text-align:center; line-height:1.6;">请上传您的当日三餐<br>AI 营养引擎将实时估算热量，并同步至您的专属重塑导师。</div><button class="vp-btn" onclick="document.getElementById('vip-upload').click()">📷 唤醒视觉镜头上传三餐</button><input type="file" id="vip-upload" accept="image/*" style="display:none;" onchange="vipUploadMock(event)"><div id="vip-success-msg" style="display:none; margin-top:40px; padding:20px; background:rgba(50,215,75,0.1); border:1px solid #32D74B; border-radius:16px; color:#32D74B; text-align:center; font-weight:bold; line-height:1.5;">✅ 视觉解析完成！<br><br>数据已加密传输至您的导师后台，请耐心等待导师的专业点评与规划。</div></div>
     
     <div class="guide-modal" id="guideModal"><div style="display:flex; justify-content:space-between; margin-bottom:20px;"><div class="gm-title" id="gm-title">指南标题</div><div style="color:#888; font-size:28px; cursor:pointer;" onclick="document.getElementById('guideModal').classList.remove('show')">×</div></div><div class="gm-content" id="gm-content"></div></div>
-    <div class="ai-scanning-overlay" id="aiOverlay"><div class="scan-box" id="scanBoxImage"><div class="scan-line"></div></div><div class="scan-text" id="scanText" style="text-align:center; white-space:pre-wrap;">CONNECTING AI...</div></div>
+    
     <div class="poster-modal" id="posterModal"><div style="color:#D4AF37; font-size:18px; font-weight:bold; margin-bottom:15px;">长按下方图片保存至相册</div><img id="final-poster" class="poster-img" src=""><div style="color:#888; font-size:16px; border:1px solid #444; padding:10px 30px; border-radius:50px; cursor:pointer;" onclick="document.getElementById('posterModal').classList.remove('show')">关闭</div></div>
     <canvas id="hiddenCanvas" style="display:none;"></canvas>
 
     <script>
-        // ================= 🚨 核心黑科技：极速几何边缘张量引擎 (秒杀死物，吸附活体) =================
-        function analyzeImageStructure(imgDataUrl, callback) {
-            const img = new Image();
-            img.onload = () => {
-                const can = document.createElement('canvas'); const ctx = can.getContext('2d');
-                const w = 64, h = 64; can.width = w; can.height = h;
-                ctx.drawImage(img, 0, 0, w, h);
-                const data = ctx.getImageData(0, 0, w, h).data;
+        // ================= 🚨 终极核武器：身体物理资产雷达逻辑 =================
+        let assetRadarInst = null;
+        
+        function generateAssetRadar() {
+            const prof = document.getElementById('asset-prof').value;
+            const pain = document.getElementById('asset-pain').value;
+            
+            document.getElementById('aiOverlay').style.display = 'flex';
+            let t = document.getElementById('scanText'); t.innerText = "LOADING ACE BIOMECHANICS DATABASE...\n调取 ACE 运动力学数据库";
+            setTimeout(()=>t.innerText="ANALYZING KINETIC CHAIN DEPRECIATION...\n推演动力链折旧率", 800);
+            
+            setTimeout(()=>{
+                document.getElementById('aiOverlay').style.display = 'none';
+                document.getElementById('radar-container').style.display = 'block';
+                
+                // 默认理想健康体态的各项数据为 100
+                const idealData = [100, 100, 100, 100, 100, 100];
+                let currentData = [80, 80, 80, 80, 80, 80]; // 兜底数据
+                
+                let reportHtml = '';
 
-                let colSums = new Array(w).fill(0);
-                let neutralPixels = 0;
-
-                // 扫描颜色饱和度与边缘差值
-                for(let y=0; y<h; y++) {
-                    for(let x=0; x<w; x++) {
-                        let idx = (y*w + x)*4;
-                        let r = data[idx], g = data[idx+1], b = data[idx+2];
-                        
-                        // 提取轮廓
-                        if(x < w-1) {
-                            let right = idx + 4;
-                            colSums[x] += Math.abs(r - data[right]) + Math.abs(g - data[right+1]) + Math.abs(b - data[right+2]);
-                        }
-
-                        // 提取背景中性色 (红烧肉这类食物极其缺乏中性色，而人体照片背景通常包含大量墙面中性色)
-                        let max = Math.max(r,g,b), min = Math.min(r,g,b);
-                        let sat = max === 0 ? 0 : (max - min) / max;
-                        if(sat < 0.25 || (r>200 && g>200 && b>200) || (r<40 && g<40 && b<40)) {
-                            neutralPixels++;
-                        }
-                    }
+                // 根据痛点进行数据折旧扣减
+                if(pain === 'a') { // 颈肩僵硬
+                    currentData = [40, 50, 75, 85, 60, 90];
+                    reportHtml = `
+                        <div class="pos-data-card" style="display:flex;"><div class="pos-data-icon">👤</div><div class="pos-data-text">
+                            <div class="pos-data-title">上交叉综合征 (Upper Crossed) <span>高危折旧</span></div>
+                            <div class="pos-data-desc"><strong>病理分析:</strong> 颈椎曲度与肩带稳定性数据断崖式下跌。胸大肌过紧，斜方肌被动拉长，颈椎承受了3倍以上正常重力，这是引发偏头痛的直接原因。</div>
+                            <div class="pos-advice"><strong>💡 资产修复方案:</strong> 立即启动胸锁乳突肌松解，重建深层颈屈肌力量，否则极易发展为不可逆的颈椎间盘突出。</div>
+                        </div></div>`;
+                } else if(pain === 'b') { // 腰背酸痛
+                    currentData = [85, 80, 65, 45, 40, 70];
+                    reportHtml = `
+                        <div class="pos-data-card" style="display:flex;"><div class="pos-data-icon">🩻</div><div class="pos-data-text">
+                            <div class="pos-data-title">核心刚性丧失 (Core Instability) <span>高危折旧</span></div>
+                            <div class="pos-data-desc"><strong>病理分析:</strong> 骨盆中立位与核心刚性指标全线飘红。您的腰椎在替罢工的腹横肌和臀大肌代偿发力，导致腰肌劳损。</div>
+                            <div class="pos-advice"><strong>💡 资产修复方案:</strong> 必须停止盲目负重！首先剥离髂腰肌粘连筋膜，重新激活臀部神经募集。</div>
+                        </div></div>`;
+                } else if(pain === 'c') { // 体态臃肿
+                    currentData = [75, 70, 70, 60, 50, 55];
+                    reportHtml = `
+                        <div class="pos-data-card" style="display:flex;"><div class="pos-data-icon">🔥</div><div class="pos-data-text">
+                            <div class="pos-data-title">系统性代谢萎缩 (Metabolic Decline) <span>全面折旧</span></div>
+                            <div class="pos-data-desc"><strong>病理分析:</strong> 基础代谢率与神经募集指标严重低于同龄健康值。肌肉流失导致内分泌紊乱，形成易胖体质闭环。</div>
+                            <div class="pos-advice"><strong>💡 资产修复方案:</strong> 严禁节食！需通过全身大肌群结构性抗阻训练，强行拉高静息代谢率。</div>
+                        </div></div>`;
+                } else if(pain === 'd') { // 膝盖弹响
+                    currentData = [90, 85, 80, 55, 65, 35];
+                    reportHtml = `
+                        <div class="pos-data-card" style="display:flex;"><div class="pos-data-icon">🦵</div><div class="pos-data-text">
+                            <div class="pos-data-title">下肢力线崩溃 (Alignment Collapse) <span>高危折旧</span></div>
+                            <div class="pos-data-desc"><strong>病理分析:</strong> 下肢力线与骨盆中立指标极低。膝关节承受了本该由臀部吸收的冲击力，半月板正在加速磨损。</div>
+                            <div class="pos-advice"><strong>💡 资产修复方案:</strong> 纠正足弓塌陷，强化臀中肌以稳定股骨，严防软骨不可逆损伤。</div>
+                        </div></div>`;
                 }
-
-                // 计算视觉重心的 X 坐标
-                let totalEdge = 0; let weightedX = 0;
-                for(let x=0; x<w; x++) { totalEdge += colSums[x]; weightedX += x * colSums[x]; }
-                let centerX = (weightedX / totalEdge) / w * 100;
-                if(isNaN(centerX) || centerX < 20 || centerX > 80) centerX = 50;
-
-                // 🚨 防伪核心：如果整张图片几乎没有中性色背景（如红烧肉填满屏幕），直接拒绝
-                let neutralRatio = neutralPixels / (w*h);
-                let isHuman = neutralRatio > 0.12; 
-
-                // 基于哈希生成微调变量，保证同一张图坐标绝对一致，不同图有细微自然变化
-                let hashStr = imgDataUrl.substring(100, 500);
-                let hVal = 0; for(let i=0;i<hashStr.length;i++){ hVal=((hVal<<5)-hVal)+hashStr.charCodeAt(i); hVal|=0; }
-                hVal = Math.abs(hVal);
-
-                // 动态锚点生成：紧贴人物身体宽度
-                let bodyWidth = 25 + (hVal % 10); 
-                let sLeft = Math.max(10, centerX - bodyWidth/2);
-                let sRight = Math.min(90, centerX + bodyWidth/2);
                 
-                let headY = 15 + (hVal % 8);
-                let shoulderY = headY + 10;
-                let hipY = 50 + ((hVal >> 2) % 10);
+                document.getElementById('pos-report-cards').innerHTML = reportHtml;
 
-                callback({
-                    isHuman: isHuman,
-                    centerLine: centerX,
-                    shoulders: { left: sLeft, right: sRight, y: shoulderY },
-                    hips: { left: sLeft + 2, right: sRight - 2, y: hipY },
-                    head: { x: centerX, y: headY }
-                });
-            };
-            img.src = imgDataUrl;
-        }
-
-        // ================= 🚨 升级版 AI 体态雷达交互 =================
-        let currentPosView = 'frontal'; 
-        function setPosView(view, btn) {
-            document.querySelectorAll('.pos-tab').forEach(b => b.classList.remove('active')); btn.classList.add('active');
-            currentPosView = view;
-        }
-
-        function getHash(str) { let h=0; for(let i=0;i<str.length;i++){ h=((h<<5)-h)+str.charCodeAt(i); h|=0; } return Math.abs(h); }
-
-        function runPostureMock(evt) {
-            const f = evt.target.files[0]; if(!f) return;
-            const r = new FileReader(); r.onload = e => {
-                const b64 = e.target.result;
-                
-                document.getElementById('scanBoxImage').style.backgroundImage = `url(${b64})`;
-                document.getElementById('aiOverlay').style.display = 'flex';
-                let t = document.getElementById('scanText'); t.innerText = "BIOMETRIC IDENTIFICATION...\n人体特征验证中";
-                
-                // 调用张量分析引擎
-                analyzeImageStructure(b64, (data) => {
-                    if(!data.isHuman) {
-                        setTimeout(() => {
-                            document.getElementById('aiOverlay').style.display = 'none';
-                            alert("❌ 识别为非直立人体目标（如食物、局部物体），拒绝执行！\n\n请上传包含人体和环境背景的【站立体态照】。");
-                            evt.target.value='';
-                        }, 1200);
-                        return;
+                // 渲染雷达图
+                Chart.defaults.color = '#888';
+                if(assetRadarInst) assetRadarInst.destroy();
+                assetRadarInst = new Chart(document.getElementById('assetRadarChart'), {
+                    type: 'radar',
+                    data: {
+                        labels: ['颈椎曲度', '肩带稳定性', '胸椎灵活性', '骨盆中立位', '核心刚性', '下肢力线'],
+                        datasets: [
+                            {
+                                label: '理想健康模型',
+                                data: idealData,
+                                backgroundColor: 'rgba(50, 215, 75, 0.1)',
+                                borderColor: '#32D74B',
+                                pointBackgroundColor: '#32D74B',
+                                borderWidth: 2,
+                            },
+                            {
+                                label: '当前资产折旧',
+                                data: currentData,
+                                backgroundColor: 'rgba(255, 69, 58, 0.2)',
+                                borderColor: '#FF453A',
+                                pointBackgroundColor: '#FF453A',
+                                borderWidth: 2,
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            r: {
+                                angleLines: { color: 'rgba(255, 255, 255, 0.1)' },
+                                grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                                pointLabels: { color: '#ccc', font: { size: 12, weight: 'bold' } },
+                                ticks: { display: false, min: 0, max: 100 }
+                            }
+                        },
+                        plugins: { legend: { position: 'bottom', labels: { color: '#fff' } } }
                     }
-
-                    setTimeout(()=>t.innerText="ANALYZING SKELETAL ALIGNMENT...\n骨骼力学吸附中", 800);
-                    setTimeout(()=>t.innerText="CALCULATING ACE BIOMECHANICS...\n匹配 ACE 国际标准库", 1500);
-                    
-                    setTimeout(()=>{
-                        document.getElementById('aiOverlay').style.display = 'none';
-                        document.getElementById('pos-dynamic-overlays').innerHTML = '';
-                        document.getElementById('pos-report-cards').innerHTML = '';
-                        
-                        // 🚨 核心修复：先设置图片源，并移除loaded类，等待onload事件触发
-                        const resImg = document.getElementById('pos-res-img');
-                        resImg.classList.remove('loaded');
-                        resImg.src = b64; 
-                        
-                        const overlays = document.getElementById('pos-dynamic-overlays');
-                        const reports = document.getElementById('pos-report-cards');
-                        let h = getHash(b64.substring(100, 3000));
-                        
-                        if (currentPosView === 'frontal') {
-                            document.getElementById('pos-warning-title').innerText = "⚠️ 发现 2 处冠状面 (Frontal Plane) 高风险代偿";
-                            
-                            // 🚨 双侧差异化诊断引擎核心逻辑
-                            let sTiltVal = (h % 150) / 10 + 1.5;
-                            let isLeftShoulderHigh = (h % 2 === 0); // 偶数左高，奇数右高
-                            let sRot = isLeftShoulderHigh ? -sTiltVal : sTiltVal; // 左高逆时针旋转，右高顺时针
-                            let sText = isLeftShoulderHigh ? "左肩偏高 (Left Elevation)" : "右肩偏高 (Right Elevation)";
-                            let sAdvice = isLeftShoulderHigh ? "松解左侧上斜方肌、提肩胛肌；强化右侧中下斜方肌。" : "松解右侧上斜方肌、提肩胛肌；强化左侧中下斜方肌。";
-
-                            let pTiltVal = ((h>>2) % 80) / 10 + 1.5;
-                            let isLeftPelvisHigh = ((h>>3) % 2 === 0);
-                            let pRot = isLeftPelvisHigh ? pTiltVal : -pTiltVal; // 骨盆旋转方向相反更有视觉张力
-                            let pText = isLeftPelvisHigh ? "左侧骨盆偏高 (Left Hike)" : "右侧骨盆偏高 (Right Hike)";
-                            let pAdvice = isLeftPelvisHigh ? "重点拉伸左侧腰方肌(QL)与阔筋膜张肌；强化右侧臀中肌以稳定骨盆。" : "重点拉伸右侧腰方肌(QL)与阔筋膜张肌；强化左侧臀中肌以稳定骨盆。";
-                            
-                            // 完美的 CSS 动态吸附与旋转
-                            overlays.innerHTML = `
-                                <div class="ace-plumb-line" style="left: ${data.centerLine}%;"></div>
-                                <div class="ace-line-container" style="top: ${data.shoulders.y}%; left: ${data.shoulders.left}%; width: ${data.shoulders.right - data.shoulders.left}%; transform: rotate(${sRot}deg);">
-                                    <div class="ace-line-stroke"></div><div class="ace-dot" style="left: 0;"></div><div class="ace-dot" style="right: 0;"></div>
-                                </div>
-                                <div class="ace-line-container" style="top: ${data.hips.y}%; left: ${data.hips.left}%; width: ${data.hips.right - data.hips.left}%; transform: rotate(${pRot}deg);">
-                                    <div class="ace-line-stroke"></div><div class="ace-dot" style="left: 0;"></div><div class="ace-dot" style="right: 0;"></div>
-                                </div>
-                            `;
-                            reports.innerHTML = `
-                                <div class="pos-data-card"><div class="pos-data-icon">⚖️</div><div class="pos-data-text">
-                                    <div class="pos-data-title">${sText} <span>偏离 ${sTiltVal.toFixed(1)}°</span></div>
-                                    <div class="pos-data-desc"><strong>ACE 正常值:</strong> 肩峰应处于同一水平线 (0°偏差)。<br><strong>当前评估:</strong> 肩峰连线偏离水平面 ${sTiltVal.toFixed(1)}°，长期发力不均，极易引发脊柱侧弯与颈椎不适。<br><div class="pos-advice"><strong>💡 解决建议:</strong> ${sAdvice}</div></div>
-                                </div></div>
-                                <div class="pos-data-card"><div class="pos-data-icon">🩻</div><div class="pos-data-text">
-                                    <div class="pos-data-title">${pText} <span>偏离 ${pTiltVal.toFixed(1)}°</span></div>
-                                    <div class="pos-data-desc"><strong>ACE 正常值:</strong> 两侧髂前上棘处于同一直线。<br><strong>当前评估:</strong> 髂前上棘连线偏离 ${pTiltVal.toFixed(1)}°，核心肌群发力不对称，导致下肢力线崩溃及长短腿风险。<br><div class="pos-advice"><strong>💡 解决建议:</strong> ${pAdvice}</div></div>
-                                </div></div>
-                            `;
-                        } else {
-                            document.getElementById('pos-warning-title').innerText = "⚠️ 发现 3 处矢状面 (Sagittal Plane) 高风险代偿";
-                            let fhp = (((h>>3) % 40) / 10 + 1.5).toFixed(1);
-                            let apt = (((h>>4) % 120) / 10 + 3.0).toFixed(1);
-                            
-                            // 侧面坐标运算：基于肩膀中点计算
-                            let shoulderX = data.shoulders.left + (data.shoulders.right - data.shoulders.left)/2;
-                            let headX = shoulderX - 4; // 头前引
-                            let hipX = shoulderX + 3;  // 骨盆前倾
-
-                            overlays.innerHTML = `
-                                <div class="ace-plumb-line" style="left: ${shoulderX}%;"></div>
-                                <div class="ace-dot" style="top: ${data.head.y}%; left: ${headX}%;"></div>
-                                <div class="ace-dot" style="top: ${data.shoulders.y}%; left: ${shoulderX}%;"></div>
-                                <div class="ace-dot" style="top: ${data.hips.y}%; left: ${hipX}%;"></div>
-                            `;
-                            reports.innerHTML = `
-                                <div class="pos-data-card"><div class="pos-data-icon">👤</div><div class="pos-data-text">
-                                    <div class="pos-data-title">头前引 (Forward Head) <span>偏离 ${fhp}cm</span></div>
-                                    <div class="pos-data-desc"><strong>ACE 正常值:</strong> 铅垂线完美穿过外耳道与肩峰 (偏差0cm)。<br><strong>当前评估:</strong> 耳垂偏离铅垂线 ${fhp}cm，颈椎曲度变直，压迫神经，导致长期偏头痛与睡眠质量下降。<br><div class="pos-advice"><strong>💡 解决建议:</strong> 胸锁乳突肌、枕下肌群手法松解；加强颈部深层屈肌抗阻训练。</div></div>
-                                </div></div>
-                                <div class="pos-data-card"><div class="pos-data-icon">⭕</div><div class="pos-data-text">
-                                    <div class="pos-data-title">胸椎后凸 (Kyphosis) <span>圆肩驼背</span></div>
-                                    <div class="pos-data-desc"><strong>ACE 正常值:</strong> 胸椎自然生理曲度。<br><strong>当前评估:</strong> 肩峰前移，胸小肌与背阔肌张力严重失衡，影响心肺功能与胸廓出口综合征(TOS)。<br><div class="pos-advice"><strong>💡 解决建议:</strong> 强力松解胸大/小肌；中下背部肌群(菱形肌/中下斜方肌)激活重塑。</div></div>
-                                </div></div>
-                                <div class="pos-data-card"><div class="pos-data-icon">🩻</div><div class="pos-data-text">
-                                    <div class="pos-data-title">骨盆前倾 (Anterior Tilt) <span>偏移 ${apt}°</span></div>
-                                    <div class="pos-data-desc"><strong>ACE 正常值:</strong> 髂前上棘与耻骨联合在同一垂直面。<br><strong>当前评估:</strong> 骨盆偏转 ${apt}° (下交叉综合征)，视觉凸显“小肚子”且造成腰椎剪切力过大。<br><div class="pos-advice"><strong>💡 解决建议:</strong> 剥离髂腰肌极度僵硬的筋膜；重新建立腹横肌与臀大肌发力神经链接。</div></div>
-                                </div></div>
-                            `;
-                        }
-                        // 🚨 核心修复：确保容器显示
-                        document.getElementById('pos-result-container').style.display = 'block';
-                        evt.target.value='';
-                    }, 2400);
                 });
-            }; r.readAsDataURL(f);
+
+            }, 1500);
         }
 
         // ================= 基础逻辑 (全套保留) =================
