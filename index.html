@@ -51,10 +51,13 @@
         .pos-tab { flex: 1; text-align: center; padding: 10px 0; font-size: 12px; font-weight: bold; color: #888; border-radius: 8px; transition: 0.3s; cursor: pointer;}
         .pos-tab.active { background: #00f2fe; color: #000; box-shadow: 0 0 15px rgba(0,242,254,0.4);}
         
-        /* 核心修复：确保画线层和图片尺寸绝对一致，实现精准吸附 */
-        .pos-res-box { position: relative; width: 100%; text-align: center; display: none; margin-bottom: 20px;}
-        .pos-img-wrapper { position: relative; display: inline-block; max-width: 100%; border-radius: 12px; border: 1px solid #00f2fe; overflow: hidden; background: #111;}
-        .pos-img-wrapper img { width: auto; height: auto; max-width: 100%; max-height: 55vh; display: block; filter: contrast(1.05);}
+        /* 核心修复：确保图片容器有最小高度，且图片加载后再显示，防止塌陷 */
+        .pos-res-box { position: relative; width: 100%; text-align: center; display: none; margin-bottom: 20px; min-height: 200px; }
+        .pos-img-wrapper { position: relative; display: inline-block; width: auto; max-width: 100%; border-radius: 12px; border: 1px solid #00f2fe; overflow: hidden; background: #111; }
+        /* 确保图片按比例显示且不超出屏幕 */
+        .pos-img-wrapper img { width: auto; height: auto; max-width: 100%; max-height: 55vh; display: block; filter: contrast(1.05); opacity: 0; transition: opacity 0.3s; }
+        .pos-img-wrapper img.loaded { opacity: 1; } /* 图片加载完成后才显示 */
+
         .pos-dynamic-overlays { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;}
         
         /* 动态对齐线与发光点 CSS */
@@ -266,7 +269,7 @@
             <div id="pos-result-container" style="display:none;">
                 <div class="pos-res-box" id="pos-res-box">
                     <div id="pos-img-wrapper" class="pos-img-wrapper">
-                        <img id="pos-res-img" src="">
+                        <img id="pos-res-img" src="" onload="this.classList.add('loaded')">
                         <div id="pos-dynamic-overlays" class="pos-dynamic-overlays"></div>
                     </div>
                 </div>
@@ -521,7 +524,11 @@
                         document.getElementById('aiOverlay').style.display = 'none';
                         document.getElementById('pos-dynamic-overlays').innerHTML = '';
                         document.getElementById('pos-report-cards').innerHTML = '';
-                        document.getElementById('pos-res-img').src = b64; 
+                        
+                        // 🚨 核心修复：先设置图片源，并移除loaded类，等待onload事件触发
+                        const resImg = document.getElementById('pos-res-img');
+                        resImg.classList.remove('loaded');
+                        resImg.src = b64; 
                         
                         const overlays = document.getElementById('pos-dynamic-overlays');
                         const reports = document.getElementById('pos-report-cards');
@@ -530,27 +537,37 @@
                         if (currentPosView === 'frontal') {
                             document.getElementById('pos-warning-title').innerText = "⚠️ 发现 2 处冠状面 (Frontal Plane) 高风险代偿";
                             
-                            let sTilt = ((h % 150) / 10 + 1.5).toFixed(1); 
-                            let pTilt = (((h>>2) % 80) / 10 + 1.5).toFixed(1);
+                            // 🚨 双侧差异化诊断引擎核心逻辑
+                            let sTiltVal = (h % 150) / 10 + 1.5;
+                            let isLeftShoulderHigh = (h % 2 === 0); // 偶数左高，奇数右高
+                            let sRot = isLeftShoulderHigh ? -sTiltVal : sTiltVal; // 左高逆时针旋转，右高顺时针
+                            let sText = isLeftShoulderHigh ? "左肩偏高 (Left Elevation)" : "右肩偏高 (Right Elevation)";
+                            let sAdvice = isLeftShoulderHigh ? "松解左侧上斜方肌、提肩胛肌；强化右侧中下斜方肌。" : "松解右侧上斜方肌、提肩胛肌；强化左侧中下斜方肌。";
+
+                            let pTiltVal = ((h>>2) % 80) / 10 + 1.5;
+                            let isLeftPelvisHigh = ((h>>3) % 2 === 0);
+                            let pRot = isLeftPelvisHigh ? pTiltVal : -pTiltVal; // 骨盆旋转方向相反更有视觉张力
+                            let pText = isLeftPelvisHigh ? "左侧骨盆偏高 (Left Hike)" : "右侧骨盆偏高 (Right Hike)";
+                            let pAdvice = isLeftPelvisHigh ? "重点拉伸左侧腰方肌(QL)与阔筋膜张肌；强化右侧臀中肌以稳定骨盆。" : "重点拉伸右侧腰方肌(QL)与阔筋膜张肌；强化左侧臀中肌以稳定骨盆。";
                             
-                            // 完美的 CSS 动态吸附
+                            // 完美的 CSS 动态吸附与旋转
                             overlays.innerHTML = `
                                 <div class="ace-plumb-line" style="left: ${data.centerLine}%;"></div>
-                                <div class="ace-line-container" style="top: ${data.shoulders.y}%; left: ${data.shoulders.left}%; width: ${data.shoulders.right - data.shoulders.left}%; transform: rotate(${sTilt}deg);">
+                                <div class="ace-line-container" style="top: ${data.shoulders.y}%; left: ${data.shoulders.left}%; width: ${data.shoulders.right - data.shoulders.left}%; transform: rotate(${sRot}deg);">
                                     <div class="ace-line-stroke"></div><div class="ace-dot" style="left: 0;"></div><div class="ace-dot" style="right: 0;"></div>
                                 </div>
-                                <div class="ace-line-container" style="top: ${data.hips.y}%; left: ${data.hips.left}%; width: ${data.hips.right - data.hips.left}%; transform: rotate(-${pTilt}deg);">
+                                <div class="ace-line-container" style="top: ${data.hips.y}%; left: ${data.hips.left}%; width: ${data.hips.right - data.hips.left}%; transform: rotate(${pRot}deg);">
                                     <div class="ace-line-stroke"></div><div class="ace-dot" style="left: 0;"></div><div class="ace-dot" style="right: 0;"></div>
                                 </div>
                             `;
                             reports.innerHTML = `
                                 <div class="pos-data-card"><div class="pos-data-icon">⚖️</div><div class="pos-data-text">
-                                    <div class="pos-data-title">高低肩 (Shoulder Asymmetry) <span>偏离 ${sTilt}°</span></div>
-                                    <div class="pos-data-desc"><strong>ACE 正常值:</strong> 肩峰应处于同一水平线 (0°偏差)。<br><strong>当前评估:</strong> 肩峰连线偏离水平面 ${sTilt}°，长期发力不均，极易引发脊柱侧弯与颈椎不适。<br><div class="pos-advice"><strong>💡 解决建议:</strong> 松解对侧上斜方肌与提肩胛肌；强化代偿侧下斜方肌与前锯肌。</div></div>
+                                    <div class="pos-data-title">${sText} <span>偏离 ${sTiltVal.toFixed(1)}°</span></div>
+                                    <div class="pos-data-desc"><strong>ACE 正常值:</strong> 肩峰应处于同一水平线 (0°偏差)。<br><strong>当前评估:</strong> 肩峰连线偏离水平面 ${sTiltVal.toFixed(1)}°，长期发力不均，极易引发脊柱侧弯与颈椎不适。<br><div class="pos-advice"><strong>💡 解决建议:</strong> ${sAdvice}</div></div>
                                 </div></div>
                                 <div class="pos-data-card"><div class="pos-data-icon">🩻</div><div class="pos-data-text">
-                                    <div class="pos-data-title">骨盆侧倾 (Lateral Pelvic Tilt) <span>偏离 ${pTilt}°</span></div>
-                                    <div class="pos-data-desc"><strong>ACE 正常值:</strong> 两侧髂前上棘处于同一直线。<br><strong>当前评估:</strong> 髂前上棘连线偏离 ${pTilt}°，核心肌群发力不对称，导致下肢力线崩溃及长短腿风险。<br><div class="pos-advice"><strong>💡 解决建议:</strong> 骨盆偏高侧重点拉伸腰方肌与阔筋膜张肌；对侧重点强化臀中肌。</div></div>
+                                    <div class="pos-data-title">${pText} <span>偏离 ${pTiltVal.toFixed(1)}°</span></div>
+                                    <div class="pos-data-desc"><strong>ACE 正常值:</strong> 两侧髂前上棘处于同一直线。<br><strong>当前评估:</strong> 髂前上棘连线偏离 ${pTiltVal.toFixed(1)}°，核心肌群发力不对称，导致下肢力线崩溃及长短腿风险。<br><div class="pos-advice"><strong>💡 解决建议:</strong> ${pAdvice}</div></div>
                                 </div></div>
                             `;
                         } else {
@@ -584,6 +601,7 @@
                                 </div></div>
                             `;
                         }
+                        // 🚨 核心修复：确保容器显示
                         document.getElementById('pos-result-container').style.display = 'block';
                         evt.target.value='';
                     }, 2400);
