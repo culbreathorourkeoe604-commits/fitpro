@@ -13,18 +13,16 @@
     <script src="https://cdn.staticfile.net/Chart.js/3.9.1/chart.min.js"></script>
 
     <style>
-        /* ================= 1. 主页原貌 (绝对保留) ================= */
+        /* ================= 主页原貌 ================= */
         :root { --primary: #00f2fe; --secondary: #7000ff; --bg: #000; --card-bg: rgba(255, 255, 255, 0.03); --text: #fff; --grad: radial-gradient(circle at top right, #1a2a6c, #000 70%); }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; margin: 0; padding: 0; }
         body { background: var(--bg); background-image: var(--grad); color: var(--text); font-family: -apple-system, sans-serif; padding: 20px; min-height: 100vh; transition: all 0.5s ease; display: flex; flex-direction: column; overflow-x: hidden;}
         
-        #style-trigger { position: fixed; top: 15px; right: 15px; z-index: 2000; background: rgba(255,255,255,0.1); padding: 8px 15px; border-radius: 50px; font-size: 11px; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2); color: #fff; }
+        #style-trigger { position: fixed; top: 15px; right: 15px; z-index: 2000; background: rgba(255,255,255,0.1); padding: 8px 15px; border-radius: 50px; font-size: 11px; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2); color: #fff; cursor: pointer; }
         #style-panel { display: none; position: fixed; top: 60px; right: 15px; z-index: 2001; background: #111; border: 1px solid #333; border-radius: 15px; padding: 10px; width: 140px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
-        .style-option { padding: 12px; font-size: 13px; color: #aaa; text-align: center; border-bottom: 1px solid #222; }
-        
-        /* 🚨 新增：加密数据控制按钮样式 */
+        .style-option { padding: 12px; font-size: 13px; color: #aaa; text-align: center; border-bottom: 1px solid #222; cursor: pointer; }
         .db-btn { color: #D4AF37; font-weight: bold; border-top: 1px dashed #444; margin-top: 5px; padding-top: 12px; cursor: pointer;}
-
+        
         .brand-card { background: var(--card-bg); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; padding: 25px 20px; text-align: center; margin-bottom: 25px; margin-top: 10px; }
         .brand-card h1 { margin: 0; font-size: 24px; letter-spacing: 4px; color: var(--primary); text-shadow: 0 0 15px var(--primary); }
         
@@ -57,7 +55,7 @@
         
         .radar-chart-container { width: 100%; height: 300px; margin: 20px 0; display: none; background: radial-gradient(circle, #1a1a1a, #050505); border-radius: 16px; border: 1px solid #333; padding: 10px; position: relative;}
         
-        .pos-data-card { background: #111; border: 1px solid #333; border-radius: 12px; padding: 18px; margin-bottom: 12px; display: flex; align-items: flex-start; gap: 12px; display: none; animation: fadeIn 0.5s;}
+        .pos-data-card { background: #111; border: 1px solid #333; border-radius: 12px; padding: 18px; margin-bottom: 12px; display: flex; align-items: flex-start; gap: 12px; animation: fadeIn 0.5s;}
         .pos-data-icon { font-size: 28px; }
         .pos-data-text { flex: 1;}
         .pos-data-title { color: #fff; font-size: 16px; font-weight: bold; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center;}
@@ -66,9 +64,14 @@
         .pos-advice { margin-top: 12px; background: rgba(212,175,55,0.08); border-left: 3px solid #D4AF37; padding: 12px; font-size: 13px; color: #ddd; line-height:1.5;}
         .pos-advice strong { color: #D4AF37; }
 
+        /* ================= 电子签署画板 ================= */
+        .sig-container { background: #111; border: 1px dashed #D4AF37; border-radius: 12px; height: 200px; width: 100%; position: relative; margin-top: 10px;}
+        #sig-canvas { width: 100%; height: 100%; touch-action: none; border-radius: 12px;}
+        .sig-placeholder { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #444; font-size: 20px; font-weight: bold; pointer-events: none;}
+
         /* ================= 背书库 ================= */
         .e-seg { display: flex; background: #111; border-radius: 12px; padding: 6px; margin-bottom: 20px; border: 1px solid #222;}
-        .e-tab { flex: 1; text-align: center; padding: 12px 0; font-size: 14px; font-weight: bold; color: #666; border-radius: 8px; transition: 0.3s;}
+        .e-tab { flex: 1; text-align: center; padding: 12px 0; font-size: 14px; font-weight: bold; color: #666; border-radius: 8px; transition: 0.3s; cursor: pointer;}
         .e-tab.active { background: #D4AF37; color: #000; box-shadow: 0 0 15px rgba(212,175,55,0.5); transform: scale(1.02); z-index: 2;}
         .e-sec { display: none; flex-direction: column; }
         .e-sec.active { display: flex; animation: fadeIn 0.3s;}
@@ -77,18 +80,18 @@
         .e-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
         .e-item { position: relative; border-radius: 12px; overflow: hidden; background: #111; border: 1px solid rgba(212,175,55,0.3); height: 220px; }
         .e-item img { width: 100%; height: 100%; object-fit: cover; pointer-events: none;}
-        .e-item .del { position: absolute; top: 8px; right: 8px; width: 26px; height: 26px; background: rgba(0,0,0,0.8); border: 1px solid #FF3B30; border-radius: 50%; color: #FF3B30; display: flex; justify-content: center; align-items: center; font-weight: bold; z-index: 10;}
+        .e-item .del { position: absolute; top: 8px; right: 8px; width: 26px; height: 26px; background: rgba(0,0,0,0.8); border: 1px solid #FF3B30; border-radius: 50%; color: #FF3B30; display: flex; justify-content: center; align-items: center; font-weight: bold; z-index: 10; cursor: pointer;}
 
         /* ================= 24H 管家系统 ================= */
         .ls-seg { display: flex; gap: 8px; margin-bottom: 20px;}
-        .ls-tab { flex: 1; padding: 10px 0; text-align: center; border-radius: 10px; background: #111; border: 1px solid #333; color: #888; font-size: 11px; font-weight: bold; transition: 0.3s;}
+        .ls-tab { flex: 1; padding: 10px 0; text-align: center; border-radius: 10px; background: #111; border: 1px solid #333; color: #888; font-size: 11px; font-weight: bold; transition: 0.3s; cursor: pointer;}
         .ls-tab.active { background: linear-gradient(135deg, #1A1813, #0A0A0C); border-color: #D4AF37; color: #D4AF37; box-shadow: 0 4px 10px rgba(212,175,55,0.2);}
         
         .track-header { background: #111; border: 1px solid #333; border-radius: 12px; padding: 15px; margin-bottom: 20px; display: flex; flex-direction: column; gap: 10px;}
         .client-sel { display: flex; justify-content: space-between; align-items: center; font-size: 15px; font-weight: bold; color: #D4AF37; border-bottom: 1px dashed #333; padding-bottom: 10px; cursor: pointer; background: rgba(212,175,55,0.05); border-radius: 8px; padding: 10px;}
         .client-profile-tags { display: flex; gap: 8px; font-size: 11px; color: #888; margin-top: 5px; font-weight: normal; letter-spacing: 1px;}
         .date-sel { display: flex; justify-content: space-between; align-items: center; color: #fff;}
-        .date-btn { background: #222; border: none; color: #D4AF37; padding: 8px 15px; border-radius: 6px; font-size: 12px; font-weight: bold;}
+        .date-btn { background: #222; border: none; color: #D4AF37; padding: 8px 15px; border-radius: 6px; font-size: 12px; font-weight: bold; cursor: pointer;}
         input[type="date"] { background: transparent; border: 1px solid #444; color: #fff; font-size: 15px; font-weight: bold; outline: none; padding: 4px 10px; border-radius: 6px; font-family: inherit;}
         input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1); }
 
@@ -140,7 +143,7 @@
         .meal-slot { background: #0A0A0C; border: 1px solid #222; border-radius: 12px; overflow: hidden; }
         .meal-header { padding: 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #222;}
         .meal-title { font-size: 14px; font-weight: bold; color: #fff; display: flex; align-items: center; gap: 8px;}
-        .meal-add { color: #D4AF37; font-size: 12px; border: 1px solid #D4AF37; padding: 4px 10px; border-radius: 6px;}
+        .meal-add { color: #D4AF37; font-size: 12px; border: 1px solid #D4AF37; padding: 4px 10px; border-radius: 6px; cursor: pointer;}
         .meal-list { display: flex; flex-direction: column; gap: 10px; padding: 15px; }
         .meal-row { display: flex; gap: 12px; background: #111; border: 1px solid #333; padding: 12px; border-radius: 12px; position: relative;}
         .meal-row img { width: 80px; height: 80px; object-fit: cover; border-radius: 8px; flex-shrink: 0; border: 1px solid #222;}
@@ -162,7 +165,7 @@
         .chart-title { color: #D4AF37; font-size: 14px; font-weight: bold; margin-bottom: 15px; text-align: center; letter-spacing: 1px;}
         .chart-wrapper { width: 100%; height: 220px; position: relative;}
 
-        /* 🚨 AI 扫描层 */
+        /* 🚨 通用隔离 AI 扫描层 */
         .ai-scanning-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 9999; display: none; flex-direction: column; justify-content: center; align-items: center;}
         .scan-box { width: 260px; height: 260px; position: relative; overflow: hidden; margin-bottom: 20px; display:flex; justify-content:center; align-items:center; background-size: cover; background-position: center;}
         .scan-circle { width: 100%; height: 100%; border: 4px dashed #D4AF37; border-radius: 50%; animation: spin 4s linear infinite; position: absolute; top:0; left:0;}
@@ -172,7 +175,7 @@
         @keyframes spin { 100% { transform: rotate(360deg); } }
         @keyframes scanAnim { 0% { top: 0; opacity: 1; } 100% { top: 100%; opacity: 0.2; } }
 
-        /* 左滑抽屉 */
+        /* 左滑抽屉与表单 */
         .new-client-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 8000; display: none; flex-direction: column; justify-content: center; align-items: center; padding: 20px; backdrop-filter: blur(10px);}
         .new-client-modal.show { display: flex; }
         .nc-card { background: #111; border: 1px solid #D4AF37; border-radius: 16px; width: 100%; max-width: 350px; padding: 25px;}
@@ -181,7 +184,7 @@
         .nc-label { font-size: 12px; color: #888; margin-bottom: 5px; display: block;}
         .nc-input { width: 100%; background: #0A0A0C; border: 1px solid #333; color: #fff; padding: 12px; border-radius: 8px; outline: none; font-size: 14px;}
         .nc-input:focus { border-color: #D4AF37; }
-        .nc-btn { width: 100%; background: linear-gradient(135deg, #D4AF37, #AA8A2A); color: #000; border: none; padding: 14px; border-radius: 8px; font-weight: bold; font-size: 15px; margin-top: 10px;}
+        .nc-btn { width: 100%; background: linear-gradient(135deg, #D4AF37, #AA8A2A); color: #000; border: none; padding: 14px; border-radius: 8px; font-weight: bold; font-size: 15px; margin-top: 10px; cursor: pointer;}
 
         .client-modal { position: fixed; bottom: -100%; left: 0; width: 100%; background: #111; border-top: 1px solid #D4AF37; border-radius: 20px 20px 0 0; padding: 20px 0; z-index: 5000; transition: 0.4s;}
         .client-modal.show { bottom: 0; }
@@ -189,7 +192,7 @@
         .cm-row-wrapper::-webkit-scrollbar { display: none; }
         .cm-item { flex: 0 0 100%; scroll-snap-align: start; padding: 15px 20px; font-size: 15px; color: #fff; display: flex; justify-content: space-between; align-items: center; background: #111; }
         .cm-item.active { color: #D4AF37; font-weight: bold;}
-        .cm-del-btn { flex: 0 0 80px; scroll-snap-align: end; background: #FF3B30; color: #fff; display: flex; justify-content: center; align-items: center; font-weight: bold; font-size: 14px;}
+        .cm-del-btn { flex: 0 0 80px; scroll-snap-align: end; background: #FF3B30; color: #fff; display: flex; justify-content: center; align-items: center; font-weight: bold; font-size: 14px; cursor: pointer;}
         .cm-add { padding: 15px; color: #10b981; text-align: center; font-weight: bold; border-bottom: 1px dashed #222; cursor: pointer; margin: 0 20px;}
 
         .qr-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 8500; display: none; flex-direction: column; justify-content: center; align-items: center; padding: 20px;}
@@ -208,7 +211,7 @@
         .vp-title { color:#D4AF37; font-size:24px; font-weight:900; letter-spacing:4px; text-shadow:0 0 20px rgba(212,175,55,0.5);}
         .vp-btn { background:linear-gradient(135deg, #00f2fe, #4facfe); color:#000; padding:20px 50px; border-radius:50px; font-weight:900; font-size:18px; margin-top:60px; border:none; box-shadow:0 10px 30px rgba(0,242,254,0.4); cursor:pointer;}
 
-        /* ================= 🚨 门店资产绝对防御门禁 (密码隐身版) ================= */
+        /* ================= 🚨 门店绝对防御门禁 ================= */
         #auth-gate { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #050505; background-image: radial-gradient(circle at top right, #1a2a6c, #000 70%); z-index: 9999999; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; transition: opacity 0.5s;}
         .auth-card { background: rgba(255,255,255,0.03); backdrop-filter: blur(20px); border: 1px solid rgba(212,175,55,0.3); border-radius: 20px; padding: 40px 30px; width: 100%; max-width: 320px; text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,0.8);}
         .auth-title { color: #D4AF37; font-size: 22px; font-weight: 900; letter-spacing: 3px; margin-bottom: 10px;}
@@ -217,11 +220,6 @@
         .auth-input:focus { border-color: #D4AF37; box-shadow: 0 0 10px rgba(212,175,55,0.2);}
         .auth-btn { background: linear-gradient(135deg, #D4AF37, #AA8A2A); color: #000; border: none; width: 100%; padding: 15px; border-radius: 10px; font-weight: 900; font-size: 16px; cursor: pointer; box-shadow: 0 5px 15px rgba(212,175,55,0.3);}
         .auth-error { color: #FF453A; font-size: 12px; margin-top: 15px; display: none; font-weight: bold;}
-
-        /* ================= 🚨 电子签署画板 ================= */
-        .sig-container { background: #111; border: 1px dashed #D4AF37; border-radius: 12px; height: 200px; width: 100%; position: relative; margin-top: 10px;}
-        #sig-canvas { width: 100%; height: 100%; touch-action: none; border-radius: 12px;}
-        .sig-placeholder { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #444; font-size: 20px; font-weight: bold; pointer-events: none;}
     </style>
 </head>
 <body>
@@ -265,37 +263,12 @@
         <div class="card" style="border-color:#22d3ee" onclick="openModal('endorseModal')"><img src="cert.jpg" loading="lazy"><div class="card-info">【背书库】</div></div>
         <div class="card" style="border-color:#f472b6" onclick="window.location.href='./price.html'"><img src="product.jpg" loading="lazy"><div class="card-info">【黑金报价库】</div></div>
         
-        <div class="card" style="border-color:#00f2fe;" onclick="openModal('postureModal')"><img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=400&q=80" loading="lazy" style="filter: brightness(0.6);"><div class="card-info" style="color:#00f2fe;">【AI 体态雷达】</div></div>
-        <div class="card" style="border-color:#FF453A;" onclick="openModal('assetModal')"><img src="https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&w=400&q=80" loading="lazy" style="filter: brightness(0.6);"><div class="card-info" style="color:#FF453A; letter-spacing:1px;">【身体资产折旧评估】</div></div>
-        <div class="card" style="border-color:#10b981; grid-column: 1 / -1;" onclick="openModal('lifestyleModal')"><img src="https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=400&q=80" loading="lazy" style="filter: brightness(0.5) saturate(0.8);"><div class="card-info" style="color:#10b981; font-size: 14px; letter-spacing: 2px; padding: 15px 5px;">【24H 节律管家】</div></div>
-    </div>
-
-    <div id="postureModal" class="modal-base">
-        <div class="m-header">
-            <div class="m-title" style="color:#00f2fe;">AI 结构与体态透视</div>
-            <button class="m-close" onclick="closeModal('postureModal')">×</button>
+        <div class="card" style="border-color:#FF453A;" onclick="openModal('assetModal')">
+            <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=400&q=80" loading="lazy" style="filter: brightness(0.6);">
+            <div class="card-info" style="color:#FF453A; letter-spacing:1px;">【身体资产折旧评估】</div>
         </div>
-        <div class="m-body">
-            <div style="text-align:center; color:#aaa; font-size:12px; margin-bottom:15px;">依据 ACE 国际标准执行力学评估。<br><span style="color:#00f2fe; font-size:10px;">*系统内置防伪检测，仅支持有效的人体目标扫描*</span></div>
-            <div class="pos-seg">
-                <div class="pos-tab active" onclick="setPosView('frontal', this)">👤 正/背面评估 (冠状面)</div>
-                <div class="pos-tab" onclick="setPosView('sagittal', this)">🚶‍♀️ 侧面评估 (矢状面)</div>
-            </div>
-            <div class="upload-btn" style="border-color:#00f2fe; color:#00f2fe; background:rgba(0,242,254,0.1);" onclick="document.getElementById('pos-up').click()">◎ 唤醒 AI 骨骼雷达扫描仪</div>
-            <input type="file" id="pos-up" accept="image/*" style="display:none;" onchange="runPostureMock(event)">
-            
-            <div id="pos-result-container" style="display:none;">
-                <div class="pos-res-box" id="pos-res-box">
-                    <div id="pos-img-wrapper" class="pos-img-wrapper">
-                        <img id="pos-res-img" src="" onload="this.classList.add('loaded')">
-                        <div id="pos-dynamic-overlays" class="pos-dynamic-overlays"></div>
-                    </div>
-                </div>
-                <div id="pos-warning-title" style="font-size:16px; font-weight:bold; color:#FF453A; margin-bottom:15px;">⚠️ 发现多处高风险体态代偿</div>
-                <div id="pos-report-cards"></div>
-                <div class="upload-btn" style="background:linear-gradient(90deg, #00f2fe, #4facfe); color:#000; border:none; margin-top:20px;" onclick="closeModal('postureModal'); window.location.href='./plan.html'">➔ 立即调取【结构优化与体态矫正】方案</div>
-            </div>
-        </div>
+        
+        <div class="card" style="border-color:#10b981;" onclick="openModal('lifestyleModal')"><img src="https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=400&q=80" loading="lazy" style="filter: brightness(0.5) saturate(0.8);"><div class="card-info" style="color:#10b981;">【24H 节律管家】</div></div>
     </div>
 
     <div id="assetModal" class="modal-base">
@@ -304,7 +277,11 @@
             <button class="m-close" onclick="closeModal('assetModal')">×</button>
         </div>
         <div class="m-body">
-            <div style="text-align:center; color:#aaa; font-size:12px; margin-bottom:15px; line-height: 1.5;">基于 ACE 运动科学数据中心。<br>输入客户画像与临床表征，推演核心动力链折旧风险。</div>
+            <div style="text-align:center; color:#aaa; font-size:12px; margin-bottom:15px; line-height: 1.5;">
+                基于 ACE 运动科学数据中心。<br>
+                输入客户画像与临床表征，推演核心动力链折旧风险。
+            </div>
+            
             <div class="asset-form-group">
                 <span class="asset-label">客户职业画像 / 核心圈层</span>
                 <select id="asset-prof" class="asset-select">
@@ -329,12 +306,18 @@
                     <option value="p8">慢性疲劳症候群，基础代谢彻底停滞，易胖难瘦</option>
                 </select>
             </div>
-            <div class="upload-btn" style="border-color:#FF453A; color:#FF453A; background:rgba(255,69,58,0.1); margin-top:20px;" onclick="generateAssetRadar()">◎ 启动全息结构雷达扫描</div>
+
+            <div class="upload-btn" style="border-color:#FF453A; color:#FF453A; background:rgba(255,69,58,0.1); margin-top:20px;" onclick="generateAssetRadar()">
+                ◎ 启动全息结构雷达扫描
+            </div>
+
             <div id="radar-container" style="display:none; animation: fadeIn 0.8s;">
-                <div class="radar-chart-container"><canvas id="assetRadarChart"></canvas></div>
+                <div class="radar-chart-container">
+                    <canvas id="assetRadarChart"></canvas>
+                </div>
                 <div id="asset-warning-title" style="font-size:16px; font-weight:bold; color:#FF453A; margin-bottom:15px; text-align:center;">⚠️ 动力链崩溃预警</div>
                 <div id="pos-report-cards"></div>
-                
+
                 <div class="upload-btn" style="background:linear-gradient(90deg, #FF453A, #FFD60A); color:#000; border:none; margin-top:20px; text-shadow:0 1px 2px rgba(255,255,255,0.3);" onclick="openSignatureBoard()">
                     ➔ 签署《身体结构重塑委托协议》
                 </div>
@@ -444,7 +427,7 @@
                         <button class="date-btn" onclick="changeDate(1)">后天 ▶</button>
                     </div>
                     <div style="margin-top:10px; padding-top:15px; border-top:1px dashed #333; text-align:center;">
-                        <button style="background:rgba(212,175,55,0.1); color:#D4AF37; border:1px dashed #D4AF37; padding:10px 0; width:100%; border-radius:8px; font-size:13px; font-weight:bold; cursor:pointer;" onclick="openQRModal()">📱 开启会员专属云端打卡通道</button>
+                        <button style="background:rgba(212,175,55,0.1); color:#D4AF37; border:1px dashed #D4AF37; padding:10px 0; width:100%; border-radius:8px; font-size:13px; font-weight:bold; cursor:pointer;" onclick="openQRModal()">📱 开启会员专属云端打卡通道 (演示)</button>
                     </div>
                 </div>
                 <div class="energy-dash">
@@ -493,7 +476,7 @@
                 <div style="text-align:center; margin-bottom:20px; background:rgba(212,175,55,0.05); border:1px solid rgba(212,175,55,0.2); border-radius:12px; padding:15px;">
                     <div style="font-size:16px; color:#D4AF37; font-weight:900; margin-bottom:5px; letter-spacing:1px;" id="chart-member-title">VIP 专属体征趋势报告</div>
                     <div id="chart-date-range" style="font-size:11px; color:#888; font-weight:bold; margin-bottom:10px;">核算周期: 加载中...</div>
-                    <div style="color:#ccc; font-size:12px; line-height: 1.6;">系统基于核心代谢引擎，已为您推演生成<br>近 30 天的高定身体资产重塑曲线。</div>
+                    <div style="color:#ccc; font-size:12px; line-height: 1.6;">系统基于核心代谢引擎，已为您推演生成<br>近 30 天的高定身体重塑曲线。</div>
                 </div>
                 <div class="chart-card"><div class="chart-title">🔥 体重与顽固脂肪剥离曲线</div><div class="chart-wrapper"><canvas id="fatChart"></canvas></div></div>
                 <div class="chart-card"><div class="chart-title">📈 基础代谢与肌肉张力重塑</div><div class="chart-wrapper"><canvas id="bmrChart"></canvas></div></div>
@@ -512,8 +495,8 @@
     <canvas id="hiddenCanvas" style="display:none;"></canvas>
 
     <script>
-        // ================= 🚨 门禁核心 JS =================
-        const MASTER_HASH = 'TFVYSU9VODg4'; // LUXIOU888 的 Base64
+        // ================= 🚨 绝对防御门禁校验逻辑 (LUXIOU888) =================
+        const MASTER_HASH = 'TFVYSU9VODg4'; 
         const AUTH_VALID_DAYS = 30;
 
         function checkAuth() {
@@ -534,7 +517,7 @@
         }
 
         (function initAuthCheck() {
-            // 🚨 修正了原先代码中的 newSearchParams 拼写错误
+            // 🚨 修复拼写错误，保障门禁不失效
             const urlParams = new URLSearchParams(window.location.search);
             if(urlParams.get('client_token')) {
                 document.getElementById('auth-gate').style.display = 'none'; return;
@@ -695,7 +678,7 @@
             closeModal('sigModal'); document.getElementById('posterModal').classList.add('show');
         }
 
-        // ================= 雷达算法：千人千面交叉计算引擎 =================
+        // ================= 🚨 雷达算法：千人千面交叉计算引擎 =================
         let assetRadarInst = null;
         function generateAssetRadar() {
             const prof = document.getElementById('asset-prof').value;
@@ -777,94 +760,23 @@
             }, 1500);
         }
 
-        // ================= 核心自研技术：图像主体边缘张量提取 =================
-        function analyzeImageStructure(imgDataUrl, callback) {
-            const img = new Image();
-            img.onload = () => {
-                const can = document.createElement('canvas'); const ctx = can.getContext('2d');
-                const w = 64, h = 64; can.width = w; can.height = h;
-                ctx.drawImage(img, 0, 0, w, h);
-                const data = ctx.getImageData(0, 0, w, h).data;
-                let colSums = new Array(w).fill(0); let neutralPixels = 0;
-                for(let y=0; y<h; y++) {
-                    for(let x=0; x<w; x++) {
-                        let idx = (y*w + x)*4; let r = data[idx], g = data[idx+1], b = data[idx+2];
-                        if(x < w-1) { let right = idx + 4; colSums[x] += Math.abs(r - data[right]) + Math.abs(g - data[right+1]) + Math.abs(b - data[right+2]); }
-                        let max = Math.max(r,g,b), min = Math.min(r,g,b); let sat = max === 0 ? 0 : (max - min) / max;
-                        if(sat < 0.25 || (r>200 && g>200 && b>200) || (r<40 && g<40 && b<40)) { neutralPixels++; }
-                    }
-                }
-                let totalEdge = 0; let weightedX = 0;
-                for(let x=0; x<w; x++) { totalEdge += colSums[x]; weightedX += x * colSums[x]; }
-                let centerX = (weightedX / totalEdge) / w * 100;
-                if(isNaN(centerX) || centerX < 20 || centerX > 80) centerX = 50;
-                let neutralRatio = neutralPixels / (w*h);
-                let isHuman = neutralRatio > 0.12; 
-                let hashStr = imgDataUrl.substring(100, 500); let hVal = 0; for(let i=0;i<hashStr.length;i++){ hVal=((hVal<<5)-hVal)+hashStr.charCodeAt(i); hVal|=0; } hVal = Math.abs(hVal);
-                let bodyWidth = 25 + (hVal % 10); let sLeft = Math.max(10, centerX - bodyWidth/2); let sRight = Math.min(90, centerX + bodyWidth/2);
-                let headY = 15 + (hVal % 8); let shoulderY = headY + 10; let hipY = 50 + ((hVal >> 2) % 10);
-                callback({ isHuman: isHuman, centerLine: centerX, shoulders: { left: sLeft, right: sRight, y: shoulderY }, hips: { left: sLeft + 2, right: sRight - 2, y: hipY }, head: { x: centerX, y: headY } });
+        // ================= 基础逻辑 (全套保留) =================
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const vipName = urlParams.get('client_token');
+            if(vipName) {
+                document.getElementById('vip-portal-name').innerText = decodeURIComponent(vipName);
+                document.getElementById('vip-portal').style.display = 'flex'; return; 
+            }
+            document.getElementById('my-coach-avatar').src = globalCoachAvatar;
+            const request = window.indexedDB.open("LuxiouMegaMatrix", 2); 
+            request.onupgradeneeded = function(e) {
+                idb = e.target.result;
+                if (!idb.objectStoreNames.contains("base")) idb.createObjectStore("base");
+                if (!idb.objectStoreNames.contains("clients")) idb.createObjectStore("clients");
             };
-            img.src = imgDataUrl;
-        }
-
-        // ================= AI 体态雷达交互 =================
-        let currentPosView = 'frontal'; 
-        function setPosView(view, btn) { document.querySelectorAll('.pos-tab').forEach(b => b.classList.remove('active')); btn.classList.add('active'); currentPosView = view; }
-        function getHash(str) { let h=0; for(let i=0;i<str.length;i++){ h=((h<<5)-h)+str.charCodeAt(i); h|=0; } return Math.abs(h); }
-
-        function runPostureMock(evt) {
-            const f = evt.target.files[0]; if(!f) return;
-            const r = new FileReader(); r.onload = e => {
-                const b64 = e.target.result;
-                
-                const box = document.getElementById('scanBoxImage');
-                box.style.backgroundImage = `url(${b64})`; box.style.borderRadius = '50%'; box.style.borderColor = '#00f2fe'; box.style.boxShadow = '0 0 30px rgba(0,242,254,0.3)';
-                document.getElementById('scanInnerIcon').style.display = 'block'; document.getElementById('scanCircleAnim').style.display = 'block'; document.getElementById('scanLineAnim').style.display = 'none';
-                document.getElementById('scanCircleAnim').style.borderColor = '#00f2fe'; document.getElementById('scanText').style.color = '#00f2fe';
-
-                document.getElementById('aiOverlay').style.display = 'flex';
-                let t = document.getElementById('scanText'); t.innerText = "BIOMETRIC IDENTIFICATION...\n人体特征验证中";
-                
-                analyzeImageStructure(b64, (data) => {
-                    if(!data.isHuman) {
-                        setTimeout(() => {
-                            document.getElementById('aiOverlay').style.display = 'none';
-                            alert("❌ 识别为非直立人体目标（如食物、局部物体），拒绝执行！\n\n请上传包含人体和环境背景的【站立体态照】。");
-                            evt.target.value='';
-                        }, 1200); return;
-                    }
-                    setTimeout(()=>t.innerText="ANALYZING SKELETAL ALIGNMENT...\n骨骼力学吸附中", 800);
-                    setTimeout(()=>t.innerText="CALCULATING ACE BIOMECHANICS...\n匹配 ACE 国际标准库", 1500);
-                    
-                    setTimeout(()=>{
-                        document.getElementById('aiOverlay').style.display = 'none';
-                        document.getElementById('pos-dynamic-overlays').innerHTML = ''; document.getElementById('pos-report-cards').innerHTML = '';
-                        
-                        const resImg = document.getElementById('pos-res-img');
-                        resImg.classList.remove('loaded'); resImg.src = b64; 
-                        
-                        const overlays = document.getElementById('pos-dynamic-overlays'); const reports = document.getElementById('pos-report-cards');
-                        let h = getHash(b64.substring(100, 3000));
-                        
-                        if (currentPosView === 'frontal') {
-                            document.getElementById('pos-warning-title').innerText = "⚠️ 发现 2 处冠状面 (Frontal Plane) 高风险代偿";
-                            let sTiltVal = (h % 150) / 10 + 1.5; let isLeftShoulderHigh = (h % 2 === 0); let sRot = isLeftShoulderHigh ? -sTiltVal : sTiltVal; let sText = isLeftShoulderHigh ? "左肩偏高 (Left Elevation)" : "右肩偏高 (Right Elevation)"; let sAdvice = isLeftShoulderHigh ? "松解左侧上斜方肌、提肩胛肌；强化右侧中下斜方肌。" : "松解右侧上斜方肌、提肩胛肌；强化左侧中下斜方肌。";
-                            let pTiltVal = ((h>>2) % 80) / 10 + 1.5; let isLeftPelvisHigh = ((h>>3) % 2 === 0); let pRot = isLeftPelvisHigh ? pTiltVal : -pTiltVal; let pText = isLeftPelvisHigh ? "左侧骨盆偏高 (Left Hike)" : "右侧骨盆偏高 (Right Hike)"; let pAdvice = isLeftPelvisHigh ? "重点拉伸左侧腰方肌(QL)与阔筋膜张肌；强化右侧臀中肌以稳定骨盆。" : "重点拉伸右侧腰方肌(QL)与阔筋膜张肌；强化左侧臀中肌以稳定骨盆。";
-                            overlays.innerHTML = `<div class="ace-plumb-line" style="left: ${data.centerLine}%;"></div><div class="ace-line-container" style="top: ${data.shoulders.y}%; left: ${data.shoulders.left}%; width: ${data.shoulders.right - data.shoulders.left}%; transform: rotate(${sRot}deg);"><div class="ace-line-stroke"></div><div class="ace-dot" style="left: 0;"></div><div class="ace-dot" style="right: 0;"></div></div><div class="ace-line-container" style="top: ${data.hips.y}%; left: ${data.hips.left}%; width: ${data.hips.right - data.hips.left}%; transform: rotate(${pRot}deg);"><div class="ace-line-stroke"></div><div class="ace-dot" style="left: 0;"></div><div class="ace-dot" style="right: 0;"></div></div>`;
-                            reports.innerHTML = `<div class="pos-data-card"><div class="pos-data-icon">⚖️</div><div class="pos-data-text"><div class="pos-data-title">${sText} <span>偏离 ${sTiltVal.toFixed(1)}°</span></div><div class="pos-data-desc"><strong>ACE 正常值:</strong> 肩峰应处于同一水平线 (0°偏差)。<br><strong>当前评估:</strong> 肩峰连线偏离水平面 ${sTiltVal.toFixed(1)}°，长期发力不均，极易引发脊柱侧弯与颈椎不适。<br><div class="pos-advice"><strong>💡 解决建议:</strong> ${sAdvice}</div></div></div></div><div class="pos-data-card"><div class="pos-data-icon">🩻</div><div class="pos-data-text"><div class="pos-data-title">${pText} <span>偏离 ${pTiltVal.toFixed(1)}°</span></div><div class="pos-data-desc"><strong>ACE 正常值:</strong> 两侧髂前上棘处于同一直线。<br><strong>当前评估:</strong> 髂前上棘连线偏离 ${pTiltVal.toFixed(1)}°，核心肌群发力不对称，导致下肢力线崩溃及长短腿风险。<br><div class="pos-advice"><strong>💡 解决建议:</strong> ${pAdvice}</div></div></div></div>`;
-                        } else {
-                            document.getElementById('pos-warning-title').innerText = "⚠️ 发现 3 处矢状面 (Sagittal Plane) 高风险代偿";
-                            let fhp = (((h>>3) % 40) / 10 + 1.5).toFixed(1); let apt = (((h>>4) % 120) / 10 + 3.0).toFixed(1);
-                            let shoulderX = data.shoulders.left + (data.shoulders.right - data.shoulders.left)/2; let headX = shoulderX - 4; let hipX = shoulderX + 3; 
-                            overlays.innerHTML = `<div class="ace-plumb-line" style="left: ${shoulderX}%;"></div><div class="ace-dot" style="top: ${data.head.y}%; left: ${headX}%;"></div><div class="ace-dot" style="top: ${data.shoulders.y}%; left: ${shoulderX}%;"></div><div class="ace-dot" style="top: ${data.hips.y}%; left: ${hipX}%;"></div>`;
-                            reports.innerHTML = `<div class="pos-data-card"><div class="pos-data-icon">👤</div><div class="pos-data-text"><div class="pos-data-title">头前引 (Forward Head) <span>偏离 ${fhp}cm</span></div><div class="pos-data-desc"><strong>ACE 正常值:</strong> 铅垂线完美穿过外耳道与肩峰 (偏差0cm)。<br><strong>当前评估:</strong> 耳垂偏离铅垂线 ${fhp}cm，颈椎曲度变直，压迫神经，导致长期偏头痛与睡眠质量下降。<br><div class="pos-advice"><strong>💡 解决建议:</strong> 胸锁乳突肌、枕下肌群手法松解；加强颈部深层屈肌抗阻训练。</div></div></div></div><div class="pos-data-card"><div class="pos-data-icon">⭕</div><div class="pos-data-text"><div class="pos-data-title">胸椎后凸 (Kyphosis) <span>圆肩驼背</span></div><div class="pos-data-desc"><strong>ACE 正常值:</strong> 胸椎自然生理曲度。<br><strong>当前评估:</strong> 肩峰前移，胸小肌与背阔肌张力严重失衡，影响心肺功能与胸廓出口综合征(TOS)。<br><div class="pos-advice"><strong>💡 解决建议:</strong> 强力松解胸大/小肌；中下背部肌群(菱形肌/中下斜方肌)激活重塑。</div></div></div></div><div class="pos-data-card"><div class="pos-data-icon">🩻</div><div class="pos-data-text"><div class="pos-data-title">骨盆前倾 (Anterior Tilt) <span>偏移 ${apt}°</span></div><div class="pos-data-desc"><strong>ACE 正常值:</strong> 髂前上棘与耻骨联合在同一垂直面。<br><strong>当前评估:</strong> 骨盆偏转 ${apt}° (下交叉综合征)，视觉凸显“小肚子”且造成腰椎剪切力过大。<br><div class="pos-advice"><strong>💡 解决建议:</strong> 剥离髂腰肌极度僵硬的筋膜；重新建立腹横肌与臀大肌发力神经链接。</div></div></div></div>`;
-                        }
-                        document.getElementById('pos-result-container').style.display = 'block'; evt.target.value='';
-                    }, 2400);
-                });
-            }; r.readAsDataURL(f);
-        }
+            request.onsuccess = function(e) { idb = e.target.result; loadSysData(); };
+        };
 
         function togglePanel() { const p = document.getElementById('style-panel'); p.style.display = p.style.display === 'block' ? 'none' : 'block'; }
         function applyTheme(idx) {
