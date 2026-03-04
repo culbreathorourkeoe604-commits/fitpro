@@ -697,7 +697,8 @@
             }
         }
 
-        function slideToIndex(index) {
+        // 🚨 修复方案包选中状态被抹除的Bug
+        function slideToIndex(index, keepCustom = false) {
             currentVisualIndex = index;
             const track = document.getElementById('carousel-track');
             const cardWidth = document.getElementById('visual-card-container').offsetWidth;
@@ -709,12 +710,16 @@
                 dot.classList.toggle('active', idx === index);
             });
 
-            document.querySelectorAll('.phase-box:not(.combo-box)').forEach(b => b.classList.remove('selected'));
-            document.getElementById('phase-5-box').classList.remove('selected');
-            
-            const targetPhaseBox = document.getElementById(`p-box-${index + 1}`);
-            if (targetPhaseBox) {
-                targetPhaseBox.classList.add('selected');
+            // 只有当不是自定义选择时，才清除原本的高亮并赋予新的高亮
+            if (!keepCustom) {
+                document.querySelectorAll('.phase-box:not(.combo-box)').forEach(b => b.classList.remove('selected'));
+                let p5 = document.getElementById('phase-5-box');
+                if (p5) p5.classList.remove('selected');
+                
+                const targetPhaseBox = document.getElementById(`p-box-${index + 1}`);
+                if (targetPhaseBox) {
+                    targetPhaseBox.classList.add('selected');
+                }
             }
             
             updateCheckout(true); 
@@ -783,10 +788,9 @@
             }, 400); 
         }
 
-        // 🚨 核心补全：修复签名的关闭功能
         function closeSignature() {
             document.getElementById('signatureModal').classList.remove('show');
-            clearCanvas(); // 关闭时清空签名画板
+            clearCanvas(); 
         }
 
         function finishAndReturn() {
@@ -948,10 +952,11 @@
                 btn.classList.remove('disabled');
                 btn.style.pointerEvents = 'auto';
                 
+                // 🚨 修正后的滑动索引分发逻辑，完美适配高亮
                 if (!fromSwipe && maxPhaseSelected > 0 && maxPhaseSelected <= 4) {
-                    slideToIndex(maxPhaseSelected - 1);
+                    slideToIndex(maxPhaseSelected - 1, false);
                 } else if (!fromSwipe && maxPhaseSelected === 5) {
-                    slideToIndex(3); 
+                    slideToIndex(3, true); 
                 }
                 
                 if(navigator.vibrate) navigator.vibrate(50);
