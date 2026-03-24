@@ -2,47 +2,329 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>VIP 私教体态档案 | SHANGHAI LUXIOU</title>
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <script src="https://cdn.staticfile.net/Chart.js/3.9.1/chart.min.js"></script>
-    <script src="https://cdn.staticfile.net/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <meta name="referrer" content="no-referrer">
     <style>
-        :root { --primary: #00f2fe; --bg: #0b0f19; --glass: rgba(30, 41, 59, 0.7); --card: #161e2e; }
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { background: var(--bg); color: #e2e8f0; font-family: -apple-system, sans-serif; margin: 0; padding: 15px; padding-top: 75px; }
-        .back-btn { position: fixed; top: 15px; left: 15px; z-index: 1000; background: rgba(0,0,0,0.6); color: #fff; padding: 10px 18px; border-radius: 50px; text-decoration: none; font-size: 14px; border: 1px solid rgba(255,255,255,0.4); backdrop-filter: blur(10px); font-weight: bold; }
-        .report-wrap { max-width: 600px; margin: 0 auto; background: var(--glass); border-radius: 24px; padding: 25px; border: 1px solid rgba(255,255,255,0.1); }
-        .header { text-align: center; margin-bottom: 25px; border-bottom: 1px solid #333; padding-bottom: 15px; }
-        .header h1 { color: var(--primary); letter-spacing: 4px; font-size: 24px; margin: 0; }
-        .section-label { font-size: 13px; color: var(--primary); margin: 20px 0 12px; display: flex; align-items: center; letter-spacing: 1px; font-weight: bold; }
-        .section-label::before { content: ""; width: 3px; height: 14px; background: var(--primary); margin-right: 8px; border-radius: 2px; }
-        .data-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-        .data-card { background: var(--card); padding: 15px; border-radius: 16px; text-align: center; border: 1px solid rgba(255,255,255,0.05); }
-        .label { font-size: 11px; color: #64748b; margin-bottom: 6px; }
-        .value { font-size: 17px; font-weight: bold; color: var(--primary); border-bottom: 1px dashed rgba(0,242,254,0.3); padding-bottom: 2px; cursor: pointer; }
-        .photo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px; }
-        .photo-box { background: #000; border: 1px dashed #444; border-radius: 12px; height: 180px; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; cursor: pointer; }
-        .photo-box img { width: 100%; height: 100%; object-fit: cover; position: absolute; }
-        .photo-box span { font-size: 12px; color: #444; z-index: 1; }
-        .sig-box { border: 1px dashed #444; border-radius: 12px; background: #000; height: 150px; margin-top: 10px; }
-        canvas#signature { width: 100%; height: 100%; touch-action: none; }
-        .picker-mask { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 2000; display: none; align-items: center; justify-content: center; opacity: 0; transition: 0.3s; }
-        .picker-mask.active { display: flex; opacity: 1; }
-        .picker-content { background: #1a2234; width: 90%; max-width: 350px; border-radius: 20px; padding: 20px; border: 1px solid #334155; }
-        .picker-scroll-wrap { display: flex; justify-content: space-around; height: 200px; overflow: hidden; }
-        .picker-scroll { flex: 1; height: 100%; overflow-y: auto; scroll-snap-type: y mandatory; padding: 80px 0; }
-        .picker-item { height: 40px; line-height: 40px; text-align: center; font-size: 16px; color: #64748b; scroll-snap-align: center; cursor: pointer; }
-        .picker-item.selected { color: var(--primary); font-weight: bold; font-size: 18px; }
-        .btn-main { display: block; width: 100%; padding: 16px; border-radius: 12px; border: none; font-weight: bold; margin-top: 20px; cursor: pointer; }
-        .btn-export { background: var(--primary); color: #000; }
-        .btn-clear { background: #2d3748; color: #fff; margin-top: 10px; }
+        :root {
+            --primary: #00f2fe;
+            --bg: #0b0f19;
+            --glass: rgba(30, 41, 59, 0.7);
+            --card: #161e2e;
+            --muted: #64748b;
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background: var(--bg);
+            color: #e2e8f0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+            margin: 0;
+            padding: 15px;
+            padding-top: 75px;
+        }
+
+        .back-btn {
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            z-index: 1000;
+            background: rgba(0,0,0,0.6);
+            color: #fff;
+            padding: 10px 18px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 14px;
+            border: 1px solid rgba(255,255,255,0.4);
+            backdrop-filter: blur(10px);
+            font-weight: bold;
+        }
+
+        .report-wrap {
+            max-width: 600px;
+            margin: 0 auto;
+            background: var(--glass);
+            border-radius: 24px;
+            padding: 25px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 25px;
+            border-bottom: 1px solid #333;
+            padding-bottom: 15px;
+        }
+
+        .header h1 {
+            color: var(--primary);
+            letter-spacing: 4px;
+            font-size: 24px;
+            margin: 0;
+        }
+
+        .header p {
+            margin: 8px 0 0 0;
+            color: #94a3b8;
+            font-size: 12px;
+            letter-spacing: 1px;
+        }
+
+        .section-label {
+            font-size: 13px;
+            color: var(--primary);
+            margin: 20px 0 12px;
+            display: flex;
+            align-items: center;
+            letter-spacing: 1px;
+            font-weight: bold;
+        }
+
+        .section-label::before {
+            content: "";
+            width: 3px;
+            height: 14px;
+            background: var(--primary);
+            margin-right: 8px;
+            border-radius: 2px;
+        }
+
+        .data-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .data-card {
+            background: var(--card);
+            padding: 15px;
+            border-radius: 16px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .label {
+            font-size: 11px;
+            color: var(--muted);
+            margin-bottom: 6px;
+        }
+
+        .value {
+            font-size: 17px;
+            font-weight: bold;
+            color: var(--primary);
+            border-bottom: 1px dashed rgba(0,242,254,0.3);
+            padding-bottom: 2px;
+            cursor: pointer;
+            word-break: break-word;
+        }
+
+        .photo-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .photo-box {
+            background: #000;
+            border: 1px dashed #444;
+            border-radius: 12px;
+            height: 180px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .photo-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            display: none;
+        }
+
+        .photo-box span {
+            font-size: 12px;
+            color: #444;
+            z-index: 1;
+            text-align: center;
+            padding: 0 10px;
+        }
+
+        .sig-box {
+            border: 1px dashed #444;
+            border-radius: 12px;
+            background: #000;
+            height: 150px;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+
+        canvas#signature {
+            width: 100%;
+            height: 100%;
+            touch-action: none;
+            display: block;
+        }
+
+        .picker-mask {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            padding: 20px;
+        }
+
+        .picker-mask.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .picker-content {
+            background: #1a2234;
+            width: 100%;
+            max-width: 350px;
+            border-radius: 20px;
+            padding: 20px;
+            border: 1px solid #334155;
+        }
+
+        .picker-scroll-wrap {
+            display: flex;
+            justify-content: space-around;
+            height: 200px;
+            overflow: hidden;
+            gap: 10px;
+        }
+
+        .picker-scroll {
+            flex: 1;
+            height: 100%;
+            overflow-y: auto;
+            scroll-snap-type: y mandatory;
+            padding: 80px 0;
+            scrollbar-width: none;
+        }
+
+        .picker-scroll::-webkit-scrollbar {
+            display: none;
+        }
+
+        .picker-item {
+            height: 40px;
+            line-height: 40px;
+            text-align: center;
+            font-size: 16px;
+            color: var(--muted);
+            scroll-snap-align: center;
+            cursor: pointer;
+        }
+
+        .picker-item.selected {
+            color: var(--primary);
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .picker-btns {
+            display: flex;
+            gap: 10px;
+            margin-top: 18px;
+        }
+
+        .btn-main,
+        .btn-small {
+            display: block;
+            width: 100%;
+            padding: 16px;
+            border-radius: 12px;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .btn-small {
+            padding: 12px;
+        }
+
+        .btn-export {
+            background: var(--primary);
+            color: #000;
+        }
+
+        .btn-clear {
+            background: #2d3748;
+            color: #fff;
+            margin-top: 10px;
+        }
+
+        .btn-main:disabled,
+        .btn-small:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        .action-wrap {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        @media (max-width: 768px) {
+            .report-wrap {
+                padding: 18px;
+                border-radius: 18px;
+            }
+
+            .header h1 {
+                font-size: 20px;
+                letter-spacing: 2px;
+            }
+
+            .data-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
+            }
+
+            .data-card {
+                padding: 12px;
+            }
+
+            .value {
+                font-size: 15px;
+            }
+
+            .photo-box {
+                height: 150px;
+            }
+        }
     </style>
 </head>
 <body>
     <a href="./index.html" class="back-btn">返回中枢</a>
+
     <div class="report-wrap" id="reportArea">
-        <div class="header"><h1>VIP 私教体态档案</h1><p>LUXIOU DIGITAL DIAGNOSIS SYSTEM</p></div>
+        <div class="header">
+            <h1>VIP 私教体态档案</h1>
+            <p>LUXIOU DIGITAL DIAGNOSIS SYSTEM</p>
+        </div>
+
         <div class="section-label">基础信息档案</div>
         <div class="data-grid">
             <div class="data-card"><div class="label">会员姓名</div><div class="value" onclick="editName(this)">陈先生</div></div>
@@ -50,6 +332,7 @@
             <div class="data-card"><div class="label">身高数据</div><div class="value" id="val_height" onclick="openPicker('height')">176 cm</div></div>
             <div class="data-card"><div class="label">出生日期</div><div class="value" id="val_birth" onclick="openPicker('birth')">1984-05-20</div></div>
         </div>
+
         <div class="section-label">专业测评维度</div>
         <div class="data-grid">
             <div class="data-card"><div class="label">当前体重 (KG)</div><div class="value" id="val_weight" onclick="openPicker('weight')">85.0 kg</div></div>
@@ -58,85 +341,362 @@
             <div class="data-card"><div class="label">基础代谢 (KCAL)</div><div class="value" id="val_bmr" onclick="openPicker('bmr')">1850</div></div>
             <div class="data-card"><div class="label">BMI 指数</div><div class="value" id="val_bmi" onclick="openPicker('bmi')">27.4</div></div>
             <div class="data-card"><div class="label">腰臀比 (WHR)</div><div class="value" id="val_whr" onclick="openPicker('whr')">0.92</div></div>
-            <div class="data-card" style="grid-column: span 2;"><div class="label">内脏脂肪等级</div><div class="value" id="val_vfat" onclick="openPicker('vfat')">12 (警戒线)</div></div>
+            <div class="data-card" style="grid-column: span 2;"><div class="label">内脏脂肪等级</div><div class="value" id="val_vfat" onclick="openPicker('vfat')">12</div></div>
         </div>
-        <div class="section-label">智能体能雷达 (随数据自动调整)</div>
-        <div style="height:320px; margin: 10px 0;"><canvas id="radarChart"></canvas></div>
+
+        <div class="section-label">智能体能雷达（随数据自动调整）</div>
+        <div style="height:320px; margin: 10px 0;">
+            <canvas id="radarChart"></canvas>
+        </div>
+
         <div class="section-label">前后对比照片</div>
-        <div class="photo-grid"><label class="photo-box"><img id="img_b" style="display:none"><span>点击上传(前)</span><input type="file" hidden onchange="showImg(this,'img_b')"></label><label class="photo-box"><img id="img_a" style="display:none"><span>点击上传(后)</span><input type="file" hidden onchange="showImg(this,'img_a')"></label></div>
+        <div class="photo-grid">
+            <label class="photo-box">
+                <img id="img_b" alt="前照">
+                <span id="txt_b">点击上传（前）</span>
+                <input type="file" hidden accept="image/*" onchange="showImg(this,'img_b','txt_b')">
+            </label>
+            <label class="photo-box">
+                <img id="img_a" alt="后照">
+                <span id="txt_a">点击上传（后）</span>
+                <input type="file" hidden accept="image/*" onchange="showImg(this,'img_a','txt_a')">
+            </label>
+        </div>
+
         <div class="section-label">教练手写确认</div>
-        <div class="sig-box"><canvas id="signature"></canvas></div>
-        <div style="display:flex; justify-content:space-between; margin-top:20px; font-size:12px; color:#444;"><span>LUXIOU 专业版</span><span id="curDate"></span></div>
+        <div class="sig-box">
+            <canvas id="signature"></canvas>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; margin-top:20px; font-size:12px; color:#444;">
+            <span>LUXIOU 专业版</span>
+            <span id="curDate"></span>
+        </div>
     </div>
-    <div style="max-width:600px; margin:0 auto;"><button class="btn-main btn-export" onclick="exportImg()">生成并保存报告图片</button><button class="btn-main btn-clear" onclick="clearSig()">清除签名</button></div>
-    <div class="picker-mask" id="pickerMask"><div class="picker-content"><div class="picker-scroll-wrap" id="pickerList"></div><div class="picker-btns"><button class="btn-small btn-clear" onclick="closePicker()">取消</button><button class="btn-small btn-export" onclick="confirmValue()">确定</button></div></div></div>
+
+    <div class="action-wrap">
+        <button class="btn-main btn-export" id="exportBtn" onclick="exportImg()">生成并保存报告图片</button>
+        <button class="btn-main btn-clear" onclick="clearSig()">清除签名</button>
+    </div>
+
+    <div class="picker-mask" id="pickerMask">
+        <div class="picker-content">
+            <div class="picker-scroll-wrap" id="pickerList"></div>
+            <div class="picker-btns">
+                <button class="btn-small btn-clear" onclick="closePicker()">取消</button>
+                <button class="btn-small btn-export" onclick="confirmValue()">确定</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         document.getElementById('curDate').innerText = new Date().toLocaleDateString();
-        let curType = '', tempVal = '';
-        const rawData = { weight:85.0, fat:36.0, muscle:51.2, bmr:1850, bmi:27.4, whr:0.92, vfat:12 };
-        const ctx = document.getElementById('radarChart').getContext('2d');
-        const radar = new Chart(ctx, {
-            type: 'radar',
-            data: { labels: ['耐力', '力量', '灵敏', '柔韧', '核心', '爆发'], datasets: [{ data: [0,0,0,0,0,0], backgroundColor: 'rgba(0,242,254,0.2)', borderColor: '#00f2fe', borderWidth: 2, pointBackgroundColor: '#00f2fe' }] },
-            options: { scales: { r: { grid: { color: 'rgba(255,255,255,0.1)' }, angleLines: { color: 'rgba(255,255,255,0.1)' }, ticks: { display: false }, min:0, max:100 } }, plugins: { legend: { display: false } } }
-        });
-        function updateRadarLogic() {
-            const data = [
-                Math.max(30, 100 - rawData.fat * 1.5), // 耐力：体脂越低分越高
-                Math.min(95, rawData.muscle * 1.2 + (100 - rawData.fat)/2), // 力量：肌肉和体脂综合
-                Math.max(40, 100 - rawData.bmi * 2), // 灵敏：BMI越低分越高
-                85, // 柔韧：预设高值
-                Math.max(35, 100 - rawData.vfat * 4), // 核心：内脏脂肪越低分越高
-                Math.min(95, rawData.muscle * 1.5) // 爆发：肌肉量核心挂钩
-            ];
-            radar.data.datasets[0].data = data; radar.update();
+
+        let curType = '';
+        let tempVal = '';
+
+        const rawData = {
+            weight: 85.0,
+            fat: 36.0,
+            muscle: 51.2,
+            bmr: 1850,
+            bmi: 27.4,
+            whr: 0.92,
+            vfat: 12
+        };
+
+        const config = {
+            age: { min: 18, max: 80, unit: ' 岁' },
+            height: { min: 140, max: 220, unit: ' cm' },
+            weight: { min: 40, max: 150, unit: ' kg', step: 0.1 },
+            fat: { min: 5, max: 50, unit: ' %', step: 0.1 },
+            muscle: { min: 20, max: 80, unit: ' kg', step: 0.1 },
+            bmr: { min: 1000, max: 3000, step: 10 },
+            bmi: { min: 15, max: 40, step: 0.1 },
+            whr: { min: 0.6, max: 1.2, step: 0.01 },
+            vfat: { min: 1, max: 30 }
+        };
+
+        let radar = null;
+
+        function loadChartScript() {
+            return new Promise((resolve, reject) => {
+                if (window.Chart) {
+                    resolve();
+                    return;
+                }
+                const script = document.createElement('script');
+                script.src = 'https://cdn.staticfile.net/Chart.js/3.9.1/chart.min.js';
+                script.async = true;
+                script.onload = resolve;
+                script.onerror = reject;
+                document.body.appendChild(script);
+            });
         }
-        updateRadarLogic();
-        const config = { age:{min:18,max:80,unit:' 岁'}, height:{min:140,max:220,unit:' cm'}, weight:{min:40,max:150,unit:' kg',step:0.1}, fat:{min:5,max:50,unit:' %',step:0.1}, muscle:{min:20,max:80,unit:' kg',step:0.1}, bmr:{min:1000,max:3000,step:10}, bmi:{min:15,max:40,step:0.1}, whr:{min:0.6,max:1.2,step:0.01}, vfat:{min:1,max:30} };
+
+        function loadHtml2CanvasScript() {
+            return new Promise((resolve, reject) => {
+                if (window.html2canvas) {
+                    resolve();
+                    return;
+                }
+                const script = document.createElement('script');
+                script.src = 'https://cdn.staticfile.net/html2canvas/1.4.1/html2canvas.min.js';
+                script.async = true;
+                script.onload = resolve;
+                script.onerror = reject;
+                document.body.appendChild(script);
+            });
+        }
+
+        function getRadarData() {
+            return [
+                Math.max(30, 100 - rawData.fat * 1.5),
+                Math.min(95, rawData.muscle * 1.2 + (100 - rawData.fat) / 2),
+                Math.max(40, 100 - rawData.bmi * 2),
+                85,
+                Math.max(35, 100 - rawData.vfat * 4),
+                Math.min(95, rawData.muscle * 1.5)
+            ];
+        }
+
+        function initRadar() {
+            const ctx = document.getElementById('radarChart').getContext('2d');
+            radar = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: ['耐力', '力量', '灵敏', '柔韧', '核心', '爆发'],
+                    datasets: [{
+                        data: getRadarData(),
+                        backgroundColor: 'rgba(0,242,254,0.2)',
+                        borderColor: '#00f2fe',
+                        borderWidth: 2,
+                        pointBackgroundColor: '#00f2fe'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            grid: { color: 'rgba(255,255,255,0.1)' },
+                            angleLines: { color: 'rgba(255,255,255,0.1)' },
+                            ticks: { display: false },
+                            pointLabels: { color: '#cbd5e1', font: { size: 12 } },
+                            min: 0,
+                            max: 100
+                        }
+                    },
+                    plugins: { legend: { display: false } }
+                }
+            });
+        }
+
+        function updateRadarLogic() {
+            if (!radar) return;
+            radar.data.datasets[0].data = getRadarData();
+            radar.update();
+        }
+
         function openPicker(type) {
-            curType = type; const list = document.getElementById('pickerList'); list.innerHTML = '';
-            if(type === 'birth') {
-                list.innerHTML = `<div class="picker-scroll" id="p_y"></div><div class="picker-scroll" id="p_m"></div><div class="picker-scroll" id="p_d"></div>`;
-                fillScroll('p_y', 1960, 2015, ''); fillScroll('p_m', 1, 12, ''); fillScroll('p_d', 1, 31, '');
+            curType = type;
+            tempVal = '';
+
+            const list = document.getElementById('pickerList');
+            list.innerHTML = '';
+
+            if (type === 'birth') {
+                list.innerHTML = `
+                    <div class="picker-scroll" id="p_y"></div>
+                    <div class="picker-scroll" id="p_m"></div>
+                    <div class="picker-scroll" id="p_d"></div>
+                `;
+                fillScroll('p_y', 1960, 2015, '');
+                fillScroll('p_m', 1, 12, '');
+                fillScroll('p_d', 1, 31, '');
             } else {
                 list.innerHTML = `<div class="picker-scroll" id="p_single"></div>`;
                 const p = config[type];
-                for(let i=p.min; i<=p.max; i=parseFloat((i+(p.step||1)).toFixed(2))) {
-                    const v = i.toFixed(p.step < 1 ? (p.step === 0.01 ? 2 : 1) : 0);
-                    document.getElementById('p_single').innerHTML += `<div class="picker-item" onclick="selectItem(this,'${v}')">${v}${p.unit||''}</div>`;
+                const step = p.step || 1;
+                for (let i = p.min; i <= p.max; i = parseFloat((i + step).toFixed(2))) {
+                    const decimals = step === 0.01 ? 2 : (step < 1 ? 1 : 0);
+                    const v = i.toFixed(decimals);
+                    document.getElementById('p_single').innerHTML += `
+                        <div class="picker-item" onclick="selectItem(this,'${v}')">${v}${p.unit || ''}</div>
+                    `;
                 }
             }
+
             document.getElementById('pickerMask').classList.add('active');
         }
-        function fillScroll(id, min, max, unit) {
-            for(let i=min; i<=max; i++) document.getElementById(id).innerHTML += `<div class="picker-item" onclick="selectPart(this,'${i}')">${i<10?'0'+i:i}${unit}</div>`;
+
+        function fillScroll(id, min, max) {
+            const el = document.getElementById(id);
+            for (let i = min; i <= max; i++) {
+                const text = i < 10 ? '0' + i : String(i);
+                el.innerHTML += `<div class="picker-item" onclick="selectPart(this,'${text}')">${text}</div>`;
+            }
         }
-        function selectItem(el, val) { document.querySelectorAll('.picker-item').forEach(i=>i.classList.remove('selected')); el.classList.add('selected'); tempVal = val; }
-        function selectPart(el, val) { el.parentNode.querySelectorAll('.picker-item').forEach(i=>i.classList.remove('selected')); el.classList.add('selected'); }
+
+        function selectItem(el, val) {
+            document.querySelectorAll('.picker-item').forEach(i => i.classList.remove('selected'));
+            el.classList.add('selected');
+            tempVal = val;
+        }
+
+        function selectPart(el) {
+            el.parentNode.querySelectorAll('.picker-item').forEach(i => i.classList.remove('selected'));
+            el.classList.add('selected');
+        }
+
         function confirmValue() {
-            if(curType === 'birth') {
+            if (curType === 'birth') {
                 const y = document.querySelector('#p_y .selected')?.innerText || '1984';
                 const m = document.querySelector('#p_m .selected')?.innerText || '05';
                 const d = document.querySelector('#p_d .selected')?.innerText || '20';
                 document.getElementById('val_birth').innerText = `${y}-${m}-${d}`;
             } else {
+                if (!tempVal) {
+                    closePicker();
+                    return;
+                }
                 rawData[curType] = parseFloat(tempVal);
-                document.getElementById('val_'+curType).innerText = tempVal + (config[curType].unit||'');
+                document.getElementById('val_' + curType).innerText = tempVal + (config[curType].unit || '');
                 updateRadarLogic();
             }
             closePicker();
         }
-        function closePicker() { document.getElementById('pickerMask').classList.remove('active'); tempVal = ''; }
-        function editName(el) { const n = prompt("输入会员姓名", el.innerText); if(n) el.innerText = n; }
-        function showImg(input, id) { if(input.files[0]) { const r = new FileReader(); r.onload=e=>{ const img=document.getElementById(id); img.src=e.target.result; img.style.display='block'; img.nextElementSibling.style.display='none'; }; r.readAsDataURL(input.files[0]); } }
-        const can = document.getElementById('signature'); const sctx = can.getContext('2d'); let draw = false;
-        can.width = can.offsetWidth; can.height = can.offsetHeight;
-        const getP = e => ({ x: (e.touches?e.touches[0].clientX:e.clientX)-can.getBoundingClientRect().left, y: (e.touches?e.touches[0].clientY:e.clientY)-can.getBoundingClientRect().top });
-        can.addEventListener('touchstart', e => { draw=true; const p=getP(e); sctx.beginPath(); sctx.moveTo(p.x,p.y); e.preventDefault(); });
-        can.addEventListener('touchmove', e => { if(draw) { const p=getP(e); sctx.lineTo(p.x,p.y); sctx.strokeStyle='#00f2fe'; sctx.lineWidth=2; sctx.stroke(); } e.preventDefault(); });
-        can.addEventListener('touchend', () => draw=false);
-        function clearSig() { sctx.clearRect(0,0,can.width,can.height); }
-        function exportImg() { html2canvas(document.querySelector("#reportArea"), { backgroundColor: '#0b0f19', scale: 2 }).then(c => { const a = document.createElement('a'); a.download = 'LUXIOU_REPORT.png'; a.href = c.toDataURL(); a.click(); }); }
+
+        function closePicker() {
+            document.getElementById('pickerMask').classList.remove('active');
+            tempVal = '';
+        }
+
+        function editName(el) {
+            const n = prompt('输入会员姓名', el.innerText);
+            if (n && n.trim()) {
+                el.innerText = n.trim();
+            }
+        }
+
+        function showImg(input, imgId, textId) {
+            const file = input.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = e => {
+                const img = document.getElementById(imgId);
+                const txt = document.getElementById(textId);
+                img.src = e.target.result;
+                img.style.display = 'block';
+                txt.style.display = 'none';
+            };
+            reader.readAsDataURL(file);
+        }
+
+        const can = document.getElementById('signature');
+        const sctx = can.getContext('2d');
+        let drawing = false;
+
+        function resizeSignatureCanvas() {
+            const rect = can.getBoundingClientRect();
+            const dpr = window.devicePixelRatio || 1;
+            can.width = rect.width * dpr;
+            can.height = rect.height * dpr;
+            sctx.setTransform(1, 0, 0, 1, 0, 0);
+            sctx.scale(dpr, dpr);
+            sctx.lineCap = 'round';
+            sctx.lineJoin = 'round';
+            sctx.strokeStyle = '#00f2fe';
+            sctx.lineWidth = 2;
+        }
+
+        function getPoint(e) {
+            const rect = can.getBoundingClientRect();
+            const point = e.touches ? e.touches[0] : e;
+            return {
+                x: point.clientX - rect.left,
+                y: point.clientY - rect.top
+            };
+        }
+
+        can.addEventListener('mousedown', e => {
+            drawing = true;
+            const p = getPoint(e);
+            sctx.beginPath();
+            sctx.moveTo(p.x, p.y);
+        });
+
+        can.addEventListener('mousemove', e => {
+            if (!drawing) return;
+            const p = getPoint(e);
+            sctx.lineTo(p.x, p.y);
+            sctx.stroke();
+        });
+
+        can.addEventListener('mouseup', () => drawing = false);
+        can.addEventListener('mouseleave', () => drawing = false);
+
+        can.addEventListener('touchstart', e => {
+            drawing = true;
+            const p = getPoint(e);
+            sctx.beginPath();
+            sctx.moveTo(p.x, p.y);
+            e.preventDefault();
+        }, { passive: false });
+
+        can.addEventListener('touchmove', e => {
+            if (!drawing) return;
+            const p = getPoint(e);
+            sctx.lineTo(p.x, p.y);
+            sctx.stroke();
+            e.preventDefault();
+        }, { passive: false });
+
+        can.addEventListener('touchend', e => {
+            drawing = false;
+            e.preventDefault();
+        }, { passive: false });
+
+        function clearSig() {
+            const rect = can.getBoundingClientRect();
+            sctx.clearRect(0, 0, rect.width, rect.height);
+        }
+
+        function exportImg() {
+            const btn = document.getElementById('exportBtn');
+            btn.disabled = true;
+            btn.innerText = '正在生成...';
+
+            loadHtml2CanvasScript().then(() => {
+                return window.html2canvas(document.querySelector('#reportArea'), {
+                    backgroundColor: '#0b0f19',
+                    scale: 2,
+                    useCORS: true
+                });
+            }).then(c => {
+                const a = document.createElement('a');
+                a.download = 'LUXIOU_REPORT.png';
+                a.href = c.toDataURL('image/png');
+                a.click();
+                btn.disabled = false;
+                btn.innerText = '生成并保存报告图片';
+            }).catch(() => {
+                btn.disabled = false;
+                btn.innerText = '生成并保存报告图片';
+                alert('生成失败，请重试。');
+            });
+        }
+
+        window.addEventListener('resize', resizeSignatureCanvas);
+
+        loadChartScript().then(() => {
+            initRadar();
+            resizeSignatureCanvas();
+        }).catch(() => {
+            resizeSignatureCanvas();
+            alert('图表加载失败，请刷新页面重试。');
+        });
     </script>
 </body>
 </html>
