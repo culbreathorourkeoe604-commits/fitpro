@@ -4,88 +4,557 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>R玥精致健身 | 巅峰报价仪表盘</title>
+    <meta name="referrer" content="no-referrer">
     <style>
-        /* 顶级香槟黑金配色 */
-        :root { --primary: #E8C37C; --primary-dark: #C69A45; --bg-deep: #050505; --card-light: #16161A; --card-dark: #0A0A0C; --text-main: #FFFFFF; --text-sub: #A0A0AB; --danger: #FF3B30;}
-        
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; margin: 0; padding: 0; }
-        html, body { width: 100%; height: 100%; overflow: hidden; background: var(--bg-deep); color: var(--text-main); font-family: "DIN Alternate", -apple-system, sans-serif; -webkit-font-smoothing: antialiased; display: flex; flex-direction: column; }
-        
-        body::before { content: ''; position: absolute; top: -10vh; left: 50%; transform: translateX(-50%); width: 150vw; height: 30vh; background: radial-gradient(ellipse, rgba(232, 195, 124, 0.15) 0%, transparent 70%); z-index: 0; pointer-events: none; }
+        :root {
+            --primary: #E8C37C;
+            --primary-dark: #C69A45;
+            --bg-deep: #050505;
+            --card-light: #16161A;
+            --card-dark: #0A0A0C;
+            --text-main: #FFFFFF;
+            --text-sub: #A0A0AB;
+            --danger: #FF3B30;
+        }
 
-        .header-brand { width: 100%; height: 60px; display: flex; align-items: center; justify-content: center; position: relative; z-index: 50; flex-shrink: 0;}
-        .brand-text { font-size: 16px; font-weight: 900; color: var(--primary); letter-spacing: 3px; }
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+            outline: none;
+            margin: 0;
+            padding: 0;
+        }
 
-        .seg-control { display: flex; background: rgba(20,20,25,0.8); border-radius: 12px; padding: 5px; margin: 5px 20px 15px; border: 1px solid rgba(255,255,255,0.05); flex-shrink: 0; z-index: 10; backdrop-filter: blur(10px);}
-        .seg-btn { flex: 1; text-align: center; padding: 10px 0; font-size: 13px; font-weight: bold; color: #666; border-radius: 8px; transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); cursor: pointer; position: relative; z-index: 2;}
-        .seg-btn.active { color: #000; text-shadow: none; font-weight: 900;}
-        .seg-btn.active::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); border-radius: 8px; z-index: -1; box-shadow: 0 4px 12px rgba(232, 195, 124, 0.4); }
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: var(--bg-deep);
+            color: var(--text-main);
+            font-family: "DIN Alternate", -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+            -webkit-font-smoothing: antialiased;
+            display: flex;
+            flex-direction: column;
+        }
 
-        .matrix-container { flex: 1; width: 100%; padding: 0 20px 90px; overflow-y: auto; -webkit-overflow-scrolling: touch; z-index: 5; position: relative; }
-        .price-section { display: none; flex-direction: column; gap: 12px; animation: scaleUp 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); }
-        .price-section.active { display: flex; }
-        @keyframes scaleUp { from { opacity: 0; transform: translateY(10px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
+        body::before {
+            content: '';
+            position: absolute;
+            top: -10vh;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150vw;
+            height: 30vh;
+            background: radial-gradient(ellipse, rgba(232, 195, 124, 0.15) 0%, transparent 70%);
+            z-index: 0;
+            pointer-events: none;
+        }
 
-        .grid-2x2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
-        
-        .m-card { background: linear-gradient(145deg, var(--card-light), var(--card-dark)); border: 1px solid rgba(255,255,255,0.06); border-radius: 16px; padding: 18px 15px; position: relative; cursor: pointer; transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); display: flex; flex-direction: column; gap: 10px; overflow: hidden; box-shadow: 0 8px 20px rgba(0,0,0,0.6);}
-        .m-card:active { transform: scale(0.96); }
-        
-        .m-card.selected { border-color: var(--primary); background: linear-gradient(145deg, #221A0F, #0A0A0C); box-shadow: 0 10px 30px rgba(232, 195, 124, 0.2), inset 0 0 15px rgba(232, 195, 124, 0.1); transform: translateY(-2px);}
-        
-        /* ✓ 移至左上角防重叠 */
-        .m-card.selected::before { content: '✓ 已优选'; position: absolute; top: -1px; left: -1px; color: #000; font-size: 10px; font-weight: bold; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); border-radius: 16px 0 16px 0; padding: 4px 10px; text-align: center; box-shadow: 2px 2px 10px rgba(232, 195, 124, 0.3); z-index: 20;}
+        .header-brand {
+            width: 100%;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 50;
+            flex-shrink: 0;
+        }
 
-        .save-tag { position: absolute; top: 0; right: 0; background: linear-gradient(135deg, #FF4B40, #D91D12); color: #fff; font-size: 9px; font-weight: 900; padding: 4px 10px; border-radius: 0 0 0 12px; letter-spacing: 0.5px; box-shadow: -2px 2px 10px rgba(217, 29, 18, 0.3); z-index: 10;}
-        .vip .save-tag { background: linear-gradient(135deg, var(--primary), #B58428); color: #000; box-shadow: -2px 2px 10px rgba(232, 195, 124, 0.4);}
+        .brand-text {
+            font-size: 16px;
+            font-weight: 900;
+            color: var(--primary);
+            letter-spacing: 3px;
+        }
 
-        .mc-top { display: flex; justify-content: space-between; align-items: flex-end; margin-top: 5px; }
-        .mc-ses { font-size: 24px; font-weight: 900; color: #fff; line-height: 1;}
-        .selected .mc-ses { color: var(--primary); }
-        .mc-ses span { font-size: 10px; color: #888; font-weight: normal; margin-left: 2px;}
-        
-        .mc-mid { display: flex; flex-direction: column; gap: 2px; margin-top: 5px;}
-        .mc-ori { font-size: 11px; color: #666; text-decoration: line-through; }
-        .mc-new { font-size: 24px; font-weight: 900; color: #fff; display: flex; align-items: baseline; gap: 2px;}
-        .selected .mc-new { color: var(--primary); text-shadow: 0 0 15px rgba(232, 195, 124, 0.3); font-size: 26px;}
-        .mc-new span { font-size: 14px; }
+        .seg-control {
+            display: flex;
+            background: rgba(20, 20, 25, 0.8);
+            border-radius: 12px;
+            padding: 5px;
+            margin: 5px 20px 15px;
+            border: 1px solid rgba(255,255,255,0.05);
+            flex-shrink: 0;
+            z-index: 10;
+            backdrop-filter: blur(10px);
+        }
 
-        .mc-bot { font-size: 10px; color: #888; border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 8px; margin-top: auto; display: flex; justify-content: space-between; align-items: center;}
-        .selected .mc-bot { color: #ccc; border-top-color: rgba(232, 195, 124, 0.2);}
-        .mc-bot-ori { color: #666; text-decoration: line-through; }
-        .mc-bot-new { color: var(--primary); font-weight: bold; font-size: 11px;}
+        .seg-btn {
+            flex: 1;
+            text-align: center;
+            padding: 10px 0;
+            font-size: 13px;
+            font-weight: bold;
+            color: #666;
+            border-radius: 8px;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            cursor: pointer;
+            position: relative;
+            z-index: 2;
+            user-select: none;
+        }
 
-        .full-card { grid-column: span 2; display: flex; justify-content: space-between; align-items: center; padding: 18px 20px; border-style: dashed;}
-        .fc-left .mc-ses { font-size: 20px; }
-        .fc-left .mc-bot { border: none; padding-top: 4px; font-size: 11px;}
-        .fc-right { text-align: right; }
-        .fc-right .mc-new { font-size: 22px; justify-content: flex-end; color: var(--primary);}
+        .seg-btn.active {
+            color: #000;
+            font-weight: 900;
+        }
 
-        .action-bar { position: fixed; bottom: 0; left: 0; width: 100%; padding: 15px 20px 25px; background: linear-gradient(to top, rgba(5,5,5,1) 60%, rgba(5,5,5,0)); z-index: 100; }
-        .btn-master { width: 100%; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: #000; border: none; padding: 16px; border-radius: 12px; font-size: 16px; font-weight: 900; box-shadow: 0 8px 25px rgba(232, 195, 124, 0.3); cursor: pointer; transition: 0.2s; display: flex; justify-content: center; align-items: center; gap: 8px;}
-        .btn-master:active { transform: scale(0.98); box-shadow: 0 4px 10px rgba(232, 195, 124, 0.2);}
+        .seg-btn.active::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-radius: 8px;
+            z-index: -1;
+            box-shadow: 0 4px 12px rgba(232, 195, 124, 0.4);
+        }
 
-        .sig-modal { position: fixed; top: 100vh; left: 0; width: 100%; height: 100vh; background: #08080A; z-index: 2000; transition: top 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); display: flex; flex-direction: column; overflow-x: hidden;}
-        .sig-modal.show { top: 0; }
-        .sig-header { height: 60px; display: flex; justify-content: space-between; align-items: center; padding: 0 20px; background: rgba(5,5,5,0.95); border-bottom: 1px solid rgba(212,175,55,0.3); flex-shrink:0;}
-        .sig-title { font-size: 16px; font-weight: bold; color: var(--primary); }
-        .sig-content { padding: 20px; flex: 1; display: flex; flex-direction: column; overflow-y: auto;}
-        
-        .sig-pad-wrap { flex: 1; display: flex; flex-direction: column; min-height: 300px;}
-        
-        .sig-summary { background: linear-gradient(145deg, #18181A, #0A0A0C); padding: 20px; border-radius: 12px; margin-bottom: 20px; border: 1px solid rgba(212,175,55,0.3); box-shadow: 0 10px 30px rgba(0,0,0,0.5);}
-        .sig-sum-title { color: #fff; font-size: 14px; margin-bottom: 10px; font-weight: bold;}
-        .sig-sum-data { display: flex; justify-content: space-between; align-items: flex-end; border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 15px; margin-top: 10px;}
-        .sig-sum-name { font-size: 16px; color: var(--primary); font-weight: 900;}
-        .sig-sum-price { font-size: 24px; color: #fff; font-weight: 900;}
+        .matrix-container {
+            flex: 1;
+            width: 100%;
+            padding: 0 20px 90px;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            z-index: 5;
+            position: relative;
+        }
 
-        .sig-pad-container { flex: 1; border: 1px dashed #555; border-radius: 12px; background: #111; position: relative; overflow: hidden; box-shadow: inset 0 0 20px rgba(0,0,0,0.8); min-height: 250px;}
-        #sigCanvas { width: 100%; height: 100%; touch-action: none; cursor: crosshair; display: block;}
-        .sig-placeholder { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #444; font-size: 24px; font-weight: bold; pointer-events: none; letter-spacing: 2px;}
-        
-        .sig-actions { display: flex; gap: 15px; margin-top: 20px; margin-bottom: 10px; flex-shrink:0;}
-        .btn-clear { flex: 1; background: #222; color: #fff; padding: 16px; border-radius: 12px; text-align: center; border: 1px solid #444; font-weight: bold; font-size: 15px; cursor:pointer;}
-        .btn-confirm-sig { flex: 2; background: linear-gradient(135deg, var(--primary), #AA8A2A); color: #000; padding: 16px; border-radius: 12px; text-align: center; border: none; font-weight: 900; font-size: 16px; box-shadow: 0 5px 20px rgba(212,175,55,0.3); cursor:pointer;}
+        .price-section {
+            display: none;
+            flex-direction: column;
+            gap: 12px;
+            animation: scaleUp 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        .price-section.active {
+            display: flex;
+        }
+
+        @keyframes scaleUp {
+            from { opacity: 0; transform: translateY(10px) scale(0.98); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .grid-2x2 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .m-card {
+            background: linear-gradient(145deg, var(--card-light), var(--card-dark));
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 16px;
+            padding: 18px 15px;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            overflow: hidden;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.6);
+        }
+
+        .m-card:active {
+            transform: scale(0.96);
+        }
+
+        .m-card.selected {
+            border-color: var(--primary);
+            background: linear-gradient(145deg, #221A0F, #0A0A0C);
+            box-shadow: 0 10px 30px rgba(232, 195, 124, 0.2), inset 0 0 15px rgba(232, 195, 124, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .m-card.selected::before {
+            content: '✓ 已优选';
+            position: absolute;
+            top: -1px;
+            left: -1px;
+            color: #000;
+            font-size: 10px;
+            font-weight: bold;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-radius: 16px 0 16px 0;
+            padding: 4px 10px;
+            text-align: center;
+            box-shadow: 2px 2px 10px rgba(232, 195, 124, 0.3);
+            z-index: 20;
+        }
+
+        .save-tag {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: linear-gradient(135deg, #FF4B40, #D91D12);
+            color: #fff;
+            font-size: 9px;
+            font-weight: 900;
+            padding: 4px 10px;
+            border-radius: 0 0 0 12px;
+            letter-spacing: 0.5px;
+            box-shadow: -2px 2px 10px rgba(217, 29, 18, 0.3);
+            z-index: 10;
+        }
+
+        .vip .save-tag {
+            background: linear-gradient(135deg, var(--primary), #B58428);
+            color: #000;
+            box-shadow: -2px 2px 10px rgba(232, 195, 124, 0.4);
+        }
+
+        .mc-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-top: 5px;
+        }
+
+        .mc-ses {
+            font-size: 24px;
+            font-weight: 900;
+            color: #fff;
+            line-height: 1;
+        }
+
+        .selected .mc-ses {
+            color: var(--primary);
+        }
+
+        .mc-ses span {
+            font-size: 10px;
+            color: #888;
+            font-weight: normal;
+            margin-left: 2px;
+        }
+
+        .mc-mid {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            margin-top: 5px;
+        }
+
+        .mc-ori {
+            font-size: 11px;
+            color: #666;
+            text-decoration: line-through;
+        }
+
+        .mc-new {
+            font-size: 24px;
+            font-weight: 900;
+            color: #fff;
+            display: flex;
+            align-items: baseline;
+            gap: 2px;
+        }
+
+        .selected .mc-new {
+            color: var(--primary);
+            text-shadow: 0 0 15px rgba(232, 195, 124, 0.3);
+            font-size: 26px;
+        }
+
+        .mc-new span {
+            font-size: 14px;
+        }
+
+        .mc-bot {
+            font-size: 10px;
+            color: #888;
+            border-top: 1px dashed rgba(255,255,255,0.1);
+            padding-top: 8px;
+            margin-top: auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .selected .mc-bot {
+            color: #ccc;
+            border-top-color: rgba(232, 195, 124, 0.2);
+        }
+
+        .mc-bot-ori {
+            color: #666;
+            text-decoration: line-through;
+        }
+
+        .mc-bot-new {
+            color: var(--primary);
+            font-weight: bold;
+            font-size: 11px;
+        }
+
+        .full-card {
+            grid-column: span 2;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 20px;
+            border-style: dashed;
+        }
+
+        .fc-left .mc-ses {
+            font-size: 20px;
+        }
+
+        .fc-left .mc-bot {
+            border: none;
+            padding-top: 4px;
+            font-size: 11px;
+        }
+
+        .fc-right {
+            text-align: right;
+        }
+
+        .fc-right .mc-new {
+            font-size: 22px;
+            justify-content: flex-end;
+            color: var(--primary);
+        }
+
+        .action-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 15px 20px 25px;
+            background: linear-gradient(to top, rgba(5,5,5,1) 60%, rgba(5,5,5,0));
+            z-index: 100;
+        }
+
+        .btn-master {
+            width: 100%;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: #000;
+            border: none;
+            padding: 16px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 900;
+            box-shadow: 0 8px 25px rgba(232, 195, 124, 0.3);
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-master:active {
+            transform: scale(0.98);
+            box-shadow: 0 4px 10px rgba(232, 195, 124, 0.2);
+        }
+
+        .sig-modal {
+            position: fixed;
+            top: 100vh;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: #08080A;
+            z-index: 2000;
+            transition: top 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        .sig-modal.show {
+            top: 0;
+        }
+
+        .sig-header {
+            height: 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            background: rgba(5,5,5,0.95);
+            border-bottom: 1px solid rgba(212,175,55,0.3);
+            flex-shrink: 0;
+        }
+
+        .sig-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .close-btn {
+            background: transparent;
+            border: none;
+            font-size: 28px;
+            color: #888;
+            cursor: pointer;
+            line-height: 1;
+        }
+
+        .sig-content {
+            padding: 20px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        .sig-pad-wrap {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 300px;
+        }
+
+        .sig-summary {
+            background: linear-gradient(145deg, #18181A, #0A0A0C);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(212,175,55,0.3);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .sig-sum-title {
+            color: #fff;
+            font-size: 14px;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .sig-sum-data {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            border-top: 1px dashed rgba(255,255,255,0.1);
+            padding-top: 15px;
+            margin-top: 10px;
+            gap: 10px;
+        }
+
+        .sig-sum-name {
+            font-size: 16px;
+            color: var(--primary);
+            font-weight: 900;
+        }
+
+        .sig-sum-price {
+            font-size: 24px;
+            color: #fff;
+            font-weight: 900;
+        }
+
+        .sig-pad-container {
+            flex: 1;
+            border: 1px dashed #555;
+            border-radius: 12px;
+            background: #111;
+            position: relative;
+            overflow: hidden;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
+            min-height: 250px;
+        }
+
+        #sigCanvas {
+            width: 100%;
+            height: 100%;
+            touch-action: none;
+            cursor: crosshair;
+            display: block;
+        }
+
+        .sig-placeholder {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #444;
+            font-size: 24px;
+            font-weight: bold;
+            pointer-events: none;
+            letter-spacing: 2px;
+            text-align: center;
+        }
+
+        .sig-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            flex-shrink: 0;
+        }
+
+        .btn-clear {
+            flex: 1;
+            background: #222;
+            color: #fff;
+            padding: 16px;
+            border-radius: 12px;
+            text-align: center;
+            border: 1px solid #444;
+            font-weight: bold;
+            font-size: 15px;
+            cursor: pointer;
+        }
+
+        .btn-confirm-sig,
+        .btn-confirm-master {
+            flex: 2;
+            background: linear-gradient(135deg, var(--primary), #AA8A2A);
+            color: #000;
+            padding: 16px;
+            border-radius: 12px;
+            text-align: center;
+            border: none;
+            font-weight: 900;
+            font-size: 16px;
+            box-shadow: 0 5px 20px rgba(212,175,55,0.3);
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .brand-text {
+                font-size: 14px;
+                letter-spacing: 2px;
+            }
+
+            .matrix-container {
+                padding: 0 14px 90px;
+            }
+
+            .seg-control {
+                margin: 5px 14px 15px;
+            }
+
+            .grid-2x2 {
+                gap: 10px;
+            }
+
+            .m-card {
+                padding: 16px 12px;
+            }
+
+            .mc-ses {
+                font-size: 22px;
+            }
+
+            .mc-new {
+                font-size: 22px;
+            }
+
+            .selected .mc-new {
+                font-size: 24px;
+            }
+
+            .sig-sum-data {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
     </style>
 </head>
 <body>
@@ -101,7 +570,7 @@
     </div>
 
     <div class="matrix-container">
-        
+
         <div id="view-regular" class="price-section active">
             <div class="grid-2x2">
                 <div class="m-card" onclick="selectCard(this, '常规减脂/塑形', '12节', '¥ 4,200')">
@@ -156,7 +625,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="m-card full-card" onclick="selectCard(this, '年度常规托管', '100+节', '按阶梯核算')">
                 <div class="fc-left">
                     <div class="mc-ses">100+<span>节</span></div>
@@ -311,7 +780,7 @@
     <div class="sig-modal" id="signatureModal">
         <div class="sig-header">
             <div class="sig-title">✦ 电子合同签署中心 ✦</div>
-            <button class="close-btn" onclick="closeSignature()" style="font-size: 28px; color: #888;">×</button>
+            <button class="close-btn" onclick="closeSignature()">×</button>
         </div>
         <div class="sig-content">
             <div id="sig-pad-wrap" class="sig-pad-wrap"></div>
@@ -319,42 +788,47 @@
     </div>
 
     <script>
-        let currentType = "常规特训";
+        let currentType = "常规减脂/塑形";
         let currentSessions = "48节";
         let currentPrice = "¥ 16,800";
+
+        let sigCanvas = null;
+        let sigCtx = null;
+        let isSigning = false;
+        let sigHasContent = false;
 
         function switchView(type, btn) {
             document.querySelectorAll('.seg-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
 
-            currentType = btn.innerText;
-
             document.querySelectorAll('.price-section').forEach(sec => sec.classList.remove('active'));
-            
+
             setTimeout(() => {
-                let activePanel = document.getElementById('view-' + type);
+                const activePanel = document.getElementById('view-' + type);
                 activePanel.classList.add('active');
-                
-                let defaultVip = activePanel.querySelector('.m-card.vip');
-                if(defaultVip) {
+
+                const defaultVip = activePanel.querySelector('.m-card.vip');
+                if (defaultVip) {
                     defaultVip.click();
                 } else {
-                    let firstCard = activePanel.querySelector('.m-card');
-                    if(firstCard) firstCard.click();
+                    const firstCard = activePanel.querySelector('.m-card');
+                    if (firstCard) firstCard.click();
                 }
             }, 10);
         }
 
         function selectCard(card, typeName, sessions, price) {
-            let parent = card.closest('.price-section');
+            const parent = card.closest('.price-section');
+            if (!parent) return;
+
             parent.querySelectorAll('.m-card').forEach(c => c.classList.remove('selected'));
-            
             card.classList.add('selected');
+
             currentType = typeName;
             currentSessions = sessions;
             currentPrice = price;
-            
-            let btn = document.getElementById('btn-submit');
+
+            const btn = document.getElementById('btn-submit');
             if (sessions.includes('+')) {
                 btn.innerHTML = `锁定 ${sessions} 终身特权 ➔`;
             } else if (sessions.includes('个月')) {
@@ -362,12 +836,9 @@
             } else {
                 btn.innerHTML = `锁定 ${sessions} 首购福利 ➔`;
             }
-            
-            if(navigator.vibrate) navigator.vibrate(15);
-        }
 
-        // ================= 签名与合同生成系统 =================
-        let sigCanvas, sigCtx, isSigning = false;
+            if (navigator.vibrate) navigator.vibrate(15);
+        }
 
         function triggerSignature() {
             openSignature(currentType, currentSessions, currentPrice);
@@ -375,7 +846,7 @@
 
         function openSignature(pkgName, sessions, price) {
             document.getElementById('signatureModal').classList.add('show');
-            
+
             document.getElementById('sig-pad-wrap').innerHTML = `
                 <div class="sig-summary" id="sig-summary-box">
                     <div class="sig-sum-title">即将为您锁定以下首购特权方案：</div>
@@ -386,7 +857,7 @@
                     </div>
                 </div>
                 <div class="sig-pad-container">
-                    <div class="sig-placeholder">请在此处手写签名</div>
+                    <div class="sig-placeholder" id="sigPlaceholder">请在此处手写签名</div>
                     <canvas id="sigCanvas"></canvas>
                 </div>
                 <div class="sig-actions" id="sig-actions-box">
@@ -399,75 +870,109 @@
             `;
 
             setTimeout(() => {
-                sigCanvas = document.getElementById('sigCanvas');
-                sigCtx = sigCanvas.getContext('2d');
-                let rect = sigCanvas.parentElement.getBoundingClientRect();
-                sigCanvas.width = rect.width;
-                sigCanvas.height = rect.height;
-                
-                sigCtx.strokeStyle = '#E8C37C'; 
-                sigCtx.lineWidth = 4;
-                sigCtx.lineCap = 'round';
-                sigCtx.lineJoin = 'round';
-                
-                sigCanvas.addEventListener('touchstart', startSign, {passive: false});
-                sigCanvas.addEventListener('touchmove', drawSign, {passive: false});
-                sigCanvas.addEventListener('touchend', endSign);
-                sigCanvas.addEventListener('mousedown', startSign);
-                sigCanvas.addEventListener('mousemove', drawSign);
-                sigCanvas.addEventListener('mouseup', endSign);
-                sigCanvas.addEventListener('mouseout', endSign);
-            }, 400);
+                setupSignatureCanvas();
+            }, 60);
         }
 
         function closeSignature() {
             document.getElementById('signatureModal').classList.remove('show');
-            clearCanvas();
+            sigCanvas = null;
+            sigCtx = null;
+            isSigning = false;
+            sigHasContent = false;
+        }
+
+        function setupSignatureCanvas() {
+            sigCanvas = document.getElementById('sigCanvas');
+            if (!sigCanvas) return;
+
+            sigCtx = sigCanvas.getContext('2d');
+
+            const rect = sigCanvas.parentElement.getBoundingClientRect();
+            const dpr = window.devicePixelRatio || 1;
+
+            sigCanvas.width = rect.width * dpr;
+            sigCanvas.height = rect.height * dpr;
+            sigCanvas.style.width = rect.width + 'px';
+            sigCanvas.style.height = rect.height + 'px';
+
+            sigCtx.setTransform(1, 0, 0, 1, 0, 0);
+            sigCtx.scale(dpr, dpr);
+            sigCtx.strokeStyle = '#E8C37C';
+            sigCtx.lineWidth = 4;
+            sigCtx.lineCap = 'round';
+            sigCtx.lineJoin = 'round';
+
+            sigCanvas.onmousedown = startSign;
+            sigCanvas.onmousemove = drawSign;
+            sigCanvas.onmouseup = endSign;
+            sigCanvas.onmouseout = endSign;
+
+            sigCanvas.ontouchstart = startSign;
+            sigCanvas.ontouchmove = drawSign;
+            sigCanvas.ontouchend = endSign;
         }
 
         function getSignPos(e) {
-            let rect = sigCanvas.getBoundingClientRect();
-            let x = e.clientX, y = e.clientY;
-            if(e.touches && e.touches.length > 0) {
+            const rect = sigCanvas.getBoundingClientRect();
+            let x = e.clientX;
+            let y = e.clientY;
+
+            if (e.touches && e.touches.length > 0) {
                 x = e.touches[0].clientX;
                 y = e.touches[0].clientY;
             }
+
             return { x: x - rect.left, y: y - rect.top };
         }
 
         function startSign(e) {
+            if (!sigCanvas || !sigCtx) return;
             e.preventDefault();
+
             isSigning = true;
-            let pos = getSignPos(e);
+            const pos = getSignPos(e);
             sigCtx.beginPath();
             sigCtx.moveTo(pos.x, pos.y);
-            let ph = document.querySelector('.sig-placeholder');
-            if(ph) ph.style.display = 'none'; 
+
+            const ph = document.getElementById('sigPlaceholder');
+            if (ph) ph.style.display = 'none';
         }
 
         function drawSign(e) {
-            if(!isSigning) return;
+            if (!isSigning || !sigCtx) return;
             e.preventDefault();
-            let pos = getSignPos(e);
+
+            const pos = getSignPos(e);
             sigCtx.lineTo(pos.x, pos.y);
             sigCtx.stroke();
+            sigHasContent = true;
         }
 
-        function endSign() {
+        function endSign(e) {
+            if (e) e.preventDefault();
             isSigning = false;
-            sigCtx.closePath();
+            if (sigCtx) sigCtx.closePath();
         }
 
         function clearCanvas() {
-            if(!sigCtx) return;
-            sigCtx.clearRect(0, 0, sigCanvas.width, sigCanvas.height);
-            let ph = document.querySelector('.sig-placeholder');
-            if(ph) ph.style.display = 'block';
+            if (!sigCtx || !sigCanvas) return;
+
+            const rect = sigCanvas.getBoundingClientRect();
+            sigCtx.clearRect(0, 0, rect.width, rect.height);
+            sigHasContent = false;
+
+            const ph = document.getElementById('sigPlaceholder');
+            if (ph) ph.style.display = 'block';
         }
 
-        // 合成并生成可保存的图片
         function generateContractImage() {
-            if(!sigCtx) return;
+            if (!sigCanvas || !sigCtx) return;
+
+            if (!sigHasContent) {
+                alert('请先完成手写签名。');
+                return;
+            }
 
             const finalCanvas = document.createElement('canvas');
             finalCanvas.width = 800;
@@ -485,7 +990,7 @@
             ctx.font = 'bold 50px sans-serif';
             ctx.textAlign = 'center';
             ctx.fillText('R玥精致健身 尊享合约', 400, 120);
-            
+
             ctx.fillStyle = '#444';
             ctx.font = '24px sans-serif';
             ctx.fillText('EXCLUSIVE VIP CONTRACT', 400, 165);
@@ -493,19 +998,15 @@
             ctx.textAlign = 'left';
             ctx.fillStyle = '#FFFFFF';
             ctx.font = '32px sans-serif';
-            
-            const sysName = "R玥专属定制";
-            const pkgName = currentType;
-            const pkgSessions = currentSessions;
-            const pkgPrice = currentPrice;
 
+            const sysName = "R玥专属定制";
             ctx.fillText('所属体系：' + sysName, 80, 280);
-            ctx.fillText('锁定方案：' + pkgName, 80, 360);
-            ctx.fillText('包含课时：' + pkgSessions, 80, 440);
+            ctx.fillText('锁定方案：' + currentType, 80, 360);
+            ctx.fillText('包含课时：' + currentSessions, 80, 440);
 
             ctx.fillStyle = '#E8C37C';
             ctx.font = 'bold 46px sans-serif';
-            ctx.fillText('首购特权价：' + pkgPrice, 80, 540);
+            ctx.fillText('首购特权价：' + currentPrice, 80, 540);
 
             ctx.fillStyle = '#888888';
             ctx.font = '24px sans-serif';
@@ -516,14 +1017,22 @@
             ctx.font = 'bold 32px sans-serif';
             ctx.fillText('客户手写确认签名：', 80, 780);
 
-            const scW = sigCanvas.width;
-            const scH = sigCanvas.height;
-            const scale = Math.min(640 / scW, 250 / scH);
-            const dw = scW * scale;
-            const dh = scH * scale;
+            const sourceW = sigCanvas.width;
+            const sourceH = sigCanvas.height;
+            const sourceDisplayW = sigCanvas.getBoundingClientRect().width;
+            const sourceDisplayH = sigCanvas.getBoundingClientRect().height;
 
-            ctx.drawImage(sigCanvas, 80, 810, dw, dh);
-            
+            const tempCanvas = document.createElement('canvas');
+            tempCanvas.width = sourceDisplayW;
+            tempCanvas.height = sourceDisplayH;
+            tempCanvas.getContext('2d').drawImage(sigCanvas, 0, 0, sourceDisplayW, sourceDisplayH);
+
+            const scale = Math.min(640 / sourceDisplayW, 250 / sourceDisplayH);
+            const dw = sourceDisplayW * scale;
+            const dh = sourceDisplayH * scale;
+
+            ctx.drawImage(tempCanvas, 80, 810, dw, dh);
+
             ctx.strokeStyle = '#333';
             ctx.lineWidth = 2;
             ctx.beginPath();
@@ -539,13 +1048,18 @@
                     <span style="font-size:12px; color:#aaa; font-weight:normal;">请长按下方图片，保存至手机相册留存</span>
                 </div>
                 <div style="flex:1; overflow-y:auto; border-radius:12px; box-shadow: 0 10px 40px rgba(232, 195, 124, 0.25); border: 1px solid rgba(232, 195, 124, 0.5);">
-                    <img src="${dataURL}" style="width:100%; display:block;">
+                    <img src="${dataURL}" style="width:100%; display:block;" alt="合同图片">
                 </div>
                 <div class="sig-actions" style="margin-top:20px;">
                     <button class="btn-confirm-master" onclick="closeSignature()">完成签约，返回主页 ➔</button>
                 </div>
             `;
         }
+
+        window.onload = function () {
+            const defaultVip = document.querySelector('#view-regular .m-card.vip');
+            if (defaultVip) defaultVip.click();
+        };
     </script>
 </body>
 </html>
